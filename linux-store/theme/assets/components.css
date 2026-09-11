@@ -162,6 +162,8 @@ html[dir="rtl"] .marquee__track { animation-direction: reverse; }
 .card__size:disabled { color: var(--fg-30); text-decoration: line-through; cursor: not-allowed; }
 .card__body { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px 4px 2px; align-content: start; }
 .card__title { grid-column: 1; font: var(--w-ui) 15px/1.3 var(--font-body); color: var(--fg); letter-spacing: -.01em; }
+.card__title a { color: var(--fg); }
+.card:hover .card__title a { color: var(--link); }
 .card__title a::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
 .card__meta { grid-column: 1; font-size: var(--fs-xs); color: var(--fg-50); text-transform: uppercase; letter-spacing: .08em; }
 .card__price { grid-column: 2; grid-row: 1 / span 2; text-align: end; font: var(--w-ui) 15px var(--font-mono); letter-spacing: -.02em; }

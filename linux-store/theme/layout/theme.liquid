@@ -52,7 +52,6 @@
   {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
   {% render 'meta-tags' %}
 
-  {%- if template.name == 'index' -%}<link rel="preload" as="image" href="{{ 'hero-embroidery-poster.webp' | asset_url }}" fetchpriority="high">{%- endif -%}
   {%- unless settings.type_system_fonts -%}{% render 'fonts', is_rtl: is_rtl %}{%- endunless -%}
 
   {{ 'glass.css' | asset_url | stylesheet_tag }}

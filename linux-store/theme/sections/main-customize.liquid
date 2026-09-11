@@ -72,9 +72,11 @@
 
           <div class="cz__print-area" data-cz-area aria-hidden="true"></div>
 
-          <button class="cz__empty glass" type="button" data-cz-pick>{% render 'icon', name: 'upload', px: 22 %}<span data-cz-empty-label>{{ 'customize.upload_side' | t: side: 'customize.back' | t }}</span><small>{{ 'customize.drop_hint' | t }}</small></button>
+          {%- if default_side == 'front' -%}{%- assign default_side_label = 'customize.front' | t -%}{%- else -%}{%- assign default_side_label = 'customize.back' | t -%}{%- endif -%}
+          <button class="cz__empty glass" type="button" data-cz-pick>{% render 'icon', name: 'upload', px: 22 %}<span data-cz-empty-label>{{ 'customize.upload_side' | t: side: default_side_label }}</span><small>{{ 'customize.drop_hint' | t }}</small></button>
 
-          {%- for side in 'front,back' | split: ',' -%}
+          {%- assign side_list = 'front,back' | split: ',' -%}
+          {%- for side in side_list -%}
           <div class="cz__design" data-cz-design="{{ side }}" hidden tabindex="0" role="img" aria-label="{{ 'customize.preview_alt' | t }}">
             <img alt="" width="400" height="400" data-cz-design-img draggable="false">
             <span class="cz__frame" aria-hidden="true"></span>
@@ -130,8 +132,9 @@
       <div class="cz__step">
         <p class="cz__step-title"><span class="badge">1</span>{{ 'customize.designs' | t }}<small class="cz__step-note">{{ 'customize.designs_note' | t }}</small></p>
         <div class="cz__uploads">
-          {%- for side in 'front,back' | split: ',' -%}
-            {%- assign side_label = 'customize.' | append: side | t -%}
+          {%- assign side_list = 'front,back' | split: ',' -%}
+          {%- for side in side_list -%}
+            {%- if side == 'front' -%}{%- assign side_label = 'customize.front' | t -%}{%- else -%}{%- assign side_label = 'customize.back' | t -%}{%- endif -%}
             <div class="cz__upload" data-cz-upload="{{ side }}">
               <label class="cz__drop" data-cz-drop="{{ side }}">
                 <span class="cz__drop-side">{{ side_label }}</span>
