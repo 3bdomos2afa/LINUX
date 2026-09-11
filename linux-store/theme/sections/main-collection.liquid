@@ -17,9 +17,9 @@
       <a href="{{ collection.url }}" class="chip{% unless current_tags %} chip--accent{% endunless %}">{{ 'collections.all' | t }}</a>
       {%- for tag in collection.all_tags -%}
         {%- if current_tags contains tag -%}
-          <a href="{{ collection.url }}" class="chip chip--accent">{{ tag }} ×</a>
+          <a href="{{ collection.url }}" class="chip chip--accent">{% render 'option-value', value: tag %} ×</a>
         {%- else -%}
-          <a href="{{ collection.url }}/{{ tag | handleize }}" class="chip">{{ tag }}</a>
+          <a href="{{ collection.url }}/{{ tag | handleize }}" class="chip">{% render 'option-value', value: tag %}</a>
         {%- endif -%}
       {%- endfor -%}
     </div>
@@ -78,21 +78,21 @@
     {%- if collection.filters.size > 0 -%}
       {%- for filter in collection.filters -%}
         <details class="filters__group" open>
-          <summary>{{ filter.label }}{% render 'icon', name: 'chevron-down', px: 16 %}</summary>
+          <summary>{% render 'option-name', name: filter.label %}{% render 'icon', name: 'chevron-down', px: 16 %}</summary>
           {%- case filter.type -%}
             {%- when 'list' -%}
               <div class="pills">
                 {%- for value in filter.values -%}
                   <label class="pill{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
                     <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
-                    {{ value.label }}
+                    {% render 'option-value', value: value.label %}
                   </label>
                 {%- endfor -%}
               </div>
             {%- when 'price_range' -%}
               <div class="filters__price">
-                <label class="field"><span class="field__label">{{ 'collections.price' | t }} min</span><input class="input" type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="0"></label>
-                <label class="field"><span class="field__label">max</span><input class="input" type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"></label>
+                <label class="field"><span class="field__label">{{ 'collections.min' | t }}</span><input class="input" type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="0"></label>
+                <label class="field"><span class="field__label">{{ 'collections.max' | t }}</span><input class="input" type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"></label>
               </div>
             {%- when 'boolean' -%}
               <label class="checkbox"><input type="checkbox" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value }}"{% if filter.true_value.active %} checked{% endif %}> {{ filter.label }}</label>
@@ -114,7 +114,7 @@
       {%- if collection.all_tags.size > 0 -%}
         <details class="filters__group" open>
           <summary>{{ 'collections.tags' | t }}{% render 'icon', name: 'chevron-down', px: 16 %}</summary>
-          <div class="pills">{%- for tag in collection.all_tags -%}<label class="pill"><input type="checkbox" name="filter.p.tag" value="{{ tag }}"{% if request.query['filter.p.tag'] == tag %} checked{% endif %}>{{ tag }}</label>{%- endfor -%}</div>
+          <div class="pills">{%- for tag in collection.all_tags -%}<label class="pill"><input type="checkbox" name="filter.p.tag" value="{{ tag }}"{% if request.query['filter.p.tag'] == tag %} checked{% endif %}>{% render 'option-value', value: tag %}</label>{%- endfor -%}</div>
         </details>
       {%- endif -%}
     {%- endif -%}

@@ -273,8 +273,10 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
 
 /* Option groups shared by the PDP, quick view and the Customize studio */
 .pdp__option { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; min-width: 0; }
-.pdp__option-label { display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; font: var(--w-ui) 13px var(--font-body); color: var(--fg-70); text-transform: uppercase; letter-spacing: .08em; }
-.pdp__option-label strong { color: var(--fg); text-transform: none; letter-spacing: 0; font-size: 14px; }
+.pdp__option-label { display: block; float: inline-start; width: 100%; margin-bottom: 8px; padding: 0; font: var(--w-ui) 13px var(--font-body); color: var(--fg-70); text-transform: uppercase; letter-spacing: .08em; }
+.pdp__option-label strong { color: var(--fg); text-transform: none; letter-spacing: 0; font-size: 14px; margin-inline-start: 8px; }
+.pdp__option-label > * { vertical-align: middle; }
+.pdp__option > .pills, .pdp__option > .swatches { clear: both; }
 .pill--swatch { width: 40px; height: 40px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; }
 .pill.is-missing { display: none; }
 .skip-link { position: absolute; top: -100px; inset-inline-start: 16px; z-index: 1000; padding: 12px 18px; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-fg); font-weight: var(--w-ui); }

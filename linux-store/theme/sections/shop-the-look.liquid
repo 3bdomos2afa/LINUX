@@ -19,7 +19,7 @@
           <button class="hotspot" type="button" data-hotspot style="left: {{ block.settings.x }}%; top: {{ block.settings.y }}%" aria-label="{{ p.title | escape }}" {{ block.shopify_attributes }}></button>
           <a class="hotspot__card glass glass--solid" href="{{ p.url }}" style="left: min(max({{ block.settings.x }}%, 6%), 60%); top: calc({{ block.settings.y }}% + 22px)">
             {%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 160 }}" alt="" width="60" height="74">{%- endif -%}
-            <span><strong>{% render 'product-title', title: p.title %}</strong><span>{{ p.price | money }}</span></span>
+            <span><strong>{% render 'product-title', title: p.title %}</strong><span>{% render 'money', amount: p.price %}</span></span>
           </a>
         {%- endif -%}
       {%- endfor -%}

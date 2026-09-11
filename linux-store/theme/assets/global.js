@@ -15,14 +15,17 @@
   };
   L.money = function (cents) {
     if (cents == null || isNaN(cents)) return '';
-    const fmt = S.moneyFormat || 'LE {{amount}}';
     const n = Number(cents) / 100;
     const two = n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // Arabic: "649 جنيه" (mirrors snippets/money.liquid); other locales: the shop's money format
+    if (S.locale === 'ar') return two.replace(/\.00$/, '') + ' ' + (S.currencyAr || 'جنيه');
+    const fmt = S.moneyFormat || 'LE {{amount}}';
     return fmt
       .replace(/{{\s*amount_no_decimals\s*}}/g, Math.round(n).toLocaleString('en-US'))
       .replace(/{{\s*amount_no_trailing_zeros\s*}}/g, two.replace(/\.00$/, ''))
       .replace(/{{\s*amount_with_comma_separator\s*}}/g, n.toFixed(2).replace('.', ','))
-      .replace(/{{\s*amount\s*}}/g, two);
+      .replace(/{{\s*amount\s*}}/g, two)
+      .replace(/<[^>]+>/g, '');
   };
 
   L.fetchJSON = async function (url, opts = {}) {

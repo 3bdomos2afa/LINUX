@@ -45,7 +45,7 @@ html[dir="rtl"] .gallery__nav svg { transform: scaleX(-1); }
 .pdp__rating { display: inline-flex; align-items: center; gap: 6px; font: var(--w-ui) 13px var(--font-body); color: var(--fg-70); }
 .pdp__rating svg { color: var(--lime); }
 .pdp__form { display: grid; gap: 18px; }
-.pdp__size-guide { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; color: var(--fg-70); font: var(--w-ui) 12px var(--font-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-transform: none; letter-spacing: 0; }
+.pdp__size-guide { float: inline-end; display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; color: var(--fg-70); font: var(--w-ui) 12px var(--font-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-transform: none; letter-spacing: 0; }
 .pdp__size-guide:hover { color: var(--accent); }
 .pdp__fit { display: inline-flex; align-items: center; gap: 6px; margin-top: -6px; }
 .pdp__fit svg { color: var(--accent); }

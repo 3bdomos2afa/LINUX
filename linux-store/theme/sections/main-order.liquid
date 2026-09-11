@@ -80,16 +80,16 @@
                     {%- endfor -%}
                   </details>
                 {%- endif -%}
-                <div class="cart-line__row"><span class="muted small">× {{ item.quantity }}</span><span class="cart-line__price">{{ item.final_line_price | money }}</span></div>
+                <div class="cart-line__row"><span class="muted small">× {{ item.quantity }}</span><span class="cart-line__price">{% render 'money', amount: item.final_line_price %}</span></div>
               </div>
             </li>
           {%- endfor -%}
         </ul>
         <div class="cart-totals" style="margin-top:14px">
-          <div class="cart-totals__row"><span>{{ 'customer.order.subtotal' | t }}</span><span>{{ order.subtotal_price | money }}</span></div>
-          <div class="cart-totals__row"><span>{{ 'customer.order.shipping' | t }}</span><span>{%- if order.shipping_price > 0 -%}{{ order.shipping_price | money }}{%- else -%}{{ 'customer.order.free' | t }}{%- endif -%}</span></div>
-          {%- if order.total_discounts > 0 -%}<div class="cart-totals__row"><span>{{ 'customer.order.discount' | t }}</span><span>−{{ order.total_discounts | money }}</span></div>{%- endif -%}
-          <div class="cart-totals__row cart-totals__row--total"><span>{{ 'customer.order.total' | t }}</span><span class="money">{{ order.total_price | money }}</span></div>
+          <div class="cart-totals__row"><span>{{ 'customer.order.subtotal' | t }}</span><span>{% render 'money', amount: order.subtotal_price %}</span></div>
+          <div class="cart-totals__row"><span>{{ 'customer.order.shipping' | t }}</span><span>{%- if order.shipping_price > 0 -%}{% render 'money', amount: order.shipping_price %}{%- else -%}{{ 'customer.order.free' | t }}{%- endif -%}</span></div>
+          {%- if order.total_discounts > 0 -%}<div class="cart-totals__row"><span>{{ 'customer.order.discount' | t }}</span><span>−{% render 'money', amount: order.total_discounts %}</span></div>{%- endif -%}
+          <div class="cart-totals__row cart-totals__row--total"><span>{{ 'customer.order.total' | t }}</span><span class="money">{% render 'money', amount: order.total_price %}</span></div>
         </div>
       </div>
     </div>

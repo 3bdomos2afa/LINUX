@@ -64,7 +64,8 @@
       "search": "Search",
       "account": "Account",
       "wishlist": "Saved",
-      "cart": "Bag"
+      "cart": "Bag",
+      "news": "Journal"
     }
   },
   "sections": {
@@ -273,9 +274,24 @@
       "unisex": "Unisex",
       "pack": "Pack",
       "set": "Set",
-      "olive": "Olive"
+      "olive": "Olive",
+      "studio": "Studio",
+      "drops": "Drops",
+      "brand": "Brand",
+      "journal": "Journal",
+      "news": "News",
+      "linux": "LINUX",
+      "winter_collection": "Winter collection",
+      "summer_collection": "Summer collection",
+      "customize_print": "Customize print",
+      "new_arrivals": "New arrivals",
+      "best_sellers": "Best sellers",
+      "all_products": "All products"
     },
-    "by_type": "{{ brand }} · {{ type }}"
+    "by_type": "{{ brand }} · {{ type }}",
+    "rating_text": "4.9 · 120 reviews",
+    "desc_ar_hoodie": "<p>Relaxed-fit hoodie in heavyweight 340 gsm melton cotton. The LINUX mark is embroidered, never printed, so it stays sharp wash after wash.</p>",
+    "desc_ar_tee": "<p>Relaxed-fit tee in heavyweight cotton. The LINUX mark is embroidered, never printed, so it stays sharp wash after wash.</p>"
   },
   "size_guide": {
     "title": "Size guide",

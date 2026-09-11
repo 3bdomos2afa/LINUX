@@ -65,11 +65,12 @@
     <div class="pdp__info">
       <div class="pdp__panel glass" data-specular>
         <div class="pdp__head">
-          <p class="card__meta">{{ product.vendor }} · {% render 'option-value', value: product.type %}</p>
+          {%- assign ptype = product.type | downcase -%}{%- assign pvendor = product.vendor | downcase -%}
+          <p class="card__meta">{{ product.vendor }}{% if ptype != blank and ptype != pvendor %} · {% render 'option-value', value: product.type %}{% endif %}</p>
           <h1 class="pdp__title">{% render 'product-title', title: product.title %}</h1>
           <div class="pdp__price-row">
             <div class="pdp__price" data-price-wrap>{% render 'price', variant: current, product: product, class: 'price--lg' %}</div>
-            {%- if s.show_rating -%}<span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {{ s.rating_text }}</span>{%- endif -%}
+            {%- if s.show_rating -%}<span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {% render 'tr', value: s.rating_text, key: 'products.rating_text' %}</span>{%- endif -%}
           </div>
         </div>
 
@@ -136,7 +137,7 @@
             </div>
             <button class="btn btn--primary btn--lg pdp__atc" type="submit" data-atc {% unless current.available %}disabled{% endunless %}>
               <span data-atc-text>{% if current.available %}{{ 'products.add_to_bag' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
-              <span class="pdp__atc-price" data-atc-price>{{ current.price | money }}</span>
+              <span class="pdp__atc-price" data-atc-price>{% render 'money', amount: current.price %}</span>
             </button>
             <button class="icon-btn glass pdp__wish" type="button" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'wishlist.add' | t }}" aria-pressed="false">{% render 'icon', name: 'heart' %}{% render 'icon', name: 'heart-fill' %}</button>
           </div>
@@ -149,7 +150,7 @@
           <div class="pdp__delivery">
             <div>{% render 'icon', name: 'truck', px: 18 %}<span><strong>{{ 'products.delivery_cairo' | t }}</strong> {% render 'delivery-eta', value: settings.delivery_cairo %}</span></div>
             <div>{% render 'icon', name: 'pin', px: 18 %}<span><strong>{{ 'products.delivery_egypt' | t }}</strong> {% render 'delivery-eta', value: settings.delivery_egypt %}</span></div>
-            {%- if settings.free_shipping_threshold > 0 -%}{%- assign fs_amount = settings.free_shipping_threshold | times: 100 | money -%}<div>{% render 'icon', name: 'return', px: 18 %}<span>{{ 'products.free_shipping_over' | t: amount: fs_amount }}</span></div>{%- endif -%}
+            {%- if settings.free_shipping_threshold > 0 -%}{%- assign fs_cents = settings.free_shipping_threshold | times: 100 -%}{%- capture fs_amount -%}{% render 'money', amount: fs_cents %}{%- endcapture -%}{%- assign fs_amount = fs_amount | strip -%}<div>{% render 'icon', name: 'return', px: 18 %}<span>{{ 'products.free_shipping_over' | t: amount: fs_amount }}</span></div>{%- endif -%}
           </div>
         {%- endif -%}
       </div>
@@ -160,7 +161,7 @@
             {%- when 'description' -%}
               <details class="faq__item glass" open {{ block.shopify_attributes }}>
                 <summary>{%- assign t_d = 'products.description' | t -%}{{ block.settings.title | default: t_d }}{% render 'icon', name: 'plus', px: 18 %}</summary>
-                <div class="rte">{{ product.description }}</div>
+                <div class="rte">{% render 'product-description', product: product %}</div>
               </details>
             {%- when 'fabric' -%}
               <details class="faq__item glass" {{ block.shopify_attributes }}>
@@ -197,7 +198,7 @@
 {%- if settings.show_sticky_atc -%}
   <div class="sticky-atc glass glass--solid" data-sticky-atc aria-hidden="true">
     <img src="{{ product.featured_image | image_url: width: 120 }}" alt="" width="44" height="54">
-    <div class="sticky-atc__text"><strong>{% render 'product-title', title: product.title %}</strong><span data-sticky-price>{{ current.price | money }}</span></div>
+    <div class="sticky-atc__text"><strong>{% render 'product-title', title: product.title %}</strong><span data-sticky-price>{% render 'money', amount: current.price %}</span></div>
     <button class="btn btn--primary" type="button" data-sticky-submit>{{ 'products.add_to_bag' | t }}</button>
   </div>
 {%- endif -%}
@@ -217,7 +218,7 @@
   "settings": [
     { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
     { "type": "checkbox", "id": "show_rating", "label": "Show rating chip", "default": true },
-    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.9 · 120 reviews" },
+    { "type": "text", "id": "rating_text", "label": "Rating text (blank = translated default)" },
     { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp button under Add to bag", "default": false }
   ],
   "blocks": [

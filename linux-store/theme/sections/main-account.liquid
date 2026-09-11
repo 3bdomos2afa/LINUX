@@ -14,7 +14,7 @@
     </div>
     <ul class="account__stats" role="list">
       <li class="glass glass--clear"><strong data-count>{{ customer.orders_count }}</strong><span>{{ 'customer.account.stat_orders' | t }}</span></li>
-      <li class="glass glass--clear"><strong>{{ customer.total_spent | default: 0 | money_without_trailing_zeros }}</strong><span>{{ 'customer.account.stat_spent' | t }}</span></li>
+      <li class="glass glass--clear"><strong>{%- assign spent = customer.total_spent | default: 0 -%}{% render 'money', amount: spent %}</strong><span>{{ 'customer.account.stat_spent' | t }}</span></li>
       <li class="glass glass--clear"><strong data-wishlist-count-big>0</strong><span>{{ 'customer.account.stat_saved' | t }}</span></li>
     </ul>
     <div class="account__hero-mascot" aria-hidden="true">{% render 'mascot', name: 'hoodie-sit', width: 150, loading: 'eager' %}</div>
@@ -50,7 +50,7 @@
                     </div>
                   </div>
                   <div class="order-card__end">
-                    <strong class="order-card__total">{{ order.total_price | money }}</strong>
+                    <strong class="order-card__total">{% render 'money', amount: order.total_price %}</strong>
                     <span class="order-card__cta">{{ 'customer.orders.view' | t }}{% render 'icon', name: 'arrow-right', px: 14 %}</span>
                   </div>
                 </a>

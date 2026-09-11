@@ -40,8 +40,7 @@
       ],
       "settings": {
         "show_breadcrumb": true,
-        "show_rating": true,
-        "rating_text": "4.9 · 120 reviews"
+        "show_rating": true
       }
     },
     "related": {

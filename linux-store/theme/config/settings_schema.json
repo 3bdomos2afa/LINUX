@@ -474,5 +474,27 @@
         "content": "Every text in the theme has an English and an Arabic version. To change any wording (buttons, labels, messages) open Online Store → Themes → … → Edit default theme content, or install Shopify's free Translate & Adapt app to edit Arabic side by side."
       }
     ]
+  },
+  {
+    "name": "Localization",
+    "settings": [
+      {
+        "type": "text",
+        "id": "currency_ar",
+        "label": "Currency word shown on Arabic prices",
+        "default": "جنيه",
+        "info": "Arabic pages print prices as “649 جنيه” instead of “LE 649.00”."
+      },
+      {
+        "type": "richtext",
+        "id": "desc_ar_hoodie",
+        "label": "Arabic description — hoodies (used when a product has no Arabic translation)"
+      },
+      {
+        "type": "richtext",
+        "id": "desc_ar_tee",
+        "label": "Arabic description — tees"
+      }
+    ]
   }
 ]

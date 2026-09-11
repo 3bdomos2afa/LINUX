@@ -107,9 +107,9 @@
                 endfor
               -%}
               {%- if match and match.available -%}
-                <button class="card__size" type="button" data-quick-add="{{ match.id }}" aria-label="{{ 'products.add_size' | t: size: value }}">{{ value }}</button>
+                <button class="card__size" type="button" data-quick-add="{{ match.id }}" aria-label="{{ 'products.add_size' | t: size: value }}">{{ value | upcase }}</button>
               {%- else -%}
-                <button class="card__size" type="button" disabled aria-label="{{ 'products.size_unavailable' | t: size: value }}">{{ value }}</button>
+                <button class="card__size" type="button" disabled aria-label="{{ 'products.size_unavailable' | t: size: value }}">{{ value | upcase }}</button>
               {%- endif -%}
             {%- endfor -%}
           </div>
@@ -120,7 +120,8 @@
   </div>
   <div class="card__body">
     <h3 class="card__title"><a href="{{ url }}">{% render 'product-title', title: product.title %}</a></h3>
-    {%- if settings.card_show_vendor != false -%}<p class="card__meta">{% render 'option-value', value: product.type %}</p>{%- endif -%}
+    {%- assign ptype_l = product.type | downcase -%}{%- assign pvendor_l = product.vendor | downcase -%}
+    {%- if settings.card_show_vendor != false and ptype_l != blank and ptype_l != pvendor_l and ptype_l != 'linux' -%}<p class="card__meta">{% render 'option-value', value: product.type %}</p>{%- endif -%}
     <div class="card__price">{% render 'price', product: product %}</div>
     {%- if color_option and color_option.values.size > 1 -%}
       <div class="card__swatches" aria-label="{% render 'option-name', name: color_option.name %}">

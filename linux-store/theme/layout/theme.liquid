@@ -46,7 +46,7 @@
     endif
   -%}
   {%- capture seo_title -%}
-    {{ seo_page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless seo_page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    {{ seo_page_title }}{% if current_tags %} &ndash; {% for ct in current_tags %}{% render 'option-value', value: ct %}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless seo_page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
   {%- endcapture -%}
   <title>{{ seo_title | strip }}</title>
   {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
@@ -121,6 +121,7 @@
     window.LINUX = window.LINUX || {};
     LINUX.settings = {
       moneyFormat: {{ shop.money_format | json }},
+      currencyAr: {{ settings.currency_ar | default: 'جنيه' | json }},
       locale: {{ request.locale.iso_code | json }},
       root: {{ routes.root_url | json }},
       cartUrl: {{ routes.cart_url | json }},

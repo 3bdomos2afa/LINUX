@@ -9,7 +9,7 @@
       {%- if remaining <= 0 -%}
         <span>{{ 'cart.free_shipping_unlocked' | t }}</span>
       {%- else -%}
-        {%- assign remaining_money = remaining | money -%}
+        {%- capture remaining_money -%}{% render 'money', amount: remaining %}{%- endcapture -%}{%- assign remaining_money = remaining_money | strip -%}
         <span>{{ 'cart.free_shipping_away_html' | t: amount: remaining_money }}</span>
       {%- endif -%}
     </p>
@@ -77,7 +77,7 @@
               <input class="qty__input" type="number" value="{{ item.quantity }}" min="0" inputmode="numeric" data-qty-input data-key="{{ item.key }}" aria-label="{{ 'cart.quantity' | t }}">
               <button class="qty__btn" type="button" data-qty-change="1" data-key="{{ item.key }}" aria-label="{{ 'cart.increase' | t }}">+</button>
             </div>
-            <span class="cart-line__price">{{ item.final_line_price | money }}</span>
+            <span class="cart-line__price">{% render 'money', amount: item.final_line_price %}</span>
           </div>
           <button class="cart-line__remove" type="button" data-line-remove data-key="{{ item.key }}">{{ 'cart.remove' | t }}</button>
         </div>

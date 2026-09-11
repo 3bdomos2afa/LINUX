@@ -26,14 +26,14 @@
   <div class="bundle__tiers" role="radiogroup" aria-label="{{ 'bundle.title' | t }}">
     <button class="bundle__tier is-active" type="button" data-bundle-tier data-qty="1" data-pct="0" aria-pressed="true">
       <span class="bundle__qty">{{ 'bundle.tier' | t: count: 1 }}</span>
-      {%- assign m0 = base | money -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m0 }}</span>
+      {%- capture m0 -%}{% render 'money', amount: base %}{%- endcapture -%}{%- assign m0 = m0 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m0 }}</span>
     </button>
     {%- if t1_q > 1 -%}
       {%- assign p1 = 100 | minus: t1_p | times: base | divided_by: 100 -%}
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t1_q }}" data-pct="{{ t1_p }}" aria-pressed="false">
         <span class="bundle__save">{{ 'bundle.save' | t: percent: t1_p }}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: t1_q }}</span>
-        {%- assign m1 = p1 | money -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m1 }}</span>
+        {%- capture m1 -%}{% render 'money', amount: p1 %}{%- endcapture -%}{%- assign m1 = m1 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m1 }}</span>
       </button>
     {%- endif -%}
     {%- if t2_q > 1 -%}
@@ -41,7 +41,7 @@
       <button class="bundle__tier bundle__tier--hot" type="button" data-bundle-tier data-qty="{{ t2_q }}" data-pct="{{ t2_p }}" aria-pressed="false">
         <span class="bundle__save">{{ 'bundle.save' | t: percent: t2_p }}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: t2_q }}</span>
-        {%- assign m2 = p2 | money -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m2 }}</span>
+        {%- capture m2 -%}{% render 'money', amount: p2 %}{%- endcapture -%}{%- assign m2 = m2 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m2 }}</span>
       </button>
     {%- endif -%}
     {%- if t3_q > 1 -%}
@@ -49,7 +49,7 @@
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t3_q }}" data-pct="{{ t3_p }}" aria-pressed="false">
         <span class="bundle__save">{{ 'bundle.save' | t: percent: t3_p }}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: t3_q }}</span>
-        {%- assign m3 = p3 | money -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m3 }}</span>
+        {%- capture m3 -%}{% render 'money', amount: p3 %}{%- endcapture -%}{%- assign m3 = m3 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m3 }}</span>
       </button>
     {%- endif -%}
   </div>

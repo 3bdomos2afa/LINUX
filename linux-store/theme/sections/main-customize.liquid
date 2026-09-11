@@ -222,12 +222,12 @@
       <div class="cz__total">
         <div>
           <small>{{ 'customize.total' | t }}</small>
-          <strong data-cz-total>{{ current.price | money }}</strong>
+          <strong data-cz-total>{% render 'money', amount: current.price %}</strong>
           <span class="cz__breakdown muted" data-cz-breakdown></span>
         </div>
         <div class="pdp__stock" data-stock><span class="dot"></span><span data-cz-eta>{{ 'customize.eta_print' | t }}</span></div>
       </div>
-      <button class="btn btn--primary btn--lg btn--block" type="submit" data-atc data-cz-submit><span data-atc-text>{{ 'customize.add' | t }}</span><span class="pdp__atc-price" data-atc-price>{{ current.price | money }}</span></button>
+      <button class="btn btn--primary btn--lg btn--block" type="submit" data-atc data-cz-submit><span data-atc-text>{{ 'customize.add' | t }}</span><span class="pdp__atc-price" data-atc-price>{% render 'money', amount: current.price %}</span></button>
       <p class="form-error" data-cz-submit-error hidden></p>
 
       {%- if s.show_contact -%}

@@ -2,7 +2,7 @@
   <header class="page__head" data-reveal>
     <p class="eyebrow">{{ 'contact.title' | t }}</p>
     <h1>{{ 'home.contact_heading' | t }}</h1>
-    <div class="lede" style="text-align:center">{%- if page.content != blank -%}{{ page.content }}{%- else -%}{{ 'home.contact_body' | t }}{%- endif -%}</div>
+    <div class="lede" style="text-align:center">{%- assign fb = 'home.contact_body' | t -%}{%- if page.content != blank -%}{% render 'localized-content', content: page.content, fallback: fb %}{%- else -%}{{ fb }}{%- endif -%}</div>
   </header>
   <div class="contact">
     <div class="contact__side">
