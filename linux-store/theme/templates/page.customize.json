@@ -96,7 +96,6 @@
       ],
       "settings": {
         "open_first": true,
-        "cta_url": "https://wa.me/201110351549",
         "key_eyebrow": "home.customize_eyebrow",
         "key_heading": "home.customize_faq_title",
         "key_body": "home.faq_body"
