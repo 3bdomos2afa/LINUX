@@ -30,6 +30,21 @@
 
 ---
 
+## Before you publish — store data the theme expects
+
+The zip only contains the theme. These live in your Shopify admin and the theme reads them by handle:
+
+| What | Where | Handle / value |
+| --- | --- | --- |
+| Main menu | Navigation → Menus → **Main menu** (`main-menu`) | Items: Shop (dropdown: Winter collection, Summer collection, Customize print, All products) · Customize → `/pages/customize` · Journal → `/blogs/news` · About → `/pages/about` · Contact → `/pages/contact` |
+| Footer menus | Navigation → **Footer shop** (`footer-shop`), **Footer help** (`footer-help`), **Footer about** (`footer-about`) | Or point the three footer blocks at any menus you already have (theme editor → Footer) |
+| Pages | Online Store → Pages | `customize` (template **page.customize**), `about` (**page.about**), `contact` (**page.contact**), `faq`, `size-guide`, `shipping-returns` |
+| Collections | Products → Collections | `winter-collection`, `summer-collection`, `customize-print`, `all` — the home sections are pointed at these; change them in the editor |
+| Customize product | Products | handle `hoodie-customize`, options **Color** (black / white / burgundy / beige) and **Type** (Print / Embroidery) |
+| Arabic | Settings → Languages → add Arabic and publish | Then Translate & Adapt for product titles / descriptions / menus you want in your own words — anything you leave untranslated falls back to the theme's Arabic |
+
+A missing menu shows the English link titles; a missing page gives a 404 on that link.
+
 ## العربي
 
 **اللي في الفولدر**
@@ -55,3 +70,18 @@
 **استوديو التخصيص v2**: هودي + تيشيرت، اللون بيتغيّر لايف على الموكب، سحب وتكبير التصميم، قدام/ورا، عدد القطع ومقاس لكل قطعة، طباعة من قطعة واحدة / تطريز من 10 (الرقمين بتعدّلهم من السكشن)، ملاحظات، وزرار واتساب. السكشن بيربط *Print / Embroidery* بخيار **Type** في منتج Customize — خلّي القيمتين دول موجودين على المنتج عشان السعر يتغيّر صح. كل حاجة بتوصل في الأوردر كـ line-item properties.
 
 **الخطوط**: الإنجليزي — Matcha Rounded للعناوين وDisney Bubble لباقي النصوص. العربي — خط ثمانية Serif Display للعناوين وخط Palestine لباقي النصوص. كلها محمّلة جوه الثيم من غير أي طلب لجوجل. الرخص: Matcha Rounded نسخة *Personal Use* من iframefonts.com (لازم تشتري الرخصة التجارية قبل النشر)، Disney Bubble ملكية 7NTypes (اتأكد من رخصة الويب من البائع)، ثمانية رخصته تسمح بالمواقع وتمنع إعادة توزيع الملفات، وخط Palestine جاي من غير ملف رخصة — اتأكد من شروطه.
+
+## قبل النشر — البيانات اللي الثيم بيقرأها من المتجر
+
+الملف المضغوط فيه الثيم بس. الحاجات دي في لوحة Shopify والثيم بيقرأها بالـ handle:
+
+| إيه | فين | الـ handle / القيمة |
+| --- | --- | --- |
+| القائمة الرئيسية | Navigation ← Menus ← **Main menu** (`main-menu`) | Shop (قائمة منسدلة: Winter collection، Summer collection، Customize print، All products) · Customize ← `/pages/customize` · Journal ← `/blogs/news` · About ← `/pages/about` · Contact ← `/pages/contact` |
+| قوائم الفوتر | Navigation ← `footer-shop` و`footer-help` و`footer-about` | أو وجّه بلوكات الفوتر التلاتة لأي قوائم عندك (محرر الثيم ← Footer) |
+| الصفحات | Online Store ← Pages | `customize` (قالب **page.customize**)، `about` (**page.about**)، `contact` (**page.contact**)، `faq`، `size-guide`، `shipping-returns` |
+| الكولكشنز | Products ← Collections | `winter-collection`، `summer-collection`، `customize-print`، `all` — سكاشن الرئيسية موجّهة ليهم وتقدر تغيّرهم من المحرر |
+| منتج التخصيص | Products | handle اسمه `hoodie-customize`، بخيارات **Color** (black / white / burgundy / beige) و**Type** (Print / Embroidery) |
+| العربي | Settings ← Languages ← أضف العربية وانشرها | وبعدها Translate & Adapt لأسماء المنتجات والأوصاف والقوائم اللي عايز تكتبها بكلامك — أي حاجة ما تترجمهاش الثيم بيعرض لها عربي افتراضي |
+
+قائمة ناقصة بتظهر بعناوين لينكاتها الإنجليزية؛ صفحة ناقصة بتدّي 404 على اللينك بتاعها.
