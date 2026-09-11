@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="drawer__foot menu-drawer__foot">
-    {% render 'locale-switcher', class: 'locale-switcher--block' %}
+    {%- if settings.show_locale_switcher != false -%}{% render 'locale-switcher', class: 'locale-switcher--block' %}{%- endif -%}
     {%- if shop.customer_accounts_enabled -%}
       <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="btn btn--glass btn--sm">{% render 'icon', name: 'account', px: 18 %}{% if customer %}{{ 'customer.account.title' | t }}{% else %}{{ 'customer.login.title' | t }}{% endif %}</a>
     {%- endif -%}

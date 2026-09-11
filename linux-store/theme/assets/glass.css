@@ -68,16 +68,19 @@
   --r-inner: calc(var(--r-lg) - var(--pad-card));
 
   /* Type */
-  --font-display: "Unbounded", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", system-ui, sans-serif;
+  --font-display: "Rantaro", "Space Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", system-ui, sans-serif;
   --font-body:    "Space Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --fs-display: clamp(40px, 6.4vw, 92px);
-  --fs-h1: clamp(34px, 4.6vw, 60px);
-  --fs-h2: clamp(28px, 3.4vw, 44px);
-  --fs-h3: clamp(20px, 2vw, 26px);
-  --fs-body: 16px;
-  --fs-sm: 14px;
-  --fs-xs: 12px;
+  /* --type-scale / --heading-scale come from Theme settings (layout sets them) */
+  --type-scale: 1;
+  --heading-scale: 1;
+  --fs-display: calc(clamp(40px, 6.4vw, 92px) * var(--heading-scale));
+  --fs-h1: calc(clamp(34px, 4.6vw, 60px) * var(--heading-scale));
+  --fs-h2: calc(clamp(28px, 3.4vw, 44px) * var(--heading-scale));
+  --fs-h3: calc(clamp(20px, 2vw, 26px) * var(--heading-scale));
+  --fs-body: calc(16px * var(--type-scale));
+  --fs-sm: calc(14px * var(--type-scale));
+  --fs-xs: calc(12px * var(--type-scale));
   --tracking-label: .14em;
 
   /* Motion */
@@ -97,12 +100,12 @@
 }
 
 html[dir="rtl"] {
-  --font-display: "Cairo", "Unbounded", system-ui, sans-serif;
-  --font-body: "Readex Pro", "Space Grotesk", system-ui, sans-serif;
+  --font-display: "Thmanyah Display", "Thmanyah Sans", system-ui, sans-serif;
+  --font-body: "Thmanyah Sans", "Space Grotesk", system-ui, sans-serif;
   --tracking-label: 0;
-  --fs-display: clamp(36px, 5.6vw, 80px);
-  --fs-h1: clamp(30px, 4vw, 54px);
-  --fs-h2: clamp(26px, 3vw, 40px);
+  --fs-display: calc(clamp(36px, 5.6vw, 80px) * var(--heading-scale));
+  --fs-h1: calc(clamp(30px, 4vw, 54px) * var(--heading-scale));
+  --fs-h2: calc(clamp(26px, 3vw, 40px) * var(--heading-scale));
 }
 
 /* ---- Light scheme (Theme Editor: Cream) ---------------------------------- */
@@ -417,4 +420,36 @@ img, video, svg { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   Phone rhythm — one place that tightens sizes, boxes and gaps ≤ 760px so the
+   iOS-scale radii/paddings tuned for desktop don't swallow a 390px screen.
+   ========================================================================== */
+@media (max-width: 760px) {
+  :root {
+    --section-gap: calc(clamp(44px, 12vw, 64px) * var(--section-gap-scale, 1));
+    --gutter: calc(16px * var(--gutter-scale, 1));
+    --header-h: 60px;
+    --r-lg: 22px; --r-xl: 26px; --r-2xl: 30px; --r-hero: 26px; --r-md: 18px;
+    --pad-card: 10px;
+    --fs-display: calc(clamp(34px, 10vw, 44px) * var(--heading-scale));
+    --fs-h1: calc(clamp(28px, 8vw, 36px) * var(--heading-scale));
+    --fs-h2: calc(clamp(24px, 7vw, 30px) * var(--heading-scale));
+    --fs-h3: calc(clamp(18px, 5vw, 20px) * var(--heading-scale));
+  }
+  html[dir="rtl"] { --fs-display: calc(clamp(30px, 9vw, 40px) * var(--heading-scale)); --fs-h1: calc(clamp(26px, 7.5vw, 34px) * var(--heading-scale)); --fs-h2: calc(clamp(22px, 6.5vw, 28px) * var(--heading-scale)); }
+  .section-head { flex-wrap: wrap; align-items: start; gap: 10px 12px; margin-bottom: 16px; }
+  .section-head__text { flex: 1 1 100%; }
+  .section-head .rail__nav { margin-inline-start: auto; }
+  .section-head > .btn { margin-inline-start: auto; }
+  .eyebrow { margin-bottom: 8px; font-size: 11px; }
+  .lede { font-size: 15px; }
+  .btn { --btn-h: 48px; padding: 0 20px; font-size: 14px; }
+  .btn--lg { --btn-h: 52px; padding: 0 22px; font-size: 15px; }
+  .btn--sm { --btn-h: 40px; padding: 0 14px; font-size: 13px; }
+  .icon-btn { width: 42px; height: 42px; }
+  .pill { min-width: 46px; min-height: 42px; padding: 0 12px; font-size: 13px; }
+  .chip { min-height: 28px; padding: 0 10px; font-size: 11px; }
+  .qty { height: 44px; }
 }

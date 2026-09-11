@@ -49,7 +49,7 @@
       const zone = header.closest('[data-header-zone]');
       zone && zone.classList.toggle('is-scrolled', y > 40);
     }
-    if (heroMedia && !reduce && y < window.innerHeight) heroMedia.style.transform = `translateY(${(y * 0.22).toFixed(1)}px)`;
+    if (heroMedia && !reduce && y < window.innerHeight) heroMedia.style.transform = `translateY(${(y * 0.18).toFixed(1)}px)`;
     lastY = y; ticking = false;
   }
   addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });

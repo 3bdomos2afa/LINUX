@@ -1,4 +1,4 @@
-/* LINUX — Customize studio v2 */
+/* LINUX — Customize studio v3 */
 .cz { padding-top: calc(var(--header-h) + 40px); padding-bottom: var(--section-gap); }
 .cz__head { display: grid; gap: 10px; margin-bottom: 24px; max-width: 760px; }
 .cz__head .display { font-size: clamp(34px, 5vw, 72px); }
@@ -8,36 +8,57 @@
 .cz__stage { position: sticky; top: calc(var(--header-h) + 28px); border-radius: var(--r-hero); padding: clamp(14px, 2vw, 22px); display: grid; gap: 14px; overflow: hidden; }
 .cz__stage-top, .cz__stage-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .cz__stage-top .segmented__btn { gap: 6px; }
-.cz__canvas { position: relative; width: min(100%, 560px); aspect-ratio: 540 / 580; margin-inline: auto; display: grid; place-items: center; perspective: 1400px; touch-action: none; border-radius: var(--r-xl); background: radial-gradient(ellipse at 50% 30%, rgb(244 232 216 / .09), transparent 62%); }
-.cz__garment { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform var(--t-slow) var(--ease-out); will-change: transform; }
-.cz__garment.is-swap { animation: cz-swap .55s var(--spring); }
-@keyframes cz-swap { 0% { transform: scale(.94) rotateY(-14deg); opacity: .4; } 100% { transform: none; opacity: 1; } }
+.cz__canvas { position: relative; width: min(100%, 600px); aspect-ratio: 1; margin-inline: auto; display: grid; place-items: center; touch-action: none; border-radius: var(--r-xl); background: radial-gradient(ellipse at 50% 35%, rgb(244 232 216 / .10), transparent 64%), linear-gradient(180deg, rgb(255 255 255 / .02), rgb(0 0 0 / .12)); overflow: hidden; transition: box-shadow var(--t-med); }
+.cz__canvas.is-over { box-shadow: inset 0 0 0 2px var(--accent); }
+.cz__garment { position: relative; width: 100%; height: 100%; }
+.cz__garment.is-swap { animation: cz-swap .5s var(--spring); }
+@keyframes cz-swap { 0% { transform: scale(.96); opacity: .5; } 100% { transform: none; opacity: 1; } }
+.cz__garment.is-flip { animation: cz-flip .4s var(--ease-out); }
+@keyframes cz-flip { 0% { transform: rotateY(0); } 50% { transform: rotateY(90deg); } 100% { transform: rotateY(0); } }
+/* Photo layers */
+.cz__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; filter: drop-shadow(0 30px 40px rgb(0 0 0 / .45)); pointer-events: none; user-select: none; }
+.cz__photo[hidden] { display: none; }
+/* SVG fallback mockups */
 .cz__mock { position: absolute; inset: 0; }
 .cz__mock[hidden] { display: none; }
 .cz__mock svg { width: 100%; height: 100%; display: block; }
 .cz__garment .mock [fill="var(--gc)"] { transition: fill var(--t-med) var(--ease); }
-/* Artwork */
-.cz__design { position: absolute; left: var(--dx, 50%); top: var(--dy, 40%); width: calc(var(--ds, 42) * .66%); transform: translate(-50%, -50%); cursor: grab; touch-action: none; user-select: none; z-index: 2; }
+/* Artwork layer: position/size/rotation come from CSS vars set by JS */
+.cz__design { position: absolute; left: var(--dx, 50%); top: var(--dy, 42%); width: calc(var(--ds, 42) * .66%); transform: translate(-50%, -50%) rotate(var(--dr, 0deg)); cursor: grab; touch-action: none; user-select: none; z-index: 2; outline: none; }
 .cz__design.is-pop { animation: cz-pop .5s var(--spring); }
-@keyframes cz-pop { from { transform: translate(-50%, -50%) scale(.6); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+@keyframes cz-pop { from { transform: translate(-50%, -50%) rotate(var(--dr, 0deg)) scale(.6); opacity: 0; } to { transform: translate(-50%, -50%) rotate(var(--dr, 0deg)) scale(1); opacity: 1; } }
 .cz__design:active, .cz__design.is-dragging { cursor: grabbing; }
-.cz__design img { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .45)) contrast(1.02); mix-blend-mode: normal; }
+.cz__design img { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .45)) contrast(1.02); }
+.cz__garment.has-photo .cz__design img { mix-blend-mode: multiply; filter: contrast(1.05) saturate(1.05); }
+.cz__garment.has-photo:not(.is-light) .cz__design img { mix-blend-mode: normal; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .5)) contrast(1.02); opacity: .96; }
 .cz__garment.is-light .cz__design img { filter: drop-shadow(0 1px 1px rgb(0 0 0 / .25)); }
-.cz__design::after { content: ""; position: absolute; inset: -8px; border: 1.5px dashed rgb(244 232 216 / .6); border-radius: 8px; opacity: 0; transition: opacity var(--t-fast); pointer-events: none; }
-.cz__canvas:hover .cz__design::after, .cz__design.is-dragging::after { opacity: 1; }
-.cz__handle { position: absolute; right: -14px; bottom: -14px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--cream); color: var(--forest); box-shadow: 0 6px 14px rgb(0 0 0 / .35); opacity: 0; transition: opacity var(--t-fast), transform var(--t-med) var(--spring); }
-html[dir="rtl"] .cz__handle { right: auto; left: -14px; }
-.cz__canvas:hover .cz__handle, .cz__design.is-dragging .cz__handle { opacity: 1; }
-.cz__design.is-dragging .cz__handle { transform: scale(1.15); }
+/* Frame + knobs: visible on hover / focus / while dragging */
+.cz__frame { position: absolute; inset: -8px; border: 1.5px dashed rgb(244 232 216 / .7); border-radius: 8px; opacity: 0; transition: opacity var(--t-fast); pointer-events: none; }
+.cz__knob { position: absolute; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: var(--cream); color: var(--forest); box-shadow: 0 6px 14px rgb(0 0 0 / .35); opacity: 0; transition: opacity var(--t-fast), transform var(--t-med) var(--spring); z-index: 3; }
+.cz__knob--scale { right: -16px; bottom: -16px; cursor: nwse-resize; }
+.cz__knob--rotate { left: 50%; top: -34px; transform: translateX(-50%); cursor: grab; }
+.cz__knob--rotate::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 14px; background: rgb(244 232 216 / .7); }
+.cz__canvas:hover .cz__frame, .cz__design:focus-visible .cz__frame, .cz__design.is-dragging .cz__frame,
+.cz__canvas:hover .cz__knob, .cz__design:focus-visible .cz__knob, .cz__design.is-dragging .cz__knob { opacity: 1; }
+.cz__knob:hover { transform: scale(1.12); }
+.cz__knob--rotate:hover { transform: translateX(-50%) scale(1.12); }
+@media (pointer: coarse) { .cz__frame, .cz__knob { opacity: 1; } .cz__knob { width: 34px; height: 34px; } .cz__knob--scale { right: -18px; bottom: -18px; } .cz__knob--rotate { top: -40px; } }
 /* Print-area guide */
-.cz__print-area { position: absolute; left: 50%; top: 46%; width: 50%; height: 52%; transform: translate(-50%, -50%); border: 1px dashed rgb(244 232 216 / .18); border-radius: 10px; opacity: 0; transition: opacity var(--t-med); pointer-events: none; }
-[data-shape="tee"] .cz__print-area { top: 47%; height: 48%; }
-.cz__design.is-dragging ~ .cz__print-area, .cz__canvas:hover .cz__print-area { opacity: 1; }
-.cz__empty { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 6px; padding: 18px 22px; border-radius: var(--r-lg); color: var(--fg); font: 700 13px var(--font-body); cursor: pointer; z-index: 2; transition: transform var(--t-med) var(--spring), background var(--t-fast); }
+.cz__print-area { position: absolute; left: 50%; top: 45%; width: 52%; height: 52%; transform: translate(-50%, -50%); border: 1px dashed rgb(244 232 216 / .22); border-radius: 12px; opacity: 0; transition: opacity var(--t-med), left var(--t-med), top var(--t-med), width var(--t-med), height var(--t-med); pointer-events: none; z-index: 1; }
+.cz__canvas:hover .cz__print-area, .cz__design.is-dragging ~ .cz__print-area, .cz__garment:has(.cz__design.is-dragging) .cz__print-area { opacity: 1; }
+/* Empty prompt */
+.cz__empty { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 6px; padding: 20px 24px; border-radius: var(--r-lg); color: var(--fg); font: 700 14px var(--font-body); cursor: pointer; z-index: 2; transition: transform var(--t-med) var(--spring), background var(--t-fast); text-align: center; }
+.cz__empty small { font-weight: 500; font-size: var(--fs-xs); color: var(--fg-70); }
 .cz__empty:hover { transform: translate(-50%, -50%) scale(1.04); background: var(--glass-fill-hover); }
 .cz__empty svg { color: var(--accent); }
+/* Floating toolbar */
+.cz__tools { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: var(--r-pill); z-index: 4; }
+.cz__tools .icon-btn { width: 38px; height: 38px; }
+.cz__tools-sep { width: 1px; height: 20px; margin: 0 4px; background: var(--glass-stroke); }
 .cz__hint { display: flex; align-items: center; gap: 6px; margin: 0; font-size: var(--fs-xs); color: var(--fg-50); }
 .cz__colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.cz__keys { margin: 0; font-size: var(--fs-xs); }
+.field__label output { color: var(--accent); font-family: var(--font-mono); margin-inline-start: 6px; }
 
 /* Panel */
 .cz__panel { padding: clamp(18px, 2.4vw, 28px); border-radius: var(--r-xl); display: grid; gap: 22px; }
@@ -118,4 +139,8 @@ html[dir="rtl"] .cz__handle { right: auto; left: -14px; }
   .cz__contact { flex-direction: column; align-items: stretch; }
   .cz__contact .btn { width: 100%; }
   .cz__total strong { font-size: 26px; }
+  .cz__tools { bottom: 8px; max-width: calc(100% - 16px); overflow-x: auto; scrollbar-width: none; }
+  .cz__tools .icon-btn { width: 34px; height: 34px; flex: none; }
+  .cz__keys { display: none; }
+  .cz__head .display { font-size: clamp(30px, 9vw, 40px); }
 }

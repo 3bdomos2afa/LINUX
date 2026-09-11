@@ -2,12 +2,66 @@
   "sections": {
     "main": {
       "type": "main-customize",
+      "blocks": {
+        "black": {
+          "type": "color",
+          "settings": {
+            "name": "Black",
+            "hex": "#181818",
+            "variant_value": "black",
+            "builtin": "black"
+          }
+        },
+        "white": {
+          "type": "color",
+          "settings": {
+            "name": "White",
+            "hex": "#e5e5e5",
+            "variant_value": "white",
+            "builtin": "white"
+          }
+        },
+        "burgundy": {
+          "type": "color",
+          "settings": {
+            "name": "Burgundy",
+            "hex": "#801a31",
+            "variant_value": "burgundy",
+            "builtin": "burgundy"
+          }
+        },
+        "beige": {
+          "type": "color",
+          "settings": {
+            "name": "Beige",
+            "hex": "#b5a38a",
+            "variant_value": "beige",
+            "builtin": "beige"
+          }
+        }
+      },
+      "block_order": [
+        "black",
+        "white",
+        "burgundy",
+        "beige"
+      ],
       "settings": {
         "product": "shopify://products/hoodie-customize",
-        "colors": "Forest:#043020,Black:#111111,Cream:#f4e8d8,Beige:#e6d5b8,White:#f7f7f5,Olive:#4b5d3a",
-        "sizes": "S,M,L,XL,2XL",
+        "default_garment": "hoodie",
+        "show_tee": true,
+        "default_side": "back",
+        "sizes": "M,L,XL,2XL",
+        "quick_qtys": "1,5,10,20",
         "min_embroidery": 10,
-        "max_qty": 50
+        "max_qty": 50,
+        "max_mb": 10,
+        "show_contact": true,
+        "show_steps": true,
+        "color_option": "Color",
+        "method_option": "Type",
+        "method_print_value": "Print",
+        "method_embroidery_value": "Embroidery"
       }
     },
     "faq": {

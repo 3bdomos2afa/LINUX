@@ -40,11 +40,13 @@
       {%- endfor -%}
     </div>
     <div class="footer__bottom">
-      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ 'footer.made_in' | t }}</p>
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {% render 'tr', value: settings.made_in, key: 'footer.made_in' %}</p>
+      {%- if settings.show_footer_policies != false -%}
       <div class="footer__policies">
         {%- for policy in shop.policies -%}{%- if policy.title != blank -%}<a href="{{ policy.url }}">{% render 'menu-title', title: policy.title %}</a>{%- endif -%}{%- endfor -%}
       </div>
-      {%- if s.show_payment_icons -%}
+      {%- endif -%}
+      {%- if s.show_payment_icons and settings.show_payment_icons != false -%}
         <div class="payment-icons" aria-label="{{ 'footer.payment' | t }}">
           {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag }}{%- endfor -%}
         </div>

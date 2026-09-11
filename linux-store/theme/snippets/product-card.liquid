@@ -8,6 +8,9 @@
 {%- endcomment -%}
 {%- liquid
   assign show_quick = show_quick | default: true, allow_false: true
+  if settings.card_quick_add == false
+    assign show_quick = false
+  endif
   assign lazy = lazy | default: true, allow_false: true
   assign url = product.url
   if collection and collection.handle != 'all'
@@ -68,9 +71,11 @@
       {%- elsif on_sale -%}<span class="chip chip--sale">{{ 'products.sale' | t }}</span>
       {%- elsif is_new -%}<span class="chip chip--accent">{{ 'products.new' | t }}</span>{%- endunless -%}
     </div>
+    {%- if settings.show_wishlist != false -%}
     <button class="card__wish" type="button" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'wishlist.add' | t }}" aria-pressed="false">
       {% render 'icon', name: 'heart', px: 18 %}{% render 'icon', name: 'heart-fill', px: 18 %}
     </button>
+    {%- endif -%}
     {%- if show_quick and product.available -%}
       <div class="card__quick glass glass--solid">
         {%- if product.has_only_default_variant -%}
@@ -115,7 +120,7 @@
   </div>
   <div class="card__body">
     <h3 class="card__title"><a href="{{ url }}">{% render 'product-title', title: product.title %}</a></h3>
-    <p class="card__meta">{% render 'option-value', value: product.type %}</p>
+    {%- if settings.card_show_vendor != false -%}<p class="card__meta">{% render 'option-value', value: product.type %}</p>{%- endif -%}
     <div class="card__price">{% render 'price', product: product %}</div>
     {%- if color_option and color_option.values.size > 1 -%}
       <div class="card__swatches" aria-label="{% render 'option-name', name: color_option.name %}">

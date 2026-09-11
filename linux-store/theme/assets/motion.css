@@ -16,10 +16,10 @@
 
 /* ---- Reveal variants ------------------------------------------------------ */
 [data-reveal="scale"] { transform: scale(.94); }
-[data-reveal="left"] { transform: translateX(-30px); }
-[data-reveal="right"] { transform: translateX(30px); }
-html[dir="rtl"] [data-reveal="left"] { transform: translateX(30px); }
-html[dir="rtl"] [data-reveal="right"] { transform: translateX(-30px); }
+[data-reveal="left"] { --reveal-x: -30px; transform: translateX(var(--reveal-x)); }
+[data-reveal="right"] { --reveal-x: 30px; transform: translateX(var(--reveal-x)); }
+html[dir="rtl"] [data-reveal="left"] { --reveal-x: 30px; }
+html[dir="rtl"] [data-reveal="right"] { --reveal-x: -30px; }
 [data-reveal="blur"] { filter: blur(10px); transition-property: opacity, transform, filter; }
 [data-reveal].is-in { transform: none; filter: none; }
 

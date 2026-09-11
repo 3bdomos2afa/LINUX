@@ -4,12 +4,16 @@
       "type": "hero-embroidery",
       "settings": {
         "height": 100,
+        "height_mobile": 70,
+        "overlay": 10,
+        "layout": "below",
+        "show_headline": true,
+        "show_cta": true,
         "cta_url": "/collections/winter-collection",
         "cta2_url": "/pages/customize",
         "show_trust": true,
-        "overlay": 25,
-        "chip_1": "FW26",
-        "show_headline": true
+        "show_controls": true,
+        "show_scroll_hint": true
       }
     },
     "marquee": {
@@ -322,8 +326,7 @@
     },
     "newsletter": {
       "type": "newsletter",
-      "settings": {
-      }
+      "settings": {}
     },
     "penguins": {
       "type": "penguin-row",

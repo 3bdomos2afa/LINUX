@@ -96,7 +96,8 @@
         // Shopify accepts multipart on /cart/add.js and stores file properties
         // on the line item — used by the Customize studio for the artwork.
         fd.delete('form_type'); fd.delete('utf8');
-        await L.fetchJSON(`${root}/cart/add.js`, { method: 'POST', body: fd });
+        try { await L.fetchJSON(`${root}/cart/add.js`, { method: 'POST', body: fd }); }
+        catch (err) { if (form.getAttribute('action') && !(err.status >= 400 && err.status < 500 && err.status !== 413)) { form.submit(); return; } throw err; }
         await refresh();
         L.buzz();
         if (S.cartType === 'page') L.toast(strings.added, { action: { label: strings.view_bag, href: S.cartUrl } });

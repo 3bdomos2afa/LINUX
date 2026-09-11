@@ -320,13 +320,14 @@
     "apply_discount": "Apply",
     "discount_hint": "Applied at checkout.",
     "discount_invalid": "This code isn't valid for your bag",
-    "discount_applied": "Code applied"
+    "discount_applied": "Code applied",
+    "details": "Details"
   },
   "customize": {
     "title": "Customize studio",
     "subtitle": "Upload your artwork, pick a piece and colour, see it live.",
     "upload": "Upload your design",
-    "upload_hint": "PNG, JPG or SVG · up to 10 MB",
+    "upload_hint": "PNG, JPG or SVG · up to {{ mb }} MB",
     "replace": "Replace design",
     "remove": "Remove",
     "garment": "Garment",
@@ -351,7 +352,7 @@
     "step_2": "Pick garment & colour",
     "step_3": "Position your design",
     "step_4": "We stitch it in 3–5 days",
-    "file_too_big": "That file is too large (max 10 MB).",
+    "file_too_big": "That file is too large (max {{ mb }} MB).",
     "file_type": "Please upload a PNG, JPG or SVG.",
     "reset": "Reset position",
     "quantity": "How many pieces",
@@ -368,7 +369,19 @@
     "method_embroidery": "Embroidery",
     "center": "Center",
     "eta_print": "Ready in 2–3 days",
-    "whatsapp_prefill": "Hi LINUX 👋 I want a custom piece:"
+    "whatsapp_prefill": "Hi LINUX 👋 I want a custom piece:",
+    "rotate": "Rotate",
+    "rotate_left": "Rotate left",
+    "rotate_right": "Rotate right",
+    "bigger": "Bigger",
+    "smaller": "Smaller",
+    "fit": "Fit to area",
+    "drop_hint": "or drop a file here",
+    "hint_design": "Drag to move · corner knob to resize · top knob to rotate · pinch on phone",
+    "keys_hint": "Keyboard: arrows move · + / − resize · [ ] rotate · Shift = bigger steps",
+    "mockup": "Preview",
+    "view_mockup": "See the mockup",
+    "position_label": "Design position"
   },
   "customer": {
     "account": {
@@ -495,9 +508,16 @@
     "studio": "Cairo, Egypt"
   },
   "page_404": {
+    "eyebrow": "Error 404",
     "title": "Lost in the stitches",
-    "body": "That page doesn't exist — the new drop does.",
-    "cta": "Back to the drop"
+    "body": "That page doesn't exist — the new drop does. Search for what you wanted or jump straight back in.",
+    "cta": "Back to the drop",
+    "search_placeholder": "Search hoodies, tees, anime…",
+    "popular_eyebrow": "While you're here",
+    "popular_heading": "What everyone's grabbing",
+    "link_shop": "Every piece, embroidered in Cairo",
+    "link_customize": "Your artwork on a hoodie or tee",
+    "link_help": "WhatsApp, email, or the FAQ"
   },
   "date_formats": {
     "month_day_year": "%B %d, %Y"

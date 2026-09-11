@@ -14,7 +14,7 @@ while (queue.length && seen.size < 120) {
   if (/Section .* error|Liquid error|translation missing/.test(html)) bad.push([p, 'render error/missing translation']);
   for (const m of html.matchAll(/href="([^"#]+)"/g)) {
     const h = m[1];
-    if (/^(https?:|mailto:|tel:|javascript:)/.test(h) || h.startsWith('/assets/') || h.startsWith('/cdn')) continue;
+    if (/^(https?:|mailto:|tel:|javascript:)/.test(h) || h.startsWith('/assets/') || h.startsWith('/cdn') || h.startsWith('/uploads/')) continue;
     if (!h.startsWith('/')) continue;
     if (!h.startsWith('/ar')) { bad.push([p, 'link drops Arabic: ' + h]); continue; }
     if (!seen.has(h) && !queue.includes(h)) queue.push(h);

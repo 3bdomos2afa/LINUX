@@ -41,7 +41,7 @@
         </div>
         <div class="gallery__badges">
           {%- if current.compare_at_price > current.price -%}<span class="chip chip--sale" data-badge-sale>{{ 'products.sale' | t }}</span>{%- endif -%}
-          <span class="chip chip--onmedia">{% render 'icon', name: 'needle', px: 12 %}{{ 'products.embroidered' | t }}</span>
+          {%- if settings.show_embroidered_chip != false -%}<span class="chip chip--onmedia">{% render 'icon', name: 'needle', px: 12 %}{{ 'products.embroidered' | t }}</span>{%- endif -%}
         </div>
         <button class="icon-btn glass glass--clear gallery__zoom" type="button" data-gallery-zoom aria-label="{{ 'products.zoom' | t }}">{% render 'icon', name: 'zoom', px: 18 %}</button>
         {%- if media_count > 1 -%}
@@ -140,7 +140,7 @@
             </button>
             <button class="icon-btn glass pdp__wish" type="button" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'wishlist.add' | t }}" aria-pressed="false">{% render 'icon', name: 'heart' %}{% render 'icon', name: 'heart-fill' %}</button>
           </div>
-          {%- if settings.whatsapp_number != blank -%}
+          {%- if s.show_whatsapp and settings.whatsapp_number != blank -%}
             <a class="btn btn--glass btn--block pdp__wa" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}?text={{ 'general.whatsapp_prefill' | t | append: ' ' | append: product.title | url_encode }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', px: 18 %}{{ 'general.whatsapp' | t }}</a>
           {%- endif -%}
         {%- endform -%}
@@ -179,9 +179,11 @@
               </details>
           {%- endcase -%}
         {%- endfor -%}
+        {%- if settings.show_share != false -%}
         <div class="pdp__share">
           <button class="btn btn--ghost btn--sm" type="button" data-copy="{{ shop.url }}{{ product.url }}" data-share>{% render 'icon', name: 'share', px: 16 %}{{ 'products.share' | t }}</button>
         </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -215,7 +217,8 @@
   "settings": [
     { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
     { "type": "checkbox", "id": "show_rating", "label": "Show rating chip", "default": true },
-    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.9 · 120 reviews" }
+    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.9 · 120 reviews" },
+    { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp button under Add to bag", "default": false }
   ],
   "blocks": [
     { "type": "description", "name": "Description", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" } ] },

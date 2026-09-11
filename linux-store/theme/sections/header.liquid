@@ -72,7 +72,7 @@
       </a>
 
       <div class="header__end">
-        {% render 'locale-switcher' %}
+        {%- if settings.show_locale_switcher != false -%}{% render 'locale-switcher' %}{%- endif -%}
         <button class="icon-btn" type="button" data-drawer-open="search" aria-label="{{ 'search.title' | t }}" aria-expanded="false">
           {% render 'icon', name: 'search' %}
         </button>
@@ -81,9 +81,11 @@
             {% render 'icon', name: 'account' %}
           </a>
         {%- endif -%}
+        {%- if settings.show_wishlist != false -%}
         <a class="icon-btn header__wishlist" href="{{ routes.search_url }}?view=wishlist" data-wishlist-link aria-label="{{ 'wishlist.title' | t }}">
           {% render 'icon', name: 'heart' %}<span class="badge header__count" data-wishlist-count hidden>0</span>
         </a>
+        {%- endif -%}
         {%- if settings.cart_type == 'page' -%}
           <a class="icon-btn header__cart" href="{{ routes.cart_url }}" aria-label="{{ 'cart.title' | t }}">
         {%- else -%}

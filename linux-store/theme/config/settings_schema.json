@@ -27,6 +27,29 @@
         "default": "forest"
       },
       {
+        "type": "header",
+        "content": "Brand colours"
+      },
+      {
+        "type": "paragraph",
+        "content": "Leave a colour empty to keep the LINUX default (forest / cream / lime). Changing these recolours the whole theme: glass, buttons, badges, links."
+      },
+      {
+        "type": "color",
+        "id": "brand_forest",
+        "label": "Forest (dark base)"
+      },
+      {
+        "type": "color",
+        "id": "brand_cream",
+        "label": "Cream (text on dark)"
+      },
+      {
+        "type": "color",
+        "id": "brand_lime",
+        "label": "Lime (accent / buttons)"
+      },
+      {
         "type": "range",
         "id": "glass_strength",
         "label": "Glass blur",
@@ -74,12 +97,6 @@
         "default": 1440
       },
       {
-        "type": "checkbox",
-        "id": "type_system_fonts",
-        "label": "Use system fonts (skip Google Fonts)",
-        "default": false
-      },
-      {
         "type": "image_picker",
         "id": "favicon",
         "label": "Favicon"
@@ -88,12 +105,97 @@
         "type": "image_picker",
         "id": "share_image",
         "label": "Social share image"
+      },
+      {
+        "type": "header",
+        "content": "Typography"
+      },
+      {
+        "type": "checkbox",
+        "id": "type_system_fonts",
+        "label": "Use system fonts (skip Rantaro / Thmanyah)",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "type_scale",
+        "label": "Text size",
+        "min": 85,
+        "max": 115,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "label": "Headline size",
+        "min": 80,
+        "max": 120,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Layout & spacing",
+    "settings": [
+      {
+        "type": "range",
+        "id": "section_gap",
+        "label": "Space between sections",
+        "min": 50,
+        "max": 150,
+        "step": 10,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "gutter_scale",
+        "label": "Side padding",
+        "min": 50,
+        "max": 150,
+        "step": 10,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Mobile"
+      },
+      {
+        "type": "range",
+        "id": "mobile_type_scale",
+        "label": "Mobile text size",
+        "min": 85,
+        "max": 115,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tab_bar",
+        "label": "Bottom tab bar on phones",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_two_col",
+        "label": "Two product columns on phones (off = one wide column)",
+        "default": true
       }
     ]
   },
   {
     "name": "Navigation",
     "settings": [
+      {
+        "type": "paragraph",
+        "content": "Menus themselves are edited in Online Store → Navigation. Menu titles the theme knows (Shop, Customize, Journal, About, Contact…) are translated automatically."
+      },
       {
         "type": "link_list",
         "id": "side_menu",
@@ -105,6 +207,18 @@
         "id": "search_suggestions",
         "label": "Popular searches (comma separated)",
         "default": "Hoodie,Anime,Customize,Sada,Shirt"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_locale_switcher",
+        "label": "Show language switcher",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_wishlist",
+        "label": "Show wishlist (heart) in header and tab bar",
+        "default": true
       }
     ]
   },
@@ -147,6 +261,24 @@
         "max": 10,
         "step": 1,
         "default": 5
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "label": "Order note field in the bag",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_discount",
+        "label": "Discount code field in the bag",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_upsell",
+        "label": "\"Complete the look\" suggestions in the bag",
+        "default": true
       }
     ]
   },
@@ -193,6 +325,84 @@
         "id": "delivery_egypt",
         "label": "Delivery: rest of Egypt",
         "default": "2–4 days"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_embroidered_chip",
+        "label": "Show \"Embroidered in Cairo\" chip on product photos",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share",
+        "label": "Show share button",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Quick add (size pills) on product cards",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor on product cards",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_compare",
+        "label": "Show crossed-out compare price",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "404 page",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The 404 page also has its own section in the theme editor (open any missing URL while customizing). These are the defaults."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_404_search",
+        "label": "Show search box",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_404_products",
+        "label": "Show popular products",
+        "default": true
+      },
+      {
+        "type": "collection",
+        "id": "collection_404",
+        "label": "Collection for popular products (blank = all)"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "Show payment icons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_footer_policies",
+        "label": "Show policy links",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "made_in",
+        "label": "\"Made in\" line (blank = translated)"
       }
     ]
   },
@@ -204,6 +414,31 @@
         "id": "whatsapp_number",
         "label": "WhatsApp number (international format)",
         "default": "201110351549"
+      },
+      {
+        "type": "select",
+        "id": "whatsapp_fab_scope",
+        "label": "Floating WhatsApp bubble",
+        "options": [
+          {
+            "value": "customize",
+            "label": "Customize page only"
+          },
+          {
+            "value": "everywhere",
+            "label": "Every page"
+          },
+          {
+            "value": "none",
+            "label": "Hidden"
+          }
+        ],
+        "default": "customize"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_prefill",
+        "label": "WhatsApp opening message (blank = translated)"
       },
       {
         "type": "url",
@@ -219,6 +454,24 @@
         "type": "url",
         "id": "social_facebook",
         "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_x",
+        "label": "X / Twitter"
+      },
+      {
+        "type": "header",
+        "content": "Store copy"
+      },
+      {
+        "type": "paragraph",
+        "content": "Every text in the theme has an English and an Arabic version. To change any wording (buttons, labels, messages) open Online Store → Themes → … → Edit default theme content, or install Shopify's free Translate & Adapt app to edit Arabic side by side."
       }
     ]
   }

@@ -62,6 +62,13 @@
   {%- if template.directory == 'customers' or template.name == 'cart' or template.name == 'page' or template.name == 'blog' or template.name == 'article' or template.name == '404' -%}{{ 'pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {{ 'offers.css' | asset_url | stylesheet_tag }}
 
+  {%- liquid
+    assign type_scale = settings.type_scale | default: 100
+    assign heading_scale = settings.heading_scale | default: 100
+    assign mobile_type_scale = settings.mobile_type_scale | default: 100
+    assign section_gap = settings.section_gap | default: 100
+    assign gutter_scale = settings.gutter_scale | default: 100
+  -%}
   {% style %}
     :root {
       --page-max: {{ settings.page_width | default: 1440 }}px;
@@ -71,7 +78,38 @@
       --r-xl: {{ settings.radius_scale | default: 100 | times: 0.36 | round }}px;
       --r-2xl: {{ settings.radius_scale | default: 100 | times: 0.44 | round }}px;
       --r-md: {{ settings.radius_scale | default: 100 | times: 0.22 | round }}px;
+      --type-scale: {{ type_scale | divided_by: 100.0 }};
+      --heading-scale: {{ heading_scale | divided_by: 100.0 }};
+      --section-gap-scale: {{ section_gap | divided_by: 100.0 }};
+      --gutter-scale: {{ gutter_scale | divided_by: 100.0 }};
+      --section-gap: calc(clamp(64px, 9vw, 128px) * var(--section-gap-scale));
+      --gutter: calc(clamp(16px, 4vw, 48px) * var(--gutter-scale));
+      {%- if settings.brand_forest != blank and settings.brand_forest != 'rgba(0,0,0,0)' %}
+      --forest: {{ settings.brand_forest }};
+      --forest-deep: {{ settings.brand_forest | color_darken: 8 }};
+      --forest-soft: {{ settings.brand_forest | color_lighten: 6 }};
+      --forest-mist: {{ settings.brand_forest | color_lighten: 14 }};
+      --bg: {{ settings.brand_forest | color_darken: 8 }};
+      --glass-fill-solid: {{ settings.brand_forest | color_modify: 'alpha', 0.62 }};
+      {%- endif %}
+      {%- if settings.brand_cream != blank and settings.brand_cream != 'rgba(0,0,0,0)' %}
+      --cream: {{ settings.brand_cream }};
+      --fg: {{ settings.brand_cream }};
+      --fg-70: {{ settings.brand_cream | color_modify: 'alpha', 0.72 }};
+      --fg-50: {{ settings.brand_cream | color_modify: 'alpha', 0.52 }};
+      --fg-30: {{ settings.brand_cream | color_modify: 'alpha', 0.3 }};
+      --fg-12: {{ settings.brand_cream | color_modify: 'alpha', 0.12 }};
+      --glass-fill: {{ settings.brand_cream | color_modify: 'alpha', 0.07 }};
+      --glass-fill-hover: {{ settings.brand_cream | color_modify: 'alpha', 0.11 }};
+      --glass-stroke: {{ settings.brand_cream | color_modify: 'alpha', 0.16 }};
+      {%- endif %}
+      {%- if settings.brand_lime != blank and settings.brand_lime != 'rgba(0,0,0,0)' %}
+      --lime: {{ settings.brand_lime }};
+      --lime-deep: {{ settings.brand_lime | color_darken: 12 }};
+      --accent: {{ settings.brand_lime }};
+      {%- endif %}
     }
+    @media (max-width: 760px) { :root { --type-scale: {{ type_scale | times: mobile_type_scale | divided_by: 10000.0 }}; } }
     {%- if settings.motion_scale == 0 -%}
     *, *::before, *::after { animation: none !important; transition: none !important; }
     {%- endif -%}
@@ -87,7 +125,8 @@
       cartUrl: {{ routes.cart_url | json }},
       freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }},
       cartType: {{ settings.cart_type | default: 'drawer' | json }},
-      whatsapp: {{ settings.whatsapp_number | default: '' | json }}
+      whatsapp: {{ settings.whatsapp_number | default: '' | json }},
+      showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }}
     };
     LINUX.strings = {
       added: {{ 'cart.added' | t | json }},
@@ -112,7 +151,7 @@
   {{ content_for_header }}
 </head>
 
-<body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name | handle }}-{{ template.suffix | handle }}{% endif %}{% if is_rtl %} is-rtl{% endif %}" data-cart-type="{{ settings.cart_type | default: 'drawer' }}">
+<body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name | handle }}-{{ template.suffix | handle }}{% endif %}{% if is_rtl %} is-rtl{% endif %}{% if settings.mobile_two_col == false %} mobile-one-col{% endif %}{% if settings.show_wishlist == false %} no-wishlist{% endif %}" data-cart-type="{{ settings.cart_type | default: 'drawer' }}">
   <a class="skip-link" href="#main">{{ 'accessibility.skip_to_content' | t }}</a>
   {%- if template.name == 'index' and settings.show_curtain -%}<div class="curtain" aria-hidden="true">{% render 'brand-logo', height: 40 %}</div>{%- endif -%}
 
@@ -135,8 +174,18 @@
   {% render 'menu-drawer' %}
   {% render 'search-overlay' %}
   {% render 'quick-view' %}
-  {% render 'tab-bar' %}
-  {%- if settings.whatsapp_number != blank -%}{% render 'whatsapp-fab' %}{%- endif -%}
+  {%- if settings.show_tab_bar != false -%}{% render 'tab-bar' %}{%- endif -%}
+  {%- liquid
+    assign show_fab = false
+    if settings.whatsapp_number != blank
+      if settings.whatsapp_fab_scope == 'everywhere'
+        assign show_fab = true
+      elsif settings.whatsapp_fab_scope == 'customize' and template.suffix == 'customize'
+        assign show_fab = true
+      endif
+    endif
+  -%}
+  {%- if show_fab -%}{% render 'whatsapp-fab' %}{%- endif -%}
   <div class="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
   <script src="{{ 'global.js' | asset_url }}" defer></script>

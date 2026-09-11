@@ -8,7 +8,7 @@
     <div data-cart-region="body">
       {% render 'cart-body', cart: cart, context: 'drawer' %}
     </div>
-    {%- if section.settings.show_upsell -%}
+    {%- if section.settings.show_upsell and settings.show_cart_upsell != false -%}
       <div class="cart-upsell" data-cart-upsell hidden>
         <p class="cart-upsell__title">{{ 'cart.upsell_title' | t }}</p>
         <div class="cart-upsell__list" data-cart-upsell-list></div>

@@ -1,9 +1,10 @@
 {%- comment -%}
   Hero — the LINUX wordmark being embroidered, shot macro. The video IS the
-  hero: it fills the stage edge to edge, and everything else is a slim glass
-  strip pinned to the bottom (headline, CTAs, trust) so the footage stays
-  uncovered. The video ships with the theme (1080p + 720p + poster); the
-  merchant can swap it in the editor.
+  hero and nothing sits on it: the stage is pure footage (plus the pause
+  control). The glass panel with the headline, CTAs and trust row lives in the
+  band directly under the video, so it slides into view as you scroll — the
+  merchant can switch the layout back to "over the video" in the editor.
+  The video ships with the theme (1080p + 720p + poster); swap it in the editor.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
@@ -31,69 +32,54 @@
   if eyebrow == blank
     assign eyebrow = 'sections.hero.eyebrow' | t
   endif
+  assign layout = s.layout | default: 'below'
+  assign panel_below = true
+  if layout == 'over'
+    assign panel_below = false
+  endif
+  assign show_panel = true
+  if s.show_headline == false and s.show_cta == false
+    assign show_panel = false
+  endif
 -%}
-<section class="hero hero--wide{% if s.show_headline == false %} hero--quiet{% endif %}" id="hero-{{ section.id }}" style="--hero-h: {{ s.height | default: 100 }}svh; --hero-dim: {{ s.overlay | default: 25 | divided_by: 100.0 }};" data-hero>
-  <div class="hero__media" aria-hidden="true" data-hero-media>
-    {%- if s.video != blank -%}
-      {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'hero__video', poster: poster }}
-    {%- else -%}
-      <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="{{ poster }}" data-hero-video>
-        <source src="{{ 'hero-embroidery-1080.mp4' | asset_url }}" type="video/mp4" media="(min-width: 900px)">
-        <source src="{{ 'hero-embroidery-720.mp4' | asset_url }}" type="video/mp4">
-      </video>
-    {%- endif -%}
-    <div class="hero__scrim"></div>
-    <div class="hero__vignette"></div>
-  </div>
-
-
-  <div class="hero__inner wrap">
-    <div class="hero__strip glass" data-specular data-reveal>
-      {%- unless s.show_headline == false -%}
-        <div class="hero__copy">
-          <p class="eyebrow hero__eyebrow"><span class="dot"></span>{{ eyebrow | escape }}</p>
-          <h1 class="hero__title display" data-split>{{ heading | escape }}</h1>
-        </div>
-      {%- endunless -%}
-      <div class="hero__side">
-        <p class="hero__sub">{{ sub | escape }}</p>
-        <div class="hero__cta">
-          <a href="{{ s.cta_url | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg" data-magnetic>{{ cta | escape }}{% render 'icon', name: 'arrow-right' %}</a>
-          {%- if cta2 != blank -%}<a href="{{ s.cta2_url | default: routes.collections_url }}" class="btn btn--glass btn--lg" data-magnetic>{{ cta2 | escape }}</a>{%- endif -%}
-        </div>
-      </div>
+<section class="hero hero--wide{% if panel_below %} hero--panel-below{% else %} hero--panel-over{% endif %}{% unless show_panel %} hero--quiet{% endunless %}" id="hero-{{ section.id }}" style="--hero-h: {{ s.height | default: 100 }}svh; --hero-h-mobile: {{ s.height_mobile | default: 70 }}svh; --hero-dim: {{ s.overlay | default: 10 | divided_by: 100.0 }};" data-hero>
+  <div class="hero__stage">
+    <div class="hero__media" aria-hidden="true" data-hero-media>
+      {%- if s.video != blank -%}
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'hero__video', poster: poster }}
+      {%- else -%}
+        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="{{ poster }}" data-hero-video>
+          <source src="{{ 'hero-embroidery-1080.mp4' | asset_url }}" type="video/mp4" media="(min-width: 900px)">
+          <source src="{{ 'hero-embroidery-720.mp4' | asset_url }}" type="video/mp4">
+        </video>
+      {%- endif -%}
+      <div class="hero__scrim"></div>
+      <div class="hero__vignette"></div>
     </div>
 
-    {%- if s.show_trust -%}
-      {%- liquid
-        assign t1 = s.trust_1
-        if t1 == blank
-          assign t1 = 'sections.hero.trust_1' | t
-        endif
-        assign t2 = s.trust_2
-        if t2 == blank
-          assign t2 = 'sections.hero.trust_2' | t
-        endif
-        assign t3 = s.trust_3
-        if t3 == blank
-          assign t3 = 'sections.hero.trust_3' | t
-        endif
-      -%}
-      <ul class="hero__trust" role="list" data-reveal style="--i: 3">
-        <li>{% render 'icon', name: 'truck', px: 16 %}<span>{{ t1 | escape }}</span></li>
-        <li>{% render 'icon', name: 'return', px: 16 %}<span>{{ t2 | escape }}</span></li>
-        <li>{% render 'icon', name: 'needle', px: 16 %}<span>{{ t3 | escape }}</span></li>
-      </ul>
+    {%- if s.show_controls != false -%}
+      <div class="hero__controls">
+        <button class="icon-btn glass glass--clear hero__toggle" type="button" data-hero-toggle aria-label="{{ 'sections.hero.pause' | t }}" aria-pressed="false">
+          <span class="hero__toggle-pause">{% render 'icon', name: 'pause', px: 16 %}</span>
+          <span class="hero__toggle-play">{% render 'icon', name: 'play', px: 16 %}</span>
+        </button>
+      </div>
     {%- endif -%}
+
+    {%- if panel_below and s.show_scroll_hint != false -%}
+      <a href="#hero-panel-{{ section.id }}" class="hero__scroll glass glass--clear glass--pill" aria-label="{{ 'sections.hero.scroll' | t }}"><span class="hero__scroll-dot"></span></a>
+    {%- endif -%}
+
+    {%- unless panel_below -%}
+      {%- if show_panel -%}
+        <div class="hero__inner wrap">{% render 'hero-panel', s: s, eyebrow: eyebrow, heading: heading, sub: sub, cta: cta, cta2: cta2 %}</div>
+      {%- endif -%}
+    {%- endunless -%}
   </div>
 
-  <div class="hero__controls">
-    <a href="#after-hero" class="hero__scroll glass glass--clear glass--pill" aria-label="{{ 'sections.hero.scroll' | t }}"><span class="hero__scroll-dot"></span></a>
-    <button class="icon-btn glass glass--clear hero__toggle" type="button" data-hero-toggle aria-label="{{ 'sections.hero.pause' | t }}" aria-pressed="false">
-      <span class="hero__toggle-pause">{% render 'icon', name: 'pause', px: 16 %}</span>
-      <span class="hero__toggle-play">{% render 'icon', name: 'play', px: 16 %}</span>
-    </button>
-  </div>
+  {%- if panel_below and show_panel -%}
+    <div class="hero__band wrap" id="hero-panel-{{ section.id }}">{% render 'hero-panel', s: s, eyebrow: eyebrow, heading: heading, sub: sub, cta: cta, cta2: cta2 %}</div>
+  {%- endif -%}
 </section>
 <div id="after-hero"></div>
 
@@ -102,23 +88,33 @@
   "name": "Hero — Embroidery video",
   "settings": [
     { "type": "paragraph", "content": "Text fields left empty fall back to the theme's translations, so the hero switches language automatically." },
+    { "type": "header", "content": "Video" },
     { "type": "video", "id": "video", "label": "Video (defaults to the embroidery loop shipped with the theme)" },
     { "type": "image_picker", "id": "poster", "label": "Poster image" },
-    { "type": "range", "id": "height", "label": "Height", "min": 70, "max": 100, "step": 5, "unit": "vh", "default": 100 },
-    { "type": "range", "id": "overlay", "label": "Darken video", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 25 },
-    { "type": "checkbox", "id": "show_headline", "label": "Show headline over the video", "default": true },
+    { "type": "range", "id": "height", "label": "Video height (desktop)", "min": 50, "max": 100, "step": 5, "unit": "vh", "default": 100 },
+    { "type": "range", "id": "height_mobile", "label": "Video height (phone)", "min": 40, "max": 100, "step": 5, "unit": "vh", "default": 70 },
+    { "type": "range", "id": "overlay", "label": "Darken video", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 10 },
+    { "type": "checkbox", "id": "show_controls", "label": "Show pause button", "default": true },
+    { "type": "checkbox", "id": "show_scroll_hint", "label": "Show scroll hint", "default": true },
+    { "type": "header", "content": "Glass panel" },
+    { "type": "select", "id": "layout", "label": "Where the glass panel sits", "options": [
+      { "value": "below", "label": "Under the video (video stays clean)" },
+      { "value": "over", "label": "Over the video" }
+    ], "default": "below" },
+    { "type": "checkbox", "id": "show_headline", "label": "Show headline", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
     { "type": "text", "id": "heading", "label": "Headline" },
     { "type": "textarea", "id": "subheading", "label": "Subheading" },
+    { "type": "checkbox", "id": "show_cta", "label": "Show buttons", "default": true },
     { "type": "text", "id": "cta_label", "label": "Primary button" },
     { "type": "url", "id": "cta_url", "label": "Primary link" },
     { "type": "text", "id": "cta2_label", "label": "Secondary button" },
     { "type": "url", "id": "cta2_url", "label": "Secondary link" },
+    { "type": "header", "content": "Trust row" },
     { "type": "checkbox", "id": "show_trust", "label": "Show trust row", "default": true },
     { "type": "text", "id": "trust_1", "label": "Trust 1" },
     { "type": "text", "id": "trust_2", "label": "Trust 2" },
-    { "type": "text", "id": "trust_3", "label": "Trust 3" },
-    { "type": "text", "id": "chip_1", "label": "Sticker chip", "default": "FW26" }
+    { "type": "text", "id": "trust_3", "label": "Trust 3" }
   ],
   "presets": [ { "name": "Hero — Embroidery video" } ]
 }

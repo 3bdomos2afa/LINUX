@@ -42,6 +42,7 @@ linux-store/
 | Area | Notes |
 | --- | --- |
 | `assets/glass.css` | Design tokens, glass material (regular / clear / solid), atmosphere, buttons, pills, swatches, forms |
+| Fonts | Rantaro + Space Grotesk (EN), Thmanyah Serif Display + Thmanyah Sans (AR) — self-hosted in `assets/*.woff2`, wired in `snippets/fonts.liquid` |
 | `assets/components.css` | Header + mega menu, hero, marquee, cards, rails, bento, drawers, footer, search, tab bar, toasts |
 | `assets/*.js` | Vanilla, dependency-free: AJAX cart + section rendering, predictive search (with Arabic term mapping), wishlist (localStorage), product variants/gallery/sticky ATC/quick view, Customize studio |
 | `sections/` | 40 sections incl. all `main-*` templates, hero video, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |

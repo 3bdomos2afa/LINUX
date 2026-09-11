@@ -21,23 +21,48 @@
   <ul class="cart-lines" role="list">
     {%- for item in cart.items -%}
       <li class="cart-line glass glass--clear" data-line data-key="{{ item.key }}" style="--i: {{ forloop.index0 }}">
-        <a class="cart-line__media" href="{{ item.url }}">
-          {%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}" width="84" height="104" loading="lazy">{%- endif -%}
+        {%- liquid
+          assign mockup = item.properties['Mockup']
+          assign has_mockup = false
+          if mockup contains '/uploads/' or mockup contains 'data:image'
+            assign has_mockup = true
+          endif
+        -%}
+        <a class="cart-line__media{% if has_mockup %} cart-line__media--mockup{% endif %}" href="{{ item.url }}">
+          {%- if has_mockup -%}
+            <img src="{{ mockup }}" alt="{{ 'customize.mockup' | t }}" width="84" height="84" loading="lazy">
+          {%- elsif item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}" width="84" height="104" loading="lazy">{%- endif -%}
         </a>
         <div class="cart-line__body">
           <a class="cart-line__title" href="{{ item.url }}">{% render 'product-title', title: item.product.title %}</a>
           {%- unless item.product.has_only_default_variant -%}<p class="cart-line__meta">{%- for opt in item.variant.options -%}{% render 'option-value', value: opt %}{%- unless forloop.last %} / {% endunless -%}{%- endfor -%}</p>{%- endunless -%}
-          {%- for p in item.properties -%}
-            {%- assign first_char = p.first | slice: 0 -%}
-            {%- if p.last != blank and first_char != '_' -%}
-              <p class="cart-line__meta">{% render 'property-label', name: p.first %}:
-                {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>
-                {%- elsif p.last contains 'upload:' -%} {{ p.last | remove_first: 'upload:' }}
-                {%- elsif p.first == 'Method' or p.first == 'Garment' or p.first == 'Colour' -%} {% render 'option-value', value: p.last %}
-                {%- else -%} {{ p.last }}{%- endif -%}
-              </p>
-            {%- endif -%}
-          {%- endfor -%}
+          {%- liquid
+            assign prop_count = 0
+            for p in item.properties
+              assign fc = p.first | slice: 0
+              if p.last != blank and fc != '_' and p.first != 'Mockup'
+                assign prop_count = prop_count | plus: 1
+              endif
+            endfor
+          -%}
+          {%- if prop_count > 0 -%}
+          <details class="cart-line__props"{% if prop_count <= 3 %} open{% endif %}>
+            <summary>{{ 'cart.details' | t }} · {{ prop_count }}</summary>
+            {%- for p in item.properties -%}
+              {%- assign first_char = p.first | slice: 0 -%}
+              {%- if p.last != blank and first_char != '_' and p.first != 'Mockup' -%}
+                <p class="cart-line__meta">{% render 'property-label', name: p.first %}:
+                  {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>
+                  {%- elsif p.last contains 'upload:' -%} {{ p.last | remove_first: 'upload:' }}
+                  {%- elsif p.first == 'Method' or p.first == 'Garment' or p.first == 'Colour' or p.first == 'Side' -%} {% render 'option-value', value: p.last %}
+                  {%- elsif p.first == 'Design position' -%} <span class="mono">{{ p.last }}</span>
+                  {%- else -%} {{ p.last }}{%- endif -%}
+                </p>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if has_mockup -%}<p class="cart-line__meta"><a href="{{ mockup }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} ↗</a></p>{%- endif -%}
+          </details>
+          {%- endif -%}
           <div class="cart-line__row">
             <div class="qty qty--sm">
               <button class="qty__btn" type="button" data-qty-change="-1" data-key="{{ item.key }}" aria-label="{{ 'cart.decrease' | t }}">−</button>

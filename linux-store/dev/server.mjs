@@ -335,6 +335,9 @@ async function readBody(req) {
   if (ct.includes('multipart/form-data')) return parseMultipart(raw, ct);
   return Object.fromEntries(new URLSearchParams(raw.toString('utf8')));
 }
+// Shopify stores file line-item properties and returns a /uploads/… URL; the
+// harness mirrors that by writing the part to dev/.uploads and serving it.
+const UPLOADS = path.join(__dirname, '.uploads');
 function parseMultipart(raw, ct) {
   const boundary = ct.split('boundary=')[1];
   const out = {};
@@ -342,7 +345,14 @@ function parseMultipart(raw, ct) {
   for (const part of raw.toString('latin1').split(`--${boundary}`)) {
     const m = part.match(/name="([^"]+)"(?:; filename="([^"]*)")?\r\n(?:Content-Type: [^\r\n]+\r\n)?\r\n([\s\S]*)\r\n$/);
     if (!m) continue;
-    out[m[1]] = m[2] !== undefined ? (m[2] ? `upload:${m[2]}` : '') : Buffer.from(m[3], 'latin1').toString('utf8');
+    if (m[2] !== undefined) {
+      if (!m[2]) { out[m[1]] = ''; continue; }
+      const bytes = Buffer.from(m[3], 'latin1');
+      const name = `${Date.now().toString(36)}-${m[2].replace(/[^\w.-]+/g, '_')}`;
+      fs.mkdirSync(UPLOADS, { recursive: true });
+      fs.writeFileSync(path.join(UPLOADS, name), bytes);
+      out[m[1]] = `/uploads/${name}`;
+    } else out[m[1]] = Buffer.from(m[3], 'latin1').toString('utf8');
   }
   return out;
 }
@@ -366,6 +376,14 @@ const server = http.createServer(async (req, res) => {
     // Dev-only: side-by-side phone frames for mobile layout checks
     if (pathname === '/__device') return send(res, 200, fs.readFileSync(path.join(__dirname, 'scripts/device-frame.html'), 'utf8'));
 
+    // Uploaded line-item files (see parseMultipart)
+    if (pathname.startsWith('/uploads/')) {
+      const file = path.join(UPLOADS, path.basename(pathname));
+      if (!fs.existsSync(file)) return send(res, 404, 'not found', 'text/plain');
+      const ext = path.extname(file).toLowerCase();
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+      return fs.createReadStream(file).pipe(res);
+    }
     // Static theme assets
     if (pathname.startsWith('/assets/')) {
       const file = path.join(THEME, 'assets', path.basename(pathname).split('?')[0]);
