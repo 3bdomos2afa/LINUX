@@ -1,9 +1,9 @@
 {%- comment -%}
   Hero — the LINUX wordmark being embroidered, shot macro. The video IS the
-  hero and nothing sits on it: the stage is pure footage (plus the pause
-  control). The glass panel with the headline, CTAs and trust row lives in the
-  band directly under the video, so it slides into view as you scroll — the
-  merchant can switch the layout back to "over the video" in the editor.
+  hero and nothing sits on it: full-bleed footage edge to edge, no controls,
+  no overlays. The glass panel with the headline, CTAs and trust row lives in
+  the band directly under the video, so it slides into view as you scroll —
+  the merchant can switch the layout back to "over the video" in the editor.
   The video ships with the theme (1080p + 720p + poster); swap it in the editor.
 {%- endcomment -%}
 {%- liquid
@@ -42,33 +42,24 @@
     assign show_panel = false
   endif
 -%}
-<section class="hero hero--wide{% if panel_below %} hero--panel-below{% else %} hero--panel-over{% endif %}{% unless show_panel %} hero--quiet{% endunless %}" id="hero-{{ section.id }}" style="--hero-h: {{ s.height | default: 100 }}svh; --hero-h-mobile: {{ s.height_mobile | default: 70 }}svh; --hero-dim: {{ s.overlay | default: 10 | divided_by: 100.0 }};" data-hero>
+<section class="hero hero--wide{% if panel_below %} hero--panel-below{% else %} hero--panel-over{% endif %}{% unless show_panel %} hero--quiet{% endunless %}" id="hero-{{ section.id }}" style="--hero-h: {{ s.height | default: 100 }}svh; --hero-h-mobile: {{ s.height_mobile | default: 100 }}svh; --hero-dim: {{ s.overlay | default: 0 | divided_by: 100.0 }};" data-hero>
   <div class="hero__stage">
     <div class="hero__media" aria-hidden="true" data-hero-media>
       {%- if s.video != blank -%}
         {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'hero__video', poster: poster }}
       {%- else -%}
-        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="{{ poster }}" data-hero-video>
-          <source src="{{ 'hero-embroidery-1080.mp4' | asset_url }}" type="video/mp4" media="(min-width: 900px)">
-          <source src="{{ 'hero-embroidery-720.mp4' | asset_url }}" type="video/mp4">
+        {%- comment -%} Three cuts of the same loop: 1080p desktop (~1 MB), 720p tablet, 540×960 portrait crop for phones (~220 KB). {%- endcomment -%}
+        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="{{ poster }}" data-hero-video>
+          <source src="{{ 'hero-1080.mp4' | asset_url }}" type="video/mp4" media="(min-width: 1100px)">
+          <source src="{{ 'hero-720.mp4' | asset_url }}" type="video/mp4" media="(min-width: 640px)">
+          <source src="{{ 'hero-mobile.mp4' | asset_url }}" type="video/mp4">
         </video>
       {%- endif -%}
       <div class="hero__scrim"></div>
       <div class="hero__vignette"></div>
     </div>
 
-    {%- if s.show_controls != false -%}
-      <div class="hero__controls">
-        <button class="icon-btn glass glass--clear hero__toggle" type="button" data-hero-toggle aria-label="{{ 'sections.hero.pause' | t }}" aria-pressed="false">
-          <span class="hero__toggle-pause">{% render 'icon', name: 'pause', px: 16 %}</span>
-          <span class="hero__toggle-play">{% render 'icon', name: 'play', px: 16 %}</span>
-        </button>
-      </div>
-    {%- endif -%}
 
-    {%- if panel_below and s.show_scroll_hint != false -%}
-      <a href="#hero-panel-{{ section.id }}" class="hero__scroll glass glass--clear glass--pill" aria-label="{{ 'sections.hero.scroll' | t }}"><span class="hero__scroll-dot"></span></a>
-    {%- endif -%}
 
     {%- unless panel_below -%}
       {%- if show_panel -%}
@@ -92,10 +83,8 @@
     { "type": "video", "id": "video", "label": "Video (defaults to the embroidery loop shipped with the theme)" },
     { "type": "image_picker", "id": "poster", "label": "Poster image" },
     { "type": "range", "id": "height", "label": "Video height (desktop)", "min": 50, "max": 100, "step": 5, "unit": "vh", "default": 100 },
-    { "type": "range", "id": "height_mobile", "label": "Video height (phone)", "min": 40, "max": 100, "step": 5, "unit": "vh", "default": 70 },
-    { "type": "range", "id": "overlay", "label": "Darken video", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 10 },
-    { "type": "checkbox", "id": "show_controls", "label": "Show pause button", "default": true },
-    { "type": "checkbox", "id": "show_scroll_hint", "label": "Show scroll hint", "default": true },
+    { "type": "range", "id": "height_mobile", "label": "Video height (phone)", "min": 40, "max": 100, "step": 5, "unit": "vh", "default": 100 },
+    { "type": "range", "id": "overlay", "label": "Darken video", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 0 },
     { "type": "header", "content": "Glass panel" },
     { "type": "select", "id": "layout", "label": "Where the glass panel sits", "options": [
       { "value": "below", "label": "Under the video (video stays clean)" },

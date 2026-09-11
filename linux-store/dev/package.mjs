@@ -40,7 +40,7 @@ fs.mkdirSync(path.join(stage, 'brand-assets'), { recursive: true });
 fs.copyFileSync(themeZip, path.join(stage, `${name}.zip`));
 fs.copyFileSync(path.join(root, 'INSTALL.md'), path.join(stage, 'INSTALL.md'));
 fs.copyFileSync(path.join(root, 'ADMIN-GUIDE.md'), path.join(stage, 'ADMIN-GUIDE.md'));
-for (const f of ['hero-embroidery-1080.mp4', 'hero-embroidery-720.mp4', 'hero-embroidery-poster.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
+for (const f of ['hero-1080.mp4', 'hero-720.mp4', 'hero-mobile.mp4', 'hero-embroidery-poster.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
 for (const f of fs.readdirSync(path.join(themeRoot, 'assets')).filter((f) => /^(mascot-|brand-|favicon-|wordmark)/.test(f))) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'brand-assets', f));
 const bundle = path.join(dist, 'LINUX-theme-delivery.zip');
 execFileSync('zip', ['-qr', '-X', bundle, 'LINUX-theme-delivery'], { cwd: dist, stdio: 'inherit' });

@@ -48,7 +48,7 @@ linux-store/
 | `sections/` | 40 sections incl. all `main-*` templates, hero video, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |
 | `templates/` | JSON templates for every Shopify template type, plus `password` and `gift_card` |
 | `locales/` | `en.default.json`, `ar.json` (Egyptian tone) |
-| Hero video | `hero-embroidery-1080.mp4` (4.9 MB) / `-720.mp4` / poster, cut from the brand's own embroidery footage with a seamless loop |
+| Hero video | `hero-1080.mp4` (~1 MB, desktop) / `hero-720.mp4` (tablet) / `hero-mobile.mp4` (540×960 portrait crop, ~220 KB) + poster — the browser picks one via `<source media>`; cut from the brand's own embroidery footage with a seamless loop |
 
 ## Local preview (no Shopify account needed)
 

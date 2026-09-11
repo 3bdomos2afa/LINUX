@@ -6,6 +6,9 @@
   const doc = document;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(pointer: fine)').matches;
+  /* Hover-swap card images are only fetched on pointer devices (they never show on touch) */
+  if (fine) doc.querySelectorAll('img[data-hover-only][data-src]').forEach((img) => { img.src = img.dataset.src; });
+  else doc.querySelectorAll('img[data-hover-only]').forEach((img) => img.remove());
 
   /* Specular sheen follows the pointer on [data-specular] glass */
   if (fine && !reduce) {
@@ -36,7 +39,6 @@
 
   /* Header: compact capsule on scroll, hide on scroll-down past the fold */
   const header = doc.querySelector('[data-header]');
-  const heroMedia = doc.querySelector('[data-hero-media]');
   let lastY = window.scrollY, ticking = false;
   function onScroll() {
     const y = window.scrollY;
@@ -44,12 +46,11 @@
       header.classList.toggle('is-compact', y > 48);
       // Hide when scrolling down (after a small threshold), reveal immediately on scroll up
       const goingDown = y > lastY + 2, goingUp = y < lastY - 2;
-      if (goingDown && y > 320 && !doc.body.classList.contains('drawer-open')) header.classList.add('is-hidden');
-      else if (goingUp || y <= 320) header.classList.remove('is-hidden');
+      if (goingDown && y > 140 && !doc.body.classList.contains('drawer-open')) header.classList.add('is-hidden');
+      else if (goingUp || y <= 140) header.classList.remove('is-hidden');
       const zone = header.closest('[data-header-zone]');
       zone && zone.classList.toggle('is-scrolled', y > 40);
     }
-    if (heroMedia && !reduce && y < window.innerHeight) heroMedia.style.transform = `translateY(${(y * 0.18).toFixed(1)}px)`;
     lastY = y; ticking = false;
   }
   addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
@@ -57,20 +58,13 @@
 
   /* Hero video pause/play + Save-Data respect */
   const video = doc.querySelector('[data-hero-video]');
-  const toggle = doc.querySelector('[data-hero-toggle]');
   if (video) {
     const saveData = navigator.connection && navigator.connection.saveData;
-    if (saveData || reduce) { video.pause(); video.removeAttribute('autoplay'); if (toggle) toggle.setAttribute('aria-pressed', 'true'); }
+    if (saveData) { video.pause(); video.removeAttribute('autoplay'); }
     else { video.play().catch(() => {}); }
-    if (toggle) toggle.addEventListener('click', () => {
-      const paused = video.paused;
-      if (paused) video.play().catch(() => {}); else video.pause();
-      toggle.setAttribute('aria-pressed', String(!paused));
-    });
     // Free the decoder when the hero is off-screen
-    if ('IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window && !saveData) {
       new IntersectionObserver((entries) => entries.forEach((en) => {
-        if (toggle && toggle.getAttribute('aria-pressed') === 'true') return;
         if (en.isIntersecting) video.play().catch(() => {}); else video.pause();
       }), { threshold: 0.05 }).observe(video);
     }
@@ -210,6 +204,11 @@
     card && card.classList.toggle('is-open');
   });
 
+  /* Marquees only animate while on screen */
+  if ('IntersectionObserver' in window) {
+    const mio = new IntersectionObserver((entries) => entries.forEach((en) => { en.target.style.animationPlayState = en.isIntersecting ? '' : 'paused'; }), { threshold: 0 });
+    doc.querySelectorAll('.marquee__track, .announcement__track').forEach((t) => mio.observe(t));
+  }
   /* Announcement duplicates for seamless marquee are in Liquid; pause on hover */
   doc.querySelectorAll('.announcement').forEach((a) => {
     a.addEventListener('pointerenter', () => a.querySelector('.announcement__track').style.animationPlayState = 'paused');

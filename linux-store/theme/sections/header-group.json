@@ -19,7 +19,6 @@
       "settings": {
         "menu": "main-menu",
         "logo_height": 22,
-        "transparent_home": true,
         "show_shop_cta": true,
         "show_announcement": true
       }

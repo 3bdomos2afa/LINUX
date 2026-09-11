@@ -13,7 +13,7 @@
         {%- if block.settings.image != blank -%}
           <img src="{{ block.settings.image | image_url: width: 600 }}" alt="" width="600" height="600" loading="lazy">
         {%- else -%}
-          {%- assign fallbacks = 'brand-lookbook-1.webp,brand-lookbook-2.webp,brand-editorial.webp,brand-still-life.webp,brand-campaign.webp,placeholder-cap.webp' | split: ',' -%}
+          {%- assign fallbacks = 'brand-lookbook-1.webp,brand-lookbook-2.webp,brand-editorial.webp,brand-still-life.webp,brand-campaign.webp,brand-badge.webp' | split: ',' -%}
           <img src="{{ fallbacks[forloop.index0] | default: 'brand-still-life.webp' | asset_url }}" alt="" width="600" height="600" loading="lazy">
         {%- endif -%}
         <span>{% render 'icon', name: 'instagram', px: 26 %}</span>

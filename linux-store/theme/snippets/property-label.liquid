@@ -5,6 +5,8 @@
 {%- endcomment -%}
 {%- liquid
   assign n = name | downcase | strip
+  assign name_design = 'customize.upload' | t
+  assign name_pos = 'customize.position_label' | t
   case n
     when 'garment'
       echo 'customize.garment' | t
@@ -18,10 +20,18 @@
       echo 'customize.notes' | t
     when 'design file'
       echo 'customize.upload' | t
-    when 'side'
+    when 'side' or 'sides'
       echo 'customize.side' | t
     when 'design position'
       echo 'customize.position_label' | t
+    when 'front design'
+      echo 'customize.front' | t | append: ' · ' | append: name_design
+    when 'back design'
+      echo 'customize.back' | t | append: ' · ' | append: name_design
+    when 'front position'
+      echo 'customize.front' | t | append: ' · ' | append: name_pos
+    when 'back position'
+      echo 'customize.back' | t | append: ' · ' | append: name_pos
     else
       echo name
   endcase

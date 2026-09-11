@@ -22,9 +22,16 @@
     {%- for item in cart.items -%}
       <li class="cart-line glass glass--clear" data-line data-key="{{ item.key }}" style="--i: {{ forloop.index0 }}">
         {%- liquid
-          assign mockup = item.properties['Mockup']
+          assign mock_front = item.properties['Front mockup']
+          assign mock_back = item.properties['Back mockup']
+          assign mockup = blank
+          if mock_back contains '/uploads/' or mock_back contains 'data:image'
+            assign mockup = mock_back
+          elsif mock_front contains '/uploads/' or mock_front contains 'data:image'
+            assign mockup = mock_front
+          endif
           assign has_mockup = false
-          if mockup contains '/uploads/' or mockup contains 'data:image'
+          if mockup != blank
             assign has_mockup = true
           endif
         -%}
@@ -40,7 +47,7 @@
             assign prop_count = 0
             for p in item.properties
               assign fc = p.first | slice: 0
-              if p.last != blank and fc != '_' and p.first != 'Mockup'
+              if p.last != blank and fc != '_' and p.first != 'Front mockup' and p.first != 'Back mockup'
                 assign prop_count = prop_count | plus: 1
               endif
             endfor
@@ -50,17 +57,18 @@
             <summary>{{ 'cart.details' | t }} · {{ prop_count }}</summary>
             {%- for p in item.properties -%}
               {%- assign first_char = p.first | slice: 0 -%}
-              {%- if p.last != blank and first_char != '_' and p.first != 'Mockup' -%}
+              {%- if p.last != blank and first_char != '_' and p.first != 'Front mockup' and p.first != 'Back mockup' -%}
                 <p class="cart-line__meta">{% render 'property-label', name: p.first %}:
                   {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>
                   {%- elsif p.last contains 'upload:' -%} {{ p.last | remove_first: 'upload:' }}
-                  {%- elsif p.first == 'Method' or p.first == 'Garment' or p.first == 'Colour' or p.first == 'Side' -%} {% render 'option-value', value: p.last %}
-                  {%- elsif p.first == 'Design position' -%} <span class="mono">{{ p.last }}</span>
+                  {%- elsif p.first == 'Method' or p.first == 'Garment' or p.first == 'Colour' -%} {% render 'option-value', value: p.last %}
+                  {%- elsif p.first contains 'position' -%} <span class="mono">{{ p.last }}</span>
                   {%- else -%} {{ p.last }}{%- endif -%}
                 </p>
               {%- endif -%}
             {%- endfor -%}
-            {%- if has_mockup -%}<p class="cart-line__meta"><a href="{{ mockup }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} ↗</a></p>{%- endif -%}
+            {%- if mock_front contains '/uploads/' or mock_front contains 'data:image' -%}<p class="cart-line__meta"><a href="{{ mock_front }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.front' | t }} ↗</a></p>{%- endif -%}
+            {%- if mock_back contains '/uploads/' or mock_back contains 'data:image' -%}<p class="cart-line__meta"><a href="{{ mock_back }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.back' | t }} ↗</a></p>{%- endif -%}
           </details>
           {%- endif -%}
           <div class="cart-line__row">

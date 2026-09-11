@@ -37,7 +37,7 @@
       -%}
       <a href="{{ url }}" data-tilt class="bento__tile bento__tile--{{ bs.size | default: 'small' }}" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
         {%- if img != blank -%}
-          <img src="{{ img | image_url: width: 1000 }}" alt="" width="1000" height="1000" loading="lazy">
+          <img src="{{ img | image_url: width: 800 }}" srcset="{{ img | image_url: width: 400 }} 400w, {{ img | image_url: width: 800 }} 800w, {{ img | image_url: width: 1200 }} 1200w" sizes="(max-width: 900px) 50vw, 25vw" alt="" width="800" height="800" loading="lazy" decoding="async">
         {%- else -%}
           <img src="{{ 'brand-lookbook-1.webp' | asset_url }}" alt="" width="1000" height="1334" loading="lazy">
         {%- endif -%}

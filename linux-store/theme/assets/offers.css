@@ -14,9 +14,9 @@
 .bundle__tier:hover { background: var(--glass-fill-hover); transform: translateY(-2px); }
 .bundle__tier.is-active { border-color: var(--accent); background: rgb(143 203 90 / .14); }
 .bundle__tier--hot::before { content: "★"; position: absolute; top: -9px; inset-inline-end: 10px; font-size: 11px; line-height: 1; padding: 3px 7px; border-radius: 999px; background: var(--cream); color: var(--forest); }
-.bundle__qty { font: 800 15px var(--font-display); letter-spacing: -.01em; }
-.bundle__save { font: 700 11px var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
-.bundle__each { font: 600 12px var(--font-mono); color: var(--fg-70); }
+.bundle__qty { font: var(--w-heading) 15px var(--font-display); letter-spacing: 0; color: var(--heading); }
+.bundle__save { font: var(--w-ui) 11px var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.bundle__each { font: var(--w-ui) 12px var(--font-mono); color: var(--fg-70); }
 .bundle__note { display: flex; align-items: center; gap: 6px; margin: 0; }
 
 /* ---- Fit finder ----------------------------------------------------------- */
@@ -32,8 +32,8 @@
 .fit__body { display: grid; gap: 14px; padding: 4px 16px 16px; }
 .fit__inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .fit__result { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 16px; border-radius: var(--r-md); background: rgb(143 203 90 / .12); border: 1px solid rgb(143 203 90 / .35); animation: fit-pop .5s var(--spring); }
-.fit__label { margin: 0; font: 700 12px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-70); }
-.fit__size { margin: 0; font: 800 44px/1 var(--font-display); letter-spacing: -.03em; color: var(--accent); }
+.fit__label { margin: 0; font: var(--w-ui) 12px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-70); }
+.fit__size { margin: 0; font: var(--w-heading) 44px/1 var(--font-display); letter-spacing: -.02em; color: var(--accent); }
 .fit__disclaimer { display: flex; gap: 6px; align-items: flex-start; margin: 0; line-height: 1.5; }
 .fit__disclaimer .icon { flex: 0 0 auto; margin-top: 2px; }
 @keyframes fit-pop { from { transform: scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -42,7 +42,7 @@
 .cart-discount { display: grid; gap: 8px; }
 .cart-discount__row { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: var(--r-pill); border: 1px solid var(--glass-stroke); background: var(--glass-fill); }
 .cart-discount__row > .icon { color: var(--fg-50); flex: 0 0 auto; }
-.cart-discount__row .input { flex: 1; min-width: 0; height: 40px; padding: 0; border: 0; background: transparent; font: 600 14px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; box-shadow: none; }
+.cart-discount__row .input { flex: 1; min-width: 0; height: 40px; padding: 0; border: 0; background: transparent; font: var(--w-ui) 14px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; box-shadow: none; }
 .cart-discount__row .input:focus { outline: none; box-shadow: none; }
 .cart-discount__row .btn { flex: 0 0 auto; height: 40px; }
 .cart-discount__codes { display: flex; flex-wrap: wrap; gap: 6px; }

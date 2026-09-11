@@ -15,7 +15,7 @@
 .collection__sort .select:focus { box-shadow: none; }
 .filters { display: grid; gap: 10px; align-content: start; }
 .filters__group { border-radius: var(--r-md); border: 1px solid var(--glass-stroke); padding: 0 16px; }
-.filters__group summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; font: 700 14px var(--font-body); cursor: pointer; list-style: none; }
+.filters__group summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; font: var(--w-ui) 14px var(--font-body); cursor: pointer; list-style: none; }
 .filters__group summary::-webkit-details-marker { display: none; }
 .filters__group[open] summary svg { transform: rotate(180deg); }
 .filters__group > :not(summary) { padding-bottom: 16px; }

@@ -1,10 +1,6 @@
 {%- liquid
   assign s = section.settings
   assign menu = linklists[s.menu]
-  assign over_hero = false
-  if s.transparent_home and template.name == 'index'
-    assign over_hero = true
-  endif
 -%}
 
 {%- if s.show_announcement -%}{%- capture announcement -%}{% render 'tr', value: s.announcement_text, key: 'home.announcement' %}{%- endcapture -%}
@@ -18,7 +14,7 @@
 </div>
 {%- endif -%}
 
-<div class="header-zone{% if over_hero %} header-zone--over-hero{% endif %}" data-header-zone>
+<div class="header-zone" data-header-zone>
   <header class="header glass glass--solid" id="site-header" data-header role="banner">
     <div class="header__inner">
       <div class="header__start">
@@ -127,12 +123,6 @@
       "id": "menu",
       "label": "Menu",
       "default": "main-menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_home",
-      "label": "Float over the hero on the home page",
-      "default": true
     },
     {
       "type": "checkbox",

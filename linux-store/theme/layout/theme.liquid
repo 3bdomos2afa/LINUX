@@ -13,6 +13,7 @@
   <meta name="theme-color" content="{% if scheme == 'cream' %}#efe4d2{% else %}#043020{% endif %}">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.shopify.com">
 
   {%- if settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64 }}">
@@ -51,6 +52,7 @@
   {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
   {% render 'meta-tags' %}
 
+  {%- if template.name == 'index' -%}<link rel="preload" as="image" href="{{ 'hero-embroidery-poster.webp' | asset_url }}" fetchpriority="high">{%- endif -%}
   {%- unless settings.type_system_fonts -%}{% render 'fonts', is_rtl: is_rtl %}{%- endunless -%}
 
   {{ 'glass.css' | asset_url | stylesheet_tag }}
@@ -60,7 +62,7 @@
   {%- if template.name == 'product' -%}{{ 'product.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'collection' or template.name == 'search' or template.name == 'list-collections' -%}{{ 'collection.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.directory == 'customers' or template.name == 'cart' or template.name == 'page' or template.name == 'blog' or template.name == 'article' or template.name == '404' -%}{{ 'pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
-  {{ 'offers.css' | asset_url | stylesheet_tag }}
+  {%- if template.name == 'product' or template.name == 'cart' or settings.cart_type != 'page' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- endif -%}
 
   {%- liquid
     assign type_scale = settings.type_scale | default: 100
@@ -164,7 +166,7 @@
 
   {% sections 'header-group' %}
 
-  <main id="main" role="main" tabindex="-1">
+  <main id="main" role="main" tabindex="-1" class="main">
     {{ content_for_layout }}
   </main>
 
