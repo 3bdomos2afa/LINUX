@@ -45,8 +45,8 @@
                       <span class="order-card__date">{% render 'date-ar', date: order.created_at %}</span>
                     </div>
                     <div class="order-card__status">
-                      <span class="status status--{{ order.financial_status }}">{% render 'icon', name: 'check', px: 12 %}{{ order.financial_status_label }}</span>
-                      <span class="status status--{{ order.fulfillment_status }}">{% render 'icon', name: 'truck', px: 12 %}{{ order.fulfillment_status_label }}</span>
+                      {% render 'order-status', status: order.financial_status, label: order.financial_status_label, icon: 'check' %}
+                      {% render 'order-status', status: order.fulfillment_status, label: order.fulfillment_status_label, icon: 'truck' %}
                     </div>
                   </div>
                   <div class="order-card__end">

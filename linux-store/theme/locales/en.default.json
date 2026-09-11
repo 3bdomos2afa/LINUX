@@ -328,7 +328,7 @@
     "step_details": "Details",
     "step_payment": "Payment",
     "summary": "Order summary",
-    "trust_secure": "Secure checkout by Shopify",
+    "trust_secure": "Secure checkout",
     "trust_exchange": "14-day exchange, unworn with tags",
     "trust_cod": "Cash on delivery or card"
   },
@@ -520,6 +520,19 @@
       "body": "Set a password to activate your account.",
       "submit": "Activate",
       "decline": "Decline"
+    },
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "refunded": "Refunded",
+      "partially_refunded": "Partially refunded",
+      "authorized": "Authorised",
+      "voided": "Voided",
+      "fulfilled": "Delivered",
+      "unfulfilled": "Preparing",
+      "partial": "Partly shipped",
+      "in_progress": "In progress",
+      "restocked": "Returned"
     }
   },
   "blog": {

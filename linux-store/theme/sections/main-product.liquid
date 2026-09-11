@@ -147,8 +147,8 @@
 
         {%- if settings.show_delivery_estimate -%}
           <div class="pdp__delivery">
-            <div>{% render 'icon', name: 'truck', px: 18 %}<span><strong>{{ 'products.delivery_cairo' | t }}</strong> {{ settings.delivery_cairo }}</span></div>
-            <div>{% render 'icon', name: 'pin', px: 18 %}<span><strong>{{ 'products.delivery_egypt' | t }}</strong> {{ settings.delivery_egypt }}</span></div>
+            <div>{% render 'icon', name: 'truck', px: 18 %}<span><strong>{{ 'products.delivery_cairo' | t }}</strong> {% render 'delivery-eta', value: settings.delivery_cairo %}</span></div>
+            <div>{% render 'icon', name: 'pin', px: 18 %}<span><strong>{{ 'products.delivery_egypt' | t }}</strong> {% render 'delivery-eta', value: settings.delivery_egypt %}</span></div>
             {%- if settings.free_shipping_threshold > 0 -%}{%- assign fs_amount = settings.free_shipping_threshold | times: 100 | money -%}<div>{% render 'icon', name: 'return', px: 18 %}<span>{{ 'products.free_shipping_over' | t: amount: fs_amount }}</span></div>{%- endif -%}
           </div>
         {%- endif -%}

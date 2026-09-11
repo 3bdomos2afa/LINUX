@@ -101,7 +101,7 @@
       </div>
       <div class="account__panel glass" data-reveal style="--i:4">
         <div class="account__panel-head"><h2 class="h3">{% render 'icon', name: 'lock', px: 16 %} {{ 'customer.order.payment' | t }}</h2></div>
-        <p class="small"><span class="status status--{{ order.financial_status }}">{{ order.financial_status_label }}</span></p>
+        <p class="small">{% render 'order-status', status: order.financial_status, label: order.financial_status_label %}</p>
         <div class="address-card__text muted small">{{ order.billing_address | format_address }}</div>
       </div>
       <div class="account__panel glass account__help" data-reveal style="--i:5">

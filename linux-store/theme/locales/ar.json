@@ -328,7 +328,7 @@
     "step_details": "البيانات",
     "step_payment": "الدفع",
     "summary": "ملخص الطلب",
-    "trust_secure": "دفع آمن عبر Shopify",
+    "trust_secure": "دفع آمن",
     "trust_exchange": "استبدال خلال 14 يوم بشرط إن القطعة ما اتلبست",
     "trust_cod": "الدفع عند الاستلام أو بالكارت"
   },
@@ -520,6 +520,19 @@
       "body": "اختر كلمة مرور لتفعيل حسابك.",
       "submit": "تفعيل",
       "decline": "رفض"
+    },
+    "status": {
+      "paid": "مدفوع",
+      "pending": "قيد الدفع",
+      "refunded": "مسترجع",
+      "partially_refunded": "مسترجع جزئياً",
+      "authorized": "مؤكد",
+      "voided": "ملغي",
+      "fulfilled": "اتوصّل",
+      "unfulfilled": "بيتجهّز",
+      "partial": "اتشحن جزئياً",
+      "in_progress": "قيد التنفيذ",
+      "restocked": "مرتجع"
     }
   },
   "blog": {
