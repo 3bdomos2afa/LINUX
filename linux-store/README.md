@@ -66,3 +66,4 @@ check on a real Shopify preview theme before publishing.
 - `/__device?a=/&b=/products/x&c=/collections/y` shows three phone frames;
   add `&desktop=1` for a 1280px frame.
 - `node check.mjs` runs Shopify's official theme-check (must be 0 errors).
+- `ruby dev/shopify-lint.rb` mirrors what Shopify's **theme importer** rejects and theme-check does not: the Ruby Liquid tokenizer (an output tag closes at the first `}` — a literal `{x}` inside `{{ … }}` drops the whole file), schema limits (section/block names ≤ 25 chars, labels ≤ 70, no empty `select` values, complete ranges) and template JSON resource settings (plain handles, never `shopify://…`). Needs `apt install ruby && gem install liquid`; `package.mjs` runs it automatically when Ruby is present. A file the importer drops shows up on the store as `Could not find asset …` or as a 404 on every page using that section.

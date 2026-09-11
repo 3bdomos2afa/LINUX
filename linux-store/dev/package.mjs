@@ -22,6 +22,13 @@ if (errors.length) {
   process.exit(1);
 }
 
+// Shopify's importer is stricter than theme-check (Ruby Liquid tokenizer, schema limits). Run the mirror lint when Ruby is present.
+try {
+  execFileSync('ruby', ['--version'], { stdio: 'ignore' });
+  try { execFileSync('ruby', [path.join(root, 'dev', 'shopify-lint.rb')], { stdio: 'inherit' }); }
+  catch { console.error('shopify-lint: importer-level findings — fix them before packaging'); process.exit(1); }
+} catch { console.warn('shopify-lint skipped (ruby + liquid gem not installed: apt install ruby && gem install liquid)'); }
+
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 
