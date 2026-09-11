@@ -26,7 +26,7 @@
 
 **Customize studio v2**: hoodie + tee, live recolour, drag/scale, front/back, quantity with a size per piece, print from 1 piece / embroidery from 10 (both editable in the section), notes, WhatsApp button. The section maps *Print / Embroidery* to your Customize product's **Type** option — keep those two values on the product so pricing switches correctly. Everything arrives on the order as line-item properties (Garment, Colour, Method, Sizes, Notes, Design file).
 
-**Fonts**: Rantaro (headlines) + Space Grotesk (body) for English, Thmanyah Serif Display (headlines) + Thmanyah Sans (body) for Arabic — self-hosted inside the theme, no Google request. Rantaro is the Limitype *demo* cut (digits 5–9 are scribbled in that file), so numbers fall back to Space Grotesk until you replace `assets/rantaro-latin.woff2` with the licensed full version. Thmanyah is used under the Thmanyah font license (brand/website use allowed; do not redistribute the files). Toggle *Use system fonts* in Theme settings if you ever want to drop them.
+**Fonts**: English — Matcha Rounded for headings, Disney Bubble for all other text. Arabic — Thmanyah Serif Display for headings, Palestine for all other text. All self-hosted inside the theme (no Google request). Licences: Matcha Rounded is the *Personal Use* cut from iframefonts.com (buy the commercial licence before going live), Disney Bubble is © 7NTypes (check the seller's licence for web embedding), Thmanyah's licence allows website/brand use but forbids redistributing the files, Palestine ships with no licence text — confirm its terms. Toggle *Use system fonts* in Theme settings if you ever want to drop them.
 
 ---
 
@@ -54,4 +54,4 @@
 
 **استوديو التخصيص v2**: هودي + تيشيرت، اللون بيتغيّر لايف على الموكب، سحب وتكبير التصميم، قدام/ورا، عدد القطع ومقاس لكل قطعة، طباعة من قطعة واحدة / تطريز من 10 (الرقمين بتعدّلهم من السكشن)، ملاحظات، وزرار واتساب. السكشن بيربط *Print / Embroidery* بخيار **Type** في منتج Customize — خلّي القيمتين دول موجودين على المنتج عشان السعر يتغيّر صح. كل حاجة بتوصل في الأوردر كـ line-item properties.
 
-**الخطوط**: Rantaro للعناوين + Space Grotesk للنصوص بالإنجليزي، وخط ثمانية (Serif Display للعناوين + Sans للنصوص) بالعربي — محمّلة جوه الثيم من غير أي طلب لجوجل. نسخة Rantaro المرفقة نسخة *ديمو* من Limitype (الأرقام من 5 لـ 9 مشخبطة فيها عمداً)، فالأرقام بتظهر بخط Space Grotesk لحد ما تشتري النسخة الكاملة وتستبدل `assets/rantaro-latin.woff2`. خط ثمانية مستخدم حسب رخصته (مسموح في المواقع والبراند، ممنوع إعادة توزيع الملفات).
+**الخطوط**: الإنجليزي — Matcha Rounded للعناوين وDisney Bubble لباقي النصوص. العربي — خط ثمانية Serif Display للعناوين وخط Palestine لباقي النصوص. كلها محمّلة جوه الثيم من غير أي طلب لجوجل. الرخص: Matcha Rounded نسخة *Personal Use* من iframefonts.com (لازم تشتري الرخصة التجارية قبل النشر)، Disney Bubble ملكية 7NTypes (اتأكد من رخصة الويب من البائع)، ثمانية رخصته تسمح بالمواقع وتمنع إعادة توزيع الملفات، وخط Palestine جاي من غير ملف رخصة — اتأكد من شروطه.

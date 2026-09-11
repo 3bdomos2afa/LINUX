@@ -53,7 +53,7 @@
       html += `<section class="search-group"><p class="search-group__title">${esc(strings.products)}</p><div class="search-products">` + products.map((p) => {
         const img = p.featured_image ? thumb(p.featured_image.url) : (p.image ? thumb(p.image) : '');
         const sale = p.compare_at_price_min && Number(p.compare_at_price_min) > Number(p.price);
-        return `<a class="search-product" href="${p.url}">${img ? `<img src="${img}" alt="" loading="lazy" width="200" height="266">` : ''}<strong>${esc(p.title)}</strong><span class="price"><span class="price__current${sale ? ' price__sale' : ''}">${money(p.price)}</span>${sale ? `<s class="price__compare">${money(p.compare_at_price_min)}</s>` : ''}</span></a>`;
+        return `<a class="search-product" href="${p.url}">${img ? `<img src="${img}" alt="" loading="lazy" width="200" height="266">` : ''}<strong>${esc(L.title(p.title))}</strong><span class="price"><span class="price__current${sale ? ' price__sale' : ''}">${money(p.price)}</span>${sale ? `<s class="price__compare">${money(p.compare_at_price_min)}</s>` : ''}</span></a>`;
       }).join('') + '</div></section>';
     }
     if (collections.length || pages.length) {

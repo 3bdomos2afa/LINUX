@@ -35,11 +35,21 @@
         endcapture
         assign sub = sub | strip
       -%}
-      <a href="{{ url }}" data-tilt class="bento__tile bento__tile--{{ bs.size | default: 'small' }}" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
-        {%- if img != blank -%}
+      {%- liquid
+        assign has_photo = false
+        if img != blank
+          assign has_photo = true
+        endif
+        if coll.handle == 'customize-print' and bs.image == blank
+          assign has_photo = false
+        endif
+      -%}
+      <a href="{{ url }}" data-tilt class="bento__tile bento__tile--{{ bs.size | default: 'small' }}{% unless has_photo %} bento__tile--empty{% endunless %}" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        {%- if has_photo -%}
           <img src="{{ img | image_url: width: 800 }}" srcset="{{ img | image_url: width: 400 }} 400w, {{ img | image_url: width: 800 }} 800w, {{ img | image_url: width: 1200 }} 1200w" sizes="(max-width: 900px) 50vw, 25vw" alt="" width="800" height="800" loading="lazy" decoding="async">
         {%- else -%}
-          <img src="{{ 'brand-lookbook-1.webp' | asset_url }}" alt="" width="1000" height="1334" loading="lazy">
+          {%- assign tile_mascot = bs.mascot | default: 'skate-spray' -%}
+          {% render 'mascot', name: tile_mascot, width: 150, class: 'bento__mascot' %}
         {%- endif -%}
         <span class="bento__label glass glass--solid">
           <span><strong>{{ label }}</strong>{% if coll.products_count %}<small>{{ 'collections.count' | t: count: coll.products_count }}</small>{% elsif sub != blank %}<small>{{ sub }}</small>{% endif %}</span>
@@ -124,6 +134,19 @@
           "type": "text",
           "id": "key_sub",
           "label": "Translation key — subtitle (optional)"
+        },
+        {
+          "type": "select",
+          "id": "mascot",
+          "label": "Penguin shown when the collection has no photo",
+          "options": [
+            { "value": "skate-spray", "label": "Spray can" },
+            { "value": "classic", "label": "Classic" },
+            { "value": "skate", "label": "Skate" },
+            { "value": "hoodie-sit", "label": "Hoodie, sitting" },
+            { "value": "boombox", "label": "Boombox" }
+          ],
+          "default": "skate-spray"
         }
       ]
     }

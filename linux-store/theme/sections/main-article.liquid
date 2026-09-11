@@ -1,6 +1,6 @@
 <article class="article wrap">
   <header class="article__head" data-reveal>
-    <nav class="crumbs"><a href="{{ blog.url }}">{{ blog.title }}</a>{% render 'icon', name: 'chevron-right', px: 12 %}<span>{{ article.published_at | date: format: 'month_day_year' }}</span></nav>
+    <nav class="crumbs"><a href="{{ blog.url }}">{{ blog.title }}</a>{% render 'icon', name: 'chevron-right', px: 12 %}<span>{% render 'date-ar', date: article.published_at %}</span></nav>
     <h1 class="article__title">{{ article.title }}</h1>
     <p class="muted">{{ 'blog.by' | t: author: article.author }} · {{ 'blog.min_read' | t: minutes: article.content | strip_html | size | divided_by: 1100 | at_least: 1 }}</p>
   </header>

@@ -1,34 +1,29 @@
 {%- comment -%}
-  Self-hosted fonts. Only the subsets the current language needs are preloaded;
-  unicode-range lets the browser skip the rest.
-    EN  display: Rantaro (brand)   · body: Space Grotesk
-    AR  display: Thmanyah Serif Display · body: Thmanyah Sans
-    both: JetBrains Mono for prices / labels
-
-  Rantaro ships as the Limitype *demo* cut: digits 5–9 are deliberately
-  scribbled in that file, so its unicode-range excludes U+0030-0039 and every
-  number falls through to Space Grotesk. Drop the full commercial OTF in as
-  rantaro-latin.woff2 and add U+0030-0039 back to get Rantaro numerals.
+  Self-hosted fonts, one @font-face per role. Only the current language's files
+  are preloaded.
+    EN  headings: Matcha Rounded (single bold cut)
+        everything else: Disney Bubble (single cut, caps-forward display face)
+    AR  headings: Thmanyah Serif Display (700 / 900)
+        everything else: Palestine (single cut; covers Arabic + Latin + digits)
+    numbers / prices: JetBrains Mono — kept for tabular prices on both languages
+    system fallbacks are listed after each family in glass.css; if a glyph is
+    missing (e.g. Palestine has no ASCII punctuation beyond . , -) the browser
+    falls through to the next family in the stack.
 {%- endcomment -%}
-{%- liquid
-  assign latin_range = 'U+0000-002F, U+003A-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
-  assign latin_full = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
--%}
 {%- if is_rtl -%}
   {{ 'thmanyah-display-900.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-  {{ 'thmanyah-sans-400.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'palestine.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'disney-bubble.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
 {%- else -%}
-  {{ 'rantaro-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-  {{ 'space-grotesk-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'matcha-rounded.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'disney-bubble.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
 {%- endif -%}
 <style>
-  @font-face { font-family: "Rantaro"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'rantaro-latin.woff2' | asset_url }}") format("woff2"); unicode-range: {{ latin_range }}; }
-  @font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 300 700; font-display: swap; src: url("{{ 'space-grotesk-latin.woff2' | asset_url }}") format("woff2"); unicode-range: {{ latin_full }}; }
+  @font-face { font-family: "Matcha Rounded"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'matcha-rounded.woff2' | asset_url }}") format("woff2"); }
+  @font-face { font-family: "Disney Bubble"; font-style: normal; font-weight: 300 900; font-display: swap; src: url("{{ 'disney-bubble.woff2' | asset_url }}") format("woff2"); }
   @font-face { font-family: "Thmanyah Display"; font-style: normal; font-weight: 700; font-display: swap; src: url("{{ 'thmanyah-display-700.woff2' | asset_url }}") format("woff2"); }
   @font-face { font-family: "Thmanyah Display"; font-style: normal; font-weight: 800 900; font-display: swap; src: url("{{ 'thmanyah-display-900.woff2' | asset_url }}") format("woff2"); }
-  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 300 400; font-display: swap; src: url("{{ 'thmanyah-sans-400.woff2' | asset_url }}") format("woff2"); }
-  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 500 600; font-display: swap; src: url("{{ 'thmanyah-sans-500.woff2' | asset_url }}") format("woff2"); }
-  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 700; font-display: swap; src: url("{{ 'thmanyah-sans-700.woff2' | asset_url }}") format("woff2"); }
-  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 800 900; font-display: swap; src: url("{{ 'thmanyah-sans-900.woff2' | asset_url }}") format("woff2"); }
-  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("{{ 'jetbrains-mono-latin.woff2' | asset_url }}") format("woff2"); unicode-range: {{ latin_full }}; }
+  {%- comment -%} Palestine ships empty Latin outlines → subset to Arabic + digits; Latin words inside Arabic text fall to Disney Bubble {%- endcomment -%}
+  @font-face { font-family: "Palestine"; font-style: normal; font-weight: 300 900; font-display: swap; src: url("{{ 'palestine.woff2' | asset_url }}") format("woff2"); unicode-range: U+0020, U+0025, U+002C-002E, U+0030-0039, U+00A0, U+0600-06FF, U+2013-2014, U+2018-2019, U+201C-201D, U+2026, U+FB50-FEFF; }
+  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("{{ 'jetbrains-mono-latin.woff2' | asset_url }}") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2212, U+FEFF, U+FFFD; }
 </style>

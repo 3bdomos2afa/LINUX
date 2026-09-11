@@ -321,7 +321,16 @@
     "discount_hint": "الكود بيتفعّل في الخطوة الجاية.",
     "discount_invalid": "الكود ده مش شغال على شنطتك",
     "discount_applied": "الكود اتفعّل",
-    "details": "التفاصيل"
+    "details": "التفاصيل",
+    "review_eyebrow": "الخطوة 1 من 3",
+    "steps_label": "خطوات الطلب",
+    "step_bag": "الشنطة",
+    "step_details": "البيانات",
+    "step_payment": "الدفع",
+    "summary": "ملخص الطلب",
+    "trust_secure": "دفع آمن عبر Shopify",
+    "trust_exchange": "استبدال خلال 14 يوم بشرط إن القطعة ما اتلبست",
+    "trust_cod": "الدفع عند الاستلام أو بالكارت"
   },
   "customize": {
     "title": "استوديو التخصيص",
@@ -400,7 +409,15 @@
       "no_orders": "لسه مفيش أوردرات.",
       "no_orders_body": "أول طلب ليك هيظهر هنا.",
       "view_addresses": "إدارة العناوين",
-      "default_address": "العنوان الأساسي"
+      "default_address": "العنوان الأساسي",
+      "intro": "طلباتك وقطعك المحفوظة وعناوينك في مكان واحد.",
+      "stat_orders": "طلبات",
+      "stat_spent": "إجمالي",
+      "stat_saved": "محفوظ",
+      "orders_count": "{{ count }} إجمالاً",
+      "help_title": "محتاج مساعدة؟",
+      "help_body": "مقاس أو استبدال أو تصميم خاص، ابعت لنا وهنظبطها.",
+      "help_prefill": "أهلاً LINUX، سؤال عن حسابي:"
     },
     "login": {
       "title": "سجّل دخول",
@@ -453,7 +470,22 @@
       "discount": "الخصم",
       "billing": "عنوان الفاتورة",
       "shipping_address": "عنوان الشحن",
-      "back": "الرجوع للحساب"
+      "back": "الرجوع للحساب",
+      "thanks_eyebrow": "شكراً",
+      "thanks_title": "طلب {{ name }} في طريقه ليك.",
+      "thanks_body": "اتعمل يوم {{ date }}. هنبلّغك في كل خطوة.",
+      "progress": "تتبّع الطلب",
+      "step_placed": "اتعمل",
+      "step_paid": "اتأكد",
+      "step_stitched": "اتطرّز",
+      "step_delivered": "اتوصّل",
+      "items": "قطعك",
+      "free": "مجاني",
+      "help_title": "عن الطلب ده",
+      "help_body": "المقاس مش مناسب أو عندك سؤال؟ كلّمنا خلال 14 يوم ونبدّله.",
+      "help_prefill": "أهلاً LINUX، بخصوص طلب {{ name }}:",
+      "shop_again": "تسوّق تاني",
+      "payment": "الدفع"
     },
     "addresses": {
       "title": "العناوين",

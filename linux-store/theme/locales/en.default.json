@@ -321,7 +321,16 @@
     "discount_hint": "Applied at checkout.",
     "discount_invalid": "This code doesn't apply to your bag",
     "discount_applied": "Code applied",
-    "details": "Details"
+    "details": "Details",
+    "review_eyebrow": "Step 1 of 3",
+    "steps_label": "Checkout steps",
+    "step_bag": "Bag",
+    "step_details": "Details",
+    "step_payment": "Payment",
+    "summary": "Order summary",
+    "trust_secure": "Secure checkout by Shopify",
+    "trust_exchange": "14-day exchange, unworn with tags",
+    "trust_cod": "Cash on delivery or card"
   },
   "customize": {
     "title": "Customize studio",
@@ -400,7 +409,15 @@
       "no_orders": "No orders yet.",
       "no_orders_body": "Your first order will appear here.",
       "view_addresses": "Manage addresses",
-      "default_address": "Default address"
+      "default_address": "Default address",
+      "intro": "Your orders, saved pieces and addresses in one place.",
+      "stat_orders": "orders",
+      "stat_spent": "spent",
+      "stat_saved": "saved",
+      "orders_count": "{{ count }} total",
+      "help_title": "Need a hand?",
+      "help_body": "Sizes, exchanges or a custom design — message us and we'll sort it.",
+      "help_prefill": "Hi LINUX, a question about my account:"
     },
     "login": {
       "title": "Sign in",
@@ -453,7 +470,22 @@
       "discount": "Discount",
       "billing": "Billing address",
       "shipping_address": "Shipping address",
-      "back": "Back to account"
+      "back": "Back to account",
+      "thanks_eyebrow": "Thank you",
+      "thanks_title": "Order {{ name }} is on its way to being yours.",
+      "thanks_body": "Placed on {{ date }}. We'll message you at every step.",
+      "progress": "Order progress",
+      "step_placed": "Placed",
+      "step_paid": "Confirmed",
+      "step_stitched": "Stitched",
+      "step_delivered": "Delivered",
+      "items": "Your pieces",
+      "free": "Free",
+      "help_title": "About this order",
+      "help_body": "Wrong size or a question? Reply within 14 days and we'll exchange it.",
+      "help_prefill": "Hi LINUX, about order {{ name }}:",
+      "shop_again": "Shop again",
+      "payment": "Payment"
     },
     "addresses": {
       "title": "Addresses",

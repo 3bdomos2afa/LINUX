@@ -8,6 +8,11 @@
   L.on = (ev, fn) => { if (!listeners.has(ev)) listeners.set(ev, new Set()); listeners.get(ev).add(fn); return () => listeners.get(ev).delete(fn); };
   L.emit = (ev, data) => { (listeners.get(ev) || []).forEach((fn) => { try { fn(data); } catch (e) { console.error(e); } }); };
 
+  /* Word-level Arabic fallback for client-rendered product titles (mirrors snippets/product-title.liquid) */
+  L.title = (title) => {
+    if (!L.words || /[\u0600-\u06FF]/.test(title)) return title;
+    return String(title).split(' ').map((w) => L.words[w.toLowerCase()] || w).join(' ');
+  };
   L.money = function (cents) {
     if (cents == null || isNaN(cents)) return '';
     const fmt = S.moneyFormat || 'LE {{amount}}';

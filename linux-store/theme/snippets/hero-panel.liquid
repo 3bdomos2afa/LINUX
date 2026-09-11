@@ -6,7 +6,7 @@
 <div class="hero__strip glass" data-specular data-reveal>
   {%- unless s.show_headline == false -%}
     <div class="hero__copy">
-      <p class="eyebrow hero__eyebrow"><span class="dot"></span>{{ eyebrow | escape }}</p>
+      <p class="eyebrow hero__eyebrow">{{ eyebrow | escape }}</p>
       <h1 class="hero__title display" data-split>{{ heading | escape }}</h1>
     </div>
   {%- endunless -%}

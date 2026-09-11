@@ -30,7 +30,7 @@
         "about"
       ],
       "settings": {
-        "show_newsletter": true,
+        "show_newsletter": false,
         "show_payment_icons": true,
         "show_mascot": true
       }

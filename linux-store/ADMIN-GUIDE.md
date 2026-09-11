@@ -8,7 +8,7 @@
 
 | المجموعة | اللي تتحكم فيه |
 | --- | --- |
-| **Appearance** | السكيم (غامق/فاتح) · **ألوان البراند** (الأخضر الغابة، الكريمي، الليموني — سيبها فاضية للافتراضي) · قوة الزجاج · استدارة الزوايا · الحركة · ستارة اللوجو · عرض الصفحة · **حجم النص** و**حجم العناوين** (٪) · خطوط النظام بدل Rantaro/ثمانية · الفافيكون · صورة المشاركة |
+| **Appearance** | السكيم (غامق/فاتح) · **ألوان البراند** (الأخضر الغابة، الكريمي، الليموني — سيبها فاضية للافتراضي) · قوة الزجاج · استدارة الزوايا · الحركة · ستارة اللوجو · عرض الصفحة · **حجم النص** و**حجم العناوين** (٪) · خطوط النظام بدل الخطوط المخصصة · الفافيكون · صورة المشاركة |
 | **Layout & spacing** | المسافة بين السكاشن (٪) · البادينج الجانبي (٪) · **حجم النص على الموبايل** (٪) · إظهار/إخفاء التاب بار تحت · عمود واحد أو عمودين للمنتجات على الموبايل |
 | **Navigation** | منيو الموبايل · كلمات البحث الشائعة · إظهار مبدّل اللغة · إظهار المفضلة (القلب) |
 | **Cart & checkout** | درج أو صفحة · حد الشحن المجاني · تنبيه "باقي X قطع" · خانة الملاحظات · خانة كود الخصم · اقتراحات "كمّل اللوك" |
@@ -49,8 +49,8 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو تطب
 
 ## 5. الخطوط
 
-- إنجليزي: **Rantaro** لكل النصوص (عناوين ونصوص). النسخة المرفقة ديمو: الأرقام 5–9 مشخبطة فيها عمداً، فالأرقام بتظهر بخط Space Grotesk لحد ما تستبدل `assets/rantaro-latin.woff2` بالنسخة المرخّصة من Limitype. Rantaro قصّة واحدة (Bold) فسُمك العناوين والنصوص بيتفرّق بالحجم واللون: العناوين كريمي، النصوص أبيض، اللينكات أخضر.
-- عربي: **ثمانية Serif Display Black** للعناوين (كريمي) + **ثمانية Sans Light/Regular** للنصوص (أبيض) واللينكات بالأخضر (رخصة ثمانية تسمح بالاستخدام في المواقع والبراند وتمنع إعادة توزيع الملفات).
+- إنجليزي: **Matcha Rounded** للعناوين (كريمي، قصّة Bold واحدة) + **Disney Bubble** لكل باقي النصوص (أبيض) واللينكات أخضر. Matcha نسخة Personal Use — اشتري الرخصة التجارية قبل النشر.
+- عربي: **ثمانية Serif Display Black** للعناوين (كريمي) + **Palestine** لكل باقي النصوص (أبيض) واللينكات أخضر.
 
 ---
 
@@ -78,4 +78,4 @@ Every part of the storefront is editable without code. Where to find it:
 `Front design` / `Back design` (original uploads), **`Front mockup` / `Back mockup`** (JPEG of the garment with that side's design composited exactly as placed), `Sides` (`Front + Back` / `Front` / `Back`), `Garment`, `Colour`, `Method`, `Sizes` (per piece), `Front position` / `Back position` (`x,y,scale,rotate`), `Notes`. The variant is resolved from colour × size × Print/Embroidery so pricing follows.
 
 ### Fonts
-Rantaro for all English text (single bold cut; demo digits 5–9 fall back to Space Grotesk until the licensed file replaces `assets/rantaro-latin.woff2`); Thmanyah Serif Display (headlines) + Thmanyah Sans (body) for Arabic. Roles: headings cream & heavy, body/sub-headings white & light, links green — tokens `--heading`, `--fg`, `--link` in `glass.css`.
+Matcha Rounded (headings) + Disney Bubble (all other text) for English; Thmanyah Serif Display (headings) + Palestine (all other text) for Arabic. Roles: headings cream & heavy, body/sub-headings white, links green — tokens `--heading`, `--fg`, `--link` in `glass.css`.

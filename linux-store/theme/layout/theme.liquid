@@ -148,6 +148,11 @@
       free_shipping_away: {{ 'cart.free_shipping_away' | t: amount: '[amount]' | json }},
       copied: {{ 'general.copied' | t | json }}
     };
+    {%- if request.locale.iso_code == 'ar' -%}
+    {%- assign ov_keys = 'hoodie,hoodies,shirt,shirts,t-shirt,tee,cap,black,white,beige,burgundy,olive,green,navy,grey,gray,red,blue,brown,cream,sada,anime,customize,flower,oversized,zip,classic,winter,summer,collection,embroidered,kids,men,women,unisex,pack,set' | split: ',' -%}
+    {%- capture ov -%}{%- for k in ov_keys -%}{%- assign key = 'products.option_values.' | append: k -%}{%- assign v = key | t -%}{%- unless v contains 'translation missing' -%}{{ k | json }}:{{ v | json }},{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+    LINUX.words = { {{ ov | strip | split: ',' | join: ',' }} };
+    {%- endif -%}
   </script>
   {{ content_for_header }}
 </head>

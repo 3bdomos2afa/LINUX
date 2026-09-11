@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "3.1.0",
+    "theme_version": "3.2.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -113,7 +113,7 @@
       {
         "type": "checkbox",
         "id": "type_system_fonts",
-        "label": "Use system fonts (skip Rantaro / Thmanyah)",
+        "label": "Use system fonts (skip Matcha / Disney Bubble / Thmanyah / Palestine)",
         "default": false
       },
       {

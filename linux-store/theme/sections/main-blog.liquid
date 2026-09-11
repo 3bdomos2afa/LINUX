@@ -11,7 +11,7 @@
             {%- if article.image -%}<img src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.image.alt | escape }}" loading="lazy" width="1000" height="625">{%- else -%}<img src="{{ 'brand-still-life.webp' | asset_url }}" alt="" width="1400" height="875" loading="lazy">{%- endif -%}
           </a>
           <div class="post__body">
-            <p class="post__meta"><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>{%- if article.tags.size > 0 -%} · {{ article.tags | join: ' · ' }}{%- endif -%}</p>
+            <p class="post__meta"><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{% render 'date-ar', date: article.published_at %}</time>{%- if article.tags.size > 0 -%} · {{ article.tags | join: ' · ' }}{%- endif -%}</p>
             <h2 class="post__title"><a href="{{ article.url }}">{{ article.title }}</a></h2>
             <p class="muted">{{ article.excerpt_or_content | strip_html | truncatewords: 26 }}</p>
             <span class="btn btn--ghost btn--sm" style="justify-self:start">{{ 'blog.read_more' | t }}{% render 'icon', name: 'arrow-right', px: 16 %}</span>

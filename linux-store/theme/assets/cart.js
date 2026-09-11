@@ -209,7 +209,7 @@
         const v = p.variants.find((x) => x.available) || p.variants[0];
         const img = p.featured_image ? (typeof p.featured_image === 'string' ? p.featured_image : p.featured_image.src) : '';
         const src = img && img.includes('cdn.shopify.com') ? img.replace(/(\.[a-z]+)(\?|$)/, '_200x$1$2') : img;
-        return `<div class="upsell glass glass--clear"><a href="${p.url}"><img src="${src}" alt="" width="56" height="68" loading="lazy"></a><div><strong>${p.title}</strong><span class="price"><span class="price__current">${L.money(v.price)}</span></span></div><button class="btn btn--cream btn--sm" type="button" data-quick-add="${v.id}" aria-label="${strings.add_to_bag}">+</button></div>`;
+        return `<div class="upsell glass glass--clear"><a href="${p.url}"><img src="${src}" alt="" width="56" height="68" loading="lazy"></a><div><strong>${L.title(p.title)}</strong><span class="price"><span class="price__current">${L.money(v.price)}</span></span></div><button class="btn btn--cream btn--sm" type="button" data-quick-add="${v.id}" aria-label="${strings.add_to_bag}">+</button></div>`;
       }).join('');
       upsellFor = pid; wrap.hidden = false;
     } catch { wrap.hidden = true; }

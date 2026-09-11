@@ -348,7 +348,7 @@
       const dh = dw * (d.img.naturalHeight / Math.max(1, d.img.naturalWidth));
       ctx.save(); ctx.translate(size * d.x / 100, size * d.y / 100); ctx.rotate(d.r * Math.PI / 180);
       ctx.drawImage(d.img, -dw / 2, -dh / 2, dw, dh); ctx.restore();
-      ctx.fillStyle = 'rgba(244,232,216,.9)'; ctx.font = '500 24px system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(244,232,216,.9)'; ctx.font = `500 24px ${getComputedStyle(document.body).fontFamily}`;
       ctx.fillText(`${state.label} · ${state.color} · ${sideName(side)} · ${state.method} · ×${state.qty} · ${d.pos.value}`, 24, size - 28);
       const blob = await new Promise((res) => c.toBlob(res, 'image/jpeg', .85));
       if (!blob) return null;
