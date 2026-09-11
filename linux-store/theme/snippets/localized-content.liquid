@@ -4,7 +4,7 @@
   English page body would leak into the Arabic storefront — so if the Arabic
   page still carries no Arabic letters we show `fallback` (a theme string or
   section setting) instead.
-  Usage: {% render 'localized-content', content: page.content, fallback: 'home.about_body' | t %}
+  Usage: assign fb = 'home.about_body' | t, then {% render 'localized-content', content: page.content, fallback: fb %}
 {%- endcomment -%}
 {%- assign out = content -%}
 {%- if request.locale.iso_code == 'ar' and content != blank -%}

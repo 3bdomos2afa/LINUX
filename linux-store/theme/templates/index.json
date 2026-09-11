@@ -61,7 +61,7 @@
       "type": "product-carousel",
       "settings": {
         "number": "01",
-        "collection": "shopify://collections/winter-collection",
+        "collection": "winter-collection",
         "limit": 8
       }
     },
@@ -71,21 +71,21 @@
         "c1": {
           "type": "collection",
           "settings": {
-            "collection": "shopify://collections/winter-collection",
+            "collection": "winter-collection",
             "size": "large"
           }
         },
         "c2": {
           "type": "collection",
           "settings": {
-            "collection": "shopify://collections/summer-collection",
+            "collection": "summer-collection",
             "size": "small"
           }
         },
         "c3": {
           "type": "collection",
           "settings": {
-            "collection": "shopify://collections/customize-print",
+            "collection": "customize-print",
             "size": "small",
             "key_label": "home.collections_customize_label",
             "key_sub": "home.collections_customize_sub"
@@ -94,7 +94,7 @@
         "c4": {
           "type": "collection",
           "settings": {
-            "collection": "shopify://collections/all",
+            "collection": "all",
             "size": "wide",
             "key_label": "home.collections_all_label"
           }
@@ -121,7 +121,7 @@
       "type": "product-grid",
       "settings": {
         "number": "03",
-        "collection": "shopify://collections/all",
+        "collection": "all",
         "limit": 8,
         "columns": 4
       }
@@ -132,7 +132,7 @@
         "h1": {
           "type": "hotspot",
           "settings": {
-            "product": "shopify://products/hoodie-anime-black",
+            "product": "hoodie-anime-black",
             "x": 50,
             "y": 40
           }
@@ -140,7 +140,7 @@
         "h2": {
           "type": "hotspot",
           "settings": {
-            "product": "shopify://products/anime-shirt",
+            "product": "anime-shirt",
             "x": 42,
             "y": 75
           }

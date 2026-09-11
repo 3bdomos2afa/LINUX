@@ -65,7 +65,13 @@
       "account": "حسابي",
       "wishlist": "المحفوظ",
       "cart": "الشنطة",
-      "news": "المدوّنة"
+      "news": "المدوّنة",
+      "catalog": "تسوّق",
+      "products": "المنتجات",
+      "collections": "الكوليكشنز",
+      "all": "الكل",
+      "main_menu": "القائمة",
+      "footer_menu": "الفوتر"
     }
   },
   "sections": {
@@ -182,7 +188,9 @@
       "price-ascending": "السعر، من الأقل للأعلى",
       "price-descending": "السعر، من الأعلى للأقل",
       "created-descending": "الأحدث أولاً",
-      "created-ascending": "الأقدم أولاً"
+      "created-ascending": "الأقدم أولاً",
+      "most-relevant": "الأكثر صلة",
+      "relevance": "الأكثر صلة"
     },
     "min": "الأدنى",
     "max": "الأعلى",
@@ -229,7 +237,11 @@
       "size": "المقاس",
       "type": "النوع",
       "material": "الخامة",
-      "style": "الستايل"
+      "style": "الستايل",
+      "availability": "التوفّر",
+      "price": "السعر",
+      "product_type": "النوع",
+      "vendor": "البراند"
     },
     "option_values": {
       "1": "1",
@@ -286,7 +298,11 @@
       "customize_print": "طباعة مخصّصة",
       "new_arrivals": "وصل جديد",
       "best_sellers": "الأكثر طلباً",
-      "all_products": "كل المنتجات"
+      "all_products": "كل المنتجات",
+      "in_stock": "متاح",
+      "out_of_stock": "غير متاح",
+      "home_page": "الرئيسية",
+      "frontpage": "الرئيسية"
     },
     "by_type": "{{ brand }} · {{ type }}",
     "rating_text": "4.9 · 120 تقييم",

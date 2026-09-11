@@ -47,7 +47,7 @@
         "beige"
       ],
       "settings": {
-        "product": "shopify://products/hoodie-customize",
+        "product": "hoodie-customize",
         "default_garment": "hoodie",
         "show_tee": true,
         "default_side": "back",

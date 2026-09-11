@@ -51,6 +51,9 @@ export function buildStore(dataDir) {
 
   // ---- Menus ----------------------------------------------------------------
   const link = (title, url, links = []) => ({ title, url, links, levels: links.length ? 1 : 0, handle: title.toLowerCase().replace(/\s+/g, '-'), type: 'http_link', object: null });
+  // Mirrors a store where the merchant translated a few menu titles in Translate & Adapt (Shopify serves them localised)
+  const AR_MENU = { 'Contact': 'تواصل معنا', 'About': 'عن LINUX' };
+  const localizeMenu = (menu, locale) => locale === 'ar' ? { ...menu, links: menu.links.map((l) => ({ ...l, title: AR_MENU[l.title] || l.title, links: (l.links || []).map((c) => ({ ...c, title: AR_MENU[c.title] || c.title })) })) } : menu;
   const linklists = {
     'main-menu': { title: 'Main menu', handle: 'main-menu', links: [
       link('Shop', '/collections/all', [link('Winter collection', '/collections/winter-collection'), link('Summer collection', '/collections/summer-collection'), link('Customize print', '/collections/customize-print'), link('All products', '/collections/all')]),
@@ -127,7 +130,7 @@ export function buildStore(dataDir) {
       };
       const lz = (x) => L(x);
       return {
-        shop: lz(shop), settings, routes, cart: lz(this.cartObject()), customer: lz(customer), linklists: lz(linklists), collections: lz(collections), all_products: lz(byHandle), pages: lz(pages), blogs: lz(blogs), images: {},
+        shop: lz(shop), settings, routes, cart: lz(this.cartObject()), customer: lz(customer), linklists: lz(Object.fromEntries(Object.entries(linklists).map(([k, m]) => [k, localizeMenu(m, locale)]))), collections: lz(collections), all_products: lz(byHandle), pages: lz(pages), blogs: lz(blogs), images: {},
         request: { locale: localeObj, path: reqPath, query, host: 'localhost', design_mode: false, visual_preview_mode: false, page_type: 'index', origin: 'http://localhost:3000' },
         localization: {
           available_languages: shop.published_locales.map((l) => ({ ...l, primary: l.primary })), language: localeObj,

@@ -134,7 +134,7 @@ export function registerFilters(engine, store) {
       const n = Number(h.count);
       val = (n === 1 ? val.one : n === 0 && val.zero ? val.zero : val.other) ?? val.other ?? val.one;
     }
-    if (val === undefined) return `translation missing: ${locale}.${key}`;
+    if (val === undefined) return `Translation missing: ${locale}.${key}`; // same casing as Shopify
     return String(val).replace(/{{\s*(\w+)\s*}}/g, (m, k) => (h[k] !== undefined ? h[k] : m));
   });
 

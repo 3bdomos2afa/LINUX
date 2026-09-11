@@ -60,7 +60,7 @@
             {%- assign b = block.settings -%}
             {%- assign key = block.id -%}
             {%- if b.hoodie_back != blank -%}<img class="cz__photo" data-cz-photo="{{ key }}|hoodie-back" src="{{ b.hoodie_back | image_url: width: 1000 }}" alt="" width="1000" height="1000" loading="lazy" decoding="async" hidden>
-            {%- elsif b.builtin != blank -%}<img class="cz__photo" data-cz-photo="{{ key }}|hoodie-back" src="{{ 'cz-hoodie-back-' | append: b.builtin | append: '.webp' | asset_url }}" alt="" width="720" height="720" loading="lazy" decoding="async" hidden>{%- endif -%}
+            {%- elsif b.builtin != blank and b.builtin != 'none' -%}<img class="cz__photo" data-cz-photo="{{ key }}|hoodie-back" src="{{ 'cz-hoodie-back-' | append: b.builtin | append: '.webp' | asset_url }}" alt="" width="720" height="720" loading="lazy" decoding="async" hidden>{%- endif -%}
             {%- if b.hoodie_front != blank -%}<img class="cz__photo" data-cz-photo="{{ key }}|hoodie-front" src="{{ b.hoodie_front | image_url: width: 1000 }}" alt="" width="1000" height="1000" loading="lazy" decoding="async" hidden>{%- endif -%}
             {%- if b.tee_front != blank -%}<img class="cz__photo" data-cz-photo="{{ key }}|tee-front" src="{{ b.tee_front | image_url: width: 1000 }}" alt="" width="1000" height="1000" loading="lazy" decoding="async" hidden>{%- endif -%}
             {%- if b.tee_back != blank -%}<img class="cz__photo" data-cz-photo="{{ key }}|tee-back" src="{{ b.tee_back | image_url: width: 1000 }}" alt="" width="1000" height="1000" loading="lazy" decoding="async" hidden>{%- endif -%}
@@ -115,7 +115,7 @@
     </div>
 
     {%- comment -%} ---------- Panel ---------- {%- endcomment -%}
-    {%- form 'product', p, class: 'cz__panel glass', data-product-form: '', data-cz-form: '', enctype: 'multipart/form-data' -%}
+    {%- form 'product', p, class: 'cz__panel glass', data-product-form: '', data-cz-form: '' -%}
       <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
       <input type="hidden" name="quantity" value="1" data-cz-qty-field>
       <input type="hidden" name="properties[Garment]" data-cz-garment-prop value="{{ 'home.garment_hoodie' | t | escape }}">
@@ -259,7 +259,7 @@
 {
   "name": "Customize studio",
   "settings": [
-    { "type": "product", "id": "product", "label": "Customize product (its variants carry the price; a 'Type' option with Print/Embroidery values switches price)" },
+    { "type": "product", "id": "product", "label": "Customize product", "info": "Its variants carry the price; a 'Type' option with Print / Embroidery values switches the price." },
     { "type": "header", "content": "Copy (blank = translated)" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
     { "type": "text", "id": "heading", "label": "Heading" },
@@ -291,13 +291,13 @@
       "type": "color",
       "name": "Garment colour",
       "settings": [
-        { "type": "text", "id": "name", "label": "Name (shown to the shopper, translated if the theme knows it)", "default": "Black" },
+        { "type": "text", "id": "name", "label": "Colour name", "info": "Shown to the shopper; translated when the theme knows the word.", "default": "Black" },
         { "type": "color", "id": "hex", "label": "Swatch colour", "default": "#181818" },
-        { "type": "text", "id": "variant_value", "label": "Matching value in the product's Color option (blank = same as name)" },
+        { "type": "text", "id": "variant_value", "label": "Value in the product's Color option", "info": "Leave blank when it equals the colour name." },
         { "type": "select", "id": "builtin", "label": "Built-in hoodie back photo", "options": [
-          { "value": "", "label": "None (use uploaded photos / drawn mockup)" },
+          { "value": "none", "label": "None (use uploaded photos / drawn mockup)" },
           { "value": "black", "label": "Black" }, { "value": "white", "label": "White" }, { "value": "burgundy", "label": "Burgundy" }, { "value": "beige", "label": "Beige" }
-        ], "default": "" },
+        ], "default": "none" },
         { "type": "image_picker", "id": "hoodie_back", "label": "Hoodie — back photo (overrides built-in)" },
         { "type": "image_picker", "id": "hoodie_front", "label": "Hoodie — front photo" },
         { "type": "image_picker", "id": "tee_front", "label": "Tee — front photo" },

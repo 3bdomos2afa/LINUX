@@ -11,7 +11,7 @@ while (queue.length && seen.size < 120) {
   const res = await fetch(BASE + p, { redirect: 'manual' });
   const html = res.status === 200 ? await res.text() : '';
   if (res.status !== 200) { bad.push([p, 'HTTP ' + res.status + (res.headers.get('location') ? ' → ' + res.headers.get('location') : '')]); continue; }
-  if (/Section .* error|Liquid error|translation missing/.test(html)) bad.push([p, 'render error/missing translation']);
+  if (/Section .* error|Liquid error|[Tt]ranslation missing/.test(html)) bad.push([p, 'render error/missing translation']);
   for (const m of html.matchAll(/href="([^"#]+)"/g)) {
     const h = m[1];
     if (/^(https?:|mailto:|tel:|javascript:)/.test(h) || h.startsWith('/assets/') || h.startsWith('/cdn') || h.startsWith('/uploads/')) continue;

@@ -243,11 +243,11 @@ function blocksOf(s) {
 async function renderSection(type, id, settings, blocks, env) {
   const sec = loadSection(type);
   if (!sec) return `<!-- section ${type} missing -->`;
-  const merged = { ...schemaDefaults(sec.schema.settings), ...resolveSettings(settings, env) };
+  const merged = { ...schemaDefaults(sec.schema.settings), ...resolveSettings(settings, env, sec.schema.settings) };
   const blockSchemas = Object.fromEntries((sec.schema.blocks || []).map((b) => [b.type, b]));
   const fullBlocks = blocks.map((b, i) => ({
     id: b.id, type: b.type, shopify_attributes: '', index: i + 1, index0: i,
-    settings: { ...schemaDefaults(blockSchemas[b.type]?.settings), ...resolveSettings(b.settings, env) },
+    settings: { ...schemaDefaults(blockSchemas[b.type]?.settings), ...resolveSettings(b.settings, env, blockSchemas[b.type]?.settings) },
   }));
   const section = { id, settings: merged, blocks: fullBlocks, index: 1, index0: 0, location: 'template' };
   try {
@@ -269,9 +269,13 @@ function globalsOf(env) {
 
 // Settings that reference store objects (collection handles, products, menus,
 // images) are resolved into the mock objects Shopify would provide.
-function resolveSettings(settings, env) {
+function resolveSettings(settings, env, defs) {
   const out = {};
+  const typeOf = (k) => (defs || []).find((d) => d.id === k)?.type;
   for (const [k, v] of Object.entries(settings || {})) {
+    // Like Shopify: `collection` / `product` settings hold a plain handle and resolve to the object
+    if (typeof v === 'string' && typeOf(k) === 'collection' && !/^shopify:/.test(v)) { const c = store.collections[v] || null; out[k] = env.__lz ? env.__lz(c) : c; continue; }
+    if (typeof v === 'string' && typeOf(k) === 'product' && !/^shopify:/.test(v)) { const pr = store.productByHandle(v) || null; out[k] = env.__lz ? env.__lz(pr) : pr; continue; }
     if (typeof v === 'string' && /^shopify:\/\/collections\//.test(v)) out[k] = env.__lz ? env.__lz(store.collections[v.split('/').pop()] || null) : (store.collections[v.split('/').pop()] || null);
     else if (typeof v === 'string' && /^shopify:\/\/products\//.test(v)) out[k] = env.__lz ? env.__lz(store.productByHandle(v.split('/').pop()) || null) : (store.productByHandle(v.split('/').pop()) || null);
     else if (typeof v === 'string' && /^shopify:\/\/shop_images\//.test(v)) out[k] = store.imageObject('/assets/' + v.split('/').pop());

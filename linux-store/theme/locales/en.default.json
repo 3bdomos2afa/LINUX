@@ -65,7 +65,13 @@
       "account": "Account",
       "wishlist": "Saved",
       "cart": "Bag",
-      "news": "Journal"
+      "news": "Journal",
+      "catalog": "Shop",
+      "products": "Products",
+      "collections": "Collections",
+      "all": "All",
+      "main_menu": "Menu",
+      "footer_menu": "Footer"
     }
   },
   "sections": {
@@ -182,7 +188,9 @@
       "price-ascending": "Price, low to high",
       "price-descending": "Price, high to low",
       "created-descending": "Date, new to old",
-      "created-ascending": "Date, old to new"
+      "created-ascending": "Date, old to new",
+      "most-relevant": "Most relevant",
+      "relevance": "Relevance"
     },
     "min": "Min",
     "max": "Max",
@@ -229,7 +237,11 @@
       "size": "Size",
       "type": "Type",
       "material": "Material",
-      "style": "Style"
+      "style": "Style",
+      "availability": "Availability",
+      "price": "Price",
+      "product_type": "Type",
+      "vendor": "Brand"
     },
     "option_values": {
       "1": "1",
@@ -286,7 +298,11 @@
       "customize_print": "Customize print",
       "new_arrivals": "New arrivals",
       "best_sellers": "Best sellers",
-      "all_products": "All products"
+      "all_products": "All products",
+      "in_stock": "In stock",
+      "out_of_stock": "Out of stock",
+      "home_page": "Home page",
+      "frontpage": "Home page"
     },
     "by_type": "{{ brand }} · {{ type }}",
     "rating_text": "4.9 · 120 reviews",

@@ -32,7 +32,7 @@
       <label class="visually-hidden" for="sort-by">{{ 'collections.sort_by' | t }}</label>
       <select class="select" id="sort-by" name="sort_by" onchange="this.form.submit()">
         {%- for opt in collection.sort_options -%}
-          {%- assign sort_key = 'collections.sort_options.' | append: opt.value -%}{%- assign sort_label = sort_key | t -%}{%- if sort_label contains 'translation missing' -%}{%- assign sort_label = opt.name -%}{%- endif -%}<option value="{{ opt.value }}"{% if collection.sort_by == opt.value %} selected{% endif %}>{{ sort_label }}</option>
+          {%- assign sort_key = 'collections.sort_options.' | append: opt.value -%}{%- assign sort_label = sort_key | t -%}{%- assign sort_label_lc = sort_label | downcase -%}{%- if sort_label_lc contains 'translation missing' -%}{%- assign sort_label = opt.name -%}{%- endif -%}<option value="{{ opt.value }}"{% if collection.sort_by == opt.value %} selected{% endif %}>{{ sort_label }}</option>
         {%- endfor -%}
       </select>
     </form>
