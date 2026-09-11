@@ -19,9 +19,9 @@
 
 ## 2. السكاشن (كل صفحة → السكشن → إعداداته)
 
-- **Header**: اللوجو وارتفاعه · المنيو · يطفو فوق الفيديو أو لا · زرار Shop ونصه ولينكه · شريط الإعلان ونصه · بلوكات صور الميجا منيو.
-- **Hero (فيديو التطريز)**: الفيديو · البوستر · ارتفاع الفيديو على الديسكتوب وعلى الموبايل · تعتيم الفيديو · زرار الإيقاف · إشارة السكرول · **مكان اللوح الزجاجي (تحت الفيديو — الافتراضي — أو فوقه)** · العنوان الصغير/الكبير/الفرعي · الزرارين ولينكاتهم · صف الثقة (3 نصوص).
-- **Customize studio (`/pages/customize`)**: منتج التخصيص · النصوص · القطعة الافتراضية (هودي/تيشيرت) وعرض التيشيرت · الجهة الافتراضية (ورا/قدام) · المقاسات · شيبس الكمية السريعة · الحد الأدنى للتطريز · أقصى كمية · أقصى حجم ملف · بوكس "كلّمنا الأول" · صف "إزاي بتشتغل" ونصوصه · ربط خيارات المنتج (Color / Type / Print / Embroidery).
+- **Header**: اللوجو وارتفاعه · المنيو · زرار Shop ونصه ولينكه · شريط الإعلان ونصه · بلوكات صور الميجا منيو. الهيدر ثابت في كل الصفحات: يختفي وانت نازل ويرجع أول ما تطلع.
+- **Hero (فيديو التطريز)**: الفيديو · البوستر · ارتفاع الفيديو على الديسكتوب وعلى الموبايل (الافتراضي: الشاشة كلها) · تعتيم الفيديو (الافتراضي: صفر) · **مكان اللوح الزجاجي (تحت الفيديو — الافتراضي — أو فوقه)** · العنوان الصغير/الكبير/الفرعي · الزرارين ولينكاتهم · صف الثقة (3 نصوص). مافيش أزرار على الفيديو.
+- **Customize studio (`/pages/customize`)**: منتج التخصيص · النصوص · القطعة الافتراضية (هودي/تيشيرت) وعرض التيشيرت · الجهة الافتراضية (ورا/قدام) · المقاسات · شيبس الكمية السريعة · الحد الأدنى للتطريز · أقصى كمية · أقصى حجم ملف · بوكس "مش متأكد؟ اسأل الأول" · صف "إزاي بتشتغل" ونصوصه · ربط خيارات المنتج (Color / Type / Print / Embroidery). **العميل يقدر يرفع تصميم لقدام وتصميم لورا** (أو واحد منهم)، وكل جهة ليها مكانها وحجمها ودورانها.
   - **بلوكات الألوان**: كل لون بلوك — الاسم، لون السواتش، القيمة المطابقة في خيار Color بالمنتج، **صورة ظهر الهودي المدمجة** (أسود / أبيض / برجندي / بيج) أو صورك أنت (ظهر/قدام هودي، قدام/ورا تيشيرت). لو مافيش صورة للجهة، الثيم يرسم موكب بلون السواتش.
 - **404**: العنوان الصغير/الكبير/النص · الزرار ولينكه · البطريق · البحث · المنتجات الشائعة وعددها والكولكشن · **بلوكات روابط سريعة** (عنوان، نص، لينك، أيقونة — أو مفتاح ترجمة).
 - **Product page**: الفتات · شارة التقييم ونصها · زرار واتساب تحت الإضافة (مطفي افتراضياً) · بلوكات: الوصف / القماش / الشحن / عرض الباندل (الكميات والنسب) / اعرف مقاسك / أكورديون مخصص.
@@ -37,19 +37,20 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو تطب
 
 | الخاصية | القيمة |
 | --- | --- |
-| Design file | ملف التصميم الأصلي (لينك `/uploads/…` في Shopify admin) |
-| **Mockup** | **صورة JPEG للهودي/التيشيرت بعد وضع التصميم عليه** بنفس المكان والحجم والدوران (لينك `/uploads/…`) |
-| Garment / Colour / Side / Method | القطعة · اللون · الجهة (قدام/ورا) · طباعة/تطريز |
+| Front design / Back design | ملف التصميم الأصلي لكل جهة (لينك `/uploads/…` في Shopify admin) |
+| **Front mockup / Back mockup** | **صورة JPEG للقطعة بعد وضع التصميم عليها** بنفس المكان والحجم والدوران، لكل جهة فيها تصميم (لينك `/uploads/…`) |
+| Sides | `Front + Back` أو `Front` أو `Back` |
+| Garment / Colour / Method | القطعة · اللون · طباعة/تطريز |
 | Sizes | مقاس كل قطعة `1:L, 2:M, …` |
-| Design position | `x:50,y:42,scale:46,rotate:15,side:back` (٪ من عرض القطعة + زاوية الدوران) |
+| Front position / Back position | `x:50,y:42,scale:46,rotate:15` (٪ من عرض القطعة + زاوية الدوران) |
 | Notes | ملاحظات العميل |
 
 الفاريانت المختار = اللون × المقاس الأول × النوع (Print/Embroidery)، فالسعر بيتغيّر تلقائياً.
 
 ## 5. الخطوط
 
-- إنجليزي: **Rantaro** للعناوين (النسخة المرفقة ديمو: الأرقام 5–9 مشخبطة فيها عمداً، فالأرقام بتظهر بخط Space Grotesk لحد ما تستبدل `assets/rantaro-latin.woff2` بالنسخة المرخّصة من Limitype) + Space Grotesk للنصوص.
-- عربي: **ثمانية Serif Display** للعناوين + **ثمانية Sans** للنصوص (رخصة ثمانية تسمح بالاستخدام في المواقع والبراند وتمنع إعادة توزيع الملفات).
+- إنجليزي: **Rantaro** لكل النصوص (عناوين ونصوص). النسخة المرفقة ديمو: الأرقام 5–9 مشخبطة فيها عمداً، فالأرقام بتظهر بخط Space Grotesk لحد ما تستبدل `assets/rantaro-latin.woff2` بالنسخة المرخّصة من Limitype. Rantaro قصّة واحدة (Bold) فسُمك العناوين والنصوص بيتفرّق بالحجم واللون: العناوين كريمي، النصوص أبيض، اللينكات أخضر.
+- عربي: **ثمانية Serif Display Black** للعناوين (كريمي) + **ثمانية Sans Light/Regular** للنصوص (أبيض) واللينكات بالأخضر (رخصة ثمانية تسمح بالاستخدام في المواقع والبراند وتمنع إعادة توزيع الملفات).
 
 ---
 
@@ -68,13 +69,13 @@ Every part of the storefront is editable without code. Where to find it:
 - **Brand & social**: WhatsApp number, **floating WhatsApp bubble scope** (Customize page only / everywhere / hidden), opening message, Instagram / TikTok / Facebook / YouTube / X.
 
 ### Sections
-- **Hero**: video, poster, desktop & phone height, dim, pause button, scroll hint, **glass panel placement (below the video — default — or over it)**, eyebrow/headline/sub, two CTAs, trust row.
-- **Customize studio**: product, copy, default garment & side, offer tee, sizes, quick-qty chips, embroidery minimum, max qty, max file size, contact box, how-it-works row, option mapping; **colour blocks** carry the swatch, the product's Color value and the garment photos (built-in hoodie backs in black / white / burgundy / beige, or your own uploads per side). No photo → drawn recolourable mockup.
+- **Hero**: video, poster, desktop & phone height (default: full viewport), dim (default 0), **glass panel placement (below the video — default — or over it)**, eyebrow/headline/sub, two CTAs, trust row. Nothing sits on the video.
+- **Customize studio**: product, copy, default garment & side, offer tee, sizes, quick-qty chips, embroidery minimum, max qty, max file size, contact box, how-it-works row, option mapping; **colour blocks** carry the swatch, the product's Color value and the garment photos (built-in hoodie backs in black / white / burgundy / beige, or your own uploads per side). No photo → drawn recolourable mockup. **Shoppers can add a front design and a back design** (or just one); each side keeps its own position, scale and rotation.
 - **404**: copy, CTA, penguin, search, popular products, **quick-link blocks**.
 - **Product page**: breadcrumb, rating chip, WhatsApp button (off by default), description / fabric / shipping / bundle / fit-finder / custom accordions.
 
 ### Order payload from the studio
-`Design file` (original upload), **`Mockup`** (JPEG of the garment with the design composited exactly as placed), `Garment`, `Colour`, `Side`, `Method`, `Sizes` (per piece), `Design position` (`x,y,scale,rotate,side`), `Notes`. The variant is resolved from colour × size × Print/Embroidery so pricing follows.
+`Front design` / `Back design` (original uploads), **`Front mockup` / `Back mockup`** (JPEG of the garment with that side's design composited exactly as placed), `Sides` (`Front + Back` / `Front` / `Back`), `Garment`, `Colour`, `Method`, `Sizes` (per piece), `Front position` / `Back position` (`x,y,scale,rotate`), `Notes`. The variant is resolved from colour × size × Print/Embroidery so pricing follows.
 
 ### Fonts
-Rantaro (headlines, demo cut — digits fall back to Space Grotesk until the licensed file replaces `assets/rantaro-latin.woff2`) + Space Grotesk for English; Thmanyah Serif Display + Thmanyah Sans for Arabic.
+Rantaro for all English text (single bold cut; demo digits 5–9 fall back to Space Grotesk until the licensed file replaces `assets/rantaro-latin.woff2`); Thmanyah Serif Display (headlines) + Thmanyah Sans (body) for Arabic. Roles: headings cream & heavy, body/sub-headings white & light, links green — tokens `--heading`, `--fg`, `--link` in `glass.css`.

@@ -47,8 +47,8 @@ html[dir="rtl"] .mega { transform-origin: top right; }
 .nav-item:hover .mega, .nav-item.is-open .mega, .nav-item:focus-within .mega { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
 .mega__cols { display: grid; grid-template-columns: 1fr 240px; gap: 16px; }
 .mega__col { display: grid; gap: 4px; align-content: start; }
-.mega__link { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: var(--r-sm); font: var(--w-ui) 15px var(--font-body); color: var(--fg-70); transition: background var(--t-fast), color var(--t-fast), padding-inline-start var(--t-med) var(--spring); }
-.mega__link:hover, .mega__link.is-active { background: var(--glass-fill-hover); color: var(--fg); padding-inline-start: 18px; }
+.mega__link { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: var(--r-sm); font: var(--w-ui) 15px var(--font-body); color: var(--link); transition: background var(--t-fast), color var(--t-fast), padding-inline-start var(--t-med) var(--spring); }
+.mega__link:hover, .mega__link.is-active { background: var(--glass-fill-hover); color: var(--link-hover); padding-inline-start: 18px; }
 .mega__link svg { opacity: 0; transition: opacity var(--t-fast), transform var(--t-med) var(--spring); transform: translateX(-6px); }
 .mega__link:hover svg { opacity: 1; transform: none; }
 .mega__promo { aspect-ratio: 4 / 3; border-radius: var(--r-md); }
@@ -183,7 +183,7 @@ html[dir="rtl"] .marquee__track { animation-direction: reverse; }
 
 /* ---- Carousel rail ---------------------------------------------------------- */
 .rail { position: relative; }
-.rail__track { --rail-gap: 20px; --rail-per: 4; display: flex; align-items: stretch; gap: var(--rail-gap); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; padding: 6px 0 10px; margin: -6px 0 -10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.rail__track { --rail-gap: 20px; --rail-per: 4; display: flex; align-items: stretch; gap: var(--rail-gap); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; padding: 6px 0 6px; margin: -6px 0 -6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
 .rail__track::-webkit-scrollbar { display: none; }
 .rail__track > * { flex: 0 0 calc((100% - (var(--rail-per) - 1) * var(--rail-gap)) / var(--rail-per)); scroll-snap-align: start; min-height: 0; }
 @media (max-width: 1100px) { .rail__track { --rail-per: 3; --rail-gap: 16px; } }
@@ -443,8 +443,8 @@ body.drawer-open { overflow: hidden; }
 .footer__social { display: flex; gap: 4px; }
 .footer__col h4 { font: var(--w-ui) 12px var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-70); margin-bottom: 14px; }
 .footer__col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.footer__col a { font-size: 15px; color: var(--fg); opacity: .85; transition: opacity var(--t-fast), padding-inline-start var(--t-med) var(--spring); }
-.footer__col a:hover { opacity: 1; padding-inline-start: 6px; color: var(--accent); }
+.footer__col a { font-size: 15px; color: var(--link); opacity: .92; transition: opacity var(--t-fast), padding-inline-start var(--t-med) var(--spring), color var(--t-fast); }
+.footer__col a:hover { opacity: 1; padding-inline-start: 6px; color: var(--link-hover); }
 .footer__newsletter { display: grid; gap: 10px; }
 .footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding-top: 22px; border-top: 1px solid var(--glass-stroke); font-size: var(--fs-xs); color: var(--fg-50); }
 .footer__bottom a { color: inherit; }
@@ -463,7 +463,8 @@ body.drawer-open { overflow: hidden; }
 
 /* ---- Breadcrumb -------------------------------------------------------------- */
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--fg-50); text-transform: uppercase; letter-spacing: .08em; }
-.crumbs a:hover { color: var(--fg); }
+.crumbs a { color: var(--link); }
+.crumbs a:hover { color: var(--link-hover); }
 .crumbs svg { width: 12px; height: 12px; }
 html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
 
@@ -503,8 +504,10 @@ html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
   .announcement { height: 28px; font-size: 10px; }
 }
 
-/* Rails: no vertical lift inside the track (it created a nested scroll trap) */
+/* Rails: children must never overflow the track vertically (any overflow = a wheel-eating scroll trap) */
+.rail__track [data-reveal] { transform: none; }
 .rail__track .glass--hover:hover { transform: none; }
+.rail__track [data-tilt].is-tilting { transform: translateY(-3px); }
 @media (hover: hover) { .rail__track .glass--hover:hover { transform: translateY(-3px); } }
 
 /* ---- Bag on phones: compact lines, one-glance footer ------------------------ */

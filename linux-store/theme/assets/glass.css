@@ -153,6 +153,7 @@ html[dir="rtl"] {
    Atmosphere — deep forest with soft light for the glass to lens
    ========================================================================== */
 *, *::before, *::after { box-sizing: border-box; }
+button, input, select, textarea, summary { font-family: inherit; }
 html { background: var(--bg); }
 body {
   margin: 0;
@@ -195,7 +196,7 @@ body {
 /* Phones: static orbs + no grain (both are per-frame composite cost with no visible payoff on a 6" screen) */
 @media (max-width: 760px) { .atmosphere__orb { animation: none; will-change: auto; opacity: .5; } .atmosphere__grain { display: none; } }
 /* Below-the-fold sections skip layout/paint until they approach the viewport */
-.shopify-section:not(:first-child):not(#shopify-section-header):not(#shopify-section-footer) { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+main > .shopify-section:not(:first-child) { content-visibility: auto; contain-intrinsic-size: auto 600px; }
 
 /* ==========================================================================
    The material
@@ -289,8 +290,8 @@ p { margin: 0; }
 strong, b { font-weight: var(--w-ui); }
 a { color: inherit; text-decoration: none; }
 /* Text links go green; buttons/cards/icons opt out by carrying their own colour */
-p a:not(.btn), .rte a, .link, .text-link, .crumbs a, .footer__col a, .footer__policies a, .menu-drawer__sublink, .mega__link, .cart-line__meta a, .nf__chips a, .search-group a .search-item__title, .account__nav a, .post__title a { color: var(--link); }
-p a:not(.btn):hover, .rte a:hover, .link:hover, .text-link:hover, .crumbs a:hover, .footer__col a:hover, .footer__policies a:hover, .menu-drawer__sublink:hover, .mega__link:hover, .cart-line__meta a:hover, .nf__chips a:hover, .account__nav a:hover, .post__title a:hover { color: var(--link-hover); }
+p a:not(.btn), .rte a, .link, .text-link, .footer__policies a, .cart-line__meta a, .footer__bottom a { color: var(--link); }
+p a:not(.btn):hover, .rte a:hover, .link:hover, .text-link:hover, .footer__policies a:hover, .cart-line__meta a:hover, .footer__bottom a:hover { color: var(--link-hover); }
 .link { text-decoration: underline; text-decoration-color: rgb(143 203 90 / .45); text-underline-offset: 4px; transition: text-decoration-color var(--t-fast), color var(--t-fast); }
 .link:hover { text-decoration-color: var(--link-hover); }
 .rte { color: var(--fg); font-weight: var(--w-body); font-size: clamp(16px, 1.1vw, 17px); line-height: 1.75; }

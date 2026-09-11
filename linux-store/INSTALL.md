@@ -6,7 +6,7 @@
 
 **What's in this folder**
 - `linux-liquid-glass-theme.zip` — the Shopify theme. This is the only file you upload.
-- `hero-video/` — the embroidery hero video masters (1080p, 720p, poster) in case you want to re-use them elsewhere. They are already inside the theme.
+- `hero-video/` — the three hero cuts the theme ships (1600×900 desktop ~1 MB, 720p tablet ~0.6 MB, 540×960 portrait phone ~0.3 MB) + poster, in case you want to re-use them elsewhere. They are already inside the theme.
 - `brand-assets/` — penguin mascots, wordmark, favicons, editorial images used by the theme.
 
 **Install (5 minutes)**
@@ -34,7 +34,7 @@
 
 **اللي في الفولدر**
 - `linux-liquid-glass-theme.zip` — الثيم نفسه. ده الملف الوحيد اللي بترفعه.
-- `hero-video/` — فيديو التطريز (1080p و720p وصورة البوستر) لو عايز تستخدمه في مكان تاني. هو موجود جوه الثيم أصلاً.
+- `hero-video/` — تلات نسخ من فيديو التطريز (ديسكتوب ~1 ميجا، تابلت ~0.6، موبايل عمودي ~0.3) + البوستر، لو عايز تستخدمهم في مكان تاني. موجودين جوه الثيم أصلاً.
 - `brand-assets/` — البطاريق، اللوجو، الفافيكون، وصور البراند اللي الثيم بيستخدمها.
 
 **التركيب (٥ دقايق)**

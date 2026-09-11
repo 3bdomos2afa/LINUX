@@ -4,16 +4,14 @@
       "type": "hero-embroidery",
       "settings": {
         "height": 100,
-        "height_mobile": 70,
-        "overlay": 10,
+        "height_mobile": 100,
+        "overlay": 0,
         "layout": "below",
         "show_headline": true,
         "show_cta": true,
         "cta_url": "/collections/winter-collection",
         "cta2_url": "/pages/customize",
-        "show_trust": true,
-        "show_controls": true,
-        "show_scroll_hint": true
+        "show_trust": true
       }
     },
     "marquee": {

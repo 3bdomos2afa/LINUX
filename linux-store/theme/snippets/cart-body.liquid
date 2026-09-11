@@ -22,16 +22,16 @@
     {%- for item in cart.items -%}
       <li class="cart-line glass glass--clear" data-line data-key="{{ item.key }}" style="--i: {{ forloop.index0 }}">
         {%- liquid
-          assign mock_front = item.properties['Front mockup']
-          assign mock_back = item.properties['Back mockup']
-          assign mockup = blank
-          if mock_back contains '/uploads/' or mock_back contains 'data:image'
+          assign mock_front = item.properties['Front mockup'] | default: ''
+          assign mock_back = item.properties['Back mockup'] | default: ''
+          assign mockup = ''
+          if mock_back != '' and mock_back contains '/uploads/'
             assign mockup = mock_back
-          elsif mock_front contains '/uploads/' or mock_front contains 'data:image'
+          elsif mock_front != '' and mock_front contains '/uploads/'
             assign mockup = mock_front
           endif
           assign has_mockup = false
-          if mockup != blank
+          if mockup != ''
             assign has_mockup = true
           endif
         -%}
@@ -67,8 +67,8 @@
                 </p>
               {%- endif -%}
             {%- endfor -%}
-            {%- if mock_front contains '/uploads/' or mock_front contains 'data:image' -%}<p class="cart-line__meta"><a href="{{ mock_front }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.front' | t }} ↗</a></p>{%- endif -%}
-            {%- if mock_back contains '/uploads/' or mock_back contains 'data:image' -%}<p class="cart-line__meta"><a href="{{ mock_back }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.back' | t }} ↗</a></p>{%- endif -%}
+            {%- if mock_front != '' and mock_front contains '/uploads/' -%}<p class="cart-line__meta"><a href="{{ mock_front }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.front' | t }} ↗</a></p>{%- endif -%}
+            {%- if mock_back != '' and mock_back contains '/uploads/' -%}<p class="cart-line__meta"><a href="{{ mock_back }}" target="_blank" rel="noopener">{{ 'customize.view_mockup' | t }} · {{ 'customize.back' | t }} ↗</a></p>{%- endif -%}
           </details>
           {%- endif -%}
           <div class="cart-line__row">

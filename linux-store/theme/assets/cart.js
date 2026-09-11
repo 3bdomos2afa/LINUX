@@ -216,6 +216,6 @@
   }
 
   L.cart = { api, add, refresh };
-  api.get().then((c) => { paintCount(c.item_count); loadUpsell(c); }).catch(() => {});
+  api.get().then((c) => { paintCount(c.item_count); }).catch(() => {});
   L.on('drawer:open', ({ name }) => { if (name === 'cart') api.get().then(loadUpsell).catch(() => {}); });
 })();
