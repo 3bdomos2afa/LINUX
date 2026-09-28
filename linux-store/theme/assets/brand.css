@@ -1,0 +1,249 @@
+/* ==========================================================================
+   LINUX Identity 2.0 — "stitched street glass"
+   Loads last. Owns: section colour rhythm (forest / cream / lime sheets),
+   the embroidery motif (patch badges, stitched lines), product cards on the
+   studio-stone backdrop, category bubbles, ribbons, mascot motion and the
+   scroll-linked effects. Performance rules come first.
+   ========================================================================== */
+
+:root {
+  --stone-hi: #efe9df;
+  --stone: #e9e2d6;
+  --stone-lo: #e2d9ca;
+  --ink: #04241a;
+  --stitch: 2px dashed;
+  --patch-lime: linear-gradient(180deg, #a9dc7c 0%, #86c451 100%);
+  --patch-cream: linear-gradient(180deg, #fbf3e6 0%, #efe2cc 100%);
+  --patch-forest: linear-gradient(180deg, #0f5a3e 0%, #07402b 100%);
+  --twill: repeating-linear-gradient(135deg, rgb(255 255 255 / .09) 0 1px, transparent 1px 4px);
+}
+
+/* ---- Performance: only floating chrome samples the backdrop ---------------
+   Panels resting on the page sit over a smooth gradient, where a backdrop blur
+   is invisible but still costs a GPU pass per frame while scrolling. They get
+   the same look baked in; blur stays on bars, drawers, dialogs and anything
+   that floats over photos or video. */
+.glass:not(.header, .tab-bar, .drawer, .modal__panel, .search-overlay__panel, .search-overlay__bar, .sticky-atc, .wa-fab, .mega, .promo, .card__quick, .reel__tag, .reel__sound, .reel__info, .ship-meter--island, .header__locale-dropdown, .toast, .hero--panel-over .hero__strip),
+.footer__inner, .hero--panel-below .hero__strip, .bento__label {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ---- Brand curtain: first visit of the session only (flag set in <head>).
+   Lives in a blocking sheet so it never sits in the page flow. */
+.curtain { position: fixed; inset: 0; z-index: 9999; background: var(--forest-deep, #021a12); display: grid; place-items: center; pointer-events: none; animation: curtain-out .5s var(--ease-out) .35s forwards; }
+.curtain svg { width: clamp(120px, 18vw, 220px); color: var(--cream); animation: curtain-logo .7s var(--ease-out) both; }
+@keyframes curtain-logo { from { opacity: 0; transform: translateY(14px) scale(.96); } 30% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes curtain-out { to { opacity: 0; visibility: hidden; } }
+:is(.no-js, .curtain-seen) .curtain { display: none; }
+@media (prefers-reduced-motion: reduce) { .curtain { display: none; } }
+
+/* ---- Hero: the poster paints first, the video fades in once it plays ----- */
+.hero__poster, .hero__poster img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__poster img { object-fit: cover; object-position: center; }
+.hero__video { opacity: 0; transition: opacity 700ms var(--ease); }
+.hero__media.is-playing .hero__video { opacity: 1; }
+
+/* ==========================================================================
+   Section colour rhythm — cream and lime "sheets" between forest bands
+   ========================================================================== */
+.scheme-cream, .scheme-lime { position: relative; isolation: isolate; }
+.scheme-cream {
+  --sheet: linear-gradient(180deg, #f3ecdf 0%, #ebe2d3 100%);
+  --fg: #0b2a1f; --heading: var(--ink); --fg-70: rgb(4 36 26 / .74); --fg-50: rgb(4 36 26 / .58); --fg-30: rgb(4 36 26 / .3); --fg-12: rgb(4 36 26 / .1);
+  --link: #2f7a1f; --link-hover: var(--ink); --accent: var(--forest); --accent-fg: var(--cream);
+  --glass-fill: rgb(255 255 255 / .55); --glass-fill-hover: rgb(255 255 255 / .75); --glass-fill-solid: rgb(255 255 255 / .82); --glass-stroke: rgb(4 36 26 / .1); --glass-stroke-hi: rgb(255 255 255 / .95);
+  --lg-sheen: linear-gradient(162deg, rgb(255 255 255 / .7) 0%, rgb(255 255 255 / .2) 30%, rgb(255 255 255 / 0) 56%);
+  --lg-rim: linear-gradient(138deg, #fff 0%, rgb(255 255 255 / .35) 24%, transparent 46%, rgb(4 48 32 / .06) 70%, rgb(255 255 255 / .8) 100%);
+  --lg-depth: inset 0 1px 1px rgb(255 255 255 / .9), inset 0 -1px 1px rgb(4 36 26 / .04);
+  --glass-shadow: var(--lg-depth), 0 1px 2px rgb(4 36 26 / .06), 0 18px 40px -22px rgb(4 36 26 / .35);
+  --glass-shadow-lift: var(--lg-depth), 0 2px 6px rgb(4 36 26 / .08), 0 30px 60px -26px rgb(4 36 26 / .4);
+  color: var(--fg);
+}
+.scheme-lime {
+  --sheet: radial-gradient(90% 120% at 15% 0%, #b4e58a 0%, transparent 60%), linear-gradient(180deg, #93cf5e 0%, #7fbd4a 100%);
+  --fg: #03251a; --heading: #021a12; --fg-70: rgb(2 26 18 / .78); --fg-50: rgb(2 26 18 / .6); --fg-30: rgb(2 26 18 / .3); --fg-12: rgb(2 26 18 / .12);
+  --link: #021a12; --accent: var(--forest-deep); --accent-fg: #c6ef9f;
+  --glass-fill: rgb(255 255 255 / .28); --glass-fill-hover: rgb(255 255 255 / .4); --glass-stroke: rgb(2 26 18 / .14);
+  --lg-sheen: linear-gradient(162deg, rgb(255 255 255 / .45) 0%, transparent 50%);
+  color: var(--fg);
+}
+:is(.scheme-cream, .scheme-lime) .btn--primary { background: var(--forest); color: var(--cream); border-color: transparent; box-shadow: inset 0 1px 0 rgb(255 255 255 / .14), 0 12px 28px -14px rgb(4 36 26 / .7); }
+:is(.scheme-cream, .scheme-lime) .btn--primary:hover { background: #0a4a33; }
+:is(.scheme-cream, .scheme-lime) .btn--ghost { color: var(--fg); border-color: var(--fg-30); }
+:is(.scheme-cream, .scheme-lime) .eyebrow::before { box-shadow: 0 0 0 4px rgb(4 48 32 / .12); }
+
+/* A sheet is the section itself: rounded, inset, with the stitched monogram texture */
+.section.sheet { padding-inline: clamp(16px, 3.4vw, 48px); padding-block: clamp(34px, 6vw, 84px); margin-block: calc(var(--section-gap) / 4); border-radius: var(--r-2xl); background: var(--sheet); }
+.section.sheet::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: .55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2304301f' stroke-opacity='.07' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M20 14v12M14 20h12M80 74v12M74 80h12'/%3E%3Cpath d='M58 20h10M86 22h10M24 84h10M50 98h10' stroke-dasharray='3 4'/%3E%3C/g%3E%3C/svg%3E");
+}
+.section.sheet.scheme-lime::before { opacity: .8; }
+.section.sheet + .section.sheet { margin-top: 10px; }
+@media (max-width: 760px) {
+  .section.sheet { width: calc(100% - 16px); border-radius: var(--r-xl); padding-inline: 14px; }
+}
+
+/* ==========================================================================
+   Embroidery motif
+   ========================================================================== */
+/* Patch: an embroidered badge — satin fill, twill texture, stitched edge */
+.patch {
+  position: relative; display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 5px 11px;
+  border-radius: 9px; color: var(--ink); background: var(--twill), var(--patch-lime);
+  font: 800 10.5px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 1.5px 0 rgb(0 0 0 / .18), 0 8px 16px -8px rgb(0 0 0 / .55), inset 0 1px 0 rgb(255 255 255 / .55), inset 0 -1px 0 rgb(0 0 0 / .12);
+  transform: rotate(-4deg);
+}
+.patch::before { content: ""; position: absolute; inset: 2.5px; border-radius: 6.5px; border: 1.3px dashed rgb(4 36 26 / .5); pointer-events: none; }
+.patch--cream { background: var(--twill), var(--patch-cream); }
+.patch--forest { color: var(--cream); background: var(--twill), var(--patch-forest); }
+.patch--forest::before { border-color: rgb(244 232 216 / .55); }
+.patch--sold { color: var(--cream); background: var(--twill), linear-gradient(180deg, #2a302d, #151a18); transform: rotate(3deg); }
+.patch--sold::before { border-color: rgb(244 232 216 / .4); }
+html[dir="rtl"] .patch { letter-spacing: 0; font-size: 11.5px; padding-block: 4px 6px; }
+.patch svg { width: 12px; height: 12px; }
+
+/* Stitched rule under section headings — sews itself in as it scrolls into view */
+.section-head h2, .sheet .section-head h2 { position: relative; padding-bottom: 14px; }
+.section-head h2::after {
+  content: ""; position: absolute; inset-inline-start: 0; bottom: 0; width: 72px; height: 0;
+  border-top: var(--stitch) var(--accent); border-radius: 2px; transform-origin: inline-start;
+}
+html[dir="rtl"] .section-head h2::after { transform-origin: right; }
+
+/* Stitched outline on hover for interactive tiles */
+.stitched { position: relative; }
+.stitched::after { content: ""; position: absolute; inset: 6px; border-radius: calc(var(--r-lg) - 6px); border: 1.5px dashed rgb(244 232 216 / .0); transition: border-color var(--t-med) var(--ease); pointer-events: none; }
+.stitched:hover::after { border-color: rgb(244 232 216 / .45); }
+
+/* ==========================================================================
+   Ribbons (the marquee): two crossing woven tapes
+   ========================================================================== */
+.ribbons { position: relative; padding-block: clamp(26px, 5vw, 56px); overflow: hidden; }
+.ribbon { position: relative; overflow: hidden; transform: rotate(-2.4deg); margin-inline: -4vw; box-shadow: 0 16px 36px -18px rgb(0 0 0 / .7); }
+.ribbon--lime { z-index: 2; color: var(--ink); background: var(--twill), linear-gradient(180deg, #a3d873, #83c24f); }
+.ribbon--cream { z-index: 1; margin-top: -14px; transform: rotate(1.8deg); color: var(--forest); background: var(--twill), linear-gradient(180deg, #f7eee0, #eadcc6); }
+.ribbon::before, .ribbon::after { content: ""; position: absolute; inset-inline: 0; height: 0; border-top: 1.5px dashed rgb(4 36 26 / .45); pointer-events: none; }
+.ribbon::before { top: 6px; } .ribbon::after { bottom: 6px; }
+.ribbon .marquee__track { display: flex; width: max-content; padding-block: clamp(12px, 1.6vw, 18px); }
+.ribbon--cream .marquee__track { animation-direction: reverse; animation-duration: 46s; }
+.ribbon .marquee__item { display: inline-flex; align-items: center; gap: clamp(14px, 2vw, 26px); padding-inline-end: clamp(14px, 2vw, 26px); font: var(--w-heading) clamp(19px, 2.8vw, 36px)/1 var(--font-display); letter-spacing: -.01em; text-transform: uppercase; white-space: nowrap; color: inherit; }
+.ribbon .marquee__item:nth-child(even) .marquee__text { opacity: .62; }
+.ribbon .marquee__item > svg { width: clamp(16px, 1.8vw, 22px); height: auto; color: inherit; opacity: .85; }
+.ribbon .marquee__code { font: 800 12px/1 var(--font-body); letter-spacing: .12em; color: var(--cream); background: var(--forest); border: 1.5px dashed rgb(244 232 216 / .6); border-radius: var(--r-pill); padding: 7px 12px; cursor: pointer; }
+.ribbon--cream .marquee__code { display: none; }
+
+/* ==========================================================================
+   Product cards on the studio backdrop
+   ========================================================================== */
+.card { padding: 8px; border-radius: var(--r-xl); }
+.card__media {
+  aspect-ratio: 4 / 5; border-radius: calc(var(--r-xl) - 8px);
+  background: radial-gradient(90% 70% at 50% 34%, var(--stone-hi), transparent 70%), linear-gradient(180deg, var(--stone-hi), var(--stone-lo));
+  box-shadow: inset 0 0 0 1px rgb(4 36 26 / .05);
+}
+.card__media img { transition: transform 900ms var(--ease-out), opacity var(--t-med) var(--ease); }
+.card:hover .card__media img { transform: scale(1.055); }
+.card__badges { top: 10px; inset-inline-start: 10px; gap: 8px; align-items: flex-start; }
+.card__wish { background: rgb(255 255 255 / .6); color: var(--ink); box-shadow: 0 4px 14px -6px rgb(4 36 26 / .5); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.card__wish:hover { background: #fff; }
+.card__wish.is-active { color: #d0453a; }
+.card__body { padding: 12px 6px 6px; }
+.card__title { font-family: var(--font-display); font-weight: var(--w-heading); letter-spacing: -.01em; line-height: 1.2; }
+.card__title a { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* Phones: a "+" on the photo opens the size row (hover does it on desktop) */
+.card__plus { display: none; }
+@media (max-width: 760px) {
+  .card { padding: 6px; border-radius: var(--r-lg); }
+  .card__media { border-radius: calc(var(--r-lg) - 6px); }
+  .card__plus {
+    position: absolute; bottom: 8px; inset-inline-end: 8px; z-index: 4; display: grid; place-items: center; width: 38px; height: 38px;
+    border: 0; border-radius: 50%; cursor: pointer; color: var(--ink); background: var(--patch-lime);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 6px 16px -6px rgb(4 36 26 / .6);
+    transition: transform var(--t-med) var(--spring);
+  }
+  .card__plus[aria-expanded="true"] { transform: rotate(45deg); background: var(--cream); }
+  .card__quick { display: grid; inset-inline: 6px; bottom: 6px; padding: 10px 10px 54px; }
+  .card__quick:not(.is-open) { pointer-events: none; }
+  .card:hover .card__quick:not(.is-open), .card:focus-within .card__quick:not(.is-open) { transform: translateY(calc(100% + 14px)); opacity: 0; }
+  .card__body { padding: 10px 4px 4px; }
+}
+/* On light sheets cards drop the glass entirely — editorial and airy */
+:is(.scheme-cream, .scheme-lime) .card { padding: 0; background: none; border: 0; box-shadow: none; }
+:is(.scheme-cream, .scheme-lime) .card::before, :is(.scheme-cream, .scheme-lime) .card::after { display: none; }
+:is(.scheme-cream, .scheme-lime) .card__media { border-radius: var(--r-lg); background: linear-gradient(180deg, #f7f2ea, #ece4d7); box-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 18px 38px -26px rgb(4 36 26 / .45); }
+:is(.scheme-cream, .scheme-lime) .card__price .price__current { color: var(--ink); }
+
+/* ==========================================================================
+   Category bubbles (story-ring row)
+   ========================================================================== */
+.cats { padding-block: clamp(10px, 2vw, 22px); }
+.cats__track { display: flex; gap: clamp(12px, 2.2vw, 28px); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 6px var(--gutter) 8px; scrollbar-width: none; justify-content: safe center; }
+.cats__track::-webkit-scrollbar { display: none; }
+.cat { flex: none; width: clamp(78px, 9vw, 124px); display: grid; justify-items: center; gap: 9px; color: var(--fg); text-decoration: none; scroll-snap-align: start; -webkit-tap-highlight-color: transparent; }
+.cat__ring {
+  position: relative; width: 100%; aspect-ratio: 1; padding: 3px; border-radius: 50%;
+  background: conic-gradient(from 210deg, var(--lime), #d8f5b9, var(--cream), var(--lime));
+  transition: transform var(--t-med) var(--spring);
+}
+.cat__img { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 3px solid var(--forest-deep); background: linear-gradient(180deg, var(--stone-hi), var(--stone-lo)); display: grid; place-items: center; }
+.cat__img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.18); transform-origin: 50% 20%; transition: transform 700ms var(--ease-out); }
+.cat__img svg { width: 46%; height: 46%; color: var(--forest); }
+.cat:hover .cat__ring { transform: translateY(-3px) rotate(-3deg); }
+.cat:hover .cat__img img { transform: scale(1.3); }
+.cat:active .cat__ring { transform: scale(.94); }
+.cat__label { font: var(--w-ui) 13px/1.2 var(--font-body); text-align: center; color: var(--fg); }
+.cat--hot .cat__ring::after { content: ""; position: absolute; top: 2px; inset-inline-end: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px var(--forest-deep), 0 0 12px var(--lime); }
+
+/* ==========================================================================
+   Mascot motion — the penguin is alive (transform-only, cheap)
+   ========================================================================== */
+.mascot { transform-origin: 50% 100%; animation: mascot-bob 4.8s ease-in-out infinite; }
+.mascot:nth-of-type(2n) { animation-delay: -1.6s; }
+@keyframes mascot-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-1.6deg); } }
+.footer__mascot { transition: transform var(--t-slow) var(--spring); }
+.footer__mascot:hover { transform: translateY(-10px) rotate(-6deg); }
+
+/* ==========================================================================
+   Micro-interactions (JS adds these nodes)
+   ========================================================================== */
+.fly-to-bag { position: fixed; z-index: calc(var(--z-toast) + 1); object-fit: cover; border-radius: 16px; pointer-events: none; box-shadow: 0 18px 40px -12px rgb(0 0 0 / .6); will-change: transform, opacity; }
+.burst { position: fixed; z-index: calc(var(--z-toast) + 1); width: 0; height: 0; pointer-events: none; }
+.burst i { position: absolute; left: 0; top: 0; width: 8px; height: 12px; border-radius: 2px; will-change: transform, opacity; }
+.bag-bump { animation: bag-bump 520ms var(--spring); }
+@keyframes bag-bump { 30% { transform: scale(1.28) rotate(-8deg); } 60% { transform: scale(.92); } }
+
+/* Sticky add-to-bag always clears the tab bar */
+@media (max-width: 760px) { .sticky-atc { bottom: calc(96px + env(safe-area-inset-bottom)); } }
+
+/* ==========================================================================
+   Scroll-linked motion (runs off the main thread; html.sdr set in <head>)
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.sdr .section-head h2::after { animation: sdr-sew linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
+    html.sdr .bento__tile img, html.sdr .offer-spot__img { animation: sdr-parallax linear both; animation-timeline: view(); animation-range: cover; }
+    html.sdr .hero__stage { transform-origin: 50% 100%; animation: sdr-hero linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+    @keyframes sdr-sew { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes sdr-parallax { from { transform: translateY(-5%) scale(1.1); } to { transform: translateY(5%) scale(1.1); } }
+    @keyframes sdr-hero { to { transform: scale(.9); opacity: .55; } }
+  }
+}
+
+/* Tickers lay out left-to-right so the −50% loop stays in view on RTL pages;
+   each phrase keeps its own reading direction. */
+:is(.ribbon, .marquee, .announcement), .marquee__track, .announcement__track { direction: ltr; }
+html[dir="rtl"] :is(.marquee__item, .announcement__item) { direction: rtl; }
+
+/* Value-prop icons are embroidered patches (the icon is a <span>, so it must
+   beat the generic `.prop span` text colour) */
+.prop .prop__icon {
+  position: relative; color: var(--ink); background: var(--twill), var(--patch-lime); transform: rotate(-4deg);
+  box-shadow: 0 1.5px 0 rgb(0 0 0 / .16), 0 10px 18px -10px rgb(0 0 0 / .5), inset 0 1px 0 rgb(255 255 255 / .55);
+}
+.prop .prop__icon::before { content: ""; position: absolute; inset: 3px; border-radius: inherit; border: 1.3px dashed rgb(4 36 26 / .45); }
+.prop:nth-child(2n) .prop__icon { transform: rotate(3deg); }
+.scheme-cream .prop .prop__icon { color: var(--cream); background: var(--twill), var(--patch-forest); }
+.scheme-cream .prop .prop__icon::before { border-color: rgb(244 232 216 / .5); }

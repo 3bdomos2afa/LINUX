@@ -70,9 +70,9 @@
       {%- endif -%}
     </a>
     <div class="card__badges">
-      {%- unless product.available -%}<span class="chip chip--soldout">{{ 'products.sold_out' | t }}</span>
-      {%- elsif on_sale -%}<span class="chip chip--sale">{{ 'products.sale' | t }}</span>
-      {%- elsif is_new -%}<span class="chip chip--accent">{{ 'products.new' | t }}</span>{%- endunless -%}
+      {%- unless product.available -%}<span class="patch patch--sold">{{ 'products.sold_out' | t }}</span>
+      {%- elsif on_sale -%}<span class="patch">{{ 'products.sale' | t }}</span>
+      {%- elsif is_new -%}<span class="patch patch--cream">{% render 'icon', name: 'sparkle', px: 12 %}{{ 'products.new' | t }}</span>{%- endunless -%}
     </div>
     {%- if settings.show_wishlist != false -%}
     <button class="card__wish" type="button" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'wishlist.add' | t }}" aria-pressed="false">
@@ -80,6 +80,7 @@
     </button>
     {%- endif -%}
     {%- if show_quick and product.available -%}
+      <button class="card__plus" type="button" data-card-plus aria-expanded="false" aria-label="{{ 'products.quick_add' | t | escape }}">{% render 'icon', name: 'plus', px: 18 %}</button>
       <div class="card__quick glass glass--solid">
         {%- if product.has_only_default_variant -%}
           <button class="btn btn--cream btn--sm btn--block" type="button" data-quick-add="{{ product.first_available_variant.id }}">{% render 'icon', name: 'plus', px: 16 %}{{ 'products.quick_add' | t }}</button>

@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "4.0.0",
+    "theme_version": "4.1.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -74,7 +74,7 @@
         "type": "select",
         "id": "glass_refraction",
         "label": "Liquid refraction",
-        "default": "subtle",
+        "default": "off",
         "options": [
           {
             "value": "off",
@@ -89,7 +89,7 @@
             "label": "Strong"
           }
         ],
-        "info": "Bends the page at the edges of the header and tab bar like real glass. Chrome/Android only; other browsers keep the frosted glass."
+        "info": "Bends the page at the edges of the header and tab bar like real glass (Chrome/Android). It re-renders on every frame of the video underneath, so it stays off unless you want the effect over performance on low-end phones."
       },
       {
         "type": "range",
@@ -145,6 +145,27 @@
       {
         "type": "paragraph",
         "content": "Arabic uses Thmanyah Sans throughout, including numbers. English uses Froople headings and Mochi Tubby body text. Brand fonts are self-hosted and always enabled."
+      },
+      {
+        "type": "select",
+        "id": "font_preset",
+        "label": "Font style",
+        "default": "street",
+        "options": [
+          {
+            "value": "street",
+            "label": "Street — Alexandria · Fustat · Unbounded"
+          },
+          {
+            "value": "bubble",
+            "label": "Bubble — Baloo Bhaijaan 2 · Bagel Fat One"
+          },
+          {
+            "value": "classic",
+            "label": "Classic — Thmanyah · Froople · Mochi (licence needed)"
+          }
+        ],
+        "info": "Street and Bubble are open-source (SIL OFL) and cleared for your store. Classic uses fonts whose web licences are not cleared."
       },
       {
         "type": "range",

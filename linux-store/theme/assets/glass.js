@@ -135,12 +135,104 @@
     setTimeout(() => chip.classList.remove('is-copied'), 1600);
   });
 
+  /* ---- Micro-interactions ------------------------------------------------ */
+  // Remember what was pressed last, so an add-to-bag can fly from the right photo.
+  doc.addEventListener('pointerdown', (e) => { L.lastPress = e.target; }, { capture: true, passive: true });
+  const visible = (el) => el && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
+  const bagIcon = () => Array.from(doc.querySelectorAll('.tab-bar [data-drawer-open="cart"], .tab-bar a[href$="/cart"], .header__cart')).find(visible);
+
+  /* The product photo arcs into the bag. Returns how long to wait before
+     opening the drawer (0 = nothing to wait for). */
+  L.flyToBag = (image, { toDrawer = false } = {}) => {
+    if (reduce) return 0;
+    const from = L.lastPress && L.lastPress.closest && L.lastPress.closest('[data-product-card], [data-product], .sticky-atc, .bundle');
+    const pic = from && (from.querySelector('.card__media img.card__img--main, .gallery__slide.is-active img, .gallery__main img, [data-gallery] img, img') || null);
+    const src = image || (pic && (pic.currentSrc || pic.src));
+    if (!src) return 0;
+    const a = pic && visible(pic) ? pic.getBoundingClientRect() : { left: innerWidth / 2 - 48, top: innerHeight / 2 - 60, width: 96, height: 120 };
+    const size = Math.min(a.width, 160), h = size * 1.25;
+    const x0 = a.left + a.width / 2 - size / 2, y0 = a.top + Math.min(a.height, h) / 2 - h / 2;
+    const rtl = root.dir === 'rtl';
+    let tx, ty;
+    const icon = bagIcon();
+    if (toDrawer) {
+      if (innerWidth <= 760) { tx = innerWidth / 2; ty = innerHeight - 60; }
+      else { tx = rtl ? 80 : innerWidth - 80; ty = innerHeight * .42; }
+    } else if (icon) {
+      const b = icon.getBoundingClientRect(); tx = b.left + b.width / 2; ty = b.top + b.height / 2;
+    } else return 0;
+    const img = new Image();
+    img.src = src; img.alt = ''; img.className = 'fly-to-bag';
+    Object.assign(img.style, { left: x0 + 'px', top: y0 + 'px', width: size + 'px', height: h + 'px' });
+    doc.body.appendChild(img);
+    const dx = tx - (x0 + size / 2), dy = ty - (y0 + h / 2);
+    const fly = img.animate([
+      { transform: 'translate(0, 0) scale(1) rotate(0)', opacity: 1 },
+      { transform: `translate(${dx * .45}px, ${Math.min(dy * .45, 0) - 90}px) scale(.62) rotate(${rtl ? 8 : -8}deg)`, opacity: 1, offset: .5 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.14) rotate(${rtl ? 18 : -18}deg)`, opacity: .15 }
+    ], { duration: 720, easing: 'cubic-bezier(.45, 0, .25, 1)' });
+    fly.onfinish = () => {
+      img.remove();
+      const bag = bagIcon();
+      if (bag) { bag.classList.remove('bag-bump'); void bag.offsetWidth; bag.classList.add('bag-bump'); }
+    };
+    return toDrawer ? 420 : 0;
+  };
+
+  /* Particle burst: 'heart' for the wishlist, 'confetti' when free delivery unlocks */
+  L.burst = (el, kind = 'confetti') => {
+    if (reduce || !el || !el.getBoundingClientRect) return;
+    const r = el.getBoundingClientRect();
+    const wrap = doc.createElement('span');
+    wrap.className = 'burst';
+    wrap.style.left = r.left + r.width / 2 + 'px'; wrap.style.top = r.top + r.height / 2 + 'px';
+    const colours = kind === 'heart' ? ['#d0453a', '#f4e8d8', '#ff8a7a'] : ['#8fcb5a', '#f4e8d8', '#c6ef9f', '#ffffff', '#5f9c3a'];
+    const n = kind === 'heart' ? 10 : 22;
+    for (let i = 0; i < n; i++) {
+      const bit = doc.createElement('i');
+      bit.style.background = colours[i % colours.length];
+      if (kind === 'heart') { bit.style.width = bit.style.height = '7px'; bit.style.borderRadius = '50%'; }
+      wrap.appendChild(bit);
+      const ang = (Math.PI * 2 * i) / n + Math.random() * .5, dist = (kind === 'heart' ? 34 : 70) + Math.random() * (kind === 'heart' ? 22 : 60);
+      bit.animate([
+        { transform: 'translate(0,0) rotate(0) scale(1)', opacity: 1 },
+        { transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist - 20}px) rotate(${Math.random() * 360}deg) scale(.9)`, opacity: 1, offset: .6 },
+        { transform: `translate(${Math.cos(ang) * dist * 1.1}px, ${Math.sin(ang) * dist + 40}px) rotate(${Math.random() * 540}deg) scale(.4)`, opacity: 0 }
+      ], { duration: 900 + Math.random() * 300, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' });
+    }
+    doc.body.appendChild(wrap);
+    setTimeout(() => wrap.remove(), 1400);
+  };
+
+  /* Free delivery just unlocked → confetti from the meter */
+  let shipUnlocked = !!doc.querySelector('.ship-meter.is-unlocked');
+  L.on && L.on('cart:updated', () => requestAnimationFrame(() => {
+    const meter = Array.from(doc.querySelectorAll('.ship-meter')).find(visible);
+    const now = !!doc.querySelector('.ship-meter.is-unlocked');
+    if (now && !shipUnlocked && meter) { L.burst(meter, 'confetti'); L.buzz && L.buzz([10, 40, 10]); }
+    shipUnlocked = now;
+  }));
+
+  /* Phones: the "+" on a card photo opens its size row */
+  doc.addEventListener('click', (e) => {
+    const plus = e.target.closest('[data-card-plus]');
+    const open = doc.querySelector('.card__quick.is-open');
+    const shut = (q) => { q.classList.remove('is-open'); const b = q.parentElement.querySelector('[data-card-plus]'); if (b) b.setAttribute('aria-expanded', 'false'); };
+    if (!plus) { if (open && !e.target.closest('.card__quick')) shut(open); return; }
+    const quick = plus.parentElement.querySelector('.card__quick');
+    if (!quick) return;
+    if (open && open !== quick) shut(open);
+    const willOpen = !quick.classList.contains('is-open');
+    quick.classList.toggle('is-open', willOpen);
+    plus.setAttribute('aria-expanded', String(willOpen));
+  });
+
   /* Liquid Glass refraction (Chromium only). backdrop-filter:url() is ignored by
      WebKit/Gecko and would take the blur down with it, so it is only applied
      where it renders. Each [data-lens] surface gets a displacement map sized to
      its own box, so the bent rim keeps a constant width on any shape. */
   (function lensing() {
-    const level = (L.settings && L.settings.refraction) || 'subtle';
+    const level = (L.settings && L.settings.refraction) || 'off';
     if (level === 'off' || typeof navigator === 'undefined' || typeof ResizeObserver === 'undefined' || !window.CSS || !CSS.supports || !root) return;
     const brands = navigator.userAgentData && navigator.userAgentData.brands;
     const chromium = !!(brands && brands.some((b) => /Chromium|Google Chrome|Microsoft Edge|Opera|Samsung/i.test(b.brand)));
@@ -197,7 +289,7 @@
   })();
 
   /* Hero video pause/play + Save-Data respect */
-  const video = doc.querySelector('[data-hero-video]');
+  const video = doc.querySelector('[data-hero-video], [data-hero-media] video');
   if (video) {
     const saveData = navigator.connection && navigator.connection.saveData;
     const toggle = doc.querySelector('[data-hero-toggle]');
@@ -208,19 +300,27 @@
       const label = toggle.querySelector('span');
       if (label) label.textContent = held ? toggle.dataset.labelPlay : toggle.dataset.labelPause;
     };
-    toggle && toggle.addEventListener('click', () => { held = !held; if (held) video.pause(); else video.play().catch(() => {}); sync(); });
+    toggle && toggle.addEventListener('click', () => { held = !held; if (held) video.pause(); else { ready = true; video.play().catch(() => {}); } sync(); });
     sync();
+    const media = video.closest('[data-hero-media]');
+    video.addEventListener('playing', () => media && media.classList.add('is-playing'), { once: true });
+    // Start after the page has loaded so the footage never competes with the first paint.
+    let ready = false;
+    const start = () => { ready = true; if (!held && visible) video.play().catch(() => {}); };
+    let visible = true;
     if (held) { video.pause(); video.removeAttribute('autoplay'); }
-    else { video.play().catch(() => {}); }
+    else if (doc.readyState === 'complete') setTimeout(start, 200);
+    else addEventListener('load', () => setTimeout(start, 200), { once: true });
     // Free the decoder when the hero is off-screen
     if ('IntersectionObserver' in window) {
       new IntersectionObserver((entries) => entries.forEach((en) => {
-        if (en.isIntersecting && !held) video.play().catch(() => {}); else video.pause();
+        visible = en.isIntersecting;
+        if (visible && !held && ready) video.play().catch(() => {}); else if (!visible) video.pause();
       }), { threshold: 0.05 }).observe(video);
     }
   }
 
-  /* Scroll reveal */
+  /* Scroll reveal — scroll-driven CSS where supported (html.sdr), observer fallback */
   const revealables = doc.querySelectorAll('[data-reveal]');
   if ('IntersectionObserver' in window && !reduce) {
     const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });

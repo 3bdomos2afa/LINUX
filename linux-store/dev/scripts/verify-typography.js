@@ -2,16 +2,21 @@
 (async () => {
   await document.fonts.ready;
   const ar = document.documentElement.lang === 'ar';
-  const headingFont = ar ? 'Thmanyah Sans' : 'Froople';
-  const bodyFont = ar ? 'Thmanyah Sans' : 'Mochi Tubby';
+  // Expected families come from the active font preset (snippets/fonts.liquid).
+  const rootStyle = getComputedStyle(document.documentElement);
+  const family = (name) => rootStyle.getPropertyValue(name).split(',')[0].trim().replaceAll('"', '');
+  const headingFont = family('--font-display');
+  const bodyFont = family('--font-body');
+  const headingWeight = rootStyle.getPropertyValue('--w-heading').trim();
   const failures = [];
   const check = (condition, message) => { if (!condition) failures.push(message); };
   const firstFont = (style) => style.fontFamily.split(',')[0].trim().replaceAll('"', '');
   const visible = (element) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden';
-  const token = (name) => {
+  // Resolve a colour token in a given context (section colour schemes redefine it).
+  const token = (name, context = document.body) => {
     const probe = document.createElement('span');
     probe.style.color = `var(${name})`;
-    document.body.append(probe);
+    context.append(probe);
     const color = getComputedStyle(probe).color;
     probe.remove();
     return color;
@@ -31,9 +36,10 @@
     const style = getComputedStyle(element);
     const label = element.textContent.trim().slice(0, 70);
     check(firstFont(style) === headingFont, `${label}: heading font ${style.fontFamily}`);
-    check(style.color === headingColor, `${label}: heading color ${style.color}`);
+    const expectedColor = token('--heading', element.parentElement || document.body);
+    check(style.color === expectedColor, `${label}: heading color ${style.color} (expected ${expectedColor})`);
     if (ar) {
-      check(style.fontWeight === '900', `${label}: heading weight ${style.fontWeight}`);
+      check(style.fontWeight === headingWeight, `${label}: heading weight ${style.fontWeight} (expected ${headingWeight})`);
       check(style.letterSpacing === 'normal' || parseFloat(style.letterSpacing) === 0, `${label}: Arabic tracking`);
     }
   }
@@ -50,14 +56,14 @@
     for (const element of document.body.querySelectorAll('*')) {
       if (element.closest('svg,script,style') || !visible(element)) continue;
       if (![...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim())) continue;
-      check(firstFont(getComputedStyle(element)) === bodyFont, `Arabic text font: ${element.className || element.tagName}`);
+      check([bodyFont, headingFont].includes(firstFont(getComputedStyle(element))), `Arabic text font: ${element.className || element.tagName}`);
     }
     const canvas = document.createElement('canvas').getContext('2d');
     const widths = (family) => {
       canvas.font = `400 40px ${family}`;
       return ['٠١٢٣٤٥٦٧٨٩', '0123456789'].map((sample) => canvas.measureText(sample).width);
     };
-    const branded = widths('"Thmanyah Sans"');
+    const branded = widths(`"${bodyFont}"`);
     const fallback = widths('sans-serif');
     check(branded.every((width, index) => Math.abs(width - fallback[index]) > 1), 'Digit glyphs fell back to the system font');
   }

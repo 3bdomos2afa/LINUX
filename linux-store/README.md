@@ -5,10 +5,7 @@ the Apple iOS 26 "Liquid Glass" language: fully rounded glass panes, the LINUX
 forest/cream/lime palette, the penguin mascot woven through the pages, and a
 macro embroidery video as the hero. English + Egyptian Arabic (RTL).
 
-**Release gate:** the supplied fonts are not cleared for commercial webfont
-distribution. Resolve their rights before uploading the files to Shopify or
-distributing the theme; local checks are not a live Shopify import or checkout
-test. See [INSTALL.md](INSTALL.md).
+**Release status:** the default fonts are now SIL OFL (see *Typography* below), which clears the previous font-licence blocker for the default **Street** and **Bubble** presets; the optional **Classic** preset still needs written permission. Local checks are not a live Shopify import or checkout test. See [INSTALL.md](INSTALL.md).
 
 ```
 linux-store/
@@ -116,7 +113,7 @@ than silently skipping import validation. The theme zip is written to
 | `assets/glass.css` | Design tokens and the **Liquid Glass 2** material (lens · tint · sheen · rim · depth; regular / clear / solid / tinted), scroll-edge effect, view transitions, RTL mirroring, buttons, pills, forms |
 | `assets/glass.js` | Per-surface **refraction** maps for `[data-lens]` (Chromium only), tab-bar lens, header/tab-bar scroll states, announcement rotator, hero pause, reveal |
 | `assets/section-promo.css` + `promo.js` | Offer spotlight, video reels, promo popup (loaded only by those sections) |
-| Typography | EN: **Froople** headings + **Mochi Tubby** for other copy and prices. Arabic pages: **Thmanyah Sans** throughout — Regular 400 body, Medium 500 UI, Black 900 headings, including Arabic text and Latin digits. Brand fonts stay enabled; `assets/typography.css` loads last to keep heading levels consistent. See `INSTALL.md` for font-rights checks. |
+| Typography | Theme settings → **Font style**: Street (default — Alexandria + Fustat for Arabic, Unbounded + Fustat for English), Bubble (Baloo Bhaijaan 2 + Bagel Fat One) or Classic (Thmanyah / Froople / Mochi). Split Arabic/Latin WOFF2 with `unicode-range`; wired in `snippets/fonts.liquid` |
 | `assets/components.css` | Header + mega menu, hero, marquee, cards, rails, bento, drawers, footer, search, tab bar, toasts |
 | `assets/*.js` | Vanilla, dependency-free: AJAX cart + section rendering, predictive search (with Arabic term mapping), wishlist (localStorage), product variants/gallery/sticky ATC/quick view, Customize studio |
 | `sections/` | 40 sections incl. all `main-*` templates, hero video, rotating announcement bar (header), **offer spotlight**, **video reels**, **promo popup**, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |
@@ -124,18 +121,14 @@ than silently skipping import validation. The theme zip is written to
 | `locales/` | `en.default.json`, `ar.json` (Egyptian tone) |
 | Hero video | `hero-1080.mp4` (~1 MB, desktop) / `hero-720.mp4` (tablet) / `hero-mobile.mp4` (540×960 portrait crop, ~220 KB) + poster — the browser picks one via `<source media>`; cut from the brand's own embroidery footage with a seamless loop |
 
-The requested **Machine** font file was not among the supplied font files, so
-Mochi Tubby remains the previously supplied English body font; it is not being
-claimed as Machine. Its archive says **Free for Personal Use**, and the supplied
-Froople archive contains no license text. The supplied Thmanyah license allows
-commercial design/web work but prohibits making the font files independently
-extractable, including via web embedding; the current theme serves its WOFF2
-files through Shopify asset URLs and `@font-face`. Treat this as uncleared for
-public distribution until Thmanyah explicitly permits this Shopify CDN
-embedding model in writing, or the font is replaced. The private license copy is
-for internal review, not part of the delivery archive. See [INSTALL.md](INSTALL.md).
+**Typography (4.1)** — Theme settings → Appearance → **Font style**:
+- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
+- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
+- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
 
-**4.0 highlights** (details in [CHANGELOG.md](CHANGELOG.md)): Liquid Glass 2 with real edge refraction, iOS 26 tab bar, rotating offers bar, offer spotlight with live countdown, promo popup, shoppable video reels, Dynamic-Island notifications, back-in-stock requests, local payment badges, bilingual Shopify email templates (`notifications/`) and a social ad kit (`marketing/`).
+Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes.
+
+The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission.
 
 ## Local preview (no Shopify account needed)
 

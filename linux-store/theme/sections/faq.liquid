@@ -1,5 +1,5 @@
 {%- assign s = section.settings -%}
-<section class="section wrap" id="s-{{ section.id }}">
+<section class="section wrap{% if section.settings.scheme == 'cream' or section.settings.scheme == 'lime' %} sheet scheme-{{ section.settings.scheme }}{% endif %}" id="s-{{ section.id }}">
   <div class="faq">
     <div data-reveal>
       <p class="eyebrow">{%- assign k_eyebrow = s.key_eyebrow | default: 'home.faq_eyebrow' -%}{%- assign k_heading = s.key_heading | default: 'home.faq_heading' -%}{%- assign k_body = s.key_body | default: 'home.faq_body' -%}{% render 'tr', value: s.eyebrow, key: k_eyebrow %}</p>
@@ -31,6 +31,26 @@
 {
   "name": "FAQ",
   "settings": [
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour",
+      "default": "forest",
+      "options": [
+        {
+          "value": "forest",
+          "label": "Forest (dark)"
+        },
+        {
+          "value": "cream",
+          "label": "Cream sheet"
+        },
+        {
+          "value": "lime",
+          "label": "Lime sheet"
+        }
+      ]
+    },
     {
       "type": "text",
       "id": "eyebrow",

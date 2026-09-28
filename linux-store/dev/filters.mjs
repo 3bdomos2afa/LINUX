@@ -49,6 +49,7 @@ function imageUrl(img, opts = {}) {
   let src = typeof img === 'string' ? img : (img.src || img.url || img.preview_image?.src || '');
   if (!src) return '';
   if (src.startsWith('//')) src = 'https:' + src;
+  if (src.startsWith('/__photos/') && opts.width) return `${src}?width=${opts.width}`;
   if (/cdn\.shopify\.com/.test(src)) {
     const u = new URL(src);
     if (opts.width) u.searchParams.set('width', opts.width);

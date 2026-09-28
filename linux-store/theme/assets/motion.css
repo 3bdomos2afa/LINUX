@@ -2,13 +2,6 @@
    Everything here is decorative: it degrades to static under
    prefers-reduced-motion (glass.css already zeroes durations). */
 
-/* ---- Page curtain: forest wipe on first paint, then fades ---------------- */
-.curtain { position: fixed; inset: 0; z-index: 9999; background: var(--forest-deep, #021a12); display: grid; place-items: center; pointer-events: none; animation: curtain-out .7s var(--ease-out) .55s forwards; }
-.curtain svg { width: clamp(120px, 18vw, 220px); color: var(--cream); animation: curtain-logo .9s var(--ease-out) both; }
-@keyframes curtain-logo { from { opacity: 0; transform: translateY(14px) scale(.96); } 30% { opacity: 1; } to { opacity: 1; transform: none; } }
-@keyframes curtain-out { to { opacity: 0; visibility: hidden; } }
-.no-js .curtain { display: none; }
-
 /* ---- Split-text reveal (hero headline): words rise one by one ------------- */
 [data-split] .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; margin-bottom: -.08em; }
 [data-split] .w > span { display: inline-block; transform: translateY(110%); opacity: 0; transition: transform .9s var(--ease-out), opacity .6s var(--ease-out); transition-delay: calc(var(--w, 0) * 80ms + 120ms); }
@@ -104,7 +97,6 @@ html[dir="rtl"] [data-reveal="right"] { --reveal-x: -30px; }
 .penguins img:hover { transform: translateY(-10px) rotate(-6deg) scale(1.06); }
 
 @media (prefers-reduced-motion: reduce) {
-  .curtain { display: none; }
   [data-split] .w > span { transform: none; opacity: 1; }
   [data-tilt].is-tilting { transform: none; }
 }

@@ -91,15 +91,17 @@
 
   {{ 'glass.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
-  {%- if settings.motion_scale != 0 -%}{{ 'motion.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {%- comment -%} Enhancement-only sheets load without blocking the first paint. {%- endcomment -%}
+  {%- if settings.motion_scale != 0 -%}<link rel="stylesheet" href="{{ 'motion.css' | asset_url }}" media="print" onload="this.media='all'"><noscript>{{ 'motion.css' | asset_url | stylesheet_tag }}</noscript>{%- endif -%}
   {%- if template.suffix == 'customize' -%}{{ 'customize.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'product' -%}{{ 'product.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'collection' or template.name == 'search' or template.name == 'list-collections' -%}{{ 'collection.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.directory == 'customers' or template.name == 'cart' or template.name == 'page' or template.name == 'blog' or template.name == 'article' or template.name == '404' -%}{{ 'pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
-  {%- if template.name == 'product' or template.name == 'cart' or settings.cart_type != 'page' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {%- if template.name == 'product' or template.name == 'cart' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- elsif settings.cart_type != 'page' -%}<link rel="stylesheet" href="{{ 'offers.css' | asset_url }}" media="print" onload="this.media='all'"><noscript>{{ 'offers.css' | asset_url | stylesheet_tag }}</noscript>{%- endif -%}
   {{ 'v2.css' | asset_url | stylesheet_tag }}
   {{ 'typography.css' | asset_url | stylesheet_tag }}
-  {{ 'number-input.css' | asset_url | stylesheet_tag }}
+  {%- if template.name == 'product' or template.name == 'cart' or template.suffix == 'customize' -%}{{ 'number-input.css' | asset_url | stylesheet_tag }}{%- else -%}<link rel="stylesheet" href="{{ 'number-input.css' | asset_url }}" media="print" onload="this.media='all'">{%- endif -%}
+  {{ 'brand.css' | asset_url | stylesheet_tag }}
 
   {%- liquid
     assign type_scale = settings.type_scale | default: 100
@@ -154,7 +156,7 @@
     {%- endif -%}
   {% endstyle %}
 
-  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script>document.documentElement.classList.replace('no-js', 'js');if (window.CSS && CSS.supports('animation-timeline: view()') && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('sdr');try{if(sessionStorage.getItem('linux:curtain'))document.documentElement.classList.add('curtain-seen');else sessionStorage.setItem('linux:curtain','1');}catch(e){}</script>
   <script>
     window.LINUX = window.LINUX || {};
     LINUX.settings = {
@@ -167,7 +169,7 @@
       cartType: {{ settings.cart_type | default: 'drawer' | json }},
       whatsapp: {{ settings.whatsapp_number | default: '' | json }},
       showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }},
-      refraction: {{ settings.glass_refraction | default: 'subtle' | json }}
+      refraction: {{ settings.glass_refraction | default: 'off' | json }}
     };
     LINUX.strings = {
       added: {{ 'cart.added' | t | json }},
@@ -248,7 +250,35 @@
   <script src="{{ 'drawers.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
   <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
+  {%- if template.name == 'product' -%}
   <script src="{{ 'product.js' | asset_url }}" defer></script>
+  {%- else -%}
+  {%- comment -%}
+    Product scripts (quick view, recommendations, recently viewed) are ~40 KB:
+    fetched when the page actually contains them, or on the first quick-view tap.
+  {%- endcomment -%}
+  <script>
+    (function () {
+      var src = {{ 'product.js' | asset_url | json }}, pending = null;
+      function load() {
+        if (!pending) pending = new Promise(function (done) { var el = document.createElement('script'); el.src = src; el.onload = function () { window.__linuxPdp = true; done(); }; document.head.appendChild(el); });
+        return pending;
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        if (document.querySelector('[data-product], [data-recommendations], [data-recently-viewed], [data-bundle]')) load();
+      });
+      document.addEventListener('pointerover', function warm(e) {
+        if (e.target.closest && e.target.closest('[data-quick-view]')) { document.removeEventListener('pointerover', warm); load(); }
+      }, { passive: true });
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest('[data-quick-view]');
+        if (!btn || window.__linuxPdp) return;
+        e.preventDefault(); e.stopPropagation();
+        load().then(function () { btn.click(); });
+      }, true);
+    })();
+  </script>
+  {%- endif -%}
   {%- if template.name == 'collection' or template.name == 'search' -%}<script src="{{ 'collection.js' | asset_url }}" defer></script>{%- endif -%}
   {%- if template.suffix == 'customize' -%}
     <script src="{{ 'customize-model.js' | asset_url }}" defer></script>

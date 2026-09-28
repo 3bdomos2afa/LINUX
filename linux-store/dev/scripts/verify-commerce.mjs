@@ -144,9 +144,16 @@ passed('Full cart preserves the three custom lines without duplicating the shipp
 open('/ar/pages/customize');
 click('[data-cz-color="white"]');
 click('[data-cz-side="front"]');
+// Hoodie fronts now ship real built-in mockup photos for every colour…
+assert.match(evaluate("document.querySelector('[data-cz-photo]:not([hidden])')?.dataset.src || ''"), /cz-hoodie-front-white/);
+assert.equal(evaluate("document.querySelector('[data-cz-mock=hoodie-front]').hidden"), true);
+// …so the drawn, recoloured fallback is checked with those photos removed.
+evaluate("document.querySelectorAll('[data-cz-photo$=\"|hoodie-front\"]').forEach((el) => { el.dataset.czPhoto = 'disabled'; }), true");
+click('[data-cz-side="back"]');
+click('[data-cz-side="front"]');
 assert.equal(evaluate("document.querySelector('[data-cz-garment]').style.getPropertyValue('--gc')"), '#e5e5e5');
 assert.equal(evaluate("document.querySelector('[data-cz-mock=hoodie-front]').hidden"), false);
-passed('Fallback garment preview uses the selected swatch colour');
+passed('Built-in hoodie-front photo shows; the drawn fallback uses the selected swatch colour');
 
 open('/ar/pages/customize?__fixture=studio');
 assert.match(evaluate("document.querySelector('[data-cz-photo]:not([hidden])').dataset.src"), /white/);

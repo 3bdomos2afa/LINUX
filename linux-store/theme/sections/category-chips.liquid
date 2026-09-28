@@ -1,0 +1,75 @@
+{%- comment -%}
+  Category bubbles: a story-ring row under the hero. Each block links to a
+  collection (its image or first product photo fills the bubble) or to the
+  Customize studio. Labels fall back to the theme translation.
+{%- endcomment -%}
+{{ 'brand.css' | asset_url | stylesheet_tag }}
+<nav class="cats" aria-label="{{ 'cats.label' | t | escape }}">
+  <div class="cats__track" role="list">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign b = block.settings
+        assign coll = b.collection
+        if coll != blank and coll.handle == blank
+          assign coll = collections[b.collection]
+        endif
+        assign pic = b.image
+        if pic == blank and coll != blank
+          assign pic = coll.featured_image | default: coll.products.first.featured_image
+        endif
+        assign href = b.link
+        if b.studio
+          capture href
+            render 'customize-url'
+          endcapture
+        elsif href == blank and coll != blank
+          assign href = coll.url
+        endif
+        assign href = href | default: routes.all_products_collection_url | strip
+      -%}
+      <a class="cat{% if b.hot %} cat--hot{% endif %}" href="{{ href }}" role="listitem" {{ block.shopify_attributes }}>
+        <span class="cat__ring">
+          <span class="cat__img">
+            {%- if pic != blank -%}
+              {{ pic | image_url: width: 280 | image_tag: loading: 'lazy', widths: '140, 280', sizes: '(min-width: 760px) 124px, 80px', alt: '' }}
+            {%- elsif b.studio -%}
+              <img src="{{ 'cz-hoodie-back-black.webp' | asset_url }}" alt="" width="1200" height="1200" loading="lazy" decoding="async">
+            {%- else -%}
+              {%- assign cat_icon = b.icon | default: 'tag' -%}
+              {%- render 'icon', name: cat_icon -%}
+            {%- endif -%}
+          </span>
+        </span>
+        <span class="cat__label">{% render 'tr', value: b.label, key: b.key %}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Category bubbles",
+  "tag": "div",
+  "class": "section-category-chips",
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "checkbox", "id": "studio", "label": "Link to the Customize studio", "default": false },
+        { "type": "url", "id": "link", "label": "Custom link (optional)" },
+        { "type": "image_picker", "id": "image", "label": "Image (blank = collection photo)" },
+        { "type": "text", "id": "label", "label": "Label (blank = translation key)" },
+        { "type": "text", "id": "key", "label": "Translation key", "info": "e.g. cats.hoodies, cats.tees, cats.customize, cats.all" },
+        { "type": "select", "id": "icon", "label": "Icon when there is no image", "default": "tag", "options": [
+          { "value": "tag", "label": "Tag" }, { "value": "star", "label": "Star" }, { "value": "hoodie", "label": "Hoodie" }, { "value": "shirt", "label": "Shirt" }, { "value": "sparkle", "label": "Sparkle" }
+        ] },
+        { "type": "checkbox", "id": "hot", "label": "Show the new-drop dot", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "Category bubbles", "blocks": [{ "type": "category" }, { "type": "category" }, { "type": "category" }, { "type": "category" }] }]
+}
+{% endschema %}

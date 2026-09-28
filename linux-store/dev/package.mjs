@@ -68,7 +68,17 @@ if (fs.existsSync(path.join(marketing, 'out'))) {
   copyTree(path.join(marketing, 'out'), path.join(stage, 'ad-kit'), (child) => /\.(jpe?g|mp4)$/i.test(child));
   for (const f of ['README.md', 'copy.json']) if (fs.existsSync(path.join(marketing, f))) fs.copyFileSync(path.join(marketing, f), path.join(stage, 'ad-kit', f));
 }
+const licences = path.join(root, 'licenses');
+if (fs.existsSync(licences)) copyTree(licences, path.join(stage, 'licenses'), (child) => !child.endsWith('.DS_Store'));
 const bundle = path.join(dist, 'LINUX-theme-delivery.zip');
 execFileSync('zip', ['-qr', '-X', bundle, 'LINUX-theme-delivery'], { cwd: dist, stdio: 'inherit' });
 fs.rmSync(stage, { recursive: true, force: true });
 console.log(`${path.relative(process.cwd(), bundle)} — ${(fs.statSync(bundle).size / 1024 / 1024).toFixed(1)} MB`);
+
+// 4) Studio product photos — upload per product in Shopify (not part of the theme)
+const photos = path.join(root, 'photos');
+if (fs.existsSync(path.join(photos, 'manifest.json'))) {
+  const photoZip = path.join(dist, 'LINUX-product-photos.zip');
+  execFileSync('zip', ['-qr', '-X', photoZip, 'photos', '-x', '*.DS_Store', 'photos/_*'], { cwd: root, stdio: 'inherit' });
+  console.log(`${path.relative(process.cwd(), photoZip)} — ${(fs.statSync(photoZip).size / 1024 / 1024).toFixed(1)} MB`);
+}

@@ -4,17 +4,14 @@
 
 ## English
 
-**Not cleared for deployment yet.** Before uploading or distributing the supplied
-font files, obtain explicit permission for Thmanyah's Shopify CDN embedding,
-commercial/web rights for Mochi and a valid Froople license, or replace them.
-Machine was not supplied. Passing the local checks is not proof of a successful
-Shopify import, live file upload or checkout. Keep the theme unpublished while
-completing the store configuration and live-preview checks below.
+**Fonts are cleared for the default presets.** Street and Bubble use SIL OFL fonts; only the optional Classic preset (Thmanyah / Froople / Mochi) still needs written permission. Passing the local checks is not proof of a successful Shopify import, live file upload or checkout. Keep the theme unpublished while completing the store configuration and live-preview checks below.
 
 **What's in this folder**
 - `linux-liquid-glass-theme.zip` — the Shopify theme. This is the only file you upload.
 - `hero-video/` — the three hero cuts the theme ships (1600×900 desktop ~1 MB, 720p tablet ~0.6 MB, 540×960 portrait phone ~0.3 MB) + poster, in case you want to re-use them elsewhere. They are already inside the theme.
 - `brand-assets/` — penguin mascots, wordmark, favicons, editorial images used by the theme.
+- `LINUX-product-photos.zip` (next to the delivery zip) — the new studio product photos (one backdrop, 4:5), dark variants, transparent cutouts and collection covers. Upload `01.webp`, `02.webp`… to each product in order; see `photos/README.md` inside.
+- `licenses/fonts/` — SIL OFL licences of the default fonts.
 
 **Install (5 minutes)**
 1. Shopify admin → **Online Store → Themes → Add theme → Upload zip file** → pick `linux-liquid-glass-theme.zip`.
@@ -71,35 +68,14 @@ photo; changing the shared picker cannot replace an active per-colour override.
 
 **Customize studio — order and touch behavior**: shoppers can upload distinct front/back artwork; each side's position, scale and rotation are recorded. Every piece keeps its selected size. Identical variant-and-size pieces are grouped into one order line with `Size` and a `Piece` list; design files, generated JPEG mockups and placement properties travel with the line. Outside Edit/Move design, the canvas declares CSS `touch-action: pan-y pinch-zoom`; Edit/Move enables dragging. Automated checks verify no wheel-event hijack, but this does not establish touch behavior on a physical phone.
 
-**Typography and font rights**: English storefront pages use **Froople** for
-headings and **Mochi Tubby** for all other copy, including prices. Arabic pages
-use **Thmanyah Sans** throughout: Regular 400 for body text, Medium 500 for UI,
-and Black 900 for headings; Arabic text and Latin digits on Arabic pages use
-Thmanyah Sans as well. Brand fonts are always enabled; **Text size** and
-**Headline size** remain adjustable. `typography.css` loads last to keep all
-heading levels consistent. The default dark scheme uses cream headings
-(`#F4E8D8`) and white body text; filled/inverse buttons use a contrasting label
-color. The optional light/Cream scheme uses dark, legible headings and body text.
+**Typography (4.1)** — Theme settings → Appearance → **Font style**:
+- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
+- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
+- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
 
-Before production, verify font rights for the intended commercial storefront. The
-supplied Mochi archive's `exFont-License.txt` says `License: Free for Personal
-Use` and links to <https://exfont.com/mochi-tubby-ttf.font>; that text does not
-establish commercial or web-use permission. The supplied `Froople Font.zip`
-contains no license text, so do not assume those rights. The supplied Thmanyah
-license permits commercial design work, including website design, but restricts
-web/app embedding to compiled, packaged or obfuscated applications and prohibits
-hosting font files or making them independently extractable, including through
-web embedding. This theme currently loads bundled WOFF2 files with `@font-face`
-from Shopify asset URLs. That direct CDN embedding is not cleared by the license
-text: obtain Thmanyah's explicit written permission for this delivery model, or
-remove/replace the files before distributing the theme. Do not describe webfont
-rights as verified. The copied license PDF is internal review material and is
-not part of the delivery archive. The requested **Machine** font file was not
-among the supplied attachments; Mochi Tubby remains the previous font and is
-not claimed as Machine. Confirm the requested font or provide a licensed
-replacement.
+Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes.
 
----
+The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission.
 
 **New in 4.0 — check before publishing**
 - Discount codes shown by the theme (`LINUX10` in the announcement, offer spotlight and popup) must exist in **Discounts**; change or clear them in the editor otherwise.
@@ -125,16 +101,14 @@ A missing menu shows the English link titles; a missing page gives a 404 on that
 
 ## العربي
 
-**لسه مش جاهز للنشر التجاري.** قبل رفع أو توزيع ملفات الخطوط، لازم موافقة صريحة
-لتضمين Thmanyah من CDN بتاع Shopify، وحقوق تجارية وويب لـ Mochi ورخصة واضحة
-لـ Froople، أو تستبدلهم بخطوط مرخّصة. ملف Machine مش مرفق. نجاح الفحوص المحلية
-مش إثبات إن الاستيراد أو رفع الملفات أو الدفع نجح على Shopify الحقيقي؛ سيب الثيم
-غير منشور لحد ما تراجع إعدادات المتجر وتجربة المعاينة الفعلية.
+**الخطوط الافتراضية بقت مرخّصة.** إعدادات Street وBubble خطوطها رخصة SIL OFL؛ الإعداد الاختياري Classic بس (Thmanyah / Froople / Mochi) لسه محتاج موافقة مكتوبة. نجاح الفحوص المحلية مش إثبات إن الاستيراد أو رفع الملفات أو الدفع نجح على Shopify الحقيقي؛ سيب الثيم غير منشور لحد ما تراجع إعدادات المتجر وتجربة المعاينة الفعلية.
 
 **اللي في الفولدر**
 - `linux-liquid-glass-theme.zip` — الثيم نفسه. ده الملف الوحيد اللي بترفعه.
 - `hero-video/` — تلات نسخ من فيديو التطريز (ديسكتوب ~1 ميجا، تابلت ~0.6، موبايل عمودي ~0.3) + البوستر، لو عايز تستخدمهم في مكان تاني. موجودين جوه الثيم أصلاً.
 - `brand-assets/` — البطاريق، اللوجو، الفافيكون، وصور البراند اللي الثيم بيستخدمها.
+- `LINUX-product-photos.zip` (جنب ملف التسليم) — صور المنتجات الجديدة بخلفية استوديو واحدة ومقاس ٤:٥، ونسخ غامقة، وقص شفاف، وأغلفة المجموعات. ارفع `01.webp`، `02.webp`… لكل منتج بالترتيب؛ التعليمات في `photos/README.md`.
+- `licenses/fonts/` — رخص SIL OFL للخطوط الافتراضية.
 
 **التركيب (٥ دقايق)**
 1. لوحة تحكم Shopify ← **Online Store ← Themes ← Add theme ← Upload zip file** ← اختار `linux-liquid-glass-theme.zip`.
@@ -185,26 +159,14 @@ Shopify Discounts، لأن العداد مش هو اللي بيوقف الخصم
 
 **الطلب واللمس**: العميل يرفع تصميم منفصل للقدام والورا؛ مكان كل تصميم وحجمه ودورانه بيتسجلوا. مقاس كل قطعة محفوظ. القطع اللي لها نفس الفاريانت والمقاس بتتجمع في سطر كمية واحد ومعاه خاصيتا `Size` و`Piece` لأرقام القطع، بدل سطر منفصل وملفات مكررة لكل قطعة. خارج وضع Edit/Move، لوحة القطعة بتعلن CSS `touch-action: pan-y pinch-zoom`؛ وضع Edit/Move بيفعّل السحب. الاختبارات الآلية بتتأكد إن عجلة الماوس مش محجوزة، لكنها مش اختبار للمس على موبايل فعلي.
 
-**الخطوط وحقوق الاستخدام**: صفحات الإنجليزي تستخدم **Froople** للعناوين و**Mochi
-Tubby** لكل النصوص التانية، بما فيها الأسعار. صفحات العربي تستخدم **Thmanyah
-Sans** بالكامل: Regular 400 للنصوص، Medium 500 لعناصر الواجهة، وBlack 900
-للعناوين؛ الحروف العربية والأرقام اللاتينية في صفحات العربي بتستخدم Thmanyah
-Sans كمان. الخطوط مفعّلة تلقائياً؛ تقدر تفضل تعدّل **Text size** و**Headline
-size**. ملف `typography.css` بيتحمّل في الآخر عشان يوحّد شكل كل مستويات العناوين.
-في السكيم الداكن الافتراضي، العناوين كريمي (`#F4E8D8`) والنص أبيض، وألوان
-عناوين الأزرار المملوءة/المعكوسة بتحافظ على التباين. السكيم الفاتح/Cream بيستخدم
-نصوص وعناوين غامقة وواضحة.
+**الخطوط (4.1)** — Theme settings ← Appearance ← **Font style**:
+- **Street** (الافتراضي): عناوين العربي بخط **الإسكندرية (Alexandria)**، والنصوص العربي والإنجليزي بخط **فسطاط (Fustat)** — الاتنين من تصميم المصمم المصري محمد جابر — وعناوين الإنجليزي بخط **Unbounded**.
+- **Bubble**: خط **Baloo Bhaijaan 2** للنصوص عربي وإنجليزي، و**Bagel Fat One** لعناوين الإنجليزي — الاختيار المدوّر المرح.
+- **Classic**: الخطوط القديمة (Thmanyah Sans / Froople / Mochi Tubby).
 
-قبل النشر، اتأكد من حقوق كل الخطوط. ملف Mochi بيقول `License: Free for Personal
-Use`، وده ما يثبتش حق الاستخدام التجاري أو على الويب. أرشيف Froople مافيهوش نص
-رخصة. رخصة Thmanyah تسمح باستخدام الخط في تصميم مواقع تجارية، لكنها بتقيّد
-تضمينه في المواقع والتطبيقات بمنتج مجمّع أو محزّم أو مخفيّ المصدر، وبتمنع استضافة
-ملفات الخط أو إتاحتها للاستخراج المستقل، بما في ذلك التضمين على الويب. الثيم
-الحالي بيحمّل WOFF2 مباشرةً باستخدام `@font-face` من روابط Shopify؛ الرخصة ما
-بتثبتش السماح بطريقة النشر دي. لازم موافقة كتابية صريحة من Thmanyah على نشر الخط
-بهذه الطريقة، أو إزالة/استبدال ملفاته قبل توزيع الثيم. ما تعتبرش ترخيص الويب
-متحققاً. نسخة الـ PDF محفوظة للمراجعة الداخلية ومش ضمن حزمة العميل. خط **Machine**
-مش موجود بين المرفقات؛ Mochi هو الخط السابق ومش بندّعي إنه Machine.
+خطوط Street وBubble رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص ومصدرها في `licenses/fonts/`)، يعني مسموح استخدامها في المتجر ورفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني، والصفحة بتنزّل اللي محتاجاه بس (على الصفحة الرئيسية: الإنجليزي ≈ ٨١ كيلو خطوط والعربي ≈ ١٣٠ كيلو، بدل ٢٠٦ و٢٢٨ كيلو قبل كده). الملفات من غير hinting عن قصد، لأن الـ hinting الأصلي في خط الإسكندرية كان بيخفي نقط الياء الأخيرة في بعض المقاسات.
+
+خطوط **Classic** لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب. ما تستخدمش Classic غير بموافقة مكتوبة.
 
 **جديد في 4.0 — راجعه قبل النشر**
 - أي كود الثيم بيعرضه (`LINUX10` في الإعلانات والعرض والنافذة) لازم يكون موجود في **Discounts**، وإلا غيّره أو امسحه من المحرر.

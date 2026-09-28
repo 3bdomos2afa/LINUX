@@ -23,13 +23,14 @@
     "social_tiktok": "",
     "show_curtain": true,
     "glass_tint": 7,
-    "glass_refraction": "subtle",
+    "glass_refraction": "off",
     "pay_cod": true,
     "pay_card_badge": true,
     "pay_instapay": false,
     "pay_wallet": false,
     "pay_fawry": false,
-    "pay_valu": false
+    "pay_valu": false,
+    "font_preset": "street"
   },
   "presets": {
     "Forest": {

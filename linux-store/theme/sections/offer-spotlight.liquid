@@ -19,7 +19,7 @@
         {%- elsif spot_product != blank and spot_product.featured_image != blank -%}
           {{ spot_product.featured_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200', sizes: '(min-width: 760px) 45vw, 100vw', class: 'offer-spot__img' }}
         {%- else -%}
-          <img class="offer-spot__img--art" src="{{ 'mascot-hoodie-sit.webp' | asset_url }}" alt="" width="600" height="600" loading="lazy" decoding="async">
+          {% render 'mascot', name: 'hoodie-sit', width: 380, class: 'offer-spot__img--art' %}
         {%- endif -%}
         {%- if s.show_badge -%}<span class="offer-spot__burst" aria-hidden="true">{% render 'icon', name: 'percent', px: 26 %}</span>{%- endif -%}
       </div>

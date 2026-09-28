@@ -1,5 +1,5 @@
 {%- assign s = section.settings -%}
-<section class="section wrap" id="s-{{ section.id }}">
+<section class="section wrap{% if section.settings.scheme == 'cream' or section.settings.scheme == 'lime' %} sheet scheme-{{ section.settings.scheme }}{% endif %}" id="s-{{ section.id }}">
   <div class="newsletter glass" data-specular data-reveal>
     <div>
       <p class="eyebrow">{% render 'tr', value: s.eyebrow, key: 'home.newsletter_eyebrow' %}</p>
@@ -22,6 +22,26 @@
 {
   "name": "Newsletter",
   "settings": [
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour",
+      "default": "forest",
+      "options": [
+        {
+          "value": "forest",
+          "label": "Forest (dark)"
+        },
+        {
+          "value": "cream",
+          "label": "Cream sheet"
+        },
+        {
+          "value": "lime",
+          "label": "Lime sheet"
+        }
+      ]
+    },
     {
       "type": "text",
       "id": "eyebrow",

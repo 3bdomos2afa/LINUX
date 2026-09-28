@@ -10,3 +10,4 @@ __pycache__/
 linux-store/dev/.uploads/
 x.png
 linux-store/marketing/out/*.png
+linux-store/dev/.cache/

@@ -1,5 +1,38 @@
 # LINUX Liquid Glass — Changelog
 
+## 4.1.0 — Identity 2.0 · studio photos · new fonts · faster (2026-09-28)
+
+**العربي أولاً 👇 / English below**
+
+### اللي اتغيّر
+**الهوية البصرية**
+- **ألوان بإيقاع**: سكاشن «شيت» كريمي وليموني بين الأخضر الغامق (الأكثر مبيعاً كريمي، المميزات كريمي، النيوزليتر ليموني) — من إعداد **Colour** في كل سكشن.
+- **موتيف التطريز**: شارات على شكل «باتش» متطرّز (جديد / خصم / خلصت)، أيقونات المميزات باتشات، وخط غُرز تحت كل عنوان بيتخيّط وانت نازل.
+- **شرايط منسوجة** بدل الماركي: شريطين ليموني وكريمي مايلين عكس بعض (Marquee → Style).
+- **فقاعات الأقسام** تحت الهيرو زي ستوريز إنستجرام (سكشن Category bubbles).
+- **كروت المنتجات** على خلفية استوديو، زرار «+» للإضافة السريعة على الموبايل.
+- **البطريق بيتحرك**، والمنتج بيطير للشنطة لما تضيفه، وكونفيتي لما التوصيل يبقى مجاني، وقلوب لما تحفظ.
+
+**الصور والموكب**
+- **٥٠ صورة استوديو** لكل المنتجات بخلفية واحدة وتكوين واحد ٤:٥ (+ نسخ غامقة + قص شفاف) في `photos/` — المنتج نفسه ما اتغيّرش.
+- **موكب حقيقي** للاستوديو: وش الهودي بـ٤ ألوان على موديل، ضهر الهودي بـ٤ ألوان أوضح، وضهر التيشيرت أبيض/أسود.
+- **صور أغلفة للمجموعات** (شتاء، صيف، تخصيص، الكل).
+
+**الخطوط**: إعداد **Font style** — **Street** (الافتراضي: الإسكندرية + فسطاط للعربي، Unbounded + فسطاط للإنجليزي)، **Bubble**، أو **Classic**. الخطوط الجديدة مفتوحة الرخصة (OFL) فمشكلة الرخصة اتحلّت للإعداد الافتراضي.
+
+**السرعة**: صورة الهيرو بتظهر الأول والفيديو بعد التحميل، ٣ ملفات CSS مش بتوقف العرض، كود المنتج بيتحمّل عند الحاجة، البطاريق بمقاس صغير، ٦ خطوط مش مستخدمة اتشالت، البلور مقصور على العناصر العايمة، الانكسار (refraction) بقى اختياري، والستارة مرة واحدة في الجلسة.
+
+### English
+**Identity** — cream/lime section sheets between forest bands (per-section *Colour* setting); embroidery motif (patch badges and value-prop icons, stitched heading rule that sews in on scroll); woven double ribbons replacing the ticker (fixes the RTL ticker scrolling out of view); category bubbles; studio-backdrop product cards with a phone "+" quick add; penguin idle motion; fly-to-bag, free-delivery confetti and wishlist heart burst.
+
+**Photography** — 50 studio images (one backdrop, one 4:5 framing), dark variants and transparent cutouts in `photos/` (garments unaltered); real studio mockups: hoodie front ×4 colours, sharper hoodie back ×4, tee back white/black, wired through the existing *Built-in mockup photos* setting; collection cover art. The local preview shows the set via `photos/manifest.json` (`LINUX_PHOTOS=0` shows the original catalog).
+
+**Fonts** — *Font style* preset: Street (default: Alexandria + Fustat / Unbounded + Fustat), Bubble (Baloo Bhaijaan 2 + Bagel Fat One) or Classic. OFL, split Arabic/Latin WOFF2 with `unicode-range`, unhinted (the original hinting dropped the dots of a final ي at some sizes). Home-page font bytes: Arabic 228 → 130 KB, English 206 → 81 KB.
+
+**Performance** — hero poster is a real `<picture>` (portrait 540×960 on phones) and the video starts after `load`; motion/offers/number-input CSS no longer block rendering; the product script loads on demand outside product pages; 320 px mascot variants; unused fonts removed; backdrop blur only on floating chrome; refraction off by default; the brand curtain shows once per session and no longer shifts the layout (CLS 0.049 → 0).
+
+**Tooling** — preview harness gzips responses and resizes `photos/` images like Shopify's CDN; typography check reads the active preset and each section's colours; font tests cover all presets.
+
 ## 4.0.0 — Liquid Glass 2 · offers · notifications (2026-09-28)
 
 **العربي أولاً 👇 / English below**

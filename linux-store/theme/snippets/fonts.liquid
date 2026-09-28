@@ -1,18 +1,68 @@
-{%- comment -%}Self-hosted brand faces; Arabic glyphs and digits always use Thmanyah.{%- endcomment -%}
-{%- if is_rtl -%}
-  {{ 'thmanyahsans-Regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-  {{ 'thmanyahsans-Medium.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-  {{ 'thmanyahsans-Black.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-{%- else -%}
-  {{ 'froople.otf' | asset_url | preload_tag: as: 'font', type: 'font/opentype', crossorigin: 'anonymous' }}
-  {{ 'mochi-tubby.ttf' | asset_url | preload_tag: as: 'font', type: 'font/ttf', crossorigin: 'anonymous' }}
-{%- endif -%}
+{%- comment -%}
+  Brand type, self-hosted. Theme settings → Typography → Font style picks a
+  preset; each family is split into an Arabic and a Latin WOFF2 with
+  unicode-range, so a page only downloads the script it actually shows.
+    street  (default) Alexandria + Fustat (Arabic, both by Mohamed Gaber, Cairo) · Unbounded + Fustat (English) — SIL OFL 1.1 (subset, unhinted: the original hinting drops the dots of final ي at some sizes)
+    bubble  Baloo Bhaijaan 2 (Arabic + English text) · Bagel Fat One (English headings) — SIL OFL 1.1
+    classic Thmanyah Sans (Arabic) · Froople + Mochi Tubby (English) — licences not cleared for web embedding, see INSTALL.md
+  Params: is_rtl
+{%- endcomment -%}
+{%- liquid
+  assign preset = settings.font_preset | default: 'street'
+  assign ar_range = 'U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F'
+  assign la_range = 'U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-200B, U+2010-206F, U+20AC, U+2122, U+2190-2199, U+2212'
+-%}
+{%- case preset -%}
+  {%- when 'classic' -%}
+    {%- if is_rtl -%}
+      {{ 'thmanyahsans-Regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+      {{ 'thmanyahsans-Black.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- else -%}
+      {{ 'froople.otf' | asset_url | preload_tag: as: 'font', type: 'font/opentype', crossorigin: 'anonymous' }}
+      {{ 'mochi-tubby.ttf' | asset_url | preload_tag: as: 'font', type: 'font/ttf', crossorigin: 'anonymous' }}
+    {%- endif -%}
+  {%- when 'bubble' -%}
+    {%- if is_rtl -%}
+      {{ 'f-baloo-ar.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- else -%}
+      {{ 'f-bagel-la.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+      {{ 'f-baloo-la.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- endif -%}
+  {%- else -%}
+    {%- if is_rtl -%}
+      {{ 'f-alexandria-ar.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+      {{ 'f-fustat-ar.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- else -%}
+      {{ 'f-unbounded-la.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+      {{ 'f-fustat-la.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- endif -%}
+{%- endcase -%}
 <style>
+{%- case preset -%}
+  {%- when 'classic' -%}
   @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("{{ 'thmanyahsans-Regular.woff2' | asset_url }}") format("woff2"); }
   @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("{{ 'thmanyahsans-Medium.woff2' | asset_url }}") format("woff2"); }
   @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 900; font-display: swap; src: url("{{ 'thmanyahsans-Black.woff2' | asset_url }}") format("woff2"); }
-  {%- unless is_rtl -%}
+  {%- unless is_rtl %}
   @font-face { font-family: "Froople"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'froople.otf' | asset_url }}") format("opentype"); }
   @font-face { font-family: "Mochi Tubby"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'mochi-tubby.ttf' | asset_url }}") format("truetype"); }
-  {%- endunless -%}
+  {%- endunless %}
+  html:root { --font-display: "Froople", "Thmanyah Sans", sans-serif; --font-body: "Mochi Tubby", "Thmanyah Sans", sans-serif; }
+  html[dir="rtl"]:root { --font-display: "Thmanyah Sans", sans-serif; --font-body: "Thmanyah Sans", sans-serif; --w-heading: 900; --w-sub: 500; --w-body: 400; --w-ui: 500; }
+  {%- when 'bubble' -%}
+  @font-face { font-family: "Baloo Bhaijaan 2"; font-style: normal; font-weight: 400 800; font-display: swap; src: url("{{ 'f-baloo-ar.woff2' | asset_url }}") format("woff2"); unicode-range: {{ ar_range }}; }
+  @font-face { font-family: "Baloo Bhaijaan 2"; font-style: normal; font-weight: 400 800; font-display: swap; src: url("{{ 'f-baloo-la.woff2' | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+  @font-face { font-family: "Bagel Fat One"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'f-bagel-la.woff2' | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+  html:root { --font-display: "Bagel Fat One", "Baloo Bhaijaan 2", sans-serif; --font-body: "Baloo Bhaijaan 2", sans-serif; --w-heading: 400; --w-sub: 600; --w-body: 400; --w-ui: 600; --display-tracking: 0; }
+  html[dir="rtl"]:root { --font-display: "Baloo Bhaijaan 2", sans-serif; --font-body: "Baloo Bhaijaan 2", sans-serif; --w-heading: 800; --w-sub: 600; --w-body: 400; --w-ui: 600; }
+  {%- else -%}
+  @font-face { font-family: "Alexandria"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("{{ 'f-alexandria-ar.woff2' | asset_url }}") format("woff2"); unicode-range: {{ ar_range }}; }
+  @font-face { font-family: "Alexandria"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("{{ 'f-alexandria-la.woff2' | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+  @font-face { font-family: "Fustat"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("{{ 'f-fustat-ar.woff2' | asset_url }}") format("woff2"); unicode-range: {{ ar_range }}; }
+  @font-face { font-family: "Fustat"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("{{ 'f-fustat-la.woff2' | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+  @font-face { font-family: "Unbounded"; font-style: normal; font-weight: 800; font-display: swap; src: url("{{ 'f-unbounded-la.woff2' | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+  html:root { --font-display: "Unbounded", "Fustat", sans-serif; --font-body: "Fustat", sans-serif; --w-heading: 800; --w-sub: 600; --w-body: 400; --w-ui: 600; --display-scale: .84; --display-tracking: -.02em; }
+  /* Fustat's Arabic has a small eye: 18px / 500 reads like 17px elsewhere */
+  html[dir="rtl"]:root { --font-display: "Alexandria", "Fustat", sans-serif; --font-body: "Fustat", sans-serif; --w-heading: 800; --w-sub: 600; --w-body: 500; --w-ui: 600; --display-scale: 1; --display-tracking: 0; --fs-body: calc(18px * var(--type-scale)); --fs-sm: calc(15.5px * var(--type-scale)); --fs-xs: calc(13.5px * var(--type-scale)); }
+{%- endcase -%}
 </style>

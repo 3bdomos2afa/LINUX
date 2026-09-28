@@ -24,7 +24,7 @@
     {%- if s.image != blank -%}
       {{ s.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400, 600, 900', sizes: '(min-width: 640px) 360px, 100vw', class: 'promo__photo', alt: '' }}
     {%- else -%}
-      <img src="{{ 'mascot-boombox.webp' | asset_url }}" alt="" width="600" height="600" loading="lazy" decoding="async">
+      {% render 'mascot', name: 'boombox', width: 300 %}
     {%- endif -%}
   </div>
   <div class="promo__body">

@@ -77,19 +77,25 @@
               assign photo_tee_front = b.tee_front | default: s.mockup_tee_front
               assign photo_tee_back = b.tee_back | default: s.mockup_tee_back
               assign built_in = ''
+              assign built_front = ''
+              assign built_tee_back = ''
               if b.builtin != blank and b.builtin != 'none'
                 assign built_in = 'cz-hoodie-back-' | append: b.builtin | append: '.webp'
+                assign built_front = 'cz-hoodie-front-' | append: b.builtin | append: '.webp'
+                if b.builtin == 'white' or b.builtin == 'black'
+                  assign built_tee_back = 'cz-tee-back-' | append: b.builtin | append: '.webp'
+                endif
               endif
             -%}
             {%- capture photo_label -%}{% render 'option-value', value: b.name %} · {{ 'customize.mockup' | t }}{%- endcapture -%}
             {%- assign photo_key = key | append: '|hoodie-back' -%}
             {% render 'customize-mockup', photo: photo_hoodie_back, builtin: built_in, key: photo_key, label: photo_label %}
             {%- assign photo_key = key | append: '|hoodie-front' -%}
-            {% render 'customize-mockup', photo: photo_hoodie_front, key: photo_key, label: photo_label %}
+            {% render 'customize-mockup', photo: photo_hoodie_front, builtin: built_front, key: photo_key, label: photo_label %}
             {%- assign photo_key = key | append: '|tee-front' -%}
             {% render 'customize-mockup', photo: photo_tee_front, key: photo_key, label: photo_label %}
             {%- assign photo_key = key | append: '|tee-back' -%}
-            {% render 'customize-mockup', photo: photo_tee_back, key: photo_key, label: photo_label %}
+            {% render 'customize-mockup', photo: photo_tee_back, builtin: built_tee_back, key: photo_key, label: photo_label %}
           {%- endfor -%}
           {% render 'customize-mockup', photo: s.mockup_hoodie_front, key: 'shared|hoodie-front', label: photo_label %}
           {% render 'customize-mockup', photo: s.mockup_hoodie_back, key: 'shared|hoodie-back', label: photo_label %}
@@ -384,7 +390,7 @@
         { "type": "text", "id": "name", "label": "Colour name", "info": "Shown to the shopper; translated when the theme knows the word.", "default": "Black" },
         { "type": "color", "id": "hex", "label": "Swatch colour", "default": "#181818" },
         { "type": "text", "id": "variant_value", "label": "Value in the product's Color option", "info": "Leave blank when it equals the colour name." },
-        { "type": "select", "id": "builtin", "label": "Built-in hoodie back photo", "options": [
+        { "type": "select", "id": "builtin", "label": "Built-in mockup photos", "options": [
           { "value": "none", "label": "None (use uploaded photos / drawn mockup)" },
           { "value": "black", "label": "Black" }, { "value": "white", "label": "White" }, { "value": "burgundy", "label": "Burgundy" }, { "value": "beige", "label": "Beige" }
         ], "default": "none" },

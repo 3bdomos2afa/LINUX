@@ -245,6 +245,8 @@
       await api.add(items);
       added = true;
       const cart = await refresh();
+      const flying = L.flyToBag ? L.flyToBag(image, { toDrawer: open && S.cartType !== 'page' }) : 0;
+      if (flying && open && S.cartType !== 'page') await new Promise((done) => setTimeout(done, flying));
       if (S.cartType === 'page') {
         L.toast(strings.added, { image, action: { label: strings.view_bag, href: S.cartUrl } });
       } else if (open) {

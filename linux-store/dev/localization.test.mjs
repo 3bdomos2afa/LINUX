@@ -11,14 +11,14 @@ const theme = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../the
 const read = (file) => fs.readFileSync(path.join(theme, file), 'utf8');
 const shop = { money_format: 'LE {{amount}}' };
 
-function renderer(locale) {
+function renderer(locale, extraSettings = {}) {
   const engine = new Liquid({
     root: path.join(theme, 'snippets'),
     extname: '.liquid',
     globals: {
       __locale: locale,
       request: { locale: { iso_code: locale } },
-      settings: { currency_ar: 'جنيه', type_system_fonts: true },
+      settings: { currency_ar: 'جنيه', type_system_fonts: true, ...extraSettings },
       shop,
     },
   });
@@ -212,20 +212,37 @@ for (const locale of ['ar', 'en']) {
     for (const unit of Object.values(units)) assert.match(unit.textContent, digits);
   });
 
-  test(`${locale}: brand fonts load even with a legacy system-font preference`, async () => {
+  // Default "street" preset (OFL): Alexandria + Fustat on Arabic pages, Unbounded + Fustat on English ones.
+  test(`${locale}: default brand fonts load even with a legacy system-font preference`, async () => {
     const rendered = await renderer(locale).renderFile('fonts', { is_rtl: locale === 'ar', system: true });
-    assert.match(rendered, /thmanyahsans-Regular\.woff2/);
-    assert.match(rendered, /thmanyahsans-Medium\.woff2/);
-    assert.match(rendered, /thmanyahsans-Black\.woff2/);
-    assert.doesNotMatch(rendered, /JetBrains|Palestine|Disney|Matcha/);
+    assert.match(rendered, /f-fustat-ar\.woff2/);
+    assert.match(rendered, /f-fustat-la\.woff2/);
+    assert.match(rendered, /unicode-range:/);
+    assert.doesNotMatch(rendered, /JetBrains|Palestine|Disney|Matcha|thmanyah|froople|mochi/i);
     if (locale === 'en') {
-      assert.match(rendered, /froople\.otf/);
-      assert.match(rendered, /mochi-tubby\.ttf/);
+      assert.match(rendered, /rel="preload"[^>]+f-unbounded-la\.woff2/);
+      assert.match(rendered, /--font-display: "Unbounded"/);
     } else {
-      assert.doesNotMatch(rendered, /froople\.otf|mochi-tubby\.ttf/);
+      assert.match(rendered, /rel="preload"[^>]+f-alexandria-ar\.woff2/);
+      assert.match(rendered, /--font-display: "Alexandria"/);
     }
     for (const [, asset] of rendered.matchAll(/url\("\/assets\/([^"\s]+)"\)/g)) {
       assert.ok(fs.statSync(path.join(theme, 'assets', asset)).size > 0, asset);
+    }
+  });
+
+  test(`${locale}: the classic and bubble presets load only their own files`, async () => {
+    const classic = await renderer(locale, { font_preset: 'classic' }).renderFile('fonts', { is_rtl: locale === 'ar' });
+    assert.match(classic, /thmanyahsans-Regular\.woff2/);
+    assert.match(classic, /thmanyahsans-Black\.woff2/);
+    if (locale === 'en') assert.match(classic, /froople\.otf[\s\S]*mochi-tubby\.ttf/);
+    else assert.doesNotMatch(classic, /froople\.otf|mochi-tubby\.ttf/);
+    assert.doesNotMatch(classic, /f-fustat|f-alexandria|f-unbounded/);
+    const bubble = await renderer(locale, { font_preset: 'bubble' }).renderFile('fonts', { is_rtl: locale === 'ar' });
+    assert.match(bubble, /f-baloo-(ar|la)\.woff2/);
+    assert.doesNotMatch(bubble, /thmanyah|f-fustat|f-alexandria/);
+    for (const html of [classic, bubble]) {
+      for (const [, asset] of html.matchAll(/url\("\/assets\/([^"\s]+)"\)/g)) assert.ok(fs.statSync(path.join(theme, 'assets', asset)).size > 0, asset);
     }
   });
 

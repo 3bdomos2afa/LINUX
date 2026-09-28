@@ -82,20 +82,14 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 
 ## 5. الخطوط
 
-- الإنجليزي: **Froople** للعناوين و**Mochi Tubby** لباقي النصوص والأسعار.
-- العربي: **Thmanyah Sans** لكل النصوص — Regular 400 للنص، Medium 500 لعناصر
-  الواجهة، وBlack 900 للعناوين. الأرقام العربية واللاتينية على صفحات العربي
-  بتستخدم الخط نفسه.
-- الخطوط مفعّلة تلقائياً؛ **Text size** و**Headline size** لسه قابلين للتعديل.
-  `assets/typography.css` بيتحمّل بعد باقي ملفات CSS عشان يثبت نفس عائلة ووزن
-  الخط لكل مستويات العناوين.
-- ملف خط **Machine** المطلوب مش موجود ضمن المرفقات؛ Mochi Tubby هو الملف السابق ومش بندّعي إنه Machine. إشعار Mochi يسمح بالاستخدام الشخصي فقط، وأرشيف Froople مافيهوش نص رخصة.
-- رخصة Thmanyah تسمح بتصميم مواقع تجارية، لكنها بتقيّد تضمين الخط في المواقع والتطبيقات ببرنامج أو تطبيق مجمّع/محزّم/مخفي المصدر، وبتمنع استضافة ملفات الخط أو إتاحتها للاستخراج المستقل، بما في ذلك التضمين على الويب. الثيم الحالي بيحمّل ملفات WOFF2 مباشرةً بـ `@font-face` من روابط Shopify؛ الرخصة ما بتثبتش السماح بطريقة النشر دي. لازم موافقة كتابية صريحة على النشر من CDN، أو إزالة/استبدال الملفات قبل توزيع الثيم. ما تعتبرش ترخيص الويب متحققاً؛ نسخة الـ PDF للمراجعة الداخلية فقط.
-- في السكيم الداكن الافتراضي، العناوين كريمي (`#F4E8D8`) والنص أبيض، وعناوين
-  الأزرار المملوءة/المعكوسة بتستخدم لون متباين. السكيم الفاتح/Cream بيحتفظ
-  بعناوين ونصوص غامقة وواضحة.
+**الخطوط (4.1)** — Theme settings ← Appearance ← **Font style**:
+- **Street** (الافتراضي): عناوين العربي بخط **الإسكندرية (Alexandria)**، والنصوص العربي والإنجليزي بخط **فسطاط (Fustat)** — الاتنين من تصميم المصمم المصري محمد جابر — وعناوين الإنجليزي بخط **Unbounded**.
+- **Bubble**: خط **Baloo Bhaijaan 2** للنصوص عربي وإنجليزي، و**Bagel Fat One** لعناوين الإنجليزي — الاختيار المدوّر المرح.
+- **Classic**: الخطوط القديمة (Thmanyah Sans / Froople / Mochi Tubby).
 
----
+خطوط Street وBubble رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص ومصدرها في `licenses/fonts/`)، يعني مسموح استخدامها في المتجر ورفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني، والصفحة بتنزّل اللي محتاجاه بس (على الصفحة الرئيسية: الإنجليزي ≈ ٨١ كيلو خطوط والعربي ≈ ١٣٠ كيلو، بدل ٢٠٦ و٢٢٨ كيلو قبل كده). الملفات من غير hinting عن قصد، لأن الـ hinting الأصلي في خط الإسكندرية كان بيخفي نقط الياء الأخيرة في بعض المقاسات.
+
+خطوط **Classic** لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب. ما تستخدمش Classic غير بموافقة مكتوبة.
 
 ## 6. الجديد في 4.0 — تتحكم فيه منين
 
@@ -113,6 +107,18 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 | الأسئلة الشائعة | افتح صفحة `faq` من Online Store → Pages واختار القالب **page.faq**. |
 | إيميلات الإشعارات | `notifications/README.md` — تنسخ كل قالب في Settings → Notifications. |
 | إعلانات السوشيال | `marketing/README.md` — بوستات وستوريز وفيديو جاهزين، وتعدّل النص من `copy.json`. |
+
+## 7. الجديد في 4.1 — تتحكم فيه منين
+
+| الحاجة | مكانها |
+| --- | --- |
+| نوع الخط | Theme settings ← Appearance ← **Font style**: Street / Bubble / Classic |
+| لون السكشن | أي سكشن (Best sellers، Product grid، Value props، Newsletter، FAQ، Testimonials، Statement) ← **Colour**: Forest / Cream sheet / Lime sheet |
+| فقاعات الأقسام | سكشن **Category bubbles**: كل بلوك = مجموعة (الصورة من صورة المجموعة أو أول منتج) أو «Link to the Customize studio»، ونقطة «جديد» اختيارية |
+| الشرايط | سكشن Marquee ← **Style**: Woven ribbons / Classic ticker |
+| موكب الاستوديو | بلوك اللون ← **Built-in mockup photos**: وش وضهر الهودي بكل الألوان، وضهر التيشيرت أبيض/أسود. أي صورة ترفعها بتغلب |
+| صور المنتجات الجديدة | فولدر `photos/` (أو `LINUX-product-photos.zip`): ارفع `01.webp`، `02.webp`… لكل منتج بالترتيب من Products ← المنتج ← Media. التعليمات في `photos/README.md` |
+| الانكسار | Theme settings ← Appearance ← **Liquid refraction** (مقفول افتراضياً عشان السرعة) |
 
 ## English
 
@@ -187,26 +193,14 @@ the piece list instead of a separate duplicate line per piece.
 
 ### Fonts
 
-English pages use **Froople** for headings and **Mochi Tubby** for all other
-copy and prices. Arabic pages use **Thmanyah Sans** throughout: Regular 400 for
-body, Medium 500 for UI, Black 900 for headings, including Arabic text and Latin
-digits. Brand fonts are always enabled; **Text size** and **Headline size**
-remain configurable. `assets/typography.css` loads last to keep all heading
-levels consistent. In the default dark scheme, headings are cream (`#F4E8D8`)
-and body text is white; filled/inverse button labels retain a contrasting
-color. The optional light/Cream scheme uses dark, legible text. The supplied
-Thmanyah license permits commercial website design but restricts website/app
-embedding to compiled, packaged or obfuscated applications and prohibits
-hosting fonts or making font files independently extractable, including through
-web embedding. This theme currently serves WOFF2 files from Shopify asset URLs
-with `@font-face`, so the current CDN model is not cleared by the license text.
-Obtain Thmanyah's explicit written permission for this embedding model or
-remove/replace the files before distribution; do not describe webfont rights as
-verified. The copied PDF is for internal review only. The requested
-**Machine** font file was not supplied; Mochi Tubby remains the earlier font
-asset and is not claimed as Machine. Mochi's notice permits personal use only,
-and the Froople archive contains no license text. Confirm commercial/web rights
-or supply licensed fonts before publishing.
+**Typography (4.1)** — Theme settings → Appearance → **Font style**:
+- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
+- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
+- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
+
+Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes.
+
+The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission.
 
 ### New in 4.0 — where to control it
 - **Glass**: Theme settings → Appearance → *Glass tint* and *Liquid refraction* (edge refraction renders in Chromium only; other browsers keep the frosted glass).
@@ -220,3 +214,12 @@ or supply licensed fonts before publishing.
 - **Ratings**: shown only when a reviews app writes `reviews.rating` / `reviews.rating_count`.
 - **FAQ**: assign the **page.faq** template to your `faq` page.
 - **Email notifications**: see `notifications/README.md`. **Social ad kit**: see `marketing/README.md`.
+
+### New in 4.1 — where to control it
+- **Font style** (Theme settings → Appearance): Street / Bubble / Classic.
+- **Colour** on Best sellers, Product grid, Value props, Newsletter, FAQ, Testimonials and Statement: Forest, Cream sheet or Lime sheet.
+- **Category bubbles** section: one block per collection (image from the collection or its first product) or the Customize studio; optional new-drop dot.
+- **Marquee → Style**: woven ribbons or classic ticker.
+- **Built-in mockup photos** (studio colour blocks) now cover hoodie front and back in every colour and the tee back in white/black; uploads still win.
+- **Studio photo set**: `photos/` (or `LINUX-product-photos.zip`) — upload `01.webp`, `02.webp`… per product in order (Products → product → Media). See `photos/README.md`.
+- **Liquid refraction** is off by default for speed; switch it on under Appearance if you want it.
