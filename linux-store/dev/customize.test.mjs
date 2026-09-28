@@ -163,12 +163,19 @@ test('placement presets stay inside the print area and put the pocket on the wea
   const area = [50, 45, 52, 52];
   const pocket = placementFor(area, 'front', 'pocket');
   assert.ok(pocket.x > 50, 'pocket sits on the viewer\'s right');
-  assert.ok(pocket.y < 45 && pocket.s < 20);
+  assert.ok(pocket.y < 45 && pocket.s * 0.66 < 52 * 0.3, 'pocket print is small: under 30% of the area width');
   for (const [side, name] of [['front', 'center'], ['front', 'full'], ['back', 'upper'], ['back', 'middle'], ['back', 'full']]) {
-    const p = placementFor(area, side, name);
-    assert.ok(p.x >= 24 && p.x <= 76 && p.y >= 19 && p.y <= 71, `${side}/${name} inside the print area`);
-    assert.ok(p.s > 10 && p.s <= 48, `${side}/${name} scale`);
+    for (const aspect of [1, 4, 0.5]) {
+      const p = placementFor(area, side, name, aspect);
+      assert.ok(p.x >= 24 && p.x <= 76 && p.y >= 19 && p.y <= 71, `${side}/${name} inside the print area`);
+      const drawnW = p.s * 0.66, drawnH = drawnW / aspect;
+      assert.ok(drawnW <= 52 + 1e-9 && drawnH <= 52 + 1e-9, `${side}/${name} fits the area at aspect ${aspect}`);
+      assert.ok(drawnW >= 52 * 0.2 || drawnH >= 52 * 0.2, `${side}/${name} is not tiny at aspect ${aspect}`);
+    }
   }
+  // a wide text design fills the area by width on a small chest area, not by its height
+  const chest = [50, 45, 28, 22];
+  assert.ok(Math.abs(placementFor(chest, 'front', 'center', 5).s * 0.66 - 28 * 0.58) < 1e-9);
   assert.equal(placementFor(area, 'back', 'pocket'), null);
 });
 

@@ -67,8 +67,10 @@
   }
   function centerInArea(d = cur(), side = state.side) { const [cx, cy] = printArea(side); d.x = cx; d.y = cy; }
   // A new design starts at 80% of its print area (drawn width = s × .66% of the stage).
-  function defaultScale(side = state.side) { const [, , w, h] = printArea(side); return Math.max(SCALE_MIN, Math.min(42, Math.min(w, h) * .8 / .66)); }
-  function fitScale(side = state.side) { const [, , w, h] = printArea(side); return Math.min(SCALE_MAX, Math.min(w, h) / .66); }
+  const aspectOf = (d) => (d && d.img && d.img.naturalWidth && d.img.naturalHeight ? d.img.naturalWidth / d.img.naturalHeight : 1);
+  const clampS = (s) => Math.max(SCALE_MIN, Math.min(SCALE_MAX, s));
+  function defaultScale(side = state.side, d = design[side]) { return clampS(model.fitWidth(printArea(side), .8, aspectOf(d)) / .66); }
+  function fitScale(side = state.side, d = design[side]) { return clampS(model.fitWidth(printArea(side), 1, aspectOf(d)) / .66); }
 
   /* ---- Variant / price ---- */
   function pickVariant(size) {
@@ -399,7 +401,7 @@
       case 'rotate-r': d.r = norm(d.r + 15); break;
       case 'center': centerInArea(d); break;
       case 'reset': centerInArea(d); d.s = defaultScale(); d.r = 0; break;
-      case 'fit': { const [, , w, h] = printArea(); centerInArea(d); d.s = Math.min(SCALE_MAX, Math.min(w, h) * .92); d.r = 0; break; }
+      case 'fit': centerInArea(d); d.s = clampS(model.fitWidth(printArea(), .92, aspectOf(d)) / .66); d.r = 0; break;
       case 'replace': d.input.click(); return;
       case 'remove': clearFile(state.side); return;
     }
@@ -410,7 +412,7 @@
   qa('[data-cz-place]').forEach((b) => b.addEventListener('click', () => {
     const d = cur();
     if (!d.has) return;
-    const p = model.placementFor(printArea(), state.side, b.dataset.czPlace);
+    const p = model.placementFor(printArea(), state.side, b.dataset.czPlace, aspectOf(d));
     if (!p) return;
     d.x = p.x; d.y = p.y; d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, p.s)); d.r = 0;
     clampPos(d, state.side);

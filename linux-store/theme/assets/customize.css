@@ -213,7 +213,6 @@
 .cz__text-opts { display: grid; gap: 8px; }
 .cz__text-fonts .segmented__btn[data-cz-text-font="display"] { font-family: var(--font-display); font-weight: var(--w-heading); }
 .cz__text-fonts .segmented__btn[data-cz-text-font="body"] { font-family: var(--font-body); }
-.cz__text-fonts .segmented__btn[data-cz-text-font="accent"] { font-family: var(--font-accent, var(--font-display)); font-weight: var(--w-accent, 400); }
 .cz__text-colors { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .cz__text-colors .swatch { width: 34px; height: 34px; min-width: 34px; }
 .cz__text-colors .swatch.is-active { box-shadow: 0 0 0 2px var(--forest-deep), 0 0 0 4px var(--accent); }
