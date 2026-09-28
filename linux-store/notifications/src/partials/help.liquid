@@ -1,0 +1,37 @@
+{%- case lx_context -%}
+{%- when 'order' -%}{%- capture lx_wa_text -%}[[wa_order]]{%- endcapture -%}
+{%- when 'checkout' -%}{%- capture lx_wa_text -%}[[wa_checkout]]{%- endcapture -%}
+{%- else -%}{%- capture lx_wa_text -%}[[wa_account]]{%- endcapture -%}
+{%- endcase -%}
+{%- comment -%} url_encode turns spaces into "+"; WhatsApp expects %20. {%- endcomment -%}
+{%- assign lx_wa_q = lx_wa_text | strip | url_encode | replace: '+', '%20' -%}
+[[> card_open]]
+<p style="[[s.h2]]">[[help_title]]</p>
+<p style="[[s.text]]">{%- if lx_wa != '' -%}[[help_body_wa]]{%- else -%}[[help_body_mail]]{%- endif -%}</p>
+<table role="presentation" class="lx-btns" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="margin-top:16px;border-collapse:separate;">
+<tr>
+{%- if lx_wa != '' -%}
+<td class="lx-btn-cell" style="padding-[[end]]:10px;">
+<table role="presentation" class="lx-btn-table" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+<tr>
+<td align="center" bgcolor="[[c.chip]]" style="border-radius:999px;background-color:[[c.chip]];border:1px solid [[c.lime_line]];mso-padding-alt:11px 20px;">
+<a class="lx-btn-link" href="https://wa.me/{{ lx_wa }}?text={{ lx_wa_q }}" target="_blank" style="display:inline-block;padding:11px 20px;font-family:[[font]];font-size:14px;line-height:18px;font-weight:800;color:[[c.lime]];text-decoration:none;border-radius:999px;">[[help_whatsapp]]</a>
+</td>
+</tr>
+</table>
+</td>
+{%- endif -%}
+{%- if shop.email != blank -%}
+<td class="lx-btn-cell">
+<table role="presentation" class="lx-btn-table" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+<tr>
+<td align="center" style="border-radius:999px;border:1px solid [[c.btn_line]];mso-padding-alt:11px 20px;">
+<a class="lx-btn-link" href="mailto:{{ shop.email }}" style="display:inline-block;padding:11px 20px;font-family:[[font]];font-size:14px;line-height:18px;font-weight:700;color:[[c.cream]];text-decoration:none;border-radius:999px;">[[help_email]]&nbsp;· <span dir="ltr" style="white-space:nowrap;">{{ shop.email }}</span></a>
+</td>
+</tr>
+</table>
+</td>
+{%- endif -%}
+</tr>
+</table>
+[[> card_close]]

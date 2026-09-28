@@ -65,7 +65,7 @@ const notifications = path.join(root, 'notifications');
 if (fs.existsSync(notifications)) copyTree(notifications, path.join(stage, 'email-notifications'), (child) => !/^(dev|node_modules)(\/|$)/.test(child) && !child.endsWith('.DS_Store'));
 const marketing = path.join(root, 'marketing');
 if (fs.existsSync(path.join(marketing, 'out'))) {
-  copyTree(path.join(marketing, 'out'), path.join(stage, 'ad-kit'), (child) => !child.endsWith('.DS_Store'));
+  copyTree(path.join(marketing, 'out'), path.join(stage, 'ad-kit'), (child) => /\.(jpe?g|mp4)$/i.test(child));
   for (const f of ['README.md', 'copy.json']) if (fs.existsSync(path.join(marketing, f))) fs.copyFileSync(path.join(marketing, f), path.join(stage, 'ad-kit', f));
 }
 const bundle = path.join(dist, 'LINUX-theme-delivery.zip');

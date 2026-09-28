@@ -1,0 +1,18 @@
+{%- if shipping_address -%}
+[[> card_open]]
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+<tr>
+<td class="lx-stack lx-stack-gap" width="50%" valign="top" style="width:50%;padding-[[end]]:12px;text-align:[[start]];font-family:[[font]];">
+<p style="[[s.label]]">[[ship_to]]</p>
+<div class="lx-addr" style="font-family:[[font]];font-size:14px;line-height:22px;color:[[c.text]];">{{ shipping_address | format_address | remove: '<p>' | remove: '</p>' }}</div>
+</td>
+<td class="lx-stack" width="50%" valign="top" style="width:50%;text-align:[[start]];font-family:[[font]];">
+{%- if shipping_method.title != blank -%}
+<p style="[[s.label]]">[[delivery_method]]</p>
+<p style="margin:0;font-family:[[font]];font-size:14px;line-height:22px;color:[[c.text]];">{{ shipping_method.title | escape }}</p>
+{%- endif -%}
+</td>
+</tr>
+</table>
+[[> card_close]]
+{%- endif -%}

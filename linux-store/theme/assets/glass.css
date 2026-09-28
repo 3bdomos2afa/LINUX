@@ -604,3 +604,8 @@ img, video, svg { display: block; max-width: 100%; }
 /* RTL: every directional glyph mirrors in one place. `scale` (not transform)
    composes with component hover/animation transforms instead of fighting them. */
 html[dir="rtl"] :is(.icon--arrow-right, .icon--arrow-left, .icon--arrow-up-right, .icon--chevron-right, .icon--chevron-left, .icon--undo) { scale: -1 1; }
+
+/* Typography polish: headlines break into balanced lines (no lonely last word),
+   paragraphs avoid orphans — in both scripts. */
+:is(h1, h2, h3, .h1, .h2, .h3, .display) { text-wrap: balance; }
+:is(p, li, .lede, .rte) { text-wrap: pretty; }

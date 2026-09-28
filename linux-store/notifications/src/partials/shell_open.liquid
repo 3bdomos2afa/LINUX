@@ -1,0 +1,20 @@
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="[[c.page]]" dir="[[dir]]" style="width:100%;background-color:[[c.page]];direction:[[dir]];">
+<tr>
+<td align="center" class="lx-outer" style="padding:28px 14px 40px;">
+<!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td><![endif]-->
+<table role="presentation" class="lx-shell" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="width:100%;max-width:600px;direction:[[dir]];">
+<tr>
+<td align="center" style="padding:4px 0 22px;">
+{%- if lx_logo != blank -%}
+<a href="{{ store_url }}" target="_blank" style="text-decoration:none;"><img src="{{ lx_logo }}" alt="{{ shop.name | escape }}" width="{{ lx_logo_w }}" style="display:block;width:{{ lx_logo_w }}px;max-width:240px;height:auto;margin:0 auto;border:0;"></a>
+{%- else -%}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;margin:0 auto;">
+<tr>
+<td bgcolor="[[c.card]]" style="padding:11px 22px 11px 29px;border-radius:999px;background-color:[[c.card]];border:1px solid [[c.border]];border-top-color:[[c.highlight]];">
+<a href="{{ store_url }}" target="_blank" dir="ltr" style="font-family:'Arial Black','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:20px;line-height:24px;font-weight:900;letter-spacing:0.34em;color:[[c.cream]];text-decoration:none;">LINUX</a>
+</td>
+</tr>
+</table>
+{%- endif -%}
+</td>
+</tr>

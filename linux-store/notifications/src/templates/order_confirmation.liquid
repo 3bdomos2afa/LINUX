@@ -1,0 +1,37 @@
+[[> file_header]]
+[[> setup]]
+{%- assign lx_context = 'order' -%}
+{%- assign lx_step = 1 -%}
+{%- assign lx_is_custom = false -%}
+{%- for lx_l in line_items -%}{%- for p in lx_l.properties -%}{%- if p.first == 'Garment' or p.first == 'Method' -%}{%- assign lx_is_custom = true -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
+[[> head]]
+[[> shell_open]]
+[[> hero_open]]
+[[> eyebrow]]
+[[> h1]]
+<p style="[[s.body]]">[[body]]</p>
+<p style="[[s.note]]">[[placed_on]]</p>
+[[> payment_status]]
+[[> steps]]
+{%- assign lx_btn_url = order_status_url -%}
+{%- capture lx_btn_text -%}[[view_order]]{%- endcapture -%}
+{%- assign lx_btn2_url = '' -%}
+[[> buttons]]
+[[> hero_close]]
+{%- if lx_is_custom -%}
+[[> custom_callout]]
+{%- endif -%}
+[[> card_open]]
+<p style="[[s.label]]">[[items]]</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+{%- for lx_line in subtotal_line_items -%}
+{%- assign lx_qty = lx_line.quantity -%}
+{%- assign lx_show_price = true -%}
+[[> line_item]]
+{%- endfor -%}
+</table>
+[[> totals]]
+[[> card_close]]
+[[> address]]
+[[> help]]
+[[> footer]]

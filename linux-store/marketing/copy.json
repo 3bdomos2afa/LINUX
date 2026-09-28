@@ -1,0 +1,143 @@
+{
+  "_how_to_edit": "Edit any text below, then run: node linux-store/marketing/render.mjs  ·  Wrap words in *stars* to colour them lime  ·  Type \\n for a manual line break  ·  Set a value to \"\" to hide that element. Image paths are relative to linux-store/marketing/.",
+  "_offer_sources": {
+    "code": "theme/templates/index.json → marquee block m1 code = LINUX10 (also the default of the cart-drawer discount chip). Make sure the code exists in Shopify → Discounts before posting.",
+    "code_value": "locales home.newsletter_body / newsletter.footer_label → 10% off your first order",
+    "free_delivery": "config/settings_data.json free_shipping_threshold = 2000 (LE) · locales home.marquee_1, sections.hero.trust_1, cart.offer_bar",
+    "customize": "locales customize.print_note (print from a single piece) and customize.min_embroidery (embroidery minimum) · index.customize.json min_embroidery = 10",
+    "price": "dev/data/product-hoodie-sada-*.json price 64900 = LE 649 (catalog snapshot; confirm the live price, or set price to \"\")"
+  },
+  "shared": {
+    "site": "linux-eg.com",
+    "code": "LINUX10",
+    "images": {
+      "drop_photo": "assets/products/hoodie-sada-black.jpg",
+      "studio_hoodie": "../theme/assets/cz-hoodie-back-beige.webp",
+      "studio_design": "../theme/assets/mascot-skate-spray.webp",
+      "studio_mascot": "../theme/assets/mascot-classic.webp",
+      "code_background": "assets/embroidery-still.jpg",
+      "code_mascot": "../theme/assets/mascot-boombox.webp",
+      "delivery_mascot": "../theme/assets/mascot-skate.webp",
+      "delivery_thumb": "assets/products/hoodie-sada-black.jpg",
+      "cover_photos": [
+        "assets/products/hoodie-sada-burgundy.jpg",
+        "assets/products/hoodie-sada-black.jpg",
+        "assets/products/hoodie-sada-beige.jpg"
+      ],
+      "video_background": "../theme/assets/hero-mobile.mp4",
+      "video_preview": "assets/embroidery-still.jpg"
+    }
+  },
+  "ar": {
+    "dir": "rtl",
+    "feed_drop": {
+      "eyebrow": "وصل حديثًا · FW26",
+      "headline": "لسه نازل\nمن *الماكينة*",
+      "product": "هودي سادة",
+      "price": "٦٤٩ جنيه",
+      "chips": ["تطريز، مش طباعة", "ميلتون تقيل ٣٤٠ جرام"],
+      "cta": "تسوّق المجموعة"
+    },
+    "feed_studio": {
+      "eyebrow": "استوديو التصميم",
+      "headline": "تصميمك، *وخيطنا.*",
+      "body": "ارفع تصميمك، واختار القطعة واللون، وشوف شكل التصميم عليها قبل ما تطلب.",
+      "design_tag": "تصميمك",
+      "print_title": "طباعة",
+      "print_note": "من قطعة واحدة",
+      "embroidery_title": "تطريز",
+      "embroidery_note": "من ١٠ قطع",
+      "cta": "صمّم قطعتك"
+    },
+    "story_code": {
+      "eyebrow": "أول طلب ليك؟",
+      "headline": "خصم *١٠٪*",
+      "subhead": "على أول طلب",
+      "code_label": "استخدم الكود",
+      "hint": "الكود بيتفعّل في الخطوة الجاية.",
+      "cta": "تسوّق على linux-eg.com"
+    },
+    "story_delivery": {
+      "eyebrow": "بنوصّل لـ ٢٧ محافظة",
+      "headline": "توصيل مجاني",
+      "subhead": "فوق *٢٬٠٠٠ جنيه*",
+      "watermark": "٢٬٠٠٠",
+      "progress": "التوصيل بقى مجاني",
+      "rows": [
+        { "icon": "cash", "title": "الدفع عند الاستلام", "text": "ادفع كاش عند الاستلام أو بالكارت، زي ما تفضّل." },
+        { "icon": "swap", "title": "استبدال خلال ١٤ يوم", "text": "مقاسك مش مناسب؟ نبدّله لك من غير أسئلة." },
+        { "icon": "bolt", "title": "توصيل سريع", "text": "من يوم ليومين في القاهرة، ومن يومين لـ٤ أيام في باقي مصر." }
+      ],
+      "cta": "تسوّق المجموعة"
+    },
+    "carousel_cover": {
+      "eyebrow": "مجموعة FW26",
+      "headline": "معمول عشان\nيفضل *معاك.*",
+      "chip": "تطريز، مش طباعة",
+      "swipe": "اسحب"
+    },
+    "video_offer": {
+      "eyebrow": "أول طلب ليك؟",
+      "headline": "خصم *١٠٪*\nعلى أول طلب",
+      "code_label": "استخدم الكود",
+      "chip": "توصيل مجاني فوق ٢٬٠٠٠ جنيه",
+      "cta": "تسوّق على linux-eg.com"
+    }
+  },
+  "en": {
+    "dir": "ltr",
+    "feed_drop": {
+      "eyebrow": "New in · FW26",
+      "headline": "Just off\nthe *machine*",
+      "product": "Hoodie Sada",
+      "price": "LE 649",
+      "chips": ["Embroidered, never printed", "Heavyweight 340 gsm melton"],
+      "cta": "Shop the collection"
+    },
+    "feed_studio": {
+      "eyebrow": "Custom studio",
+      "headline": "Your design,\n*our thread.*",
+      "body": "Upload your artwork, choose the piece and colour, and see it on the garment before you order.",
+      "design_tag": "Your design",
+      "print_title": "Print",
+      "print_note": "From a single piece",
+      "embroidery_title": "Embroidery",
+      "embroidery_note": "From 10 pieces",
+      "cta": "Design your own"
+    },
+    "story_code": {
+      "eyebrow": "First order?",
+      "headline": "*10%* off",
+      "subhead": "your first order",
+      "code_label": "Use code",
+      "hint": "Applied at checkout.",
+      "cta": "Shop at linux-eg.com"
+    },
+    "story_delivery": {
+      "eyebrow": "Delivering to 27 governorates",
+      "headline": "Free delivery",
+      "subhead": "over *LE 2,000*",
+      "watermark": "2,000",
+      "progress": "Free delivery unlocked",
+      "rows": [
+        { "icon": "cash", "title": "Pay on delivery", "text": "Cash at the door, or card if you prefer." },
+        { "icon": "swap", "title": "14-day exchange", "text": "Wrong size? Swap it, no questions asked." },
+        { "icon": "bolt", "title": "Fast delivery", "text": "1–2 days in Cairo, 2–4 across Egypt." }
+      ],
+      "cta": "Shop the collection"
+    },
+    "carousel_cover": {
+      "eyebrow": "FW26 collection",
+      "headline": "Made to\nbe *kept.*",
+      "chip": "Embroidered, never printed",
+      "swipe": "Swipe"
+    },
+    "video_offer": {
+      "eyebrow": "First order?",
+      "headline": "*10%* off\nyour first order",
+      "code_label": "Use code",
+      "chip": "Free delivery over LE 2,000",
+      "cta": "Shop at linux-eg.com"
+    }
+  }
+}

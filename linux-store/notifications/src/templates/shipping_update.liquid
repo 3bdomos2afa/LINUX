@@ -1,0 +1,27 @@
+[[> file_header]]
+[[> setup]]
+{%- assign lx_context = 'order' -%}
+{%- assign lx_step = 2 -%}
+[[> head]]
+[[> shell_open]]
+[[> hero_open]]
+[[> eyebrow]]
+[[> h1]]
+<p style="[[s.body]]">[[body]]</p>
+[[> steps]]
+[[> tracking]]
+[[> hero_close]]
+[[> card_open]]
+<p style="[[s.label]]">[[shipment_items]]</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+{%- for lx_fl in fulfillment.fulfillment_line_items -%}
+{%- assign lx_line = lx_fl.line_item -%}
+{%- assign lx_qty = lx_fl.quantity -%}
+{%- assign lx_show_price = false -%}
+[[> line_item]]
+{%- endfor -%}
+</table>
+[[> card_close]]
+[[> address]]
+[[> help]]
+[[> footer]]

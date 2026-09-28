@@ -1,0 +1,31 @@
+[[> file_header]]
+[[> setup]]
+{%- assign lx_context = 'order' -%}
+{%- assign lx_step = 4 -%}
+[[> head]]
+[[> shell_open]]
+[[> hero_open]]
+[[> eyebrow]]
+[[> h1]]
+<p style="[[s.body]]">[[body]]</p>
+<p style="[[s.note]]">[[not_received]]</p>
+[[> steps]]
+{%- assign lx_btn_url = store_url -%}
+{%- capture lx_btn_text -%}[[shop_latest]]{%- endcapture -%}
+{%- assign lx_btn2_url = order_status_url -%}
+{%- capture lx_btn2_text -%}[[view_order]]{%- endcapture -%}
+[[> buttons]]
+[[> hero_close]]
+[[> card_open]]
+<p style="[[s.label]]">[[shipment_items]]</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+{%- for lx_fl in fulfillment.fulfillment_line_items -%}
+{%- assign lx_line = lx_fl.line_item -%}
+{%- assign lx_qty = lx_fl.quantity -%}
+{%- assign lx_show_price = false -%}
+[[> line_item]]
+{%- endfor -%}
+</table>
+[[> card_close]]
+[[> help]]
+[[> footer]]

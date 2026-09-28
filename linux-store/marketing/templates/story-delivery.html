@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- kit:inject -->
+<title>LINUX · Story 9:16 · Free delivery</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  :root{--w:1080px;--h:1920px}
+  /* Content lives between the story safe lines: 250px from the top, 340px from the bottom. */
+  .stage{display:flex;flex-direction:column;align-items:center;text-align:center;padding:272px var(--pad) 356px}
+  .blobs i{position:absolute;z-index:-2;border-radius:50%}
+  .blobs i:nth-child(1){width:760px;height:760px;left:-260px;top:860px;background:radial-gradient(closest-side,rgba(143,203,90,.5),rgba(143,203,90,0))}
+  .blobs i:nth-child(2){width:680px;height:680px;right:-260px;top:1180px;background:radial-gradient(closest-side,rgba(244,232,216,.3),rgba(244,232,216,0))}
+  .blobs i:nth-child(3){width:820px;height:820px;right:-240px;top:40px;background:radial-gradient(closest-side,rgba(143,203,90,.34),rgba(143,203,90,0))}
+  .top{align-self:stretch}
+  .wordmark{height:46px}
+  .eyebrow{font-size:28px}
+  .watermark{position:absolute;z-index:-1;left:-80px;right:-80px;top:590px;text-align:center;font-size:470px;line-height:1;white-space:nowrap;
+    color:transparent;-webkit-text-stroke:3px rgba(244,232,216,.2);transform:rotate(-7deg)}
+  .headline{align-self:stretch;margin-top:48px;font-size:156px;line-height:1;white-space:nowrap}
+  html[lang="ar"] .headline{line-height:1.12}
+  .subhead{align-self:stretch;margin:10px 0 70px;font-size:104px;line-height:1.1;color:#fff;white-space:nowrap}
+  html[lang="ar"] .subhead{margin-top:16px}
+  /* Mirrors the theme's cart drawer: line item thumbnail + a completed free-delivery bar. */
+  .cart{align-self:stretch;margin-top:auto;display:flex;align-items:center;gap:26px;padding:24px 28px;--r:46px;text-align:start}
+  .cart__thumb{flex:none;position:relative;width:128px;height:128px;border-radius:32px;overflow:hidden;
+    background:radial-gradient(90% 80% at 50% 30%,#f8eee0,#e6d3b8);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)}
+  .cart__thumb img{position:absolute;left:50%;top:-104px;height:430px;width:auto;margin-left:-117px;mix-blend-mode:multiply}
+  .cart__body{flex:1;min-width:0}
+  .cart__row{display:flex;align-items:center;gap:16px;font-size:33px;line-height:1.2}
+  .cart__row .i{width:48px;height:48px;padding:11px;border-radius:50%;background:var(--lime);color:var(--ink);stroke-width:3.2}
+  .bar{margin-top:22px;height:28px;border-radius:999px;background:rgba(2,26,18,.45);overflow:hidden;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.4),inset 0 0 0 1.5px rgba(255,255,255,.12)}
+  .bar__fill{height:100%;width:100%;border-radius:inherit;background:linear-gradient(180deg,#bdea92,#8fcb5a 55%,#77b444);box-shadow:inset 0 2px 1px rgba(255,255,255,.6)}
+  .rider{position:absolute;z-index:3;inset-inline-end:22px;bottom:36px;height:172px;width:auto;filter:drop-shadow(0 14px 16px rgba(0,0,0,.4))}
+  html[dir="rtl"] .rider{transform:scaleX(-1)}
+  .rows{align-self:stretch;margin-top:20px;display:flex;flex-direction:column;gap:14px}
+  .row{display:flex;align-items:center;gap:24px;padding:18px 28px;--r:40px;text-align:start}
+  .row__ic{flex:none;display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:rgba(143,203,90,.16);color:var(--lime);font-size:38px;box-shadow:inset 0 0 0 1.5px rgba(143,203,90,.45)}
+  .row__txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .row__txt b{font-size:34px;line-height:1.15;color:var(--cream)}
+  .row__txt span{font-size:26px;line-height:1.28;color:rgba(255,255,255,.8)}
+  .cta{margin-top:34px;font-size:40px;padding:28px 58px 29px}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="atmo"></div><div class="blobs"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="watermark h" data-k="watermark" data-no-audit aria-hidden="true"></div>
+  <header class="top">
+    <img class="wordmark audit" src="../../theme/assets/wordmark.svg" alt="LINUX">
+    <span class="glass pill eyebrow ui"><svg data-icon="pin"></svg><span data-k="eyebrow"></span></span>
+  </header>
+  <h1 class="h headline" data-k="headline" data-fit="1"></h1>
+  <p class="h subhead" data-k="subhead" data-fit="1"></p>
+  <div class="cart glass">
+    <span class="cart__thumb"><img data-src="images.delivery_thumb" alt=""></span>
+    <div class="cart__body">
+      <div class="cart__row ui"><svg data-icon="check"></svg><span data-k="progress"></span></div>
+      <div class="bar"><div class="bar__fill"></div></div>
+    </div>
+    <img class="rider abs" data-src="images.delivery_mascot" alt="">
+  </div>
+  <div class="rows" data-list="rows">
+    <div class="row glass" data-item><span class="row__ic"><svg data-f-icon="icon"></svg></span><span class="row__txt"><b class="ui" data-f="title"></b><span class="ui" data-f="text"></span></span></div>
+  </div>
+  <span class="cta audit"><span data-k="cta"></span><svg class="flip" data-icon="arrow"></svg></span>
+</main>
+<script src="kit.js"></script>
+</body>
+</html>

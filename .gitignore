@@ -9,3 +9,4 @@ __pycache__/
 .DS_Store
 linux-store/dev/.uploads/
 x.png
+linux-store/marketing/out/*.png

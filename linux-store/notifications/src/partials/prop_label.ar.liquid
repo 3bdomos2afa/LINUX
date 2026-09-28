@@ -1,0 +1,16 @@
+{%- case lx_pkd -%}
+{%- when 'garment' -%}القطعة
+{%- when 'colour', 'color' -%}اللون
+{%- when 'method' -%}الطريقة
+{%- when 'sides' -%}الجهات
+{%- when 'side' -%}الجهة
+{%- when 'size' -%}المقاس
+{%- when 'sizes' -%}المقاسات
+{%- when 'piece' -%}القطع
+{%- when 'notes' -%}ملاحظاتك
+{%- when 'front design' -%}تصميم قدام
+{%- when 'back design' -%}تصميم ورا
+{%- when 'design file' -%}ملف التصميم
+{%- when 'bundle offer' -%}عرض الباندل
+{%- else -%}{{ lx_pk | escape }}
+{%- endcase -%}

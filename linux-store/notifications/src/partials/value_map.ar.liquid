@@ -1,0 +1,47 @@
+{%- comment -%} Same vocabulary as the storefront (locales/ar.json → products.option_values); unknown values pass through escaped. {%- endcomment -%}
+{%- assign lx_vk = lx_val | downcase | strip -%}
+{%- case lx_vk -%}
+{%- when 'xs', 's', 'm', 'l', 'xl', '2xl', 'xxxl', '3xl', '4xl', '5xl' -%}{{ lx_val | upcase | escape }}
+{%- when 'xxl' -%}2XL
+{%- when 'black' -%}أسود
+{%- when 'white' -%}أبيض
+{%- when 'beige' -%}بيج
+{%- when 'burgundy' -%}نبيتي
+{%- when 'cream' -%}كريمي
+{%- when 'olive' -%}زيتي
+{%- when 'navy' -%}كحلي
+{%- when 'grey', 'gray' -%}رصاصي
+{%- when 'forest' -%}أخضر غابي
+{%- when 'green' -%}أخضر
+{%- when 'brown' -%}بني
+{%- when 'blue' -%}أزرق
+{%- when 'red' -%}أحمر
+{%- when 'pink' -%}بمبي
+{%- when 'print' -%}طباعة
+{%- when 'embroidery' -%}تطريز
+{%- when 'embroidered' -%}مطرّز
+{%- when 'hoodie' -%}هودي
+{%- when 'hoodies' -%}هوديز
+{%- when 't-shirt', 'tshirt', 'tee', 'shirt' -%}تيشيرت
+{%- when 'shirts' -%}تيشيرتات
+{%- when 'cap' -%}كاب
+{%- when 'sada' -%}سادة
+{%- when 'anime' -%}أنمي
+{%- when 'flower' -%}زهور
+{%- when 'customize' -%}تصميمك
+{%- when 'oversized' -%}أوفرسايز
+{%- when 'zip' -%}بسوستة
+{%- when 'classic' -%}كلاسيك
+{%- when 'winter' -%}شتوي
+{%- when 'summer' -%}صيفي
+{%- when 'kids' -%}أطفال
+{%- when 'men' -%}رجالي
+{%- when 'women' -%}حريمي
+{%- when 'unisex' -%}للجنسين
+{%- when 'pack' -%}باكدج
+{%- when 'set' -%}طقم
+{%- when 'front' -%}قدام
+{%- when 'back' -%}ورا
+{%- when 'front + back' -%}قدام + ورا
+{%- else -%}{{ lx_val | escape }}
+{%- endcase -%}

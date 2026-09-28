@@ -1,0 +1,15 @@
+{%- comment -%} ===== EDIT ME (optional) =====
+  whatsapp_number: digits only, international format (Egypt: 20 + the mobile number without its leading 0).
+    Pre-filled with the storefront's number (Theme settings → Brand & social). Set it to '' to hide the WhatsApp button.
+  logo_url: leave '' to use the logo uploaded in Settings → Notifications → Customize email templates.
+    To show a different logo only in these emails, paste the full https:// address of a PNG (for example from Content → Files).
+  [[store_url_note]]
+{%- endcomment -%}
+{%- assign whatsapp_number = '201110351549' -%}
+{%- assign logo_url = '' -%}
+{%- assign store_url = [[store_url_expr]] -%}
+{%- assign lx_wa = whatsapp_number | remove: '+' | remove: ' ' | remove: '-' -%}
+{%- assign lx_logo = logo_url | default: shop.email_logo_url -%}
+{%- assign lx_logo_w = shop.email_logo_width | default: 140 -%}
+{%- assign lx_first_name = customer.first_name | default: shipping_address.first_name | default: billing_address.first_name | strip -%}
+{%- assign lx_probe = 'ا,ب,ت,ث,ج,ح,خ,د,ذ,ر,ز,س,ش,ص,ض,ط,ظ,ع,غ,ف,ق,ك,ل,م,ن,ه,و,ي,ى,ة,ء,أ,إ,آ,ؤ,ئ' | split: ',' -%}

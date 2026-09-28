@@ -1,0 +1,6 @@
+{%- assign lx_vk = lx_val | downcase | strip -%}
+{%- case lx_vk -%}
+{%- when 'xs', 's', 'm', 'l', 'xl', 'xxl', '2xl', 'xxxl', '3xl', '4xl', '5xl' -%}{{ lx_val | upcase | escape }}
+{%- when 'front + back' -%}Front + Back
+{%- else -%}{%- if lx_val == lx_vk -%}{{ lx_val | capitalize | escape }}{%- else -%}{{ lx_val | escape }}{%- endif -%}
+{%- endcase -%}

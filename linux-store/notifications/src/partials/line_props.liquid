@@ -1,0 +1,33 @@
+{%- comment -%} Line-item properties. Skips blanks, keys starting with "_", mockups (already the thumbnail), placement data and the bundle estimate. {%- endcomment -%}
+{%- capture lx_props -%}
+{%- for p in lx_line.properties -%}
+{%- assign lx_pk = p.first | append: '' -%}
+{%- assign lx_pk1 = lx_pk | slice: 0 -%}
+{%- assign lx_pkd = lx_pk | downcase | strip -%}
+{%- assign lx_pv = p.last | append: '' | strip -%}
+{%- assign lx_skip = false -%}
+{%- if lx_pv == '' or lx_pk1 == '_' -%}{%- assign lx_skip = true -%}{%- endif -%}
+{%- if lx_pkd == 'front mockup' or lx_pkd == 'back mockup' or lx_pkd == 'expected bundle discount' -%}{%- assign lx_skip = true -%}{%- endif -%}
+{%- if lx_pkd contains 'position' -%}{%- assign lx_skip = true -%}{%- endif -%}
+{%- unless lx_skip -%}
+{%- assign lx_pv2 = lx_pv | slice: 0, 2 -%}
+{%- if lx_pv2 == '//' -%}{%- assign lx_pv = lx_pv | prepend: 'https:' -%}{%- endif -%}
+{%- assign lx_pv8 = lx_pv | slice: 0, 8 -%}
+{%- assign lx_pv7 = lx_pv | slice: 0, 7 -%}
+<tr>
+<td style="padding:2px 0;font-family:[[font]];font-size:13px;line-height:19px;color:[[c.muted]];text-align:[[start]];"><span style="font-weight:700;color:[[c.cream]];">[[> prop_label]]:&nbsp;</span>
+{%- if lx_pv8 == 'https://' or lx_pv7 == 'http://' -%}<a href="{{ lx_pv | escape }}" target="_blank" style="color:[[c.lime]];text-decoration:underline;">[[view_file]]</a>
+{%- elsif lx_pkd == 'notes' -%}{%- assign lx_dir_text = lx_pv -%}[[> dir_of]]<span dir="{{ lx_tdir }}">{{ lx_pv | escape | newline_to_br }}</span>
+{%- else -%}{%- assign lx_val = lx_pv -%}{%- capture lx_mapped -%}[[> value_map]]{%- endcapture -%}{%- assign lx_dir_text = lx_mapped -%}[[> dir_of]]<span dir="{{ lx_tdir }}">{{ lx_mapped }}</span>
+{%- endif -%}
+</td>
+</tr>
+{%- endunless -%}
+{%- endfor -%}
+{%- endcapture -%}
+{%- assign lx_props = lx_props | strip -%}
+{%- if lx_props != '' -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="margin-top:8px;">
+{{ lx_props }}
+</table>
+{%- endif -%}
