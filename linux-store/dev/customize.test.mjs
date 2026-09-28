@@ -157,3 +157,27 @@ test('swatch colour and configured variant value are bound to their actual datas
   assert.match(js, /btn\.dataset\.czVariantKey/);
   assert.doesNotMatch(js, /czHex|czVariantValue/);
 });
+
+test('placement presets stay inside the print area and put the pocket on the wearer\'s left chest', () => {
+  const { placementFor } = window.LINUX.customizeModel;
+  const area = [50, 45, 52, 52];
+  const pocket = placementFor(area, 'front', 'pocket');
+  assert.ok(pocket.x > 50, 'pocket sits on the viewer\'s right');
+  assert.ok(pocket.y < 45 && pocket.s < 20);
+  for (const [side, name] of [['front', 'center'], ['front', 'full'], ['back', 'upper'], ['back', 'middle'], ['back', 'full']]) {
+    const p = placementFor(area, side, name);
+    assert.ok(p.x >= 24 && p.x <= 76 && p.y >= 19 && p.y <= 71, `${side}/${name} inside the print area`);
+    assert.ok(p.s > 10 && p.s <= 48, `${side}/${name} scale`);
+  }
+  assert.equal(placementFor(area, 'back', 'pocket'), null);
+});
+
+test('print quality converts the on-garment width to DPI', () => {
+  const { printQuality } = window.LINUX.customizeModel;
+  // s = 52 / .66 fills the whole 36 cm print area: 2126 px ≈ 150 DPI
+  const full = printQuality(2126, 52 / 0.66, 52, 36);
+  assert.ok(Math.abs(full.cm - 36) < 0.01);
+  assert.equal(full.level, 'great');
+  assert.equal(printQuality(1200, 52 / 0.66, 52, 36).level, 'low');
+  assert.equal(printQuality(1600, 52 / 0.66, 52, 36).level, 'ok');
+});

@@ -128,6 +128,8 @@ for (const side of ['Front', 'Back']) {
 
 browser('fill', '[data-drawer="cart"] [data-discount-input]', 'LINUX10');
 click('[data-drawer="cart"] [data-discount-apply]');
+// The discount is applied asynchronously; give the request time to land before asserting.
+for (let tries = 0; tries < 20 && cart().total_price !== 382050; tries++) browser('wait', '200');
 assert.equal(cart().total_price, 382050);
 assert.equal(cart().discount_codes[0].applicable, true);
 browser('fill', '[data-drawer="cart"] [data-discount-input]', 'NOT-A-REAL-CODE');

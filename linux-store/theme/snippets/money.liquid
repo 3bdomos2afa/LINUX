@@ -1,6 +1,6 @@
 {%- comment -%}
   Localised price. Arabic pages print amount with Arabic-Indic numerals
-  and the theme's own currency word. English pages use Shopify default.
+  and the theme's own currency word. English pages use the shop's format without trailing .00 (LE 699, LE 1,050.50).
   Usage: {% render 'money', amount: variant.price %}
 {%- endcomment -%}
 {%- if request.locale.iso_code == 'ar' -%}
@@ -11,5 +11,5 @@
   {%- assign cur = settings.currency_ar | default: 'جنيه' -%}
   {{ a }} {{ cur }}
 {%- else -%}
-  {{ amount | money }}
+  {{ amount | money_without_trailing_zeros }}
 {%- endif -%}

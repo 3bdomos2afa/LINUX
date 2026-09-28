@@ -74,7 +74,7 @@
                 {%- if item.properties['Bundle offer'] != blank -%}
                   <div class="cart-line__bundle">
                     <span class="cart-line__bundle-icon">{% render 'icon', name: 'tag', px: 14 %}</span>
-                    <span><strong>{% if request.locale.iso_code contains 'ar' %}عرض الباندل{% else %}Bundle offer{% endif %}</strong><small>{{ item.properties['Bundle offer'] | escape }}</small>{%- if item.properties['Expected bundle discount'] != blank -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%} {{ expected_discount | strip | escape }}</small>{%- endif -%}</span>
+                    <span><strong>{{ 'cart.bundle_offer' | t }}</strong><small>{{ item.properties['Bundle offer'] | escape }}</small>{%- if item.properties['Expected bundle discount'] != blank -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%} {{ expected_discount | strip | escape }}</small>{%- endif -%}</span>
                   </div>
                 {%- endif -%}
                 {%- assign prop_count = 0 -%}

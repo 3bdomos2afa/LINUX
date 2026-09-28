@@ -1,5 +1,27 @@
 # LINUX Liquid Glass — Changelog
 
+## 4.2.0 — خطوط عربي جديدة · تعريب كامل · دفع محلي · استوديو أقوى · موكب جديد · صيف وشتا (2026-09-28)
+
+**العربي أولاً 👇 / English below**
+
+### اللي اتغيّر
+- **خط عربي ترند**: عناوين العربي بقت بخط **رقّاص** (رقعة أفيشات السينما المصرية القديمة)، والنصوص بخط **Alan Sans**، وخط إكسنت **Badeen Display** للشارات. إعداد جديد **Typography** تختار منه خط كل دور لوحده (عناوين/نصوص عربي وإنجليزي + إكسنت) — كله رخصة OFL.
+- **تعريب كامل**: ٢٣٥ نص اتكتبوا من جديد بمصري طبيعي، بقاموس ثابت (الشنطة، طلب، كولكشن، باندل، استوديو التصميم…)، والرسايل اللي كانت مكتوبة جوه الكود (أخطاء الشنطة، الباندل) بقت بتتعدّل من Shopify. التيشيرت بقى يتترجم، و«٢٤ ساعة» بدل «٢٤ ساعات»، والأسعار الإنجليزي من غير «.00».
+- **الدفع**: شعار فيزا/ماستركارد اتشال (بقى اختيار مقفول). الشارات: الدفع عند الاستلام، إنستاباي، فودافون كاش (ولوجو رسمي اختياري لكل واحد). صندوق «إزاي تدفع؟» في الشنطة بنصوص تتعدّل وبياخد عنوان إنستاباي ورقم فودافون كاش من الإعدادات.
+- **الباندل من أي منتج**: العميل يختار باقي القطع من أي منتج في المتجر (أو كولكشن تحدده)، مع استبعاد منتج التخصيص وأي منتج عليه تاج `no-bundle`.
+- **استوديو التصميم**: الكتابة بدل الصورة (٣ أشكال خط + ألوان + أي لون)، أزرار مكان التصميم (نص الصدر، جيب الصدر، الصدر كله، أعلى/نص/كل الضهر)، فحص جودة الصورة بالـDPI على المقاس الحقيقي، شريط إجمالي + «ضيف للشنطة» ثابت على الموبايل، ومكان وكلام التصميم بيوصلوا في الطلب.
+- **موكب جديد احترافي**: ١٦ صورة «جوست مانيكان» لهودي وتيشيرت أوفر سايز، قدام وورا، بـ٤ ألوان متاخدة من ألوان منتجاتك الحقيقية — من صور ستوك مرخّصة (Pexels / Unsplash) اتشال منها الموديل واتلوّنت. مناطق الطباعة اتظبطت على الصور الجديدة.
+- **الرئيسية**: بعد الهيرو على طول **الكولكشن الصيفي** بشمس لابسة نضارة وحر وموج وبطريق على سكيت، وتحته **الكولكشن الشتوي** براجل تلج بكوفية ليموني وتلج بيقع ٣ طبقات — كل النصوص والألوان والأنيميشن بتتعدّل من المحرر، والأنيميشن بيقف لما السكشن يبعد عن الشاشة.
+
+### English
+- **Typography**: Arabic headings in **Rakkas** (Egyptian film-poster Ruqaa), Arabic text in **Alan Sans**, **Badeen Display** accent; new *Typography* settings pick each role independently (Arabic/English headings and text + accent). All SIL OFL, unhinted, split per script; the previous fonts stay as “licence needed” choices.
+- **Localization**: 235 Arabic strings rewritten in natural Egyptian Arabic with one glossary; hard-coded bag/bundle messages moved to locale keys; “T-Shirt” translates; Arabic 11+ counts take the singular (٢٤ ساعة); English prices drop the trailing .00; English copy no longer promises card payments.
+- **Payments**: card logos off by default; cash on delivery, InstaPay and Vodafone Cash badges (optional official photoofferdogs); an editable “How to pay” box in the bag using the InstaPay address / Vodafone Cash number settings.
+- **Bundle from any product**: *Other pieces can be* any store product (or a chosen collection), a picked list, or this product only; the Customize product and `no-bundle` products are excluded.
+- **Customize studio**: text designs rendered to a transparent PNG in the brand fonts, placement presets, a DPI print-quality check against real print widths per garment/side, a sticky total + add-to-bag bar on phones; text and placement travel with the order as line-item properties.
+- **Mockups**: 16 ghost-mannequin oversized hoodie/tee images (front and back × black, white, burgundy, beige) derived from Pexels/Unsplash stock (model removed, recoloured from the real garment colours); print areas re-fitted. Sources and licences in `licenses/mockups/SOURCES.md`.
+- **Home page**: new *Seasonal collection* section used twice right after the hero — summer (sun in sunglasses, heat haze, sea, skating penguin) and winter (snowman with a lime scarf, three layers of CSS-only falling snow); every text, colour and effect is editable, animations pause off-screen and respect reduced motion. The old collection bento is kept but disabled.
+
 ## 4.1.0 — Identity 2.0 · studio photos · new fonts · faster (2026-09-28)
 
 **العربي أولاً 👇 / English below**

@@ -4,7 +4,7 @@
 
 ## English
 
-**Fonts are cleared for the default presets.** Street and Bubble use SIL OFL fonts; only the optional Classic preset (Thmanyah / Froople / Mochi) still needs written permission. Passing the local checks is not proof of a successful Shopify import, live file upload or checkout. Keep the theme unpublished while completing the store configuration and live-preview checks below.
+**The default fonts are cleared.** Rakkas, Alan Sans, Unbounded, Fustat and Badeen Display are SIL OFL; only the optional Thmanyah / Froople / Mochi choices (marked “licence needed”) still need written permission. Passing the local checks is not proof of a successful Shopify import, live file upload or checkout. Keep the theme unpublished while completing the store configuration and live-preview checks below.
 
 **What's in this folder**
 - `linux-liquid-glass-theme.zip` — the Shopify theme. This is the only file you upload.
@@ -12,6 +12,7 @@
 - `brand-assets/` — penguin mascots, wordmark, favicons, editorial images used by the theme.
 - `LINUX-product-photos.zip` (next to the delivery zip) — the new studio product photos (one backdrop, 4:5), dark variants, transparent cutouts and collection covers. Upload `01.webp`, `02.webp`… to each product in order; see `photos/README.md` inside.
 - `licenses/fonts/` — SIL OFL licences of the default fonts.
+- `licenses/mockups/SOURCES.md` — sources and licences of the mockup photos (Pexels / Unsplash).
 
 **Install (5 minutes)**
 1. Shopify admin → **Online Store → Themes → Add theme → Upload zip file** → pick `linux-liquid-glass-theme.zip`.
@@ -68,19 +69,21 @@ photo; changing the shared picker cannot replace an active per-colour override.
 
 **Customize studio — order and touch behavior**: shoppers can upload distinct front/back artwork; each side's position, scale and rotation are recorded. Every piece keeps its selected size. Identical variant-and-size pieces are grouped into one order line with `Size` and a `Piece` list; design files, generated JPEG mockups and placement properties travel with the line. Outside Edit/Move design, the canvas declares CSS `touch-action: pan-y pinch-zoom`; Edit/Move enables dragging. Automated checks verify no wheel-event hijack, but this does not establish touch behavior on a physical phone.
 
-**Typography (4.1)** — Theme settings → Appearance → **Font style**:
-- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
-- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
-- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
+**Typography (4.2)** — Theme settings → **Typography**: one font per role and language:
+- **Arabic headings**: **Rakkas** — drawn from the Ruqaa lettering of 1950s–60s Egyptian film posters (default). Alternatives: **Alyamama** (modern Naskh, close to the Thmanyah feel), Alexandria, Baloo Bhaijaan 2, Badeen Display.
+- **Arabic text**: **Alan Sans** (default) — legible down to 14 px. Alternatives: Fustat, Alyamama, Baloo Bhaijaan 2.
+- **English**: **Unbounded** headings and **Fustat** text, as before (alternatives: Bagel Fat One, Rakkas, Alexandria / Alan Sans, Baloo).
+- **Accent**: **Badeen Display** for stickers, seasonal badges and the Studio's “Fun” text style. Its digits are Latin-shaped, so digits and separators automatically come from the next font in the stack.
+- The previous Thmanyah / Froople / Mochi fonts remain as choices marked “licence needed”.
 
-Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes. Rendering was checked in Chrome only; Safari and Windows (where unhinted text can look slightly softer at small sizes) are not checked yet.
+All of these (defaults and alternatives) are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and pinned source commits in `licenses/fonts/`), cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, and a page preloads only its own language's files (the two default Arabic files: Rakkas ≈ 20 KB + Alan Sans ≈ 25 KB). The subsets are unhinted on purpose (the original Alexandria hinting hides the dots of a final ي), and the final-ي dots were checked in every weight. Rendering was checked in Chrome only; Safari and Windows are not checked yet.
 
-The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission. Two practical gaps as well: Mochi Tubby's own name table reads “All rights reserved”, and Thmanyah has no Arabic thousands separator (٬), so figures that use it fall back to a system font.
+The previous fonts are still not cleared: the Mochi archive says *Free for Personal Use* and its name table reads “All rights reserved”, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding (it also lacks the Arabic thousands separator ٬). Choose them only with written permission.
 
 **New in 4.0 — check before publishing**
 - Discount codes shown by the theme (`LINUX10` in the announcement, offer spotlight and popup) must exist in **Discounts**; change or clear them in the editor otherwise.
 - Assign the **page.faq** template to your `faq` page (Online Store → Pages → faq → Theme template).
-- Payments: Theme settings → **Payments** — leave on only the methods you really accept.
+- Payments: Theme settings → **Payments** — cash on delivery, InstaPay and Vodafone Cash are on; card logos are off. Add the same methods at checkout: Shopify admin → **Settings → Payments** → *Manual payment methods*: pick **Cash on Delivery (COD)** from the suggested methods, then **Create custom payment method** twice — “InstaPay” and “Vodafone Cash” — with *Payment instructions* such as “Transfer to linux@instapay / 010… and send the receipt on WhatsApp”. Manual payments arrive as *unpaid* orders; mark them paid once the money is in ([Shopify Help](https://help.shopify.com/en/manual/payments/manual-payments)). The InstaPay address / Vodafone Cash number fields in the theme only feed the “How to pay” box in the bag.
 - The promo popup opens after 12 s / on exit, once every 7 days; turn it off under Footer → Promo popup if you prefer.
 - Email templates: `notifications/README.md` (paste per notification, then *Send test email*).
 
@@ -101,7 +104,7 @@ A missing menu shows the English link titles; a missing page gives a 404 on that
 
 ## العربي
 
-**الخطوط الافتراضية بقت مرخّصة.** إعدادات Street وBubble خطوطها رخصة SIL OFL؛ الإعداد الاختياري Classic بس (Thmanyah / Froople / Mochi) لسه محتاج موافقة مكتوبة. نجاح الفحوص المحلية مش إثبات إن الاستيراد أو رفع الملفات أو الدفع نجح على Shopify الحقيقي؛ سيب الثيم غير منشور لحد ما تراجع إعدادات المتجر وتجربة المعاينة الفعلية.
+**الخطوط الافتراضية مرخّصة.** رقّاص وAlan Sans وUnbounded وفسطاط وBadeen Display كلهم رخصة SIL OFL؛ الاختيارات القديمة بس (Thmanyah / Froople / Mochi — مكتوب جنبها «licence needed») لسه محتاجة موافقة مكتوبة. نجاح الفحوص المحلية مش إثبات إن الاستيراد أو رفع الملفات أو الدفع نجح على Shopify الحقيقي؛ سيب الثيم غير منشور لحد ما تراجع إعدادات المتجر وتجربة المعاينة الفعلية.
 
 **اللي في الفولدر**
 - `linux-liquid-glass-theme.zip` — الثيم نفسه. ده الملف الوحيد اللي بترفعه.
@@ -109,6 +112,7 @@ A missing menu shows the English link titles; a missing page gives a 404 on that
 - `brand-assets/` — البطاريق، اللوجو، الفافيكون، وصور البراند اللي الثيم بيستخدمها.
 - `LINUX-product-photos.zip` (جنب ملف التسليم) — صور المنتجات الجديدة بخلفية استوديو واحدة ومقاس ٤:٥، ونسخ غامقة، وقص شفاف، وأغلفة المجموعات. ارفع `01.webp`، `02.webp`… لكل منتج بالترتيب؛ التعليمات في `photos/README.md`.
 - `licenses/fonts/` — رخص SIL OFL للخطوط الافتراضية.
+- `licenses/mockups/SOURCES.md` — مصدر ورخصة صور الموكب (Pexels / Unsplash).
 
 **التركيب (٥ دقايق)**
 1. لوحة تحكم Shopify ← **Online Store ← Themes ← Add theme ← Upload zip file** ← اختار `linux-liquid-glass-theme.zip`.
@@ -159,19 +163,21 @@ Shopify Discounts، لأن العداد مش هو اللي بيوقف الخصم
 
 **الطلب واللمس**: العميل يرفع تصميم منفصل للقدام والورا؛ مكان كل تصميم وحجمه ودورانه بيتسجلوا. مقاس كل قطعة محفوظ. القطع اللي لها نفس الفاريانت والمقاس بتتجمع في سطر كمية واحد ومعاه خاصيتا `Size` و`Piece` لأرقام القطع، بدل سطر منفصل وملفات مكررة لكل قطعة. خارج وضع Edit/Move، لوحة القطعة بتعلن CSS `touch-action: pan-y pinch-zoom`؛ وضع Edit/Move بيفعّل السحب. الاختبارات الآلية بتتأكد إن عجلة الماوس مش محجوزة، لكنها مش اختبار للمس على موبايل فعلي.
 
-**الخطوط (4.1)** — Theme settings ← Appearance ← **Font style**:
-- **Street** (الافتراضي): عناوين العربي بخط **الإسكندرية (Alexandria)**، والنصوص العربي والإنجليزي بخط **فسطاط (Fustat)** — الاتنين من تصميم المصمم المصري محمد جابر — وعناوين الإنجليزي بخط **Unbounded**.
-- **Bubble**: خط **Baloo Bhaijaan 2** للنصوص عربي وإنجليزي، و**Bagel Fat One** لعناوين الإنجليزي — الاختيار المدوّر المرح.
-- **Classic**: الخطوط القديمة (Thmanyah Sans / Froople / Mochi Tubby).
+**الخطوط (4.2)** — Theme settings ← **Typography**: خط لكل دور ولكل لغة:
+- **عناوين العربي**: **رقّاص (Rakkas)** — مأخوذ من خط الرقعة في أفيشات السينما المصرية في الخمسينات والستينات (الافتراضي). بدائل: **اليمامة (Alyamama)** نسخ حديث قريب من روح ثمانية، الإسكندرية، Baloo Bhaijaan 2، وBadeen Display.
+- **نصوص العربي**: **Alan Sans** (الافتراضي) — واضح حتى في ١٤ بكسل. بدائل: فسطاط، اليمامة، Baloo Bhaijaan 2.
+- **الإنجليزي**: عناوين **Unbounded** ونصوص **Fustat** زي ما هم (بدائل: Bagel Fat One، Rakkas، Alexandria / Alan Sans، Baloo).
+- **خط الإكسنت**: **Badeen Display** للشارات والبادچات الموسمية ولشكل «مرح» في استوديو التصميم. أرقامه شكلها لاتيني، فالأرقام والفواصل بتيجي أوتوماتيك من الخط اللي بعده.
+- الخطوط القديمة (Thmanyah / Froople / Mochi) لسه موجودة كاختيارات مكتوب جنبها «licence needed».
 
-خطوط Street وBubble رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص ومصدرها في `licenses/fonts/`)، يعني مسموح استخدامها في المتجر ورفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني، والصفحة بتنزّل اللي محتاجاه بس (على الصفحة الرئيسية: الإنجليزي ≈ ٨١ كيلو خطوط والعربي ≈ ١٣٠ كيلو، بدل ٢٠٦ و٢٢٨ كيلو قبل كده). الملفات من غير hinting عن قصد، لأن الـ hinting الأصلي في خط الإسكندرية كان بيخفي نقط الياء الأخيرة في بعض المقاسات. الرندر اتجرّب على كروم بس؛ سفاري وويندوز لسه (على ويندوز الخط من غير hinting ممكن يبان أنعم شوية في المقاسات الصغيرة).
+كل الخطوط دي (الافتراضي والبدائل) رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص والمصدر في `licenses/fonts/`)، يعني مسموح تستخدمها في المتجر وترفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني بـ`unicode-range`، والصفحة بتحمّل بس خطوط لغتها (ملفين العربي الافتراضيين: رقّاص ≈ ٢٠ ك.ب + Alan Sans ≈ ٢٥ ك.ب). الملفات من غير hinting عن قصد (الـ hinting الأصلي في الإسكندرية كان بيخفي نقط الياء الأخيرة)، واتأكدنا إن نقط الياء ظاهرة في كل الأوزان. الرندر اتجرّب على كروم بس؛ سفاري وويندوز لسه.
 
-خطوط **Classic** لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب. ما تستخدمش Classic غير بموافقة مكتوبة. وكمان: ملف Mochi Tubby نفسه مكتوب فيه «All rights reserved»، وخط Thmanyah مافيهوش فاصل الآلاف العربي (٬)، فالأرقام اللي فيها الفاصل ده بتظهر بخط النظام.
+الخطوط القديمة لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي» وملفه نفسه مكتوب فيه «All rights reserved»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب (وكمان مافيهوش فاصل الآلاف العربي ٬). ما تختارهمش غير بموافقة مكتوبة.
 
 **جديد في 4.0 — راجعه قبل النشر**
 - أي كود الثيم بيعرضه (`LINUX10` في الإعلانات والعرض والنافذة) لازم يكون موجود في **Discounts**، وإلا غيّره أو امسحه من المحرر.
 - اختار القالب **page.faq** لصفحة `faq` (Online Store ← Pages ← faq ← Theme template).
-- الدفع: Theme settings ← **Payments** — سيب شغّال بس الطرق اللي بتقبلها فعلاً.
+- الدفع: Theme settings ← **Payments** — الدفع عند الاستلام وإنستاباي وفودافون كاش شغّالين، وشعارات الكروت (فيزا وماستركارد) مقفولة. ولازم تضيف نفس الطرق في صفحة الدفع: من أدمن Shopify ← **Settings ← Payments** ← *Manual payment methods*: اختار **Cash on Delivery (COD)** من الطرق المقترحة، وبعدين **Create custom payment method** مرتين — «InstaPay» و«Vodafone Cash» — واكتب في *Payment instructions* مثلاً «حوّل على linux@instapay / 010… وابعت صورة التحويل على واتساب». الطلبات دي بتوصل *unpaid*، وتعلّمها مدفوعة لما الفلوس توصل ([Shopify Help](https://help.shopify.com/en/manual/payments/manual-payments)). خانات عنوان إنستاباي ورقم فودافون كاش في الثيم بتظهر بس في «إزاي تدفع؟» جوه الشنطة.
 - نافذة الترحيب بتفتح بعد ١٢ ثانية أو عند الخروج، مرة كل ٧ أيام؛ تقدر تقفلها من Footer ← Promo popup.
 - قوالب الإيميلات: `notifications/README.md` (انسخ كل قالب وبعدين *Send test email*).
 

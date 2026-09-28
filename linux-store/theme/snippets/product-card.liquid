@@ -57,6 +57,8 @@
 {%- capture localized_title -%}{% render 'product-title', title: product.title %}{%- endcapture -%}
 {%- assign localized_title = localized_title | strip -%}
 {%- assign image_alt = product.featured_image.alt | default: localized_title -%}
+{%- comment -%} Catalog alts that only repeat the English title read as English on Arabic pages. {%- endcomment -%}
+{%- if request.locale.iso_code == 'ar' and image_alt contains product.title -%}{%- assign image_alt = localized_title -%}{%- endif -%}
 <article class="card glass glass--hover" data-tilt data-product-card data-handle="{{ product.handle }}" data-reveal style="--i: {{ index | default: 0 | modulo: 4 }}">
   <div class="card__media">
     <a href="{{ url }}" tabindex="-1" aria-hidden="true">

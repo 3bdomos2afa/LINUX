@@ -7,6 +7,7 @@
   const family = (name) => rootStyle.getPropertyValue(name).split(',')[0].trim().replaceAll('"', '');
   const headingFont = family('--font-display');
   const bodyFont = family('--font-body');
+  const accentFont = family('--font-accent');
   const headingWeight = rootStyle.getPropertyValue('--w-heading').trim();
   const failures = [];
   const check = (condition, message) => { if (!condition) failures.push(message); };
@@ -56,7 +57,7 @@
     for (const element of document.body.querySelectorAll('*')) {
       if (element.closest('svg,script,style') || !visible(element)) continue;
       if (![...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim())) continue;
-      check([bodyFont, headingFont].includes(firstFont(getComputedStyle(element))), `Arabic text font: ${element.className || element.tagName}`);
+      check([bodyFont, headingFont, accentFont].includes(firstFont(getComputedStyle(element))), `Arabic text font: ${element.className || element.tagName}`);
     }
     const canvas = document.createElement('canvas').getContext('2d');
     const widths = (family) => {

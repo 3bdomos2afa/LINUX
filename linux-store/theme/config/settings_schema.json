@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "4.1.0",
+    "theme_version": "4.2.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -147,27 +147,6 @@
         "content": "Arabic uses Thmanyah Sans throughout, including numbers. English uses Froople headings and Mochi Tubby body text. Brand fonts are self-hosted and always enabled."
       },
       {
-        "type": "select",
-        "id": "font_preset",
-        "label": "Font style",
-        "default": "street",
-        "options": [
-          {
-            "value": "street",
-            "label": "Street — Alexandria · Fustat · Unbounded"
-          },
-          {
-            "value": "bubble",
-            "label": "Bubble — Baloo Bhaijaan 2 · Bagel Fat One"
-          },
-          {
-            "value": "classic",
-            "label": "Classic — Thmanyah · Froople · Mochi (licence needed)"
-          }
-        ],
-        "info": "Street and Bubble are open-source (SIL OFL) and cleared for your store. Classic uses fonts whose web licences are not cleared."
-      },
-      {
         "type": "range",
         "id": "type_scale",
         "label": "Text size",
@@ -186,6 +165,163 @@
         "step": 5,
         "unit": "%",
         "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "One font per role and language. Fonts marked \"licence needed\" are the previous set: use them only with the foundry's written permission. Every other font is SIL OFL (licenses/fonts)."
+      },
+      {
+        "type": "header",
+        "content": "Arabic / العربي"
+      },
+      {
+        "type": "select",
+        "id": "font_ar_heading",
+        "label": "Arabic headings",
+        "default": "rakkas",
+        "options": [
+          {
+            "value": "rakkas",
+            "label": "Rakkas — Egyptian film-poster lettering (default)"
+          },
+          {
+            "value": "alyamama",
+            "label": "Alyamama — modern Naskh, Thmanyah-like"
+          },
+          {
+            "value": "alexandria",
+            "label": "Alexandria — geometric"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2 — rounded"
+          },
+          {
+            "value": "badeen",
+            "label": "Badeen Display — bold poster"
+          },
+          {
+            "value": "thmanyah",
+            "label": "Thmanyah Sans — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "font_ar_body",
+        "label": "Arabic text",
+        "default": "alan",
+        "options": [
+          {
+            "value": "alan",
+            "label": "Alan Sans (default)"
+          },
+          {
+            "value": "fustat",
+            "label": "Fustat"
+          },
+          {
+            "value": "alyamama",
+            "label": "Alyamama"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "thmanyah",
+            "label": "Thmanyah Sans — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "English"
+      },
+      {
+        "type": "select",
+        "id": "font_en_heading",
+        "label": "English headings",
+        "default": "unbounded",
+        "options": [
+          {
+            "value": "unbounded",
+            "label": "Unbounded — wide (default)"
+          },
+          {
+            "value": "bagel",
+            "label": "Bagel Fat One — bubbly"
+          },
+          {
+            "value": "rakkas",
+            "label": "Rakkas"
+          },
+          {
+            "value": "alexandria",
+            "label": "Alexandria"
+          },
+          {
+            "value": "froople",
+            "label": "Froople — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "font_en_body",
+        "label": "English text",
+        "default": "fustat",
+        "options": [
+          {
+            "value": "fustat",
+            "label": "Fustat (default)"
+          },
+          {
+            "value": "alan",
+            "label": "Alan Sans"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "mochi",
+            "label": "Mochi Tubby — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Accent"
+      },
+      {
+        "type": "select",
+        "id": "font_accent",
+        "label": "Accent font (stickers, seasonal badges, the Studio's \"Fun\" text)",
+        "default": "badeen",
+        "options": [
+          {
+            "value": "badeen",
+            "label": "Badeen Display (default)"
+          },
+          {
+            "value": "rakkas",
+            "label": "Rakkas"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "none",
+            "label": "None — use the heading font"
+          }
+        ]
       }
     ]
   },
@@ -462,7 +598,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Card icons come from your payment provider automatically. Switch on the local methods you actually accept — they show in the footer and under the checkout button."
+        "content": "Badges show in the footer and under the checkout button. Turn on only what you really accept, then add the same methods in Shopify → Settings → Payments → Manual payment methods (see INSTALL.md)."
       },
       {
         "type": "checkbox",
@@ -474,12 +610,41 @@
         "type": "checkbox",
         "id": "pay_instapay",
         "label": "InstaPay",
-        "default": false
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_instapay_address",
+        "label": "InstaPay address or phone (optional)",
+        "info": "e.g. linux@instapay — shown in \"How to pay\". Blank = \"we'll send the details on WhatsApp\"."
+      },
+      {
+        "type": "image_picker",
+        "id": "pay_instapay_logo",
+        "label": "InstaPay logo (optional)",
+        "info": "Upload the official mark if you have it; blank = LINUX badge."
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_vodafone",
+        "label": "Vodafone Cash",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_vodafone_number",
+        "label": "Vodafone Cash number (optional)",
+        "info": "Shown in \"How to pay\". Blank = \"we'll send the details on WhatsApp\"."
+      },
+      {
+        "type": "image_picker",
+        "id": "pay_vodafone_logo",
+        "label": "Vodafone Cash logo (optional)"
       },
       {
         "type": "checkbox",
         "id": "pay_wallet",
-        "label": "Mobile wallets (Vodafone Cash, etc.)",
+        "label": "Other mobile wallets",
         "default": false
       },
       {
@@ -496,9 +661,35 @@
       },
       {
         "type": "checkbox",
-        "id": "pay_card_badge",
-        "label": "Show a \"Cards\" badge when no card icons are available",
+        "id": "pay_card_icons",
+        "label": "Show card logos (Visa, Mastercard…)",
+        "default": false,
+        "info": "Only if your payment provider really takes cards. The logos come from the provider automatically."
+      },
+      {
+        "type": "header",
+        "content": "How to pay"
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_howto",
+        "label": "Show \"How to pay\" in the bag",
         "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_cod_note",
+        "label": "Cash on delivery note (blank = translated)"
+      },
+      {
+        "type": "text",
+        "id": "pay_instapay_note",
+        "label": "InstaPay note (blank = translated)"
+      },
+      {
+        "type": "text",
+        "id": "pay_vodafone_note",
+        "label": "Vodafone Cash note (blank = translated)"
       }
     ]
   },

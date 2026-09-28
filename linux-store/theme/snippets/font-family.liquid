@@ -1,0 +1,101 @@
+{%- comment -%}
+  One self-hosted brand font family, split per script with unicode-range so a
+  page only downloads the script it shows. All families except Thmanyah, Froople
+  and Mochi Tubby are SIL OFL (licenses/fonts). Subsets are unhinted on purpose.
+  Params: key (family id from Theme settings → Typography), mode:
+    name        the quoted CSS family name
+    face        its @font-face rules
+    preload-ar  <link rel="preload"> for the Arabic file
+    preload-la  <link rel="preload"> for the Latin file
+{%- endcomment -%}
+{%- liquid
+  assign ar_range = 'U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F'
+  assign la_range = 'U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-200B, U+2010-206F, U+20AC, U+2122, U+2190-2199, U+2212'
+  assign fam = ''
+  assign ar_file = ''
+  assign la_file = ''
+  assign weights = '400'
+  case key
+    when 'rakkas'
+      assign fam = 'Rakkas'
+      assign ar_file = 'f-rakkas-ar.woff2'
+      assign la_file = 'f-rakkas-la.woff2'
+      assign weights = '100 900'
+    when 'alyamama'
+      assign fam = 'Alyamama'
+      assign ar_file = 'f-alyamama-ar.woff2'
+      assign la_file = 'f-alyamama-la.woff2'
+      assign weights = '300 900'
+    when 'alexandria'
+      assign fam = 'Alexandria'
+      assign ar_file = 'f-alexandria-ar.woff2'
+      assign la_file = 'f-alexandria-la.woff2'
+      assign weights = '100 900'
+    when 'baloo'
+      assign fam = 'Baloo Bhaijaan 2'
+      assign ar_file = 'f-baloo-ar.woff2'
+      assign la_file = 'f-baloo-la.woff2'
+      assign weights = '400 800'
+    when 'alan'
+      assign fam = 'Alan Sans'
+      assign ar_file = 'f-alan-ar.woff2'
+      assign la_file = 'f-alan-la.woff2'
+      assign weights = '300 900'
+    when 'fustat'
+      assign fam = 'Fustat'
+      assign ar_file = 'f-fustat-ar.woff2'
+      assign la_file = 'f-fustat-la.woff2'
+      assign weights = '200 800'
+    when 'badeen'
+      comment
+        Badeen draws ٠–٩ with Latin shapes: digits and separators are left out
+        of its range so they come from the next family in the stack.
+      endcomment
+      assign fam = 'Badeen Display'
+      assign ar_file = 'f-badeen-ar.woff2'
+      assign la_file = 'f-badeen-la.woff2'
+      assign weights = '100 900'
+      assign ar_range = 'U+0600-065F, U+066D-06EF, U+06FA-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F'
+    when 'unbounded'
+      assign fam = 'Unbounded'
+      assign la_file = 'f-unbounded-la.woff2'
+      assign weights = '800'
+    when 'bagel'
+      assign fam = 'Bagel Fat One'
+      assign la_file = 'f-bagel-la.woff2'
+      assign weights = '100 900'
+    when 'thmanyah'
+      assign fam = 'Thmanyah Sans'
+    when 'froople'
+      assign fam = 'Froople'
+    when 'mochi'
+      assign fam = 'Mochi Tubby'
+  endcase
+-%}
+{%- case mode -%}
+  {%- when 'name' -%}"{{ fam }}"
+  {%- when 'preload-ar' -%}
+    {%- if key == 'thmanyah' -%}{{ 'thmanyahsans-Regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- elsif ar_file != blank -%}{{ ar_file | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}{%- endif -%}
+  {%- when 'preload-la' -%}
+    {%- if key == 'froople' -%}{{ 'froople.otf' | asset_url | preload_tag: as: 'font', type: 'font/opentype', crossorigin: 'anonymous' }}
+    {%- elsif key == 'mochi' -%}{{ 'mochi-tubby.ttf' | asset_url | preload_tag: as: 'font', type: 'font/ttf', crossorigin: 'anonymous' }}
+    {%- elsif la_file != blank -%}{{ la_file | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}{%- endif -%}
+  {%- else -%}
+    {%- if key == 'thmanyah' %}
+  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("{{ 'thmanyahsans-Regular.woff2' | asset_url }}") format("woff2"); }
+  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("{{ 'thmanyahsans-Medium.woff2' | asset_url }}") format("woff2"); }
+  @font-face { font-family: "Thmanyah Sans"; font-style: normal; font-weight: 900; font-display: swap; src: url("{{ 'thmanyahsans-Black.woff2' | asset_url }}") format("woff2"); }
+    {%- elsif key == 'froople' %}
+  @font-face { font-family: "Froople"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'froople.otf' | asset_url }}") format("opentype"); }
+    {%- elsif key == 'mochi' %}
+  @font-face { font-family: "Mochi Tubby"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("{{ 'mochi-tubby.ttf' | asset_url }}") format("truetype"); }
+    {%- else -%}
+      {%- if ar_file != blank %}
+  @font-face { font-family: "{{ fam }}"; font-style: normal; font-weight: {{ weights }}; font-display: swap; src: url("{{ ar_file | asset_url }}") format("woff2"); unicode-range: {{ ar_range }}; }
+      {%- endif -%}
+      {%- if la_file != blank %}
+  @font-face { font-family: "{{ fam }}"; font-style: normal; font-weight: {{ weights }}; font-display: swap; src: url("{{ la_file | asset_url }}") format("woff2"); unicode-range: {{ la_range }}; }
+      {%- endif -%}
+    {%- endif -%}
+{%- endcase -%}

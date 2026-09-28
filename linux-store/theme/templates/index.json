@@ -14,6 +14,26 @@
         "show_trust": true
       }
     },
+    "summer": {
+      "type": "seasonal-collection",
+      "settings": {
+        "season": "summer",
+        "collection": "summer-collection",
+        "art_side": "start",
+        "space_top": 40,
+        "space_bottom": 12
+      }
+    },
+    "winter": {
+      "type": "seasonal-collection",
+      "settings": {
+        "season": "winter",
+        "collection": "winter-collection",
+        "art_side": "end",
+        "space_top": 12,
+        "space_bottom": 40
+      }
+    },
     "marquee": {
       "type": "marquee",
       "blocks": {
@@ -70,6 +90,7 @@
     },
     "collections": {
       "type": "featured-collections",
+      "disabled": true,
       "blocks": {
         "c1": {
           "type": "collection",
@@ -250,6 +271,8 @@
   },
   "order": [
     "hero",
+    "summer",
+    "winter",
     "cats",
     "marquee",
     "bestsellers",

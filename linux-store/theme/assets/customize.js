@@ -15,6 +15,10 @@
   const tiers = model.tiersFrom(mapping.tiers).filter((tier) => tier.quantity <= MAX_QTY);
   const AREA = meta.area || {};
   const SCALE_MIN = 10, SCALE_MAX = 90;
+  const PRINT_CM = mapping.print || {};
+  const SHOW_QUALITY = mapping.quality !== false;
+  const PLACE_EN = { center: 'Center chest', pocket: 'Left chest', upper: 'Upper back', middle: 'Center back' };
+  let syncTextLabel = () => {};
   const SIDES = ['front', 'back'];
 
   const q = (s) => root.querySelector(s);
@@ -62,6 +66,9 @@
     d.y = Math.max(cy - h / 2 + Math.min(half, h / 2) * .35, Math.min(cy + h / 2 - Math.min(half, h / 2) * .35, d.y));
   }
   function centerInArea(d = cur(), side = state.side) { const [cx, cy] = printArea(side); d.x = cx; d.y = cy; }
+  // A new design starts at 80% of its print area (drawn width = s × .66% of the stage).
+  function defaultScale(side = state.side) { const [, , w, h] = printArea(side); return Math.max(SCALE_MIN, Math.min(42, Math.min(w, h) * .8 / .66)); }
+  function fitScale(side = state.side) { const [, , w, h] = printArea(side); return Math.min(SCALE_MAX, Math.min(w, h) / .66); }
 
   /* ---- Variant / price ---- */
   function pickVariant(size) {
@@ -135,6 +142,19 @@
     return photo;
   }
 
+  /* Print quality of an uploaded design at its current size on the garment */
+  function quality(side) {
+    const d = design[side];
+    if (!d.has || !SHOW_QUALITY) return null;
+    if (d.vector) return { level: 'great', label: strings.quality_vector, title: strings.quality_vector };
+    const [, , w] = printArea(side);
+    const cm = (PRINT_CM[state.shape] || {})[side] || (side === 'back' ? 36 : 28);
+    const r = model.printQuality(d.px, d.s, w, cm);
+    return { level: r.level, label: strings['quality_' + r.level], title: `${L.digits(Math.round(r.dpi))} DPI · ${L.digits(Math.round(r.cm))} cm` };
+  }
+  // A preset label only travels with the order while the design still sits exactly there.
+  const placeName = (d) => d.place && Math.abs(d.x - d.place.x) < .6 && Math.abs(d.y - d.place.y) < .6 && Math.abs(d.s - d.place.s) < .6 && Math.abs(d.r) < .5 ? d.place.name : '';
+
   function paintDesign(side) {
     const d = design[side];
     clampPos(d, side);
@@ -147,6 +167,12 @@
     d.drop.setAttribute('aria-busy', String(!!d.loading));
     q(`[data-cz-upload="${side}"] [data-cz-upload-status]`).hidden = !d.loading;
     if (d.dot) d.dot.hidden = !d.has;
+    const chip = q(`[data-cz-quality="${side}"]`);
+    if (chip) {
+      const qual = quality(side);
+      chip.hidden = !qual;
+      if (qual) { chip.dataset.level = qual.level; chip.textContent = qual.label; chip.title = qual.title; }
+    }
   }
 
   function paint() {
@@ -157,11 +183,26 @@
     colorProp.value = state.color;
     const withDesign = SIDES.filter((s) => design[s].has);
     sidesProp.value = withDesign.length === 2 ? (strings.both || 'Front + Back') : withDesign.map(sideName).join('');
-    if (scale) { scale.value = Math.round(d.s); if (scaleOut) scaleOut.value = L.digits(Math.round(d.s)) + '%'; }
+    if (scale) { scale.value = Math.round(d.s); if (scaleOut) scaleOut.value = L.digits(Math.round(d.s)) + (L.settings.locale === 'ar' ? '٪' : '%'); }
     if (rotate) { rotate.value = Math.round(d.r); if (rotateOut) rotateOut.value = L.digits(Math.round(d.r)) + '°'; }
     root.dataset.shape = state.shape; root.dataset.side = state.side;
     showLayer(); paintArea();
     empty.hidden = d.has;
+    const stageQuality = q('[data-cz-quality-stage]');
+    if (stageQuality) {
+      const qual = quality(state.side);
+      stageQuality.hidden = !qual;
+      if (qual) { stageQuality.dataset.level = qual.level; stageQuality.textContent = qual.label; stageQuality.title = qual.title; }
+    }
+    const places = q('[data-cz-places]');
+    if (places) {
+      places.hidden = !d.has;
+      const active = placeName(d);
+      qa('[data-cz-place]').forEach((b) => { b.hidden = b.dataset.side !== state.side; const on = !!active && active === b.dataset.czPlace && b.dataset.side === state.side; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on)); });
+    }
+    syncTextLabel();
+    const stickyTotal = q('[data-cz-sticky-total]');
+    if (stickyTotal && total) stickyTotal.textContent = total.textContent;
     if (emptyLabel) emptyLabel.textContent = (strings.uploadSide || 'Upload [side] design').replace('[side]', sideName(state.side));
     if (fineSide) fineSide.textContent = sideName(state.side);
     if (fine) fine.classList.toggle('is-disabled', !d.has);
@@ -241,7 +282,7 @@
 
   /* ---- Upload (per side) ---- */
   function showError(msg) { err.textContent = msg; err.hidden = !msg; }
-  function setFile(side, file) {
+  function setFile(side, file, extra = {}) {
     showError('');
     if (!file) return;
     const d = design[side];
@@ -254,11 +295,15 @@
       if (d.request !== request) { URL.revokeObjectURL(url); return; }
       if (d.url) URL.revokeObjectURL(d.url);
       d.url = url; d.img.src = url; d.loading = false;
-      centerInArea(d, side); d.s = 42; d.r = 0; d.has = true; d.file = file;
+      centerInArea(d, side); d.s = defaultScale(side); d.r = 0; d.has = true; d.file = file;
+      d.px = image.naturalWidth || 0;
+      d.vector = file.type === 'image/svg+xml' || !!extra.text;
+      d.text = extra.text || null;
+      d.place = null;
       state.editing = false;
       if (state.side !== side) setSide(side, false);
       const thumb = d.row.querySelector('[data-cz-thumb]'); if (thumb) thumb.src = url;
-      d.row.querySelector('[data-cz-filename]').textContent = file.name;
+      d.row.querySelector('[data-cz-filename]').textContent = extra.text ? (strings.text_file || '[text]').replace('[text]', extra.text.value) : file.name;
       d.row.querySelector('[data-cz-filesize]').textContent = `${L.digits(Math.ceil(file.size / 1024))} ${strings.kilobytes}`;
       d.el.classList.remove('is-pop'); void d.el.offsetWidth; d.el.classList.add('is-pop');
       paint(); L.buzz();
@@ -276,6 +321,7 @@
     if (d.url) URL.revokeObjectURL(d.url);
     d.url = null;
     d.input.value = ''; d.img.removeAttribute('src'); d.has = false; d.file = null; d.pos.value = '';
+    d.text = null; d.place = null; d.vector = false; d.px = 0;
     state.editing = false;
     if (d.mock) d.mock.value = '';
     paint();
@@ -352,7 +398,7 @@
       case 'rotate-l': d.r = norm(d.r - 15); break;
       case 'rotate-r': d.r = norm(d.r + 15); break;
       case 'center': centerInArea(d); break;
-      case 'reset': centerInArea(d); d.s = 42; d.r = 0; break;
+      case 'reset': centerInArea(d); d.s = defaultScale(); d.r = 0; break;
       case 'fit': { const [, , w, h] = printArea(); centerInArea(d); d.s = Math.min(SCALE_MAX, Math.min(w, h) * .92); d.r = 0; break; }
       case 'replace': d.input.click(); return;
       case 'remove': clearFile(state.side); return;
@@ -360,13 +406,119 @@
     paint(); L.buzz();
   }));
 
+  /* ---- Placement presets ---- */
+  qa('[data-cz-place]').forEach((b) => b.addEventListener('click', () => {
+    const d = cur();
+    if (!d.has) return;
+    const p = model.placementFor(printArea(), state.side, b.dataset.czPlace);
+    if (!p) return;
+    d.x = p.x; d.y = p.y; d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, p.s)); d.r = 0;
+    clampPos(d, state.side);
+    d.place = { name: b.dataset.czPlace, x: d.x, y: d.y, s: d.s };
+    d.el.classList.remove('is-pop'); void d.el.offsetWidth; d.el.classList.add('is-pop');
+    paint(); L.buzz();
+  }));
+
+  /* ---- Text designs: typed words become a transparent PNG for the side ---- */
+  function trimCanvas(c, margin) {
+    const { width, height } = c;
+    const data = c.getContext('2d').getImageData(0, 0, width, height).data;
+    let top = height, left = width, right = -1, bottom = -1;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        if (data[(y * width + x) * 4 + 3] > 8) { if (x < left) left = x; if (x > right) right = x; if (y < top) top = y; if (y > bottom) bottom = y; }
+      }
+    }
+    if (right < 0) return c;
+    left = Math.max(0, left - margin); top = Math.max(0, top - margin);
+    right = Math.min(width - 1, right + margin); bottom = Math.min(height - 1, bottom + margin);
+    const out = document.createElement('canvas');
+    out.width = right - left + 1; out.height = bottom - top + 1;
+    out.getContext('2d').drawImage(c, left, top, out.width, out.height, 0, 0, out.width, out.height);
+    return out;
+  }
+  async function textToFile(value, role, color) {
+    const css = getComputedStyle(document.documentElement);
+    const pick = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
+    const display = pick('--font-display', 'sans-serif');
+    const family = role === 'body' ? pick('--font-body', display) : role === 'accent' ? pick('--font-accent', display) : display;
+    const weight = role === 'body' ? pick('--w-ui', '600') : role === 'accent' ? pick('--w-accent', '400') : pick('--w-heading', '800');
+    const size = 240, spec = `${weight} ${size}px ${family}`;
+    try { await document.fonts.load(spec, value); } catch {}
+    const lines = value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).slice(0, 3);
+    const rtl = /[\u0590-\u08FF]/.test(value);
+    const probe = document.createElement('canvas').getContext('2d');
+    probe.font = spec;
+    const lineH = Math.round(size * 1.35), pad = Math.round(size * .35);
+    const c = document.createElement('canvas');
+    c.width = Math.min(4096, Math.ceil(Math.max(...lines.map((line) => probe.measureText(line).width))) + pad * 2);
+    c.height = Math.min(4096, lineH * lines.length + pad * 2);
+    const ctx = c.getContext('2d');
+    ctx.font = spec; ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    try { ctx.direction = rtl ? 'rtl' : 'ltr'; } catch {}
+    lines.forEach((line, i) => ctx.fillText(line, c.width / 2, pad + lineH * (i + .5)));
+    const out = trimCanvas(c, Math.round(size * .08));
+    const blob = await new Promise((res) => out.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('text');
+    return new File([blob], `text-${state.side}-${Date.now()}.png`, { type: 'image/png' });
+  }
+  const textBox = q('[data-cz-text]');
+  const textApply = q('[data-cz-text-apply]');
+  if (textBox && textApply) {
+    const input = q('[data-cz-text-input]'), toggle = q('[data-cz-text-toggle]');
+    let fontRole = 'display', color = textBox.querySelector('[data-cz-text-color].is-active')?.dataset.czTextColor || '#f4e8d8';
+    syncTextLabel = () => { textApply.textContent = (strings.text_apply || '[side]').replace('[side]', sideName(state.side)); };
+    toggle?.addEventListener('click', () => {
+      const open = textBox.hidden;
+      textBox.hidden = !open; toggle.setAttribute('aria-expanded', String(open));
+      if (open) { syncTextLabel(); input.focus(); }
+    });
+    qa('[data-cz-text-font]').forEach((b) => b.addEventListener('click', () => {
+      fontRole = b.dataset.czTextFont;
+      qa('[data-cz-text-font]').forEach((x) => { const on = x === b; x.classList.toggle('is-active', on); x.setAttribute('aria-checked', String(on)); });
+    }));
+    const pickColor = (hex, btn) => {
+      color = hex;
+      qa('[data-cz-text-color]').forEach((x) => { const on = x === btn; x.classList.toggle('is-active', on); x.setAttribute('aria-checked', String(on)); });
+    };
+    qa('[data-cz-text-color]').forEach((b) => b.addEventListener('click', () => pickColor(b.dataset.czTextColor, b)));
+    q('[data-cz-text-custom]')?.addEventListener('input', (e) => pickColor(e.target.value, null));
+    textApply.addEventListener('click', async () => {
+      const value = input.value.trim();
+      if (!value) { showError(strings.text_empty); input.focus(); return; }
+      textApply.classList.add('is-loading');
+      try {
+        const file = await textToFile(value, fontRole, color);
+        const fontLabel = q(`[data-cz-text-font="${fontRole}"]`)?.textContent.trim() || fontRole;
+        setFile(state.side, file, { text: { value, font: fontLabel, color } });
+        textBox.hidden = true; toggle?.setAttribute('aria-expanded', 'false');
+      } catch { showError(strings.file_invalid); }
+      textApply.classList.remove('is-loading');
+    });
+  }
+
+  /* ---- Phones: total + add-to-bag follow the shopper once the stage is passed ---- */
+  const sticky = q('[data-cz-sticky]'), submitButton = q('[data-cz-submit]');
+  if (sticky && submitButton && 'IntersectionObserver' in window) {
+    let pastStage = false, submitInView = false;
+    const update = () => {
+      const show = pastStage && !submitInView;
+      sticky.classList.toggle('is-visible', show);
+      sticky.setAttribute('aria-hidden', String(!show));
+      sticky.inert = !show;
+    };
+    new IntersectionObserver(([en]) => { submitInView = en.isIntersecting; update(); }).observe(submitButton);
+    new IntersectionObserver(([en]) => { pastStage = !en.isIntersecting && en.boundingClientRect.top < 0; update(); }).observe(q('.cz__stage') || canvas);
+    q('[data-cz-sticky-submit]')?.addEventListener('click', () => { if (form.requestSubmit) form.requestSubmit(submitButton); else submitButton.click(); });
+  }
+
   /* ---- Garment / colour ---- */
   qa('[data-cz-garment-opt]').forEach((btn) => btn.addEventListener('click', () => {
     if (!catalog[btn.dataset.czGarmentOpt]) return;
     qa('[data-cz-garment-opt]').forEach((b) => { b.classList.toggle('is-active', b === btn); b.setAttribute('aria-pressed', String(b === btn)); });
     state.shape = btn.dataset.czGarmentOpt; state.label = btn.dataset.label || state.shape;
     garment.classList.remove('is-swap'); void garment.offsetWidth; garment.classList.add('is-swap');
-    SIDES.forEach((s) => centerInArea(design[s], s));
+    SIDES.forEach((s) => { centerInArea(design[s], s); design[s].s = Math.min(design[s].s, fitScale(s)); });
     paint(); L.buzz();
   }));
   qa('[data-cz-color]').forEach((btn) => btn.addEventListener('click', () => {
@@ -460,6 +612,9 @@
         properties[`${label} design`] = d.file;
         properties[`${label} mockup`] = files[index];
         properties[`${label} position`] = d.pos.value;
+        if (d.text) properties[`${label} text`] = `${d.text.value} · ${d.text.font} · ${d.text.color}`;
+        const place = placeName(d);
+        if (place) properties[`${label} placement`] = PLACE_EN[place] || (side === 'front' ? 'Full front' : 'Full back');
       });
       preparedItems = groups.map((group) => ({ id: group.id, quantity: group.quantity, properties: { ...properties, Size: group.size, Piece: group.pieces.join(', ') } }));
       q('[data-cz-submit]').disabled = false;

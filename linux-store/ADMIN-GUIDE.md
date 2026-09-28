@@ -82,14 +82,16 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 
 ## 5. الخطوط
 
-**الخطوط (4.1)** — Theme settings ← Appearance ← **Font style**:
-- **Street** (الافتراضي): عناوين العربي بخط **الإسكندرية (Alexandria)**، والنصوص العربي والإنجليزي بخط **فسطاط (Fustat)** — الاتنين من تصميم المصمم المصري محمد جابر — وعناوين الإنجليزي بخط **Unbounded**.
-- **Bubble**: خط **Baloo Bhaijaan 2** للنصوص عربي وإنجليزي، و**Bagel Fat One** لعناوين الإنجليزي — الاختيار المدوّر المرح.
-- **Classic**: الخطوط القديمة (Thmanyah Sans / Froople / Mochi Tubby).
+**الخطوط (4.2)** — Theme settings ← **Typography**: خط لكل دور ولكل لغة:
+- **عناوين العربي**: **رقّاص (Rakkas)** — مأخوذ من خط الرقعة في أفيشات السينما المصرية في الخمسينات والستينات (الافتراضي). بدائل: **اليمامة (Alyamama)** نسخ حديث قريب من روح ثمانية، الإسكندرية، Baloo Bhaijaan 2، وBadeen Display.
+- **نصوص العربي**: **Alan Sans** (الافتراضي) — واضح حتى في ١٤ بكسل. بدائل: فسطاط، اليمامة، Baloo Bhaijaan 2.
+- **الإنجليزي**: عناوين **Unbounded** ونصوص **Fustat** زي ما هم (بدائل: Bagel Fat One، Rakkas، Alexandria / Alan Sans، Baloo).
+- **خط الإكسنت**: **Badeen Display** للشارات والبادچات الموسمية ولشكل «مرح» في استوديو التصميم. أرقامه شكلها لاتيني، فالأرقام والفواصل بتيجي أوتوماتيك من الخط اللي بعده.
+- الخطوط القديمة (Thmanyah / Froople / Mochi) لسه موجودة كاختيارات مكتوب جنبها «licence needed».
 
-خطوط Street وBubble رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص ومصدرها في `licenses/fonts/`)، يعني مسموح استخدامها في المتجر ورفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني، والصفحة بتنزّل اللي محتاجاه بس (على الصفحة الرئيسية: الإنجليزي ≈ ٨١ كيلو خطوط والعربي ≈ ١٣٠ كيلو، بدل ٢٠٦ و٢٢٨ كيلو قبل كده). الملفات من غير hinting عن قصد، لأن الـ hinting الأصلي في خط الإسكندرية كان بيخفي نقط الياء الأخيرة في بعض المقاسات. الرندر اتجرّب على كروم بس؛ سفاري وويندوز لسه (على ويندوز الخط من غير hinting ممكن يبان أنعم شوية في المقاسات الصغيرة).
+كل الخطوط دي (الافتراضي والبدائل) رخصتها **SIL Open Font License 1.1** من مستودع Google Fonts الرسمي (الرخص والمصدر في `licenses/fonts/`)، يعني مسموح تستخدمها في المتجر وترفعها مع الثيم. كل خط متقسم ملف عربي وملف لاتيني بـ`unicode-range`، والصفحة بتحمّل بس خطوط لغتها (ملفين العربي الافتراضيين: رقّاص ≈ ٢٠ ك.ب + Alan Sans ≈ ٢٥ ك.ب). الملفات من غير hinting عن قصد (الـ hinting الأصلي في الإسكندرية كان بيخفي نقط الياء الأخيرة)، واتأكدنا إن نقط الياء ظاهرة في كل الأوزان. الرندر اتجرّب على كروم بس؛ سفاري وويندوز لسه.
 
-خطوط **Classic** لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب. ما تستخدمش Classic غير بموافقة مكتوبة. وكمان: ملف Mochi Tubby نفسه مكتوب فيه «All rights reserved»، وخط Thmanyah مافيهوش فاصل الآلاف العربي (٬)، فالأرقام اللي فيها الفاصل ده بتظهر بخط النظام.
+الخطوط القديمة لسه رخصتها مش واضحة: Mochi «للاستخدام الشخصي» وملفه نفسه مكتوب فيه «All rights reserved»، وFroople من غير رخصة، ورخصة Thmanyah بتمنع استضافة ملفات الخط على الويب (وكمان مافيهوش فاصل الآلاف العربي ٬). ما تختارهمش غير بموافقة مكتوبة.
 
 ## 6. الجديد في 4.0 — تتحكم فيه منين
 
@@ -100,7 +102,7 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 | كارت العرض | سكشن **Offer spotlight** في الرئيسية: الكود، نهاية العرض (اختياري)، الزرار، الصورة أو منتج. سيبه فاضي = نص الثيم بالعربي والإنجليزي. |
 | نافذة الترحيب | Footer group → **Promo popup**: تفعيل، التوقيت (بعد ثواني / عند الخروج)، يظهر تاني بعد كام يوم، الصفحات، الكود، تسجيل النيوزليتر. ارفع *Campaign version* عشان حملة جديدة تظهر للناس اللي قفلتها قبل كده. |
 | الريلز | سكشن **Video reels**: كل بلوك = فيديو (من Shopify) + منتج. من غير فيديو بيشتغل فيديو التطريز كبديل. |
-| شارات الدفع | Theme settings → **Payments**: الدفع عند الاستلام، إنستاباي، المحافظ، فوري، valU — شغّل بس اللي بتقبله فعلاً. أيقونات الكروت بتيجي من بوابة الدفع أوتوماتيك. |
+| شارات الدفع | Theme settings → **Payments** — اتحدّثت في 4.2 (شوف الجدول تحت). |
 | بلّغني لما يرجع | بيظهر لوحده على المقاس الخلصان. الطلبات بتوصل إيميل المتجر (Settings → Store details) بعنوان فيه Product / Variant / Link. |
 | عرض الباندل | Product page → بلوك Bundle → *Matching automatic discount is live*: شغّله **بس** بعد ما تعمل الخصم الأوتوماتيك المطابق في Discounts. |
 | التقييمات | الشارة بتظهر بس لو في تطبيق تقييمات بيكتب `reviews.rating` و`reviews.rating_count` (زي Shopify Product Reviews / Judge.me). مفيش أرقام وهمية. |
@@ -112,13 +114,25 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 
 | الحاجة | مكانها |
 | --- | --- |
-| نوع الخط | Theme settings ← Appearance ← **Font style**: Street / Bubble / Classic |
+| نوع الخط | اتغيّر في 4.2: Theme settings ← **Typography** (شوف تحت) |
 | لون السكشن | أي سكشن (Best sellers، Product grid، Value props، Newsletter، FAQ، Testimonials، Statement) ← **Colour**: Forest / Cream sheet / Lime sheet |
 | فقاعات الأقسام | سكشن **Category bubbles**: كل بلوك = مجموعة (الصورة من صورة المجموعة أو أول منتج) أو «Link to the Customize studio»، ونقطة «جديد» اختيارية |
 | الشرايط | سكشن Marquee ← **Style**: Woven ribbons / Classic ticker |
-| موكب الاستوديو | بلوك اللون ← **Built-in mockup photos**: وش وضهر الهودي بكل الألوان، وضهر التيشيرت أبيض/أسود. أي صورة ترفعها بتغلب |
+| موكب الاستوديو | اتغيّر في 4.2 — شوف «الموكب الجديد» تحت. أي صورة ترفعها بتغلب |
 | صور المنتجات الجديدة | فولدر `photos/` (أو `LINUX-product-photos.zip`): ارفع `01.webp`، `02.webp`… لكل منتج بالترتيب من Products ← المنتج ← Media. التعليمات في `photos/README.md` |
 | الانكسار | Theme settings ← Appearance ← **Liquid refraction** (مقفول افتراضياً عشان السرعة) |
+
+## 8. الجديد في 4.2 — تتحكم فيه منين
+
+| الحاجة | مكانها |
+| --- | --- |
+| الخطوط | Theme settings ← **Typography**: عناوين العربي، نصوص العربي، عناوين الإنجليزي، نصوص الإنجليزي، وخط الإكسنت — كل واحد لوحده (الافتراضي رقّاص + Alan Sans، Unbounded + فسطاط، Badeen Display) |
+| طرق الدفع | Theme settings ← **Payments**: الدفع عند الاستلام، إنستاباي (+ العنوان واللوجو اختياري)، فودافون كاش (+ الرقم واللوجو اختياري)، و*Show card logos* مقفول. «إزاي تدفع؟» في الشنطة بنصوص تتعدّل. وضيف نفس الطرق من Settings ← Payments ← Manual payment methods (الخطوات في INSTALL.md) |
+| الباندل من أي منتج | صفحة المنتج ← بلوك Bundle ← **Other pieces can be**: أي منتج في المتجر (أو كولكشن تختاره) / المنتجات اللي تختارها بس / نفس المنتج بس. منتج التخصيص والمنتجات اللي عليها تاج `no-bundle` مش بتظهر |
+| الكولكشن الصيفي والشتوي | سكشن **Seasonal collection** (مرتين في الرئيسية): الموسم (صيف بشمس لابسة نضارة وحر / شتا براجل تلج وتلج بيقع)، الكولكشن، عدد المنتجات، كل النصوص، بادچ الحرارة، مكان الرسمة، الأنيميشن، كمية التلج، البطريق، اللون، والمسافات |
+| استوديو التصميم | سكشن Customize ← **Studio tools**: الكتابة بدل الصورة (وحد أقصى للحروف وألوان الكتابة)، أزرار مكان التصميم (نص الصدر / الجيب / الصدر كله / أعلى الضهر / نص الضهر / الضهر كله)، فحص جودة الصورة، عرض منطقة الطباعة الحقيقي بالسنتيمتر لكل قطعة ووش، وشريط الإجمالي الثابت على الموبايل |
+| الموكب الجديد | ١٦ صورة: هودي وتيشيرت أوفر سايز قدام وورا بـ٤ ألوان (من بلوك اللون ← Built-in mockup photos). المصادر والرخص في `licenses/mockups/SOURCES.md` |
+| التعريب | كل النصوص في Online Store ← Themes ← ⋯ ← **Edit default theme content** (عربي/إنجليزي)، بما فيها رسايل الشنطة والباندل اللي كانت مكتوبة جوه الكود |
 
 ## English
 
@@ -193,14 +207,16 @@ the piece list instead of a separate duplicate line per piece.
 
 ### Fonts
 
-**Typography (4.1)** — Theme settings → Appearance → **Font style**:
-- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
-- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
-- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
+**Typography (4.2)** — Theme settings → **Typography**: one font per role and language:
+- **Arabic headings**: **Rakkas** — drawn from the Ruqaa lettering of 1950s–60s Egyptian film posters (default). Alternatives: **Alyamama** (modern Naskh, close to the Thmanyah feel), Alexandria, Baloo Bhaijaan 2, Badeen Display.
+- **Arabic text**: **Alan Sans** (default) — legible down to 14 px. Alternatives: Fustat, Alyamama, Baloo Bhaijaan 2.
+- **English**: **Unbounded** headings and **Fustat** text, as before (alternatives: Bagel Fat One, Rakkas, Alexandria / Alan Sans, Baloo).
+- **Accent**: **Badeen Display** for stickers, seasonal badges and the Studio's “Fun” text style. Its digits are Latin-shaped, so digits and separators automatically come from the next font in the stack.
+- The previous Thmanyah / Froople / Mochi fonts remain as choices marked “licence needed”.
 
-Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes. Rendering was checked in Chrome only; Safari and Windows (where unhinted text can look slightly softer at small sizes) are not checked yet.
+All of these (defaults and alternatives) are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and pinned source commits in `licenses/fonts/`), cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, and a page preloads only its own language's files (the two default Arabic files: Rakkas ≈ 20 KB + Alan Sans ≈ 25 KB). The subsets are unhinted on purpose (the original Alexandria hinting hides the dots of a final ي), and the final-ي dots were checked in every weight. Rendering was checked in Chrome only; Safari and Windows are not checked yet.
 
-The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission. Two practical gaps as well: Mochi Tubby's own name table reads “All rights reserved”, and Thmanyah has no Arabic thousands separator (٬), so figures that use it fall back to a system font.
+The previous fonts are still not cleared: the Mochi archive says *Free for Personal Use* and its name table reads “All rights reserved”, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding (it also lacks the Arabic thousands separator ٬). Choose them only with written permission.
 
 ### New in 4.0 — where to control it
 - **Glass**: Theme settings → Appearance → *Glass tint* and *Liquid refraction* (edge refraction renders in Chromium only; other browsers keep the frosted glass).
@@ -208,7 +224,7 @@ The **Classic** fonts are still not cleared: the Mochi archive says *Free for Pe
 - **Offer spotlight** section: code, optional end time (live countdown, auto-hide), button, image or product.
 - **Promo popup** (footer group): on/off, trigger (delay / exit intent), repeat after N days, pages, code, newsletter sign-up; raise *Campaign version* to re-show a new campaign.
 - **Video reels** section: one block per clip (Shopify video) + product to shop.
-- **Payments**: Theme settings → Payments — switch on only the local methods you accept; card icons come from your gateway.
+- **Payments**: Theme settings → Payments — updated in 4.2 (see below).
 - **Back in stock**: automatic on sold-out variants; requests arrive at the store email with Product / Variant / Link.
 - **Bundle**: tick *Matching automatic discount is live* only after creating the matching automatic discount.
 - **Ratings**: shown only when a reviews app writes `reviews.rating` / `reviews.rating_count`.
@@ -216,10 +232,19 @@ The **Classic** fonts are still not cleared: the Mochi archive says *Free for Pe
 - **Email notifications**: see `notifications/README.md`. **Social ad kit**: see `marketing/README.md`.
 
 ### New in 4.1 — where to control it
-- **Font style** (Theme settings → Appearance): Street / Bubble / Classic.
+- **Fonts**: replaced in 4.2 by Theme settings → **Typography** (see below).
 - **Colour** on Best sellers, Product grid, Value props, Newsletter, FAQ, Testimonials and Statement: Forest, Cream sheet or Lime sheet.
 - **Category bubbles** section: one block per collection (image from the collection or its first product) or the Customize studio; optional new-drop dot.
 - **Marquee → Style**: woven ribbons or classic ticker.
-- **Built-in mockup photos** (studio colour blocks) now cover hoodie front and back in every colour and the tee back in white/black; uploads still win.
+- **Built-in mockup photos** (studio colour blocks) now cover hoodie front and back in every colour and the tee back in white/black; uploads still win (replaced in 4.2 by the 16-image set below).
 - **Studio photo set**: `photos/` (or `LINUX-product-photos.zip`) — upload `01.webp`, `02.webp`… per product in order (Products → product → Media). See `photos/README.md`.
 - **Liquid refraction** is off by default for speed; switch it on under Appearance if you want it.
+
+### New in 4.2 — where to control it
+- **Typography** (Theme settings): Arabic headings / text, English headings / text and an accent font, each chosen independently (defaults Rakkas + Alan Sans, Unbounded + Fustat, Badeen Display).
+- **Payments** (Theme settings): cash on delivery, InstaPay (optional address and logo), Vodafone Cash (optional number and logo); *Show card logos* is off. An editable “How to pay” box sits under the checkout button. Add the same methods under Settings → Payments → Manual payment methods (steps in INSTALL.md).
+- **Bundle → Other pieces can be**: any product in the store (or a collection you pick) / only the picked products / only this product. The Customize product and products tagged `no-bundle` are always left out.
+- **Seasonal collection** section (twice on the home page): season (summer sun with sunglasses and heat haze / winter snowman with falling snow), collection, product count, all copy, temperature badge, art side, effects, snow amount, mascot, colour and spacing.
+- **Customize → Studio tools**: text designs (length limit, text colours), placement buttons, print-quality check, real print widths in cm per garment and side, sticky total bar on phones.
+- **Mockups**: 16 ghost-mannequin images — oversized hoodie and tee, front and back, 4 colours (colour block → *Built-in mockup photos*). Sources and licences: `licenses/mockups/SOURCES.md`.
+- **Localization**: every string is in Online Store → Themes → ⋯ → **Edit default theme content**, including the bag and bundle messages that used to be hard-coded.

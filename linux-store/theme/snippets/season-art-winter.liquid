@@ -1,0 +1,51 @@
+{%- comment -%}
+  Winter scene for sections/seasonal-collection: night sky, moon, snowy hills,
+  pines, a snowman in a lime scarf and forest beanie, and the penguin. The
+  falling snow lives on the section panel so it covers the whole section.
+  Decorative only. Params: badge, caption, show_badge, mascot.
+  part: 'icon' → only the small snowflake glyph used in the eyebrow.
+{%- endcomment -%}
+{%- if part == 'icon' -%}
+<svg class="seasonal__glyph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5V21.5M20.2 7.3L3.8 16.8M20.2 16.8L3.8 7.3M14.6 5.1L12 7.6L9.4 5.1M19.3 10.8L15.8 9.8L16.7 6.3M16.7 17.7L15.8 14.2L19.3 13.2M9.4 18.9L12 16.4L14.6 18.9M4.7 13.2L8.2 14.2L7.3 17.7M7.3 6.3L8.2 9.8L4.7 10.8"/></svg>
+{%- else -%}
+<span class="sa__stars"></span><span class="sa__stars sa__stars--b"></span>
+<span class="sa__moon"></span>
+<svg class="sa__hill sa__hill--back" viewBox="0 0 400 100" preserveAspectRatio="none" focusable="false"><path d="M0 36C70 12 150 28 230 18S360 10 400 24V100H0Z" fill="#cfe5ec"/><path d="M0 36C70 12 150 28 230 18S360 10 400 24" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.5" vector-effect="non-scaling-stroke"/></svg>
+<svg class="sa__pine sa__pine--a" viewBox="0 0 60 100" focusable="false"><path d="M26 82h8v16h-8Z" fill="#3a2a1c"/><path d="M30 4 14 32h7L8 56h9L3 84h54L43 56h9L39 32h7Z" fill="#0a4a33" stroke="#043020" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 4 22 18q4 3 8 0 4 3 8 0ZM14 32h32l-2 3q-4 3-8 0-4 3-8 0-4 3-8 0-3 2-6-3ZM8 56h44l-2 3q-5 3-10 0-5 3-10 0-5 3-10 0-5 3-9-3Z" fill="#f4fbff"/></svg>
+<svg class="sa__pine sa__pine--b" viewBox="0 0 60 100" focusable="false"><path d="M26 82h8v16h-8Z" fill="#3a2a1c"/><path d="M30 4 14 32h7L8 56h9L3 84h54L43 56h9L39 32h7Z" fill="#0a4a33" stroke="#043020" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 4 22 18q4 3 8 0 4 3 8 0ZM14 32h32l-2 3q-4 3-8 0-4 3-8 0-4 3-8 0-3 2-6-3ZM8 56h44l-2 3q-5 3-10 0-5 3-10 0-5 3-10 0-5 3-9-3Z" fill="#f4fbff"/></svg>
+<svg class="sa__hill sa__hill--front" viewBox="0 0 400 100" preserveAspectRatio="none" focusable="false"><path d="M0 48C90 28 190 56 290 40S370 32 400 42V100H0Z" fill="#f4fbff"/><path d="M40 70h10M120 82h14M226 66h8M300 78h12M362 62h8" stroke="#bfe3ee" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>
+<svg class="sa__snowman" viewBox="0 0 200 300" fill="none" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+  <ellipse cx="100" cy="292" rx="66" ry="7" fill="#0b3d36" opacity=".28"/>
+  <path d="M62 150 24 120M34 128l-12-2M31 126l-1-12M138 150l38-32M166 126l12 2M169 124v-12" stroke="#6b4a2e" stroke-width="5"/>
+  <circle cx="100" cy="238" r="56" fill="#fff" stroke="#043020" stroke-width="4"/>
+  <path d="M56 252a46 46 0 0 0 58 36" stroke="#d3e8ef" stroke-width="8"/>
+  <circle cx="100" cy="156" r="42" fill="#fff" stroke="#043020" stroke-width="4"/>
+  <path d="M64 170a36 36 0 0 0 42 26" stroke="#d3e8ef" stroke-width="7"/>
+  <circle cx="100" cy="88" r="34" fill="#fff" stroke="#043020" stroke-width="4"/>
+  <g fill="#10201a"><circle cx="100" cy="152" r="4.5"/><circle cx="100" cy="174" r="4.5"/><circle cx="100" cy="222" r="5"/><circle cx="100" cy="246" r="5"/><circle cx="88" cy="90" r="5"/><circle cx="112" cy="90" r="5"/><circle cx="85" cy="107" r="2.4"/><circle cx="92" cy="112" r="2.4"/><circle cx="100" cy="114" r="2.4"/><circle cx="108" cy="112" r="2.4"/></g>
+  <circle cx="89.8" cy="88.2" r="1.6" fill="#fff"/><circle cx="113.8" cy="88.2" r="1.6" fill="#fff"/>
+  <path d="M99 97l31 6-31 4Z" fill="#ff8a3d" stroke="#043020" stroke-width="2.5"/>
+  <path d="M108 99.5l-1 4M116 101l-1 3" stroke="#c85a1c" stroke-width="1.6"/>
+  <path d="M64 114c20 12 52 12 72 0l3 14c-23 14-55 14-78 0Z" fill="#8fcb5a" stroke="#043020" stroke-width="3.5"/>
+  <path d="M76 121v11M88 124v12M100 125v12M112 124v12M124 121v11" stroke="#5f9c3a" stroke-width="4" stroke-linecap="butt"/>
+  <path d="M113 130l20-3 1 58-19-1Z" fill="#8fcb5a" stroke="#043020" stroke-width="3.5"/>
+  <path d="M115 150l19-2M115 168l19-1" stroke="#f4e8d8" stroke-width="5" stroke-linecap="butt"/>
+  <path d="M118 188v8M124 188v8M130 188v8" stroke="#5f9c3a" stroke-width="3"/>
+  <path d="M66 70c0-26 16-40 34-40s34 14 34 40Z" fill="#0a4a33" stroke="#043020" stroke-width="3.5"/>
+  <path d="M84 40c-6 8-9 18-9 28M100 33v35M116 40c6 8 9 18 9 28" stroke="#156e4c" stroke-width="3"/>
+  <rect x="62" y="62" width="76" height="16" rx="8" fill="#0f5a3e" stroke="#043020" stroke-width="3.5"/>
+  <path d="M72 65v10M80 65v10M88 65v10M96 65v10M132 65v10" stroke="#156e4c" stroke-width="2.4"/>
+  <rect x="104" y="64.5" width="22" height="11" rx="2.5" fill="#8fcb5a"/>
+  <rect x="106" y="66.5" width="18" height="7" rx="1.5" stroke="#043020" stroke-width="1" stroke-dasharray="2 1.6"/>
+  <circle cx="100" cy="28" r="11" fill="#f4e8d8" stroke="#043020" stroke-width="3.5"/>
+  <path d="M95 24h2M101 30h2M104 23h1" stroke="#d9c8b0" stroke-width="2"/>
+</svg>
+{%- if mascot != blank -%}{% render 'mascot', name: mascot, width: 200, class: 'sa__mascot' %}{%- endif -%}
+{%- if show_badge and badge != blank -%}
+<div class="sa__temp sa__temp--frost">
+  <svg class="sa__temp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 2.5V21.5M20.2 7.3L3.8 16.8M20.2 16.8L3.8 7.3M14.6 5.1L12 7.6L9.4 5.1M19.3 10.8L15.8 9.8L16.7 6.3M16.7 17.7L15.8 14.2L19.3 13.2M9.4 18.9L12 16.4L14.6 18.9M4.7 13.2L8.2 14.2L7.3 17.7M7.3 6.3L8.2 9.8L4.7 10.8"/></svg>
+  <span class="sa__temp-val">{{ badge }}</span>
+  {%- if caption != blank -%}<span class="sa__temp-cap">{{ caption }}</span>{%- endif -%}
+</div>
+{%- endif -%}
+{%- endif -%}

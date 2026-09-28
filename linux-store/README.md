@@ -5,7 +5,7 @@ the Apple iOS 26 "Liquid Glass" language: fully rounded glass panes, the LINUX
 forest/cream/lime palette, the penguin mascot woven through the pages, and a
 macro embroidery video as the hero. English + Egyptian Arabic (RTL).
 
-**Release status:** the default fonts are now SIL OFL (see *Typography* below), which clears the previous font-licence blocker for the default **Street** and **Bubble** presets; the optional **Classic** preset still needs written permission. Local checks are not a live Shopify import or checkout test. See [INSTALL.md](INSTALL.md).
+**Release status:** every default font (Rakkas + Alan Sans for Arabic, Unbounded + Fustat for English, Badeen Display accent) is SIL OFL (see *Typography* below); only the optional Thmanyah / Froople / Mochi choices, marked “licence needed”, still need written permission. Local checks are not a live Shopify import or checkout test. See [INSTALL.md](INSTALL.md).
 
 ```
 linux-store/
@@ -83,11 +83,18 @@ than silently skipping import validation. The theme zip is written to
   its own size when quantity changes.
 - **Garment photos**: four shared image pickers set the hoodie front/back and
   tee front/back. Each garment-colour block can override all four views. The
-  priority is per-colour upload, shared upload, built-in hoodie-back photo,
-  then the drawn fallback. Clear a colour override to use a new shared image. Use
-  square images with matching crops; uploaded photos keep their real colours.
-  The included hoodie-back mockups (black, white, burgundy and beige) and drawn
-  garment fallback are retained; no hard-coded external image URLs are needed.
+  priority is per-colour upload, shared upload, built-in mockup, then the drawn
+  fallback. Clear a colour override to use a new shared image. Use square images
+  with matching crops; uploaded photos keep their real colours. The built-in
+  mockups (4.2) are ghost-mannequin oversized hoodie and tee, front and back, in
+  black, white, burgundy and beige (16 files, from Pexels/Unsplash stock — see
+  `licenses/mockups/SOURCES.md`). The print areas in the section's `area` JSON
+  match their framing; replace the mockups only with images framed the same way.
+  The tee appears once *T-shirt customization product* is set.
+- **Studio tools (4.2)**: text designs (typed words become a transparent PNG in the
+  brand fonts), placement presets (chest, pocket, full front / upper, centre, full
+  back), a print-quality check (DPI at the real print width set per garment/side)
+  and a sticky total + add-to-bag bar on phones — each switchable in the section.
 - **Quantity pricing**: the `volume_pricing_enabled` switch is off by default. Add
   `price_tier` blocks only for real rates: `quantity` is the minimum
   piece count; the discount percentage field defaults to `0`.
@@ -113,7 +120,7 @@ than silently skipping import validation. The theme zip is written to
 | `assets/glass.css` | Design tokens and the **Liquid Glass 2** material (lens · tint · sheen · rim · depth; regular / clear / solid / tinted), scroll-edge effect, view transitions, RTL mirroring, buttons, pills, forms |
 | `assets/glass.js` | Per-surface **refraction** maps for `[data-lens]` (Chromium only), tab-bar lens, header/tab-bar scroll states, announcement rotator, hero pause, reveal |
 | `assets/section-promo.css` + `promo.js` | Offer spotlight, video reels, promo popup (loaded only by those sections) |
-| Typography | Theme settings → **Font style**: Street (default — Alexandria + Fustat for Arabic, Unbounded + Fustat for English), Bubble (Baloo Bhaijaan 2 + Bagel Fat One) or Classic (Thmanyah / Froople / Mochi). Split Arabic/Latin WOFF2 with `unicode-range`; wired in `snippets/fonts.liquid` |
+| Typography | Theme settings → **Typography**: Arabic headings / text, English headings / text and an accent font, chosen independently (defaults Rakkas + Alan Sans, Unbounded + Fustat, Badeen Display). Split Arabic/Latin WOFF2 with `unicode-range`; wired in `snippets/fonts.liquid` + `snippets/font-family.liquid` |
 | `assets/components.css` | Header + mega menu, hero, marquee, cards, rails, bento, drawers, footer, search, tab bar, toasts |
 | `assets/*.js` | Vanilla, dependency-free: AJAX cart + section rendering, predictive search (with Arabic term mapping), wishlist (localStorage), product variants/gallery/sticky ATC/quick view, Customize studio |
 | `sections/` | 40 sections incl. all `main-*` templates, hero video, rotating announcement bar (header), **offer spotlight**, **video reels**, **promo popup**, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |
@@ -121,14 +128,16 @@ than silently skipping import validation. The theme zip is written to
 | `locales/` | `en.default.json`, `ar.json` (Egyptian tone) |
 | Hero video | `hero-1080.mp4` (~1 MB, desktop) / `hero-720.mp4` (tablet) / `hero-mobile.mp4` (540×960 portrait crop, ~220 KB) + poster — the browser picks one via `<source media>`; cut from the brand's own embroidery footage with a seamless loop |
 
-**Typography (4.1)** — Theme settings → Appearance → **Font style**:
-- **Street** (default): Arabic headings **Alexandria**, Arabic and English body **Fustat** (both by the Cairo type designer Mohamed Gaber), English headings **Unbounded**.
-- **Bubble**: **Baloo Bhaijaan 2** (Arabic + English text) with **Bagel Fat One** English headings — the rounded, playful option.
-- **Classic**: the previous Thmanyah Sans / Froople / Mochi Tubby set.
+**Typography (4.2)** — Theme settings → **Typography**: one font per role and language:
+- **Arabic headings**: **Rakkas** — drawn from the Ruqaa lettering of 1950s–60s Egyptian film posters (default). Alternatives: **Alyamama** (modern Naskh, close to the Thmanyah feel), Alexandria, Baloo Bhaijaan 2, Badeen Display.
+- **Arabic text**: **Alan Sans** (default) — legible down to 14 px. Alternatives: Fustat, Alyamama, Baloo Bhaijaan 2.
+- **English**: **Unbounded** headings and **Fustat** text, as before (alternatives: Bagel Fat One, Rakkas, Alexandria / Alan Sans, Baloo).
+- **Accent**: **Badeen Display** for stickers, seasonal badges and the Studio's “Fun” text style. Its digits are Latin-shaped, so digits and separators automatically come from the next font in the stack.
+- The previous Thmanyah / Froople / Mochi fonts remain as choices marked “licence needed”.
 
-Street and Bubble are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and the pinned source commit in `licenses/fonts/`), so they are cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, so a page downloads only the script it shows (measured on the home page: English ≈ 81 KB and Arabic ≈ 130 KB of fonts, versus 206 KB and 228 KB before). The subsets are unhinted on purpose: the original Alexandria hinting hides the dots of a final ي at some sizes. Rendering was checked in Chrome only; Safari and Windows (where unhinted text can look slightly softer at small sizes) are not checked yet.
+All of these (defaults and alternatives) are **SIL Open Font License 1.1** fonts from the official Google Fonts repository (licences and pinned source commits in `licenses/fonts/`), cleared for your store, for self-hosting and for redistribution with the theme. Each family ships as an Arabic and a Latin WOFF2 with `unicode-range`, and a page preloads only its own language's files (the two default Arabic files: Rakkas ≈ 20 KB + Alan Sans ≈ 25 KB). The subsets are unhinted on purpose (the original Alexandria hinting hides the dots of a final ي), and the final-ي dots were checked in every weight. Rendering was checked in Chrome only; Safari and Windows are not checked yet.
 
-The **Classic** fonts are still not cleared: the Mochi archive says *Free for Personal Use*, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding. Use Classic only with written permission. Two practical gaps as well: Mochi Tubby's own name table reads “All rights reserved”, and Thmanyah has no Arabic thousands separator (٬), so figures that use it fall back to a system font.
+The previous fonts are still not cleared: the Mochi archive says *Free for Personal Use* and its name table reads “All rights reserved”, the Froople archive has no licence text, and the Thmanyah licence restricts hosting the font files for web embedding (it also lacks the Arabic thousands separator ٬). Choose them only with written permission.
 
 ## Local preview (no Shopify account needed)
 

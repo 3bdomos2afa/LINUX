@@ -5,7 +5,13 @@
   Usage: {% render 'delivery-eta', value: settings.delivery_cairo %}
 {%- endcomment -%}
 {%- if request.locale.iso_code == 'ar' -%}
-  {%- assign v = value | replace: 'days', 'أيام' | replace: 'day', 'يوم' | replace: 'hours', 'ساعات' | replace: 'hour', 'ساعة' | replace: 'weeks', 'أسابيع' | replace: 'week', 'أسبوع' -%}
+  {%- comment -%} Arabic counts from 11 up take the singular noun: ٣ أيام but ١٤ يوم, ٢٤ ساعة. {%- endcomment -%}
+  {%- assign last_n = value | split: ' ' | first | split: '–' | last | split: '-' | last | plus: 0 -%}
+  {%- if last_n >= 11 -%}
+    {%- assign v = value | replace: 'days', 'يوم' | replace: 'day', 'يوم' | replace: 'hours', 'ساعة' | replace: 'hour', 'ساعة' | replace: 'weeks', 'أسبوع' | replace: 'week', 'أسبوع' -%}
+  {%- else -%}
+    {%- assign v = value | replace: 'days', 'أيام' | replace: 'day', 'يوم' | replace: 'hours', 'ساعات' | replace: 'hour', 'ساعة' | replace: 'weeks', 'أسابيع' | replace: 'week', 'أسبوع' -%}
+  {%- endif -%}
   {% render 'digits', value: v %}
 {%- else -%}
   {{ value }}

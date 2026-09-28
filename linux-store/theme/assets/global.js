@@ -29,7 +29,7 @@
       .replace(/{{\s*amount_no_decimals\s*}}/g, Math.round(n).toLocaleString('en-US'))
       .replace(/{{\s*amount_no_trailing_zeros\s*}}/g, two.replace(/\.00$/, ''))
       .replace(/{{\s*amount_with_comma_separator\s*}}/g, n.toFixed(2).replace('.', ','))
-      .replace(/{{\s*amount\s*}}/g, two)
+      .replace(/{{\s*amount\s*}}/g, two.replace(/\.00$/, ''))
       .replace(/<[^>]+>/g, '');
   };
 

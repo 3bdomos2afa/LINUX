@@ -71,6 +71,28 @@
     return [...groups.values()];
   }
 
+  /* Placement presets, relative to the side's print area [cx, cy, w, h] (all in
+     % of the square stage). "pocket" is the wearer's left chest, which is the
+     viewer's right on a front view. s is the design width knob (drawn at s × .66%). */
+  const PLACES = {
+    front: { center: { y: -0.2, s: 0.58 }, pocket: { x: 0.24, y: -0.3, s: 0.26 }, full: { y: 0, s: 0.92 } },
+    back: { upper: { y: -0.28, s: 0.7 }, middle: { y: -0.02, s: 0.8 }, full: { y: 0.02, s: 0.92 } },
+  };
+  function placementFor(area, side, name) {
+    const preset = PLACES[side] && PLACES[side][name];
+    if (!preset || !area) return null;
+    const [cx, cy, w, h] = area;
+    return { x: cx + (preset.x || 0) * w, y: cy + (preset.y || 0) * h, s: Math.min(w, h) * preset.s };
+  }
+
+  /* Print quality: physical width of the design on the garment and the pixel
+     density it gets there. printCm is the real width of the side's print area. */
+  function printQuality(px, s, areaWidth, printCm) {
+    const cm = (Number(s) * 0.66 / Number(areaWidth)) * Number(printCm);
+    const dpi = cm > 0 ? Number(px) / (cm / 2.54) : 0;
+    return { cm, dpi, level: dpi >= 150 ? 'great' : dpi >= 100 ? 'ok' : 'low' };
+  }
+
   window.LINUX = window.LINUX || {};
-  window.LINUX.customizeModel = { variantFor, tiersFrom, quote, groupPieces };
+  window.LINUX.customizeModel = { variantFor, tiersFrom, quote, groupPieces, placementFor, printQuality };
 })();

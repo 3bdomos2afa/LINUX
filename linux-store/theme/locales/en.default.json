@@ -332,7 +332,8 @@
     "reviews_count": {
       "one": "{{ count }} review",
       "other": "{{ count }} reviews"
-    }
+    },
+    "load_error": "Could not load this product. Try again."
   },
   "size_guide": {
     "title": "Size guide",
@@ -392,7 +393,14 @@
     "summary": "Order summary",
     "trust_secure": "Secure checkout",
     "trust_exchange": "14-day exchange, unworn with tags",
-    "trust_cod": "Cash on delivery or card"
+    "trust_cod": "Cash on delivery, InstaPay or Vodafone Cash",
+    "error_invalid": "Choose an available item and a valid quantity.",
+    "error_check_bag": "Could not confirm the add. Check your bag before trying again.",
+    "error_refresh": "Items were added, but your bag couldn't refresh. Open it before adding again.",
+    "error_confirm_size": "Could not confirm one customized size was added.",
+    "bundle_offer": "Bundle offer",
+    "bundle_actual": "Actual Shopify discount (this line):",
+    "bundle_note": "The bundle price is an estimate. Shopify confirms the real discount at checkout, and changing your bag can change it."
   },
   "customize": {
     "title": "Customize studio",
@@ -483,7 +491,32 @@
     "pricing_estimate_notice": "An estimate based on advertised quantity tiers. The actual discount appears in your bag when offer conditions are met. Shipping is calculated at checkout.",
     "next_tier": "Choose {{ count }} pieces to reach the advertised {{ percent }}% quantity discount.",
     "tier_label": "{{ count }}+ pieces · {{ percent }}%",
-    "tier_base": "Regular unit price"
+    "tier_base": "Regular unit price",
+    "text_add": "Or write text instead",
+    "text_label": "Your text",
+    "text_placeholder": "e.g. your name, a word or a date",
+    "text_font": "Style",
+    "text_font_bold": "Bold",
+    "text_font_clean": "Clean",
+    "text_font_fun": "Fun",
+    "text_color": "Colour",
+    "text_custom_color": "Any colour",
+    "text_apply": "Put it on the [side]",
+    "text_apply_default": "Add text",
+    "text_note": "We print your text exactly as you see it — up to 3 lines.",
+    "text_file": "Text: [text]",
+    "text_empty": "Type your text first.",
+    "placement": "Placement",
+    "place_center": "Center chest",
+    "place_pocket": "Chest pocket",
+    "place_full_front": "Full front",
+    "place_upper": "Upper back",
+    "place_middle": "Center back",
+    "place_full_back": "Full back",
+    "quality_great": "Print-ready quality",
+    "quality_ok": "Good quality",
+    "quality_low": "Too small for this size — upload a bigger file",
+    "quality_vector": "Sharp at any size"
   },
   "customer": {
     "account": {
@@ -682,7 +715,7 @@
     "prop_1_title": "Fast delivery",
     "prop_1_text": "1–2 days in Cairo, 2–4 across Egypt.",
     "prop_2_title": "Pay on delivery",
-    "prop_2_text": "Cash at the door, or card if you prefer.",
+    "prop_2_text": "Cash at the door, InstaPay or Vodafone Cash.",
     "prop_3_title": "14-day exchange",
     "prop_3_text": "Wrong size? Swap it, no questions asked.",
     "prop_4_title": "Embroidered, not printed",
@@ -714,7 +747,7 @@
     "faq_2_q": "Can I exchange the size?",
     "faq_2_a": "<p>Yes, within 14 days, unworn and with tags. Start it from your account or message us on WhatsApp.</p>",
     "faq_3_q": "Do you accept cash on delivery?",
-    "faq_3_a": "<p>Yes, anywhere in Egypt. Cards and Meeza work too.</p>",
+    "faq_3_a": "<p>Yes, anywhere in Egypt — pay cash on delivery, by InstaPay or by Vodafone Cash.</p>",
     "faq_4_q": "How does the custom studio work?",
     "faq_4_a": "<p>Upload your artwork, pick the piece and colour, place it exactly where you want it, and order. We stitch it within 3–5 working days.</p>",
     "newsletter_eyebrow": "Stay close",
@@ -788,7 +821,23 @@
     "note": "Pick the colour and size for each piece.",
     "disclaimer": "Prices here are estimates; the actual discount and final price show in your bag before you pay.",
     "product_color": "Product / colour",
-    "save_live": "Save {{ percent }}"
+    "save_live": "Save {{ percent }}",
+    "note_any": "Mix any pieces from the store — pick the product, colour and size for each one.",
+    "pick_any": "Any product from the store",
+    "estimate_note": "estimate only; Shopify calculates actual discounts",
+    "js_piece": "Piece",
+    "js_estimate": "Estimate",
+    "js_subtotal": "Subtotal before discounts",
+    "js_savings": "Estimated savings",
+    "js_total": "Estimated total",
+    "js_savings_live": "Savings",
+    "js_total_live": "Total",
+    "js_choose": "Choose available options for each piece.",
+    "js_stock": "The requested quantity is more than we have in stock.",
+    "js_quantity": "Enter a valid quantity above zero.",
+    "js_select": "Choose",
+    "js_average": "Estimated average per piece",
+    "js_one_time": "Bundle offers are one-time purchases only."
   },
   "fit": {
     "title": "Find your size",
@@ -847,7 +896,14 @@
     "wallet": "Mobile wallets",
     "fawry": "Fawry",
     "valu": "valU instalments",
-    "card": "Cards"
+    "card": "Cards",
+    "vodafone": "Vodafone Cash",
+    "howto_title": "How to pay",
+    "howto_cod": "Pay the courier in cash when your order arrives.",
+    "howto_instapay": "After you confirm your order, transfer to {{ address }} on InstaPay and send us the receipt on WhatsApp.",
+    "howto_instapay_generic": "After you confirm your order we'll send you the InstaPay details on WhatsApp.",
+    "howto_vodafone": "After you confirm your order, send the amount to {{ number }} and share the receipt on WhatsApp.",
+    "howto_vodafone_generic": "After you confirm your order we'll send you the Vodafone Cash number on WhatsApp."
   },
   "cats": {
     "label": "Shop by category",
@@ -855,5 +911,24 @@
     "tees": "Tees",
     "customize": "Design yours",
     "all": "All"
+  },
+  "seasonal": {
+    "summer_eyebrow": "Summer collection",
+    "summer_heading": "Hot out? Keep it light",
+    "summer_text": "Breathable cotton tees, made for Cairo heat.",
+    "summer_cta": "Shop summer",
+    "summer_badge": "40°",
+    "summer_badge_caption": "August heat",
+    "winter_eyebrow": "Winter collection",
+    "winter_heading": "Cold out? Keep it warm",
+    "winter_text": "Heavyweight 340 gsm cotton hoodies with real embroidery.",
+    "winter_cta": "Shop winter",
+    "winter_badge": "3°",
+    "winter_badge_caption": "January chill",
+    "none_eyebrow": "LINUX picks",
+    "none_heading": "Pick your fit",
+    "none_text": "Embroidered streetwear from Cairo, made to last.",
+    "none_cta": "Shop the collection",
+    "see_all": "See the full collection"
   }
 }

@@ -153,7 +153,7 @@ test('reduced motion leaves localized count-up numbers unchanged', () => {
 test('Arabic dates and delivery estimates use localized display digits', async () => {
   const liquid = renderer('ar');
   assert.equal((await liquid.renderFile('date-ar', { date: '2026-09-25T12:00:00Z' })).trim(), '٢٥ سبتمبر ٢٠٢٦');
-  for (const [value, expected] of [['1–2 days', '١–٢ أيام'], ['24 hours', '٢٤ ساعات']]) {
+  for (const [value, expected] of [['1–2 days', '١–٢ أيام'], ['24 hours', '٢٤ ساعة'], ['3-5 days', '٣-٥ أيام'], ['14 days', '١٤ يوم']]) {
     assert.equal((await liquid.renderFile('delivery-eta', { value })).trim(), expected);
     assert.equal((await renderer('en').renderFile('delivery-eta', { value })).trim(), value);
   }
@@ -212,36 +212,36 @@ for (const locale of ['ar', 'en']) {
     for (const unit of Object.values(units)) assert.match(unit.textContent, digits);
   });
 
-  // Default "street" preset (OFL): Alexandria + Fustat on Arabic pages, Unbounded + Fustat on English ones.
-  test(`${locale}: default brand fonts load even with a legacy system-font preference`, async () => {
+  // Default type (OFL): Rakkas + Alan Sans on Arabic pages, Unbounded + Fustat on English ones, Badeen Display accent.
+  test(`${locale}: default brand fonts preload only the current language's files`, async () => {
     const rendered = await renderer(locale).renderFile('fonts', { is_rtl: locale === 'ar', system: true });
-    assert.match(rendered, /f-fustat-ar\.woff2/);
-    assert.match(rendered, /f-fustat-la\.woff2/);
     assert.match(rendered, /unicode-range:/);
     assert.doesNotMatch(rendered, /JetBrains|Palestine|Disney|Matcha|thmanyah|froople|mochi/i);
+    const preloads = [...rendered.matchAll(/rel="preload"[^>]*href="[^"]*\/([^"/?]+)/g)].map((m) => m[1]);
     if (locale === 'en') {
-      assert.match(rendered, /rel="preload"[^>]+f-unbounded-la\.woff2/);
-      assert.match(rendered, /--font-display: "Unbounded"/);
+      assert.deepEqual(preloads.sort(), ['f-fustat-la.woff2', 'f-unbounded-la.woff2']);
+      assert.match(rendered, /html:root \{ --font-display: "Unbounded", "Rakkas"/);
     } else {
-      assert.match(rendered, /rel="preload"[^>]+f-alexandria-ar\.woff2/);
-      assert.match(rendered, /--font-display: "Alexandria"/);
+      assert.deepEqual(preloads.sort(), ['f-alan-ar.woff2', 'f-rakkas-ar.woff2']);
+      assert.match(rendered, /html\[dir="rtl"\]:root \{ --font-display: "Rakkas", "Unbounded"/);
     }
+    assert.match(rendered, /--font-accent: "Badeen Display"/);
+    // Badeen's digits look Latin, so its Arabic range leaves ٠–٩ and separators to the next family.
+    assert.match(rendered, /f-badeen-ar\.woff2[^}]*unicode-range: U\+0600-065F, U\+066D-06EF, U\+06FA-06FF/);
     for (const [, asset] of rendered.matchAll(/url\("\/assets\/([^"\s]+)"\)/g)) {
       assert.ok(fs.statSync(path.join(theme, 'assets', asset)).size > 0, asset);
     }
   });
 
-  test(`${locale}: the classic and bubble presets load only their own files`, async () => {
-    const classic = await renderer(locale, { font_preset: 'classic' }).renderFile('fonts', { is_rtl: locale === 'ar' });
-    assert.match(classic, /thmanyahsans-Regular\.woff2/);
-    assert.match(classic, /thmanyahsans-Black\.woff2/);
-    if (locale === 'en') assert.match(classic, /froople\.otf[\s\S]*mochi-tubby\.ttf/);
-    else assert.doesNotMatch(classic, /froople\.otf|mochi-tubby\.ttf/);
-    assert.doesNotMatch(classic, /f-fustat|f-alexandria|f-unbounded/);
-    const bubble = await renderer(locale, { font_preset: 'bubble' }).renderFile('fonts', { is_rtl: locale === 'ar' });
-    assert.match(bubble, /f-baloo-(ar|la)\.woff2/);
-    assert.doesNotMatch(bubble, /thmanyah|f-fustat|f-alexandria/);
-    for (const html of [classic, bubble]) {
+  test(`${locale}: every font choice in Theme settings loads only its own existing files`, async () => {
+    const legacy = await renderer(locale, { font_ar_heading: 'thmanyah', font_ar_body: 'thmanyah', font_en_heading: 'froople', font_en_body: 'mochi', font_accent: 'none' }).renderFile('fonts', { is_rtl: locale === 'ar' });
+    assert.match(legacy, /thmanyahsans-Regular\.woff2/);
+    assert.match(legacy, /froople\.otf[\s\S]*mochi-tubby\.ttf|mochi-tubby\.ttf[\s\S]*froople\.otf/);
+    assert.doesNotMatch(legacy, /f-rakkas|f-alan|f-badeen/);
+    const rounded = await renderer(locale, { font_ar_heading: 'baloo', font_ar_body: 'baloo', font_en_heading: 'bagel', font_en_body: 'baloo', font_accent: 'baloo' }).renderFile('fonts', { is_rtl: locale === 'ar' });
+    assert.match(rounded, /f-baloo-(ar|la)\.woff2/);
+    assert.doesNotMatch(rounded, /thmanyah|f-rakkas|f-alan/);
+    for (const html of [legacy, rounded]) {
       for (const [, asset] of html.matchAll(/url\("\/assets\/([^"\s]+)"\)/g)) assert.ok(fs.statSync(path.join(theme, 'assets', asset)).size > 0, asset);
     }
   });

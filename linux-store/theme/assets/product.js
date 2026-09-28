@@ -7,15 +7,21 @@
   const S = L.settings || {};
   const root = S.root && S.root !== '/' ? S.root.replace(/\/$/, '') : '';
   const ar = (document.documentElement.lang || '').toLowerCase().startsWith('ar');
-  const bundleText = ar ? {
-    piece: 'القطعة', estimate: 'تقديري', subtotal: 'الإجمالي قبل الخصومات', savings: 'التوفير التقديري', total: 'الإجمالي التقديري', savingsLive: 'التوفير', totalLive: 'الإجمالي',
-    choose: 'اختر خيارات متاحة لكل قطعة.', stock: 'الكمية المطلوبة تتجاوز المخزون المتاح.', quantity: 'أدخل كمية صحيحة أكبر من صفر.',
-    select: 'اختر', average: 'متوسط سعر القطعة التقديري', oneTime: 'عروض المجموعة متاحة للشراء مرة واحدة فقط.',
+  const bs = L.strings || {};
+  const bundleText = {
+    piece: bs.b_piece, estimate: bs.b_estimate, subtotal: bs.b_subtotal, savings: bs.b_savings, total: bs.b_total, savingsLive: bs.b_savings_live, totalLive: bs.b_total_live,
+    choose: bs.b_choose, stock: bs.b_stock, quantity: bs.b_quantity, select: bs.b_select, average: bs.b_average, oneTime: bs.b_one_time,
+  };
+  const bundleFallback = ar ? {
+    piece: 'القطعة', estimate: 'تقديري', subtotal: 'المجموع قبل الخصم', savings: 'التوفير التقديري', total: 'الإجمالي التقديري', savingsLive: 'التوفير', totalLive: 'الإجمالي',
+    choose: 'اختار اختيارات متاحة لكل قطعة.', stock: 'الكمية المطلوبة أكتر من المتاح.', quantity: 'اكتب كمية صحيحة أكبر من صفر.',
+    select: 'اختار', average: 'متوسط سعر القطعة التقديري', oneTime: 'عروض الباندل للشراء مرة واحدة بس.',
   } : {
     piece: 'Piece', estimate: 'Estimate', subtotal: 'Subtotal before discounts', savings: 'Estimated savings', total: 'Estimated total', savingsLive: 'You save', totalLive: 'Total',
     choose: 'Choose available options for every piece.', stock: 'The requested quantity exceeds available stock.', quantity: 'Enter a positive whole-number quantity.',
     select: 'Choose', average: 'Estimated average per piece', oneTime: 'Bundle offers support one-time purchases only.',
   };
+  for (const key of Object.keys(bundleFallback)) if (!bundleText[key] || /^translation missing/i.test(bundleText[key])) bundleText[key] = bundleFallback[key];
 
   /* ------------------------------------------------------------------ */
   /* Product controller — one per [data-product]                         */
@@ -356,7 +362,7 @@
         if (match && ((typeof value === 'string' && value) || (value instanceof File && value.size))) properties[match[1]] = value;
       }
       const group = pieces.length ? `bundle-${crypto.randomUUID()}` : null;
-      const bundleOffer = bundle?.dataset.offerTitle || (ar ? 'عرض الباندل' : 'Bundle offer');
+      const bundleOffer = bundle?.dataset.offerTitle || L.strings?.bundle_offer || (ar ? 'عرض الباندل' : 'Bundle offer');
       const bundleDiscount = Number(activeTier?.dataset.pct || 0);
       /* The shopper reads these properties in the cart, so the piece's options
          are written with the localized labels the picker showed (colour, size),
@@ -370,7 +376,7 @@
           ...(fd.get('selling_plan') ? { selling_plan: fd.get('selling_plan') } : {}),
           properties: { ...properties, ...(group ? {
             'Bundle offer': `${bundleOffer} · ${pieces.length} ${ar ? 'قطع' : 'pieces'}`,
-            'Expected bundle discount': `${bundleDiscount}% (${ar ? 'تقديري فقط؛ يحسب Shopify الخصم الفعلي' : 'estimate only; Shopify calculates actual discounts'})`,
+            'Expected bundle discount': `${bundleDiscount}% (${L.strings?.bundle_estimate_note || (ar ? 'تقديري بس؛ Shopify بيحسب الخصم الفعلي' : 'estimate only; Shopify calculates actual discounts')})`,
             'Bundle piece': `${index + 1} / ${pieces.length}`,
             'Bundle selection': `${ar ? 'القطعة' : 'Piece'} ${index + 1}: ${selection}`,
             '_bundle_id': group,
@@ -561,7 +567,7 @@
       content.querySelector('[data-product]')?.destroyProduct?.();
       const error = document.createElement('p');
       error.className = 'muted'; error.setAttribute('role', 'alert');
-      error.textContent = L.strings.error || (ar ? 'تعذر تحميل المنتج.' : 'Could not load this product.');
+      error.textContent = L.strings.load_error || L.strings.error || (ar ? 'معرفناش نحمّل المنتج. جرّب تاني.' : 'Could not load this product.');
       const link = document.createElement('a');
       link.className = 'btn btn--ghost btn--block'; link.href = productUrl;
       link.textContent = L.strings.view_full || (ar ? 'عرض التفاصيل الكاملة' : 'View full details');

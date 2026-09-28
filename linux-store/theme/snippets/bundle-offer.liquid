@@ -20,7 +20,18 @@
   assign t3_q = bs.tier3_qty | default: 0
   assign t3_p = bs.tier3_pct | default: 20
   assign locale = request.locale.iso_code | slice: 0, 2
-  assign bundle_products = product.metafields.custom.bundle_products.value | default: bs.products
+  assign source = bs.source | default: 'store'
+  if source == 'same'
+    assign bundle_products = nil
+  elsif source == 'list'
+    assign bundle_products = product.metafields.custom.bundle_products.value | default: bs.products
+  else
+    assign source_coll = bs.collection
+    if source_coll == blank
+      assign source_coll = collections.all
+    endif
+    assign bundle_products = source_coll.products
+  endif
   assign sibling_count = bundle_products.size | default: 0 | at_most: 50
   assign live = bs.discount_live
   assign estimate_label = 'bundle.estimate' | t
@@ -83,7 +94,7 @@
       <div class="bundle__selection">
         <img class="bundle__image" data-bundle-image src="{{ product.featured_image | image_url: width: 160 }}" width="48" height="60" alt="" loading="lazy" hidden>
         <label class="bundle__option" data-bundle-product-label>
-          <span>{{ 'bundle.product_color' | t }}</span>
+          <span>{% if source == 'store' %}{{ 'bundle.pick_any' | t }}{% else %}{{ 'bundle.product_color' | t }}{% endif %}</span>
           <select class="input" data-bundle-product></select>
         </label>
       </div>
@@ -92,13 +103,14 @@
     </fieldset>
   </template>
   <p class="bundle__summary small" data-bundle-summary aria-live="polite" hidden></p>
-  <p class="bundle__note small muted">{% render 'icon', name: 'sparkle', px: 12 %} {{ 'bundle.note' | t }}</p>
+  <p class="bundle__note small muted">{% render 'icon', name: 'sparkle', px: 12 %} {% if source == 'store' %}{{ 'bundle.note_any' | t }}{% else %}{{ 'bundle.note' | t }}{% endif %}</p>
   {%- unless live -%}<p class="bundle__disclaimer small muted">{{ 'bundle.disclaimer' | t }}</p>{%- endunless -%}
   <script type="application/json" data-bundle-strings>{"each": {{ 'bundle.each' | t: price: '[price]' | json }}}</script>
   {%- capture json_lt -%}\u003c{%- endcapture -%}
   {%- capture bundle_data -%}
     [
     {%- assign separator = '' -%}
+    {%- assign seen_titles = '|' -%}
     {%- for product_index in (0..sibling_count) -%}
       {%- liquid
         assign bundle_product = product
@@ -108,7 +120,21 @@
           if bundle_product == blank or bundle_product.id == product.id
             continue
           endif
+          comment
+            A bundle piece must be a ready-made product the shopper can add as is.
+          endcomment
+          if bundle_product.available == false or bundle_product.gift_card? or bundle_product.handle contains 'customize' or bundle_product.tags contains 'no-bundle'
+            continue
+          endif
+          comment
+            Two catalog products with the same title look identical in the picker.
+          endcomment
+          assign title_key = '|' | append: bundle_product.title | append: '|'
+          if seen_titles contains title_key
+            continue
+          endif
         endif
+        assign seen_titles = seen_titles | append: bundle_product.title | append: '|'
       -%}
       {{- separator -}}{
         "handle": {{ bundle_product.handle | json }},

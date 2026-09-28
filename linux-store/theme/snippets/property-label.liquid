@@ -26,40 +26,76 @@
     when 'sides'
       echo 'cart.customized_sides' | t
     when 'design file'
-      echo 'customize.upload' | t
+      if locale == 'ar'
+        echo 'ملف التصميم'
+      else
+        echo 'customize.upload' | t
+      endif
     when 'side'
       echo 'customize.side' | t
     when 'design position'
       echo 'customize.position_label' | t
     when 'front design'
-      echo 'customize.front' | t | append: ' · ' | append: name_design
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · ملف التصميم'
+      else
+        echo 'customize.front' | t | append: ' · ' | append: name_design
+      endif
     when 'back design'
-      echo 'customize.back' | t | append: ' · ' | append: name_design
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · ملف التصميم'
+      else
+        echo 'customize.back' | t | append: ' · ' | append: name_design
+      endif
     when 'front position'
       echo 'customize.front' | t | append: ' · ' | append: name_pos
     when 'back position'
       echo 'customize.back' | t | append: ' · ' | append: name_pos
+    when 'front text'
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · الكتابة'
+      else
+        echo name | escape
+      endif
+    when 'back text'
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · الكتابة'
+      else
+        echo name | escape
+      endif
+    when 'front placement'
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · المكان'
+      else
+        echo name | escape
+      endif
+    when 'back placement'
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · المكان'
+      else
+        echo name | escape
+      endif
     when 'bundle offer'
       if locale == 'ar'
-        echo 'عرض المجموعة'
+        echo 'عرض الباندل'
       else
         echo 'Bundle offer'
       endif
     when 'expected bundle discount'
       if locale == 'ar'
-        echo 'خصم المجموعة المتوقع (تقديري فقط)'
+        echo 'خصم الباندل المتوقع (تقديري)'
       else
         echo 'Expected bundle discount (estimate only)'
       endif
     when 'bundle id'
       if locale == 'ar'
-        echo 'معرّف المجموعة'
+        echo 'رقم الباندل'
       else
         echo 'Bundle ID'
       endif
     when 'bundle piece'
       if locale == 'ar'
-        echo 'قطعة المجموعة'
+        echo 'قطعة من الباندل'
       else
         echo 'Bundle piece'
       endif

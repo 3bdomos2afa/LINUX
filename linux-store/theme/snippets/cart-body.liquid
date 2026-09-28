@@ -1,5 +1,4 @@
 {%- comment -%} Shared by the cart drawer and cart page. Re-rendered via the Section Rendering API. {%- endcomment -%}
-{%- assign cart_locale = request.locale.iso_code | slice: 0, 2 -%}
 {%- comment -%}
   Deliberately no free-shipping box here — on the cart page or in the drawer.
   The drawer carries both halves of it above this region: the island shows the
@@ -49,10 +48,10 @@
           <a class="cart-line__title" href="{{ item.url }}">{{ localized_item_title }}</a>
           {%- unless item.product.has_only_default_variant -%}<p class="cart-line__meta">{%- for opt in item.variant.options -%}{% render 'option-value', value: opt %}{%- unless forloop.last %} / {% endunless -%}{%- endfor -%}</p>{%- endunless -%}
           {%- if item.properties['Bundle offer'] != blank -%}
-            <div class="cart-line__bundle" aria-label="{% if cart_locale == 'ar' %}عرض الباندل{% else %}Bundle offer{% endif %}">
+            <div class="cart-line__bundle" aria-label="{{ 'cart.bundle_offer' | t }}">
               <span class="cart-line__bundle-icon">{% render 'icon', name: 'tag', px: 14 %}</span>
               <span>
-                <strong>{% if cart_locale == 'ar' %}عرض الباندل{% else %}Bundle offer{% endif %}</strong>
+                <strong>{{ 'cart.bundle_offer' | t }}</strong>
                 <small>{{ item.properties['Bundle offer'] | escape }}</small>
                 {%- if item.properties['Expected bundle discount'] != blank -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%} {{ expected_discount | strip | escape }}</small>{%- endif -%}
               </span>
@@ -121,11 +120,11 @@
             {%- assign actual_discount = 0 -%}
             {%- for allocation in item.discount_allocations -%}{%- assign actual_discount = actual_discount | plus: allocation.amount -%}{%- endfor -%}
             <div class="cart-line__discount small">
-              <p>{% if cart_locale == 'ar' %}خصم Shopify الفعلي (هذا السطر):{% else %}Actual Shopify discount (this line):{% endif %} {% render 'money', amount: actual_discount %}</p>
+              <p>{{ 'cart.bundle_actual' | t }} {% render 'money', amount: actual_discount %}</p>
               {%- for allocation in item.discount_allocations -%}
                 <p class="muted">{{ allocation.discount_application.title | escape }}: {% render 'money', amount: allocation.amount %}</p>
               {%- endfor -%}
-              <p class="muted">{% if cart_locale == 'ar' %}العرض المتوقع تقديري فقط. يحدد Shopify الأهلية والخصم الفعلي عند الدفع؛ تعديل السلة قد يغيّر العرض.{% else %}The expected offer is an estimate only. Shopify determines eligibility and actual discounts at checkout; cart changes may affect the offer.{% endif %}</p>
+              <p class="muted">{{ 'cart.bundle_note' | t }}</p>
             </div>
           {%- endif -%}
           <div class="cart-line__row">

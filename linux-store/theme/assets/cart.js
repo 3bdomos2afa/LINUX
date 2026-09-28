@@ -8,7 +8,7 @@
   const root = S.root && S.root !== '/' ? S.root.replace(/\/$/, '') : '';
   const strings = L.strings || {};
   const ar = (document.documentElement.lang || '').toLowerCase().startsWith('ar');
-  const invalidSelection = ar ? 'اختر منتجاً متاحاً وكمية صحيحة.' : 'Choose an available item and a valid quantity.';
+  const invalidSelection = L.strings?.err_invalid || (ar ? 'اختار منتج متاح وكمية صحيحة.' : 'Choose an available item and a valid quantity.');
   function showError(message) {
     const text = document.createElement('span');
     text.textContent = message || strings.error || invalidSelection;
@@ -64,14 +64,14 @@
       const key = customizedKey(item);
       if (!key || id == null || !Number.isSafeInteger(quantity) || quantity < 1) {
         throw new Error(ar
-          ? 'يلزم وجود معرّف ثابت للتصميم والمقاس والكمية قبل رفع الملفات.'
+          ? 'لازم يكون للتصميم والمقاس والكمية رقم ثابت قبل رفع الملفات.'
           : 'File-backed custom items need a persistent design ID, size, variant, and positive quantity.');
       }
       const current = jobs.get(key);
       if (current && (!sameProperties(current.item.properties || {}, properties)
         || String(current.item.selling_plan || '') !== String(item.selling_plan || ''))) {
         throw new Error(ar
-          ? 'بيانات القطع ذات التصميم والمقاس نفسيهما غير متطابقة؛ لم تتم إضافة شيء.'
+          ? 'بيانات القطع اللي ليها نفس التصميم والمقاس مش متطابقة، فمتضافش حاجة.'
           : 'Custom items with the same design, size, and variant have different properties; nothing was added.');
       }
       if (current) current.quantity += quantity;
@@ -145,7 +145,7 @@
           });
           const result = await L.fetchJSON(`${root}/cart/add.js`, { method: 'POST', body });
           if (!cartAddResponseMatches(result, job.id)) {
-            throw new Error(ar ? 'تعذر تأكيد إضافة أحد المقاسات.' : 'Could not confirm one customized size was added.');
+            throw new Error(L.strings?.err_confirm_size || (ar ? 'معرفناش نتأكد إن أحد المقاسات اتضاف.' : 'Could not confirm one customized size was added.'));
           }
           responses.push(result);
           counts.set(job.key, (counts.get(job.key) || 0) + job.quantity);
@@ -179,7 +179,7 @@
       const added = result?.items || (result?.id ? [result] : []);
       if (!Array.isArray(added) || !added.length || (!formData
         && (added.length !== items.length || items.some((item) => !added.some((line) => String(line.id) === String(item.id)))))) {
-        throw new Error(ar ? 'تعذر تأكيد الإضافة. تحقق من السلة قبل المحاولة مجدداً.' : 'Could not confirm the add. Check your cart before trying again.');
+        throw new Error(L.strings?.err_check_bag || (ar ? 'بص على الشنطة قبل ما تجرّب تاني.' : 'Could not confirm the add. Check your bag before trying again.'));
       }
       return result;
     },
@@ -258,8 +258,7 @@
     } catch (e) {
       if (added) {
         e.cartAdded = true;
-        e.message = ar ? 'تمت إضافة القطع، لكن تعذر تحديث السلة. افتح السلة قبل الإضافة مجدداً.'
-          : 'Items were added, but the cart could not refresh. View your cart before adding again.';
+        e.message = L.strings?.err_refresh || (ar ? 'القطع اتضافت، بس الشنطة متحدّثتش. افتحها قبل ما تضيف تاني.' : 'Items were added, but the cart could not refresh. View your cart before adding again.');
       }
       else {
         if (e.cartAdd) {
@@ -290,7 +289,7 @@
           }
         } else {
           try { await refresh(); } catch {}
-          const check = ar ? 'تحقق من السلة قبل المحاولة مجدداً.' : 'Check your cart before trying again.';
+          const check = L.strings?.err_check_bag || (ar ? 'بص على الشنطة قبل ما تجرّب تاني.' : 'Check your bag before trying again.');
           if (!e.message?.includes(check)) e.message = `${e.message || strings.error || invalidSelection} ${check}`;
         }
       }

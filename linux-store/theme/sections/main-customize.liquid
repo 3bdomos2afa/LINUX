@@ -78,13 +78,13 @@
               assign photo_tee_back = b.tee_back | default: s.mockup_tee_back
               assign built_in = ''
               assign built_front = ''
+              assign built_tee_front = ''
               assign built_tee_back = ''
               if b.builtin != blank and b.builtin != 'none'
                 assign built_in = 'cz-hoodie-back-' | append: b.builtin | append: '.webp'
                 assign built_front = 'cz-hoodie-front-' | append: b.builtin | append: '.webp'
-                if b.builtin == 'white' or b.builtin == 'black'
-                  assign built_tee_back = 'cz-tee-back-' | append: b.builtin | append: '.webp'
-                endif
+                assign built_tee_front = 'cz-tee-front-' | append: b.builtin | append: '.webp'
+                assign built_tee_back = 'cz-tee-back-' | append: b.builtin | append: '.webp'
               endif
             -%}
             {%- capture photo_label -%}{% render 'option-value', value: b.name %} · {{ 'customize.mockup' | t }}{%- endcapture -%}
@@ -93,7 +93,7 @@
             {%- assign photo_key = key | append: '|hoodie-front' -%}
             {% render 'customize-mockup', photo: photo_hoodie_front, builtin: built_front, key: photo_key, label: photo_label %}
             {%- assign photo_key = key | append: '|tee-front' -%}
-            {% render 'customize-mockup', photo: photo_tee_front, key: photo_key, label: photo_label %}
+            {% render 'customize-mockup', photo: photo_tee_front, builtin: built_tee_front, key: photo_key, label: photo_label %}
             {%- assign photo_key = key | append: '|tee-back' -%}
             {% render 'customize-mockup', photo: photo_tee_back, builtin: built_tee_back, key: photo_key, label: photo_label %}
           {%- endfor -%}
@@ -122,6 +122,7 @@
           {%- endfor -%}
         </div>
 
+        {%- if s.show_quality != false -%}<span class="cz__quality" data-cz-quality-stage hidden></span>{%- endif -%}
         <div class="cz__tools glass glass--solid" data-cz-tools hidden>
           <button class="icon-btn" type="button" data-cz-tool="zoom-out" aria-label="{{ 'customize.smaller' | t }}" title="{{ 'customize.smaller' | t }}">{% render 'icon', name: 'minus', px: 16 %}</button>
           <button class="icon-btn" type="button" data-cz-tool="zoom-in" aria-label="{{ 'customize.bigger' | t }}" title="{{ 'customize.bigger' | t }}">{% render 'icon', name: 'plus', px: 16 %}</button>
@@ -138,6 +139,19 @@
       </div>
 
       <button class="btn btn--glass btn--sm cz__edit-toggle" type="button" data-cz-edit-toggle aria-pressed="false" hidden>{{ 'customize.edit_design' | t }}</button>
+      {%- if s.enable_places != false -%}
+      <div class="cz__places" data-cz-places hidden>
+        <span class="cz__places-label">{% render 'icon', name: 'target', px: 14 %}{{ 'customize.placement' | t }}</span>
+        <div class="cz__places-list" role="group" aria-label="{{ 'customize.placement' | t | escape }}">
+          <button class="chip" type="button" data-cz-place="center" data-side="front">{{ 'customize.place_center' | t }}</button>
+          <button class="chip" type="button" data-cz-place="pocket" data-side="front">{{ 'customize.place_pocket' | t }}</button>
+          <button class="chip" type="button" data-cz-place="full" data-side="front">{{ 'customize.place_full_front' | t }}</button>
+          <button class="chip" type="button" data-cz-place="upper" data-side="back">{{ 'customize.place_upper' | t }}</button>
+          <button class="chip" type="button" data-cz-place="middle" data-side="back">{{ 'customize.place_middle' | t }}</button>
+          <button class="chip" type="button" data-cz-place="full" data-side="back">{{ 'customize.place_full_back' | t }}</button>
+        </div>
+      </div>
+      {%- endif -%}
       <div class="cz__stage-foot">
         <div class="cz__colors" role="radiogroup" aria-label="{{ 'customize.color' | t }}">
           {%- for block in color_blocks -%}
@@ -185,7 +199,7 @@
               <p class="cz__upload-status small" data-cz-upload-status role="status" hidden>{{ 'customize.processing_image' | t }}</p>
               <div class="cz__file glass glass--clear" data-cz-file-row="{{ side }}" hidden>
                 <img alt="" width="44" height="44" data-cz-thumb>
-                <div class="cz__file-meta"><span class="cz__drop-side">{{ side_label }}</span><strong data-cz-filename></strong><small class="muted" data-cz-filesize></small></div>
+                <div class="cz__file-meta"><span class="cz__drop-side">{{ side_label }}</span><strong data-cz-filename></strong><small class="muted" data-cz-filesize></small>{%- if s.show_quality != false -%}<small class="cz__quality cz__quality--row" data-cz-quality="{{ side }}" hidden></small>{%- endif -%}</div>
                 <div class="cz__file-actions">
                   <button class="icon-btn" type="button" data-cz-edit="{{ side }}" aria-label="{{ 'customize.edit_side' | t: side: side_label }}" title="{{ 'customize.edit_side' | t: side: side_label }}">{% render 'icon', name: 'move', px: 16 %}</button>
                   <button class="icon-btn" type="button" data-cz-remove="{{ side }}" aria-label="{{ 'customize.remove' | t }}" title="{{ 'customize.remove' | t }}">{% render 'icon', name: 'trash', px: 16 %}</button>
@@ -194,6 +208,36 @@
             </div>
           {%- endfor -%}
         </div>
+        {%- if s.enable_text != false -%}
+          {%- assign text_colors = s.text_colors | default: '#f4e8d8,#ffffff,#111111,#8fcb5a,#043020,#d0453a,#ffc94a' | split: ',' -%}
+          <button class="cz__text-toggle" type="button" data-cz-text-toggle aria-expanded="false" aria-controls="cz-text-{{ section.id }}">{% render 'icon', name: 'customize', px: 16 %}<span>{{ 'customize.text_add' | t }}</span>{% render 'icon', name: 'chevron-down', px: 14 %}</button>
+          <div class="cz__text glass glass--clear" id="cz-text-{{ section.id }}" data-cz-text hidden>
+            <label class="field">
+              <span class="field__label">{{ 'customize.text_label' | t }}</span>
+              <textarea class="input cz__text-input" rows="2" maxlength="{{ s.text_max | default: 32 }}" data-cz-text-input placeholder="{{ 'customize.text_placeholder' | t | escape }}"></textarea>
+            </label>
+            <div class="cz__text-opts">
+              <span class="field__label">{{ 'customize.text_font' | t }}</span>
+              <div class="segmented cz__text-fonts" role="radiogroup" aria-label="{{ 'customize.text_font' | t | escape }}">
+                <button class="segmented__btn is-active" type="button" role="radio" aria-checked="true" data-cz-text-font="display">{{ 'customize.text_font_bold' | t }}</button>
+                <button class="segmented__btn" type="button" role="radio" aria-checked="false" data-cz-text-font="body">{{ 'customize.text_font_clean' | t }}</button>
+                <button class="segmented__btn" type="button" role="radio" aria-checked="false" data-cz-text-font="accent">{{ 'customize.text_font_fun' | t }}</button>
+              </div>
+            </div>
+            <div class="cz__text-opts">
+              <span class="field__label">{{ 'customize.text_color' | t }}</span>
+              <div class="cz__text-colors" role="radiogroup" aria-label="{{ 'customize.text_color' | t | escape }}">
+                {%- for hex in text_colors -%}
+                  {%- assign hx = hex | strip -%}
+                  <button class="pill swatch{% if forloop.first %} is-active{% endif %}" type="button" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" style="--swatch: {{ hx }}" data-cz-text-color="{{ hx }}" aria-label="{{ hx }}"></button>
+                {%- endfor -%}
+                <label class="cz__text-custom" title="{{ 'customize.text_custom_color' | t | escape }}">{% render 'icon', name: 'palette', px: 16 %}<input type="color" value="#f4e8d8" data-cz-text-custom aria-label="{{ 'customize.text_custom_color' | t | escape }}"></label>
+              </div>
+            </div>
+            <button class="btn btn--primary btn--sm btn--block" type="button" data-cz-text-apply>{{ 'customize.text_apply_default' | t }}</button>
+            <p class="small muted cz__text-note">{{ 'customize.text_note' | t }}</p>
+          </div>
+        {%- endif -%}
         <p class="form-error" data-cz-error role="alert" hidden></p>
       </div>
 
@@ -305,6 +349,12 @@
       {%- endif -%}
     {%- endform -%}
   </div>
+  {%- if s.show_sticky_bar != false -%}
+  <div class="cz__sticky glass glass--solid" data-cz-sticky aria-hidden="true" inert>
+    <div class="cz__sticky-text"><small>{{ 'customize.total' | t }}</small><strong data-cz-sticky-total>{% render 'money', amount: current.price %}</strong></div>
+    <button class="btn btn--primary btn--sm" type="button" data-cz-sticky-submit>{% render 'icon', name: 'bag', px: 16 %}{{ 'products.add_to_bag' | t }}</button>
+  </div>
+  {%- endif -%}
   {% render 'size-guide-drawer' %}
 
   {%- if s.show_steps -%}
@@ -317,15 +367,15 @@
   {%- endif -%}
 
   <script type="application/json" data-cz-catalog>{"hoodie":{% render 'customize-catalog', product: hoodie %},"tee":{% render 'customize-catalog', product: tee %}}</script>
-  <script type="application/json" data-cz-config>{"colorOption":{{ s.color_option | default: 'Color' | json }},"methodOption":{{ s.method_option | default: 'Type' | json }},"sizeOption":{{ s.size_option | default: 'Size' | json }},"sizeAsProperty":{{ s.size_as_property | default: false | json }},"methodValues":{"Print":{{ s.method_print_value | default: 'Print' | json }},"Embroidery":{{ s.method_embroidery_value | default: 'Embroidery' | json }}},"tiers":[{%- if s.volume_pricing_enabled -%}{%- for block in pricing_blocks -%}{"quantity":{{ block.settings.quantity | json }},"discount":{{ block.settings.discount | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}{%- endif -%}]}</script>
+  <script type="application/json" data-cz-config>{"colorOption":{{ s.color_option | default: 'Color' | json }},"methodOption":{{ s.method_option | default: 'Type' | json }},"sizeOption":{{ s.size_option | default: 'Size' | json }},"sizeAsProperty":{{ s.size_as_property | default: false | json }},"methodValues":{"Print":{{ s.method_print_value | default: 'Print' | json }},"Embroidery":{{ s.method_embroidery_value | default: 'Embroidery' | json }}},"tiers":[{%- if s.volume_pricing_enabled -%}{%- for block in pricing_blocks -%}{"quantity":{{ block.settings.quantity | json }},"discount":{{ block.settings.discount | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}{%- endif -%}],"print":{"hoodie":{"front":{{ s.print_hoodie_front | default: 28 }},"back":{{ s.print_hoodie_back | default: 36 }}},"tee":{"front":{{ s.print_tee_front | default: 28 }},"back":{{ s.print_tee_back | default: 34 }}}},"quality":{{ s.show_quality | default: true, allow_false: true | json }}}</script>
   <script type="application/json" data-cz-strings>{
-    {%- assign copy_keys = 'edit_design,finish_editing,browse_hint,edit_hint,file_invalid,selection_unavailable,mockup_failed,pricing_standard,pricing_more,pricing_estimate_notice,next_tier,unit_price,estimated_unit_price,estimated_total,total,tier_label,tier_base,kilobytes' | split: ',' -%}
+    {%- assign copy_keys = 'edit_design,finish_editing,browse_hint,edit_hint,file_invalid,selection_unavailable,mockup_failed,pricing_standard,pricing_more,pricing_estimate_notice,next_tier,unit_price,estimated_unit_price,estimated_total,total,tier_label,tier_base,kilobytes,quality_great,quality_ok,quality_low,quality_vector,text_file,text_empty,text_apply' | split: ',' -%}
     {%- for copy_key in copy_keys -%}
       {%- assign translation_key = 'customize.' | append: copy_key -%}
       {{ copy_key | json }}: {{ translation_key | t: count: '[count]', percent: '[percent]' | json }}{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   }</script>
-  <script type="application/json" data-product-json>{"id":{{ p.id }},"handle":{{ p.handle | json }},"title":{{ p.title | json }},"url":{{ p.url | json }},"price":{{ current.price }},"strings":{"needDesign":{{ 'customize.need_design' | t | json }},"fileTooBig":{{ 'customize.file_too_big' | t: mb: max_mb_label | json }},"fileType":{{ 'customize.file_type' | t | json }},"minEmbroidery":{{ 'customize.min_embroidery' | t: count: min_emb_label | json }},"piece":{{ 'customize.piece' | t: n: '[n]' | json }},"perPiece":{{ 'customize.per_piece' | t: price: '[price]' | json }},"etaPrint":{{ 'customize.eta_print' | t | json }},"etaEmbroidery":{{ 'customize.step_4' | t | json }},"wa":{{ 'customize.whatsapp_prefill' | t | json }},"hint":{{ 'customize.hint_3d' | t | json }},"hintDesign":{{ 'customize.hint_design' | t | json }},"front":{{ 'customize.front' | t | json }},"back":{{ 'customize.back' | t | json }},"uploadSide":{{ 'customize.upload_side' | t: side: '[side]' | json }},"both":{{ 'customize.both_sides' | t | json }},"twoSided":{{ 'customize.two_sided_note' | t | json }}},"methodOption":{{ s.method_option | default: 'Type' | json }},"colorOption":{{ s.color_option | default: 'Color' | json }},"methodValues":{"Print":{{ s.method_print_value | default: 'Print' | json }},"Embroidery":{{ s.method_embroidery_value | default: 'Embroidery' | json }}},"area":{"hoodie":{"front":[50,44,52,50],"back":[50,42,56,58]},"tee":{"front":[50,46,50,50],"back":[50,44,52,54]}}}</script>
+  <script type="application/json" data-product-json>{"id":{{ p.id }},"handle":{{ p.handle | json }},"title":{{ p.title | json }},"url":{{ p.url | json }},"price":{{ current.price }},"strings":{"needDesign":{{ 'customize.need_design' | t | json }},"fileTooBig":{{ 'customize.file_too_big' | t: mb: max_mb_label | json }},"fileType":{{ 'customize.file_type' | t | json }},"minEmbroidery":{{ 'customize.min_embroidery' | t: count: min_emb_label | json }},"piece":{{ 'customize.piece' | t: n: '[n]' | json }},"perPiece":{{ 'customize.per_piece' | t: price: '[price]' | json }},"etaPrint":{{ 'customize.eta_print' | t | json }},"etaEmbroidery":{{ 'customize.step_4' | t | json }},"wa":{{ 'customize.whatsapp_prefill' | t | json }},"hint":{{ 'customize.hint_3d' | t | json }},"hintDesign":{{ 'customize.hint_design' | t | json }},"front":{{ 'customize.front' | t | json }},"back":{{ 'customize.back' | t | json }},"uploadSide":{{ 'customize.upload_side' | t: side: '[side]' | json }},"both":{{ 'customize.both_sides' | t | json }},"twoSided":{{ 'customize.two_sided_note' | t | json }}},"methodOption":{{ s.method_option | default: 'Type' | json }},"colorOption":{{ s.color_option | default: 'Color' | json }},"methodValues":{"Print":{{ s.method_print_value | default: 'Print' | json }},"Embroidery":{{ s.method_embroidery_value | default: 'Embroidery' | json }}},"area":{"hoodie":{"front":[50,45,28,22],"back":[50,49,34,38]},"tee":{"front":[50,38,30,36],"back":[50,37,30,40]}}}</script>
   {%- else -%}
     <div class="empty-state glass"><p>{{ 'customize.garment_unavailable' | t }}</p><a class="btn btn--glass" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a></div>
   {%- endif -%}
@@ -350,6 +400,17 @@
     { "type": "image_picker", "id": "mockup_hoodie_back", "label": "Hoodie — back mockup" },
     { "type": "image_picker", "id": "mockup_tee_front", "label": "Tee — front mockup" },
     { "type": "image_picker", "id": "mockup_tee_back", "label": "Tee — back mockup" },
+    { "type": "header", "content": "Studio tools" },
+    { "type": "checkbox", "id": "enable_text", "label": "Text tool (shoppers type a word, name or date)", "default": true },
+    { "type": "range", "id": "text_max", "label": "Text length limit", "min": 10, "max": 60, "step": 2, "default": 32 },
+    { "type": "text", "id": "text_colors", "label": "Text colours (hex, comma-separated)", "default": "#f4e8d8,#ffffff,#111111,#8fcb5a,#043020,#d0453a,#ffc94a" },
+    { "type": "checkbox", "id": "enable_places", "label": "Placement buttons (chest, pocket, full back…)", "default": true },
+    { "type": "checkbox", "id": "show_quality", "label": "Print-quality check on uploads", "default": true },
+    { "type": "range", "id": "print_hoodie_front", "label": "Hoodie front print width", "min": 20, "max": 40, "step": 1, "unit": "cm", "default": 28 },
+    { "type": "range", "id": "print_hoodie_back", "label": "Hoodie back print width", "min": 24, "max": 46, "step": 1, "unit": "cm", "default": 36 },
+    { "type": "range", "id": "print_tee_front", "label": "Tee front print width", "min": 20, "max": 40, "step": 1, "unit": "cm", "default": 28 },
+    { "type": "range", "id": "print_tee_back", "label": "Tee back print width", "min": 24, "max": 46, "step": 1, "unit": "cm", "default": 34 },
+    { "type": "checkbox", "id": "show_sticky_bar", "label": "Sticky total + add-to-bag bar on phones", "default": true },
     { "type": "text", "id": "sizes", "label": "Sizes offered (comma-separated)", "default": "S,M,L,XL,2XL" },
     { "type": "text", "id": "quick_qtys", "label": "Quick quantity chips (comma-separated)", "default": "1,5,10,20" },
     { "type": "range", "id": "min_embroidery", "label": "Minimum pieces for embroidery", "min": 1, "max": 50, "step": 1, "default": 10 },
@@ -374,32 +435,8 @@
     { "type": "text", "id": "method_embroidery_value", "label": "Option value for embroidery", "default": "Embroidery" }
   ],
   "blocks": [
-    {
-      "type": "price_tier",
-      "name": "Quantity tier",
-      "limit": 4,
-      "settings": [
-        { "type": "range", "id": "quantity", "label": "Minimum pieces", "min": 2, "max": 50, "step": 1, "default": 2 },
-        { "type": "range", "id": "discount", "label": "Existing Shopify discount", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 0, "info": "Use the rate you created in Shopify Discounts. Zero leaves this tier inactive." }
-      ]
-    },
-    {
-      "type": "color",
-      "name": "Garment colour",
-      "settings": [
-        { "type": "text", "id": "name", "label": "Colour name", "info": "Shown to the shopper; translated when the theme knows the word.", "default": "Black" },
-        { "type": "color", "id": "hex", "label": "Swatch colour", "default": "#181818" },
-        { "type": "text", "id": "variant_value", "label": "Value in the product's Color option", "info": "Leave blank when it equals the colour name." },
-        { "type": "select", "id": "builtin", "label": "Built-in mockup photos", "options": [
-          { "value": "none", "label": "None (use uploaded photos / drawn mockup)" },
-          { "value": "black", "label": "Black" }, { "value": "white", "label": "White" }, { "value": "burgundy", "label": "Burgundy" }, { "value": "beige", "label": "Beige" }
-        ], "default": "none" },
-        { "type": "image_picker", "id": "hoodie_back", "label": "Hoodie — back photo (overrides built-in)" },
-        { "type": "image_picker", "id": "hoodie_front", "label": "Hoodie — front photo" },
-        { "type": "image_picker", "id": "tee_front", "label": "Tee — front photo" },
-        { "type": "image_picker", "id": "tee_back", "label": "Tee — back photo" }
-      ]
-    }
+    { "type": "price_tier", "name": "Quantity tier", "limit": 4, "settings": [ { "type": "range", "id": "quantity", "label": "Minimum pieces", "min": 2, "max": 50, "step": 1, "default": 2 }, { "type": "range", "id": "discount", "label": "Existing Shopify discount", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 0, "info": "Use the rate you created in Shopify Discounts. Zero leaves this tier inactive." } ] },
+    { "type": "color", "name": "Garment colour", "settings": [ { "type": "text", "id": "name", "label": "Colour name", "info": "Shown to the shopper; translated when the theme knows the word.", "default": "Black" }, { "type": "color", "id": "hex", "label": "Swatch colour", "default": "#181818" }, { "type": "text", "id": "variant_value", "label": "Value in the product's Color option", "info": "Leave blank when it equals the colour name." }, { "type": "select", "id": "builtin", "label": "Built-in mockup photos", "options": [ { "value": "none", "label": "None (use uploaded photos / drawn mockup)" }, { "value": "black", "label": "Black" }, { "value": "white", "label": "White" }, { "value": "burgundy", "label": "Burgundy" }, { "value": "beige", "label": "Beige" } ], "default": "none", "info": "Hoodie front and back, and tee front and back, in this colour (built-in mockups). Uploaded photos below win." }, { "type": "image_picker", "id": "hoodie_back", "label": "Hoodie — back photo (overrides built-in)" }, { "type": "image_picker", "id": "hoodie_front", "label": "Hoodie — front photo" }, { "type": "image_picker", "id": "tee_front", "label": "Tee — front photo" }, { "type": "image_picker", "id": "tee_back", "label": "Tee — back photo" } ] }
   ],
   "max_blocks": 12
 }
