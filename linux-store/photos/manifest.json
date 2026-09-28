@@ -1,0 +1,778 @@
+{
+  "products": {
+    "anime-shirt-white": [
+      {
+        "file": "products/anime-shirt-white/01.webp",
+        "dark": "products/anime-shirt-white/dark/01.webp",
+        "cutout": "products/anime-shirt-white/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2753.jpg?v=1779712977"
+      },
+      {
+        "file": "products/anime-shirt-white/02.webp",
+        "dark": "products/anime-shirt-white/dark/02.webp",
+        "cutout": null,
+        "source_index": 1,
+        "kind": "detail",
+        "width": 1600,
+        "height": 2000,
+        "framing": "detail",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2755.jpg?v=1779732992"
+      },
+      {
+        "file": "products/anime-shirt-white/03.webp",
+        "dark": "products/anime-shirt-white/dark/03.webp",
+        "cutout": "products/anime-shirt-white/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2752.jpg?v=1779732982"
+      },
+      {
+        "file": "products/anime-shirt-white/04.webp",
+        "dark": "products/anime-shirt-white/dark/04.webp",
+        "cutout": "products/anime-shirt-white/cutout/04.webp",
+        "source_index": 3,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/A94DFA5C-FC27-4EB1-B3B4-45177C5C700D.png?v=1779732987"
+      },
+      {
+        "file": "products/anime-shirt-white/05.webp",
+        "dark": "products/anime-shirt-white/dark/05.webp",
+        "cutout": "products/anime-shirt-white/cutout/05.webp",
+        "source_index": 4,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/05CD8643-C68A-454B-857B-EDA94ECAE989.png?v=1779732989"
+      },
+      {
+        "file": "products/anime-shirt-white/06.webp",
+        "dark": "products/anime-shirt-white/dark/06.webp",
+        "cutout": "products/anime-shirt-white/cutout/06.webp",
+        "source_index": 5,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/ED4DBECD-F5BF-4B61-8AE6-737CE089EFA5.png?v=1779732991"
+      },
+      {
+        "file": "products/anime-shirt-white/07.webp",
+        "dark": "products/anime-shirt-white/dark/07.webp",
+        "cutout": "products/anime-shirt-white/cutout/07.webp",
+        "source_index": 6,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/4B89B5B3-678B-46CA-8DAF-942757263C46_70a2dbff-fa45-4480-a4a3-64163be189b7.png?v=1779732992"
+      }
+    ],
+    "anime-shirt": [
+      {
+        "file": "products/anime-shirt/01.webp",
+        "dark": "products/anime-shirt/dark/01.webp",
+        "cutout": "products/anime-shirt/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2754.jpg?v=1779712977"
+      },
+      {
+        "file": "products/anime-shirt/02.webp",
+        "dark": "products/anime-shirt/dark/02.webp",
+        "cutout": null,
+        "source_index": 1,
+        "kind": "detail",
+        "width": 1600,
+        "height": 2000,
+        "framing": "detail",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2756.jpg?v=1779732986"
+      },
+      {
+        "file": "products/anime-shirt/03.webp",
+        "dark": "products/anime-shirt/dark/03.webp",
+        "cutout": "products/anime-shirt/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG_2751.jpg?v=1779732972"
+      },
+      {
+        "file": "products/anime-shirt/04.webp",
+        "dark": "products/anime-shirt/dark/04.webp",
+        "cutout": "products/anime-shirt/cutout/04.webp",
+        "source_index": 3,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/CAC64EC2-1BD3-494E-AB6E-1697E66679A5.png?v=1779732986"
+      },
+      {
+        "file": "products/anime-shirt/05.webp",
+        "dark": "products/anime-shirt/dark/05.webp",
+        "cutout": "products/anime-shirt/cutout/05.webp",
+        "source_index": 4,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/9B0AC84D-BAA3-45B7-B1A5-AEA4A4D66605.png?v=1779732984"
+      },
+      {
+        "file": "products/anime-shirt/06.webp",
+        "dark": "products/anime-shirt/dark/06.webp",
+        "cutout": "products/anime-shirt/cutout/06.webp",
+        "source_index": 5,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/7904089F-9F19-4334-AF4B-2FF8091BAC5A.png?v=1779732982"
+      },
+      {
+        "file": "products/anime-shirt/07.webp",
+        "dark": "products/anime-shirt/dark/07.webp",
+        "cutout": "products/anime-shirt/cutout/07.webp",
+        "source_index": 6,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/4547F36B-A8D6-4C1C-84E2-69A4B745EF05_907658c6-c399-455d-8932-e8b4fefbc19e.png?v=1779732981"
+      }
+    ],
+    "hoodie-anime-beige": [
+      {
+        "file": "products/hoodie-anime-beige/01.webp",
+        "dark": "products/hoodie-anime-beige/dark/01.webp",
+        "cutout": "products/hoodie-anime-beige/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/R9QMA20.jpg?v=1779443291"
+      },
+      {
+        "file": "products/hoodie-anime-beige/02.webp",
+        "dark": "products/hoodie-anime-beige/dark/02.webp",
+        "cutout": "products/hoodie-anime-beige/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/RF84XO2.jpg?v=1779443291"
+      },
+      {
+        "file": "products/hoodie-anime-beige/03.webp",
+        "dark": "products/hoodie-anime-beige/dark/03.webp",
+        "cutout": "products/hoodie-anime-beige/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/RF30H7J.jpg?v=1779443291"
+      }
+    ],
+    "hoodie-anime-black-1": [
+      {
+        "file": "products/hoodie-anime-black-1/01.webp",
+        "dark": "products/hoodie-anime-black-1/dark/01.webp",
+        "cutout": "products/hoodie-anime-black-1/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/ANIME_BLACK2.png?v=1779443290"
+      },
+      {
+        "file": "products/hoodie-anime-black-1/02.webp",
+        "dark": "products/hoodie-anime-black-1/dark/02.webp",
+        "cutout": "products/hoodie-anime-black-1/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Black_2.jpg?v=1779443287"
+      }
+    ],
+    "hoodie-anime-black": [
+      {
+        "file": "products/hoodie-anime-black/01.webp",
+        "dark": "products/hoodie-anime-black/dark/01.webp",
+        "cutout": "products/hoodie-anime-black/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Black_1.jpg?v=1779443294"
+      },
+      {
+        "file": "products/hoodie-anime-black/02.webp",
+        "dark": "products/hoodie-anime-black/dark/02.webp",
+        "cutout": "products/hoodie-anime-black/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Black_2.jpg?v=1779443295"
+      },
+      {
+        "file": "products/hoodie-anime-black/03.webp",
+        "dark": "products/hoodie-anime-black/dark/03.webp",
+        "cutout": "products/hoodie-anime-black/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Black_3.jpg?v=1779443294"
+      }
+    ],
+    "hoodie-anime-burgundy": [
+      {
+        "file": "products/hoodie-anime-burgundy/01.webp",
+        "dark": "products/hoodie-anime-burgundy/dark/01.webp",
+        "cutout": "products/hoodie-anime-burgundy/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Burgundy_1.jpg?v=1779443292"
+      },
+      {
+        "file": "products/hoodie-anime-burgundy/02.webp",
+        "dark": "products/hoodie-anime-burgundy/dark/02.webp",
+        "cutout": "products/hoodie-anime-burgundy/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Burgundy_3.jpg?v=1779443292"
+      },
+      {
+        "file": "products/hoodie-anime-burgundy/03.webp",
+        "dark": "products/hoodie-anime-burgundy/dark/03.webp",
+        "cutout": "products/hoodie-anime-burgundy/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Burgundy_2.jpg?v=1779443292"
+      }
+    ],
+    "hoodie-anime-white": [
+      {
+        "file": "products/hoodie-anime-white/01.webp",
+        "dark": "products/hoodie-anime-white/dark/01.webp",
+        "cutout": "products/hoodie-anime-white/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_White_1.jpg?v=1779443293"
+      },
+      {
+        "file": "products/hoodie-anime-white/02.webp",
+        "dark": "products/hoodie-anime-white/dark/02.webp",
+        "cutout": "products/hoodie-anime-white/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_White_2.jpg?v=1779443293"
+      },
+      {
+        "file": "products/hoodie-anime-white/03.webp",
+        "dark": "products/hoodie-anime-white/dark/03.webp",
+        "cutout": "products/hoodie-anime-white/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_White_3.jpg?v=1779443293"
+      }
+    ],
+    "hoodie-anime": [
+      {
+        "file": "products/hoodie-anime/01.webp",
+        "dark": "products/hoodie-anime/dark/01.webp",
+        "cutout": "products/hoodie-anime/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/ANIME_WHITE2.png?v=1779443291"
+      },
+      {
+        "file": "products/hoodie-anime/02.webp",
+        "dark": "products/hoodie-anime/dark/02.webp",
+        "cutout": "products/hoodie-anime/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_White_1.jpg?v=1779443289"
+      }
+    ],
+    "hoodie-customize": [
+      {
+        "file": "products/hoodie-customize/01.webp",
+        "dark": "products/hoodie-customize/dark/01.webp",
+        "cutout": "products/hoodie-customize/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "flat",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/image_1766404985975029.png?v=1779443286"
+      },
+      {
+        "file": "products/hoodie-customize/02.webp",
+        "dark": "products/hoodie-customize/dark/02.webp",
+        "cutout": "products/hoodie-customize/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "flat",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/generated_image_3b5005dd-7dee-42dd-8fc5-5969971d5b04-Recovered-Recovered.png?v=1779443286"
+      },
+      {
+        "file": "products/hoodie-customize/03.webp",
+        "dark": "products/hoodie-customize/dark/03.webp",
+        "cutout": "products/hoodie-customize/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "flat",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/image_1766404985975029_b613a3fa-6ad7-44be-a128-43bccaf7d618.png?v=1779443285"
+      },
+      {
+        "file": "products/hoodie-customize/04.webp",
+        "dark": "products/hoodie-customize/dark/04.webp",
+        "cutout": "products/hoodie-customize/cutout/04.webp",
+        "source_index": 3,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "flat",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/generated_image-Recovered-Recovered_b388e254-57e9-400a-b00c-ca10c06b9184.png?v=1779443286"
+      }
+    ],
+    "hoodie-flower": [
+      {
+        "file": "products/hoodie-flower/01.webp",
+        "dark": "products/hoodie-flower/dark/01.webp",
+        "cutout": "products/hoodie-flower/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/IMG-3802.png?v=1779443289"
+      },
+      {
+        "file": "products/hoodie-flower/02.webp",
+        "dark": "products/hoodie-flower/dark/02.webp",
+        "cutout": "products/hoodie-flower/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/rn-image_picker_lib_temp_dcb5c4c2-6a0d-4ac0-b37a-b70878e7f153.png?v=1779443292"
+      },
+      {
+        "file": "products/hoodie-flower/03.webp",
+        "dark": "products/hoodie-flower/dark/03.webp",
+        "cutout": "products/hoodie-flower/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/rn-image_picker_lib_temp_a3121bbf-b2ae-40de-9722-f3993c4b78f0.png?v=1779443291"
+      }
+    ],
+    "hoodie-sada-beige": [
+      {
+        "file": "products/hoodie-sada-beige/01.webp",
+        "dark": "products/hoodie-sada-beige/dark/01.webp",
+        "cutout": "products/hoodie-sada-beige/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Beige_2.jpg?v=1779443297"
+      },
+      {
+        "file": "products/hoodie-sada-beige/02.webp",
+        "dark": "products/hoodie-sada-beige/dark/02.webp",
+        "cutout": "products/hoodie-sada-beige/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Beige_1.jpg?v=1779443298"
+      },
+      {
+        "file": "products/hoodie-sada-beige/03.webp",
+        "dark": "products/hoodie-sada-beige/dark/03.webp",
+        "cutout": "products/hoodie-sada-beige/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Beige_3.jpg?v=1779443297"
+      }
+    ],
+    "hoodie-sada-black": [
+      {
+        "file": "products/hoodie-sada-black/01.webp",
+        "dark": "products/hoodie-sada-black/dark/01.webp",
+        "cutout": "products/hoodie-sada-black/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Black_2_c1c9e68a-57f0-4d79-9ee9-ba7f28f8029d.jpg?v=1779443298"
+      },
+      {
+        "file": "products/hoodie-sada-black/02.webp",
+        "dark": "products/hoodie-sada-black/dark/02.webp",
+        "cutout": "products/hoodie-sada-black/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Black_1.jpg?v=1779443299"
+      },
+      {
+        "file": "products/hoodie-sada-black/03.webp",
+        "dark": "products/hoodie-sada-black/dark/03.webp",
+        "cutout": "products/hoodie-sada-black/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Black_3.jpg?v=1779443299"
+      }
+    ],
+    "hoodie-sada-burgundy": [
+      {
+        "file": "products/hoodie-sada-burgundy/01.webp",
+        "dark": "products/hoodie-sada-burgundy/dark/01.webp",
+        "cutout": "products/hoodie-sada-burgundy/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Burgundy_1.jpg?v=1779443296"
+      },
+      {
+        "file": "products/hoodie-sada-burgundy/02.webp",
+        "dark": "products/hoodie-sada-burgundy/dark/02.webp",
+        "cutout": "products/hoodie-sada-burgundy/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Burgundy_2.jpg?v=1779443297"
+      },
+      {
+        "file": "products/hoodie-sada-burgundy/03.webp",
+        "dark": "products/hoodie-sada-burgundy/dark/03.webp",
+        "cutout": "products/hoodie-sada-burgundy/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Burgundy_3.jpg?v=1779443296"
+      }
+    ],
+    "hoodie-sada-white": [
+      {
+        "file": "products/hoodie-sada-white/01.webp",
+        "dark": "products/hoodie-sada-white/dark/01.webp",
+        "cutout": "products/hoodie-sada-white/cutout/01.webp",
+        "source_index": 0,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Whait_2.jpg?v=1779443300"
+      },
+      {
+        "file": "products/hoodie-sada-white/02.webp",
+        "dark": "products/hoodie-sada-white/dark/02.webp",
+        "cutout": "products/hoodie-sada-white/cutout/02.webp",
+        "source_index": 1,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_White_1_24e825f4-e9f5-4d70-92c4-1b1c14f7ff13.jpg?v=1779443300"
+      },
+      {
+        "file": "products/hoodie-sada-white/03.webp",
+        "dark": "products/hoodie-sada-white/dark/03.webp",
+        "cutout": "products/hoodie-sada-white/cutout/03.webp",
+        "source_index": 2,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "closeup",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_White_3.jpg?v=1779443301"
+      },
+      {
+        "file": "products/hoodie-sada-white/04.webp",
+        "dark": "products/hoodie-sada-white/dark/04.webp",
+        "cutout": "products/hoodie-sada-white/cutout/04.webp",
+        "source_index": 3,
+        "kind": "studio",
+        "width": 1600,
+        "height": 2000,
+        "framing": "model",
+        "source": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/b129f4490c122e7f4c27c3e9c79de8bb.png?v=1779443301"
+      }
+    ]
+  },
+  "collections": {
+    "winter-collection": {
+      "wide": "collections/winter-collection-wide.webp",
+      "tall": "collections/winter-collection-tall.webp"
+    },
+    "summer-collection": {
+      "wide": "collections/summer-collection-wide.webp",
+      "tall": "collections/summer-collection-tall.webp"
+    },
+    "customize-print": {
+      "wide": "collections/customize-print-wide.webp",
+      "tall": "collections/customize-print-tall.webp"
+    },
+    "all": {
+      "wide": "collections/all-wide.webp",
+      "tall": "collections/all-tall.webp"
+    }
+  },
+  "mockups": {
+    "cz-hoodie-back-black.webp": {
+      "garment": "hoodie",
+      "side": "back",
+      "colour": "black",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-customize #0",
+      "location": "theme/assets/cz-hoodie-back-black.webp"
+    },
+    "cz-hoodie-back-burgundy.webp": {
+      "garment": "hoodie",
+      "side": "back",
+      "colour": "burgundy",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-customize #1",
+      "location": "theme/assets/cz-hoodie-back-burgundy.webp"
+    },
+    "cz-hoodie-back-white.webp": {
+      "garment": "hoodie",
+      "side": "back",
+      "colour": "white",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-customize #2",
+      "location": "theme/assets/cz-hoodie-back-white.webp"
+    },
+    "cz-hoodie-back-beige.webp": {
+      "garment": "hoodie",
+      "side": "back",
+      "colour": "beige",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-customize #3",
+      "location": "theme/assets/cz-hoodie-back-beige.webp"
+    },
+    "cz-hoodie-front-black.webp": {
+      "garment": "hoodie",
+      "side": "front",
+      "colour": "black",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-sada-black #0",
+      "location": "theme/assets/cz-hoodie-front-black.webp"
+    },
+    "cz-hoodie-front-white.webp": {
+      "garment": "hoodie",
+      "side": "front",
+      "colour": "white",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-sada-white #0",
+      "location": "theme/assets/cz-hoodie-front-white.webp"
+    },
+    "cz-hoodie-front-burgundy.webp": {
+      "garment": "hoodie",
+      "side": "front",
+      "colour": "burgundy",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-sada-burgundy #0",
+      "location": "theme/assets/cz-hoodie-front-burgundy.webp"
+    },
+    "cz-hoodie-front-beige.webp": {
+      "garment": "hoodie",
+      "side": "front",
+      "colour": "beige",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "hoodie-sada-beige #0",
+      "location": "theme/assets/cz-hoodie-front-beige.webp"
+    },
+    "cz-tee-back-white.webp": {
+      "garment": "tee",
+      "side": "back",
+      "colour": "white",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "anime-shirt #6",
+      "location": "theme/assets/cz-tee-back-white.webp"
+    },
+    "cz-tee-back-black.webp": {
+      "garment": "tee",
+      "side": "back",
+      "colour": "black",
+      "size": [
+        1200,
+        1200
+      ],
+      "print_area_pct": [
+        50,
+        45,
+        52,
+        52
+      ],
+      "source": "anime-shirt-white #6",
+      "location": "theme/assets/cz-tee-back-black.webp"
+    }
+  },
+  "notes": {
+    "studio": "LINUX Stone backdrop (#EFE9DF -> #E2D9CA), 1600x2000 WebP",
+    "dark": "LINUX Forest backdrop (#0B4F36 -> #021A12) with lime rim glow; for detail shots the dark file equals the studio crop (fabric fills the frame)",
+    "cutout": "transparent WebP trimmed to subject, max 1600px long side; not produced for detail close-ups",
+    "garments": "garments are unaltered: background replaced, reframed, soft studio shadow added; no recolouring/reshaping; one stray red campaign-overlay speck removed from the model's trousers in anime-shirt-white #0 (not the product)"
+  }
+}
