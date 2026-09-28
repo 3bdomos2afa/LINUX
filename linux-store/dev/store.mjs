@@ -96,7 +96,7 @@ export function buildStore(dataDir) {
     refund_policy: { title: 'Refund policy', url: '/policies/refund-policy', body: '<p>Mock policy.</p>' },
     shipping_policy: { title: 'Shipping policy', url: '/policies/shipping-policy', body: '<p>Mock policy.</p>' },
     terms_of_service: { title: 'Terms of service', url: '/policies/terms-of-service', body: '<p>Mock policy.</p>' },
-    enabled_payment_types: ['visa', 'master', 'meeza', 'cash_on_delivery'], metafields: {}, brand: {}, types: [...new Set(products.map((p) => p.type))], vendors: ['LINUX'],
+    enabled_payment_types: ['visa', 'master'], metafields: {}, brand: {}, types: [...new Set(products.map((p) => p.type))], vendors: ['LINUX'],
   };
 
   const store = {

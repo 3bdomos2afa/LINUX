@@ -97,6 +97,23 @@ Online Store → Themes → ⋯ → **Edit default theme content**، أو **Tran
 
 ---
 
+## 6. الجديد في 4.0 — تتحكم فيه منين
+
+| الحاجة | مكانها |
+| --- | --- |
+| شفافية الزجاج والانكسار | Theme settings → **Appearance** → *Glass tint* (أقل = أشفّ) و*Liquid refraction* (Off / Subtle / Strong). الانكسار بيبان على كروم وأندرويد بس؛ سفاري بياخد زجاج مطفي. |
+| شريط الإعلانات | Header → *Show announcement* + بلوكات **Announcement** (نص أو مفتاح ترجمة، أيقونة، لينك، كود). *Countdown end* بصيغة `2026-11-30T23:59:00+02:00` بيظهر عدّاد ويختفي لوحده. *Announcement style* = رسايل متغيّرة أو شريط متحرك. |
+| كارت العرض | سكشن **Offer spotlight** في الرئيسية: الكود، نهاية العرض (اختياري)، الزرار، الصورة أو منتج. سيبه فاضي = نص الثيم بالعربي والإنجليزي. |
+| نافذة الترحيب | Footer group → **Promo popup**: تفعيل، التوقيت (بعد ثواني / عند الخروج)، يظهر تاني بعد كام يوم، الصفحات، الكود، تسجيل النيوزليتر. ارفع *Campaign version* عشان حملة جديدة تظهر للناس اللي قفلتها قبل كده. |
+| الريلز | سكشن **Video reels**: كل بلوك = فيديو (من Shopify) + منتج. من غير فيديو بيشتغل فيديو التطريز كبديل. |
+| شارات الدفع | Theme settings → **Payments**: الدفع عند الاستلام، إنستاباي، المحافظ، فوري، valU — شغّل بس اللي بتقبله فعلاً. أيقونات الكروت بتيجي من بوابة الدفع أوتوماتيك. |
+| بلّغني لما يرجع | بيظهر لوحده على المقاس الخلصان. الطلبات بتوصل إيميل المتجر (Settings → Store details) بعنوان فيه Product / Variant / Link. |
+| عرض الباندل | Product page → بلوك Bundle → *Matching automatic discount is live*: شغّله **بس** بعد ما تعمل الخصم الأوتوماتيك المطابق في Discounts. |
+| التقييمات | الشارة بتظهر بس لو في تطبيق تقييمات بيكتب `reviews.rating` و`reviews.rating_count` (زي Shopify Product Reviews / Judge.me). مفيش أرقام وهمية. |
+| الأسئلة الشائعة | افتح صفحة `faq` من Online Store → Pages واختار القالب **page.faq**. |
+| إيميلات الإشعارات | `notifications/README.md` — تنسخ كل قالب في Settings → Notifications. |
+| إعلانات السوشيال | `marketing/README.md` — بوستات وستوريز وفيديو جاهزين، وتعدّل النص من `copy.json`. |
+
 ## English
 
 Where to find the storefront's main no-code settings:
@@ -190,3 +207,16 @@ verified. The copied PDF is for internal review only. The requested
 asset and is not claimed as Machine. Mochi's notice permits personal use only,
 and the Froople archive contains no license text. Confirm commercial/web rights
 or supply licensed fonts before publishing.
+
+### New in 4.0 — where to control it
+- **Glass**: Theme settings → Appearance → *Glass tint* and *Liquid refraction* (edge refraction renders in Chromium only; other browsers keep the frosted glass).
+- **Announcement bar**: Header → *Show announcement* + **Announcement** blocks (text or translation key, icon, link, code); optional *Countdown end* (`2026-11-30T23:59:00+02:00`) hides itself when it passes; *Announcement style* rotate / ticker.
+- **Offer spotlight** section: code, optional end time (live countdown, auto-hide), button, image or product.
+- **Promo popup** (footer group): on/off, trigger (delay / exit intent), repeat after N days, pages, code, newsletter sign-up; raise *Campaign version* to re-show a new campaign.
+- **Video reels** section: one block per clip (Shopify video) + product to shop.
+- **Payments**: Theme settings → Payments — switch on only the local methods you accept; card icons come from your gateway.
+- **Back in stock**: automatic on sold-out variants; requests arrive at the store email with Product / Variant / Link.
+- **Bundle**: tick *Matching automatic discount is live* only after creating the matching automatic discount.
+- **Ratings**: shown only when a reviews app writes `reviews.rating` / `reviews.rating_count`.
+- **FAQ**: assign the **page.faq** template to your `faq` page.
+- **Email notifications**: see `notifications/README.md`. **Social ad kit**: see `marketing/README.md`.

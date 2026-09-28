@@ -11,16 +11,62 @@
             "menu_item": "Shop",
             "link": "/collections/winter-collection"
           }
+        },
+        "ann_ship": {
+          "type": "announcement",
+          "settings": {
+            "key": "cart.offer_bar",
+            "icon": "truck",
+            "link": "/collections/all"
+          }
+        },
+        "ann_studio": {
+          "type": "announcement",
+          "settings": {
+            "key": "announcement.customize",
+            "icon": "star",
+            "link": "/pages/customize"
+          }
+        },
+        "ann_code": {
+          "type": "announcement",
+          "settings": {
+            "key": "announcement.welcome",
+            "icon": "ticket",
+            "code": "LINUX10"
+          }
+        },
+        "ann_cod": {
+          "type": "announcement",
+          "settings": {
+            "key": "home.marquee_5",
+            "icon": "cash"
+          }
+        },
+        "ann_exchange": {
+          "type": "announcement",
+          "settings": {
+            "key": "home.marquee_3",
+            "icon": "exchange",
+            "link": "/pages/shipping-returns"
+          }
         }
       },
       "block_order": [
+        "ann_ship",
+        "ann_studio",
+        "ann_code",
+        "ann_cod",
+        "ann_exchange",
         "promo"
       ],
       "settings": {
         "menu": "main-menu",
         "logo_height": 22,
         "show_shop_cta": true,
-        "show_announcement": false
+        "show_announcement": true,
+        "announcement_style": "rotate",
+        "announcement_interval": 5
       }
     }
   },

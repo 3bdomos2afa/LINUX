@@ -49,8 +49,25 @@ fs.copyFileSync(themeZip, path.join(stage, `${name}.zip`));
 fs.copyFileSync(path.join(root, 'INSTALL.md'), path.join(stage, 'INSTALL.md'));
 fs.copyFileSync(path.join(root, 'ADMIN-GUIDE.md'), path.join(stage, 'ADMIN-GUIDE.md'));
 fs.copyFileSync(path.join(root, 'CHECKOUT-BRANDING.md'), path.join(stage, 'CHECKOUT-BRANDING.md'));
-for (const f of ['hero-1080.mp4', 'hero-720.mp4', 'hero-mobile.mp4', 'hero-embroidery-poster.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
+fs.copyFileSync(path.join(root, 'CHANGELOG.md'), path.join(stage, 'CHANGELOG.md'));
+for (const f of ['hero-1080.mp4', 'hero-720.mp4', 'hero-mobile.mp4', 'hero-embroidery-poster.webp', 'hero-embroidery-poster-v2.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
 for (const f of fs.readdirSync(path.join(themeRoot, 'assets')).filter((f) => /^(mascot-|brand-|favicon-|wordmark)/.test(f))) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'brand-assets', f));
+// 3) Optional kits: Shopify email notification templates and the social ad kit
+const copyTree = (src, dst, keep = () => true, rel = '') => {
+  for (const entry of fs.readdirSync(path.join(src, rel), { withFileTypes: true })) {
+    const child = path.join(rel, entry.name);
+    if (!keep(child, entry)) continue;
+    if (entry.isDirectory()) copyTree(src, dst, keep, child);
+    else { fs.mkdirSync(path.dirname(path.join(dst, child)), { recursive: true }); fs.copyFileSync(path.join(src, child), path.join(dst, child)); }
+  }
+};
+const notifications = path.join(root, 'notifications');
+if (fs.existsSync(notifications)) copyTree(notifications, path.join(stage, 'email-notifications'), (child) => !/^(dev|node_modules)(\/|$)/.test(child) && !child.endsWith('.DS_Store'));
+const marketing = path.join(root, 'marketing');
+if (fs.existsSync(path.join(marketing, 'out'))) {
+  copyTree(path.join(marketing, 'out'), path.join(stage, 'ad-kit'), (child) => !child.endsWith('.DS_Store'));
+  for (const f of ['README.md', 'copy.json']) if (fs.existsSync(path.join(marketing, f))) fs.copyFileSync(path.join(marketing, f), path.join(stage, 'ad-kit', f));
+}
 const bundle = path.join(dist, 'LINUX-theme-delivery.zip');
 execFileSync('zip', ['-qr', '-X', bundle, 'LINUX-theme-delivery'], { cwd: dist, stdio: 'inherit' });
 fs.rmSync(stage, { recursive: true, force: true });

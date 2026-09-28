@@ -22,9 +22,11 @@
   assign locale = request.locale.iso_code | slice: 0, 2
   assign bundle_products = product.metafields.custom.bundle_products.value | default: bs.products
   assign sibling_count = bundle_products.size | default: 0 | at_most: 50
-  assign estimate_label = 'Estimate'
+  assign live = bs.discount_live
+  assign estimate_label = 'bundle.estimate' | t
+  assign pct_sign = '%'
   if locale == 'ar'
-    assign estimate_label = 'تقديري'
+    assign pct_sign = '٪'
   endif
 -%}
 {%- comment -%} Tier counts print in the same numerals as the prices beside them. {%- endcomment -%}
@@ -33,12 +35,12 @@
 {%- capture tier_2_q -%}{% render 'digits', value: t2_q %}{%- endcapture -%}
 {%- capture tier_3_q -%}{% render 'digits', value: t3_q %}{%- endcapture -%}
 {%- capture offer_title -%}{% render 'tr', value: bs.title, key: 'bundle.title' %}{%- endcapture -%}
-<div class="bundle glass" data-bundle data-offer-title="{{ offer_title | strip | escape }}" {{ block.shopify_attributes }}>
+<div class="bundle glass" data-bundle data-discount-live="{% if live %}true{% else %}false{% endif %}" data-offer-title="{{ offer_title | strip | escape }}" {{ block.shopify_attributes }}>
   <div class="bundle__head">
     <span class="bundle__icon">{% render 'icon', name: 'tag', px: 18 %}</span>
     <div>
       <strong>{% render 'tr', value: bs.title, key: 'bundle.title' %}</strong>
-      <small class="muted">{% render 'tr', value: bs.subtitle, key: 'bundle.subtitle' %}</small>
+      {%- if live -%}<small class="muted">{% render 'tr', value: bs.subtitle, key: 'bundle.subtitle' %}</small>{%- else -%}<small class="muted">{{ 'bundle.subtitle_estimate' | t }}</small>{%- endif -%}
     </div>
   </div>
   <div class="bundle__tiers" role="group" aria-label="{{ 'bundle.title' | t | escape }}">
@@ -47,25 +49,28 @@
       {%- capture m0 -%}{% render 'money', amount: base %}{%- endcapture -%}{%- assign m0 = m0 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m0 }}</span>
     </button>
     {%- if t1_q > 1 -%}
-      {%- assign p1 = 100 | minus: t1_p | times: base | divided_by: 100 -%}
+      {%- assign p1 = 100 | minus: t1_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t1_q }}" data-pct="{{ t1_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ estimate_label }} · {% render 'digits', value: t1_p %}%</span>
+        {%- capture pct_1 -%}{% render 'digits', value: t1_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_1 }}{% else %}{{ estimate_label }} · {{ pct_1 }}{% endif %}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_1_q }}</span>
         {%- capture m1 -%}{% render 'money', amount: p1 %}{%- endcapture -%}{%- assign m1 = m1 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m1 }}</span>
       </button>
     {%- endif -%}
     {%- if t2_q > 1 -%}
-      {%- assign p2 = 100 | minus: t2_p | times: base | divided_by: 100 -%}
+      {%- assign p2 = 100 | minus: t2_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier bundle__tier--hot" type="button" data-bundle-tier data-qty="{{ t2_q }}" data-pct="{{ t2_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ estimate_label }} · {% render 'digits', value: t2_p %}%</span>
+        {%- capture pct_2 -%}{% render 'digits', value: t2_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_2 }}{% else %}{{ estimate_label }} · {{ pct_2 }}{% endif %}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_2_q }}</span>
         {%- capture m2 -%}{% render 'money', amount: p2 %}{%- endcapture -%}{%- assign m2 = m2 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m2 }}</span>
       </button>
     {%- endif -%}
     {%- if t3_q > 1 -%}
-      {%- assign p3 = 100 | minus: t3_p | times: base | divided_by: 100 -%}
+      {%- assign p3 = 100 | minus: t3_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t3_q }}" data-pct="{{ t3_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ estimate_label }} · {% render 'digits', value: t3_p %}%</span>
+        {%- capture pct_3 -%}{% render 'digits', value: t3_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_3 }}{% else %}{{ estimate_label }} · {{ pct_3 }}{% endif %}</span>
         <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_3_q }}</span>
         {%- capture m3 -%}{% render 'money', amount: p3 %}{%- endcapture -%}{%- assign m3 = m3 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m3 }}</span>
       </button>
@@ -78,7 +83,7 @@
       <div class="bundle__selection">
         <img class="bundle__image" data-bundle-image src="{{ product.featured_image | image_url: width: 160 }}" width="48" height="60" alt="" loading="lazy" hidden>
         <label class="bundle__option" data-bundle-product-label>
-          <span>{% if locale == 'ar' %}المنتج / اللون{% else %}Product / color{% endif %}</span>
+          <span>{{ 'bundle.product_color' | t }}</span>
           <select class="input" data-bundle-product></select>
         </label>
       </div>
@@ -87,13 +92,8 @@
     </fieldset>
   </template>
   <p class="bundle__summary small" data-bundle-summary aria-live="polite" hidden></p>
-  <p class="bundle__note small muted">
-    {% render 'icon', name: 'sparkle', px: 12 %}
-    {% if locale == 'ar' %}اختر المنتج واللون والمقاس المتاح لكل قطعة بشكل مستقل.{% else %}Choose each piece's product, color and size independently from the available options.{% endif %}
-  </p>
-  <p class="bundle__disclaimer small muted">
-    {% if locale == 'ar' %}الأسعار والتوفير تقديرية وليست خصماً مطبقاً. يجب إعداد عرض مطابق في Shopify؛ يظهر الخصم الفعلي في السلة وعند الدفع، وقد تتغير الأهلية عند تعديل السلة.{% else %}Prices and savings are estimates, not applied discounts. A matching Shopify offer must be configured; actual discounts appear in the cart and at checkout. Cart changes may affect eligibility.{% endif %}
-  </p>
+  <p class="bundle__note small muted">{% render 'icon', name: 'sparkle', px: 12 %} {{ 'bundle.note' | t }}</p>
+  {%- unless live -%}<p class="bundle__disclaimer small muted">{{ 'bundle.disclaimer' | t }}</p>{%- endunless -%}
   <script type="application/json" data-bundle-strings>{"each": {{ 'bundle.each' | t: price: '[price]' | json }}}</script>
   {%- capture json_lt -%}\u003c{%- endcapture -%}
   {%- capture bundle_data -%}

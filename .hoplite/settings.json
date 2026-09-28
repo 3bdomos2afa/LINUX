@@ -15,7 +15,7 @@
 	"scripts": {
 		"setup": {
 			"enabled": true,
-			"command": "npm ci --prefix linux-store/dev && gem install liquid --version 5.8.7 --no-document"
+			"command": "mise trust --yes . && mise install && npm ci --prefix linux-store/dev && mise exec -- gem install liquid --version 5.8.7 --no-document"
 		},
 		"run": {
 			"enabled": true,

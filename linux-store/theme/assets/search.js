@@ -45,7 +45,7 @@
     const collections = r.collections || [];
     const pages = [...(r.pages || []), ...(r.articles || [])];
     if (!products.length && !collections.length && !pages.length) {
-      results.innerHTML = `<div class="search-empty"><img src="${wrap.dataset.emptyImg || ''}" alt="" hidden><p>${esc(strings.no_results)}</p><a class="btn btn--glass btn--sm" href="${root}/search?q=${encodeURIComponent(q)}">${esc(q)} →</a></div>`;
+      results.innerHTML = `<div class="search-empty"><img src="${wrap.dataset.emptyImg || ''}" alt="" hidden><p>${esc(strings.no_results)}</p><a class="btn btn--glass btn--sm" href="${root}/search?q=${encodeURIComponent(q)}">${esc(q)} <svg class="icon icon--arrow-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>`;
       return;
     }
     let html = '';
@@ -61,7 +61,7 @@
         collections.map((c) => `<a class="chip" href="${c.url}">${esc(c.title)}</a>`).join('') +
         pages.map((p) => `<a class="chip" href="${p.url}">${esc(p.title)}</a>`).join('') + '</div></section>';
     }
-    html += `<a class="btn btn--ghost btn--sm" href="${root}/search?q=${encodeURIComponent(q)}" style="justify-self:center">${esc(q)} — ${esc(strings.products)} →</a>`;
+    html += `<a class="btn btn--ghost btn--sm" href="${root}/search?q=${encodeURIComponent(q)}" style="justify-self:center">${esc(q)} — ${esc(strings.products)} <svg class="icon icon--arrow-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>`;
     results.innerHTML = html;
   }
 

@@ -94,7 +94,12 @@ export function registerFilters(engine, store) {
   F('video_tag', (v, ...args) => { const h = hashArgs(args); return `<video${attrs({ class: h.class, poster: h.poster, autoplay: h.autoplay, loop: h.loop, muted: h.muted, playsinline: h.playsinline, controls: h.controls, preload: h.preload })}><source src="${esc(v?.sources?.[0]?.url || v?.src || '')}" type="video/mp4"></video>`; });
   F('external_video_tag', () => '');
   F('placeholder_svg_tag', (name, cls) => `<svg class="${esc(cls || '')}" viewBox="0 0 525 525" xmlns="http://www.w3.org/2000/svg"><rect width="525" height="525" fill="#0a4a33"/><text x="50%" y="50%" fill="#f4e8d8" font-size="28" text-anchor="middle">${esc(name || 'image')}</text></svg>`);
-  F('payment_type_svg_tag', (type) => `<svg class="payment-icon" viewBox="0 0 38 24" width="38" height="24" role="img" aria-label="${esc(type)}"><rect width="38" height="24" rx="4" fill="#f4e8d8" opacity=".9"/><text x="19" y="15" font-size="7" font-family="system-ui" text-anchor="middle" fill="#043222">${esc(String(type).replace(/_/g, ' ').slice(0, 10))}</text></svg>`);
+  // Stand-ins for Shopify's official payment SVGs so previews look like the live store.
+  const PAYMENT_MARKS = {
+    visa: '<rect width="38" height="24" rx="4" fill="#fff"/><text x="19" y="16.2" font-size="10.5" font-weight="800" font-style="italic" font-family="Arial, sans-serif" text-anchor="middle" fill="#1a1f71" letter-spacing=".4">VISA</text>',
+    master: '<rect width="38" height="24" rx="4" fill="#fff"/><circle cx="15.5" cy="12" r="6.5" fill="#eb001b"/><circle cx="22.5" cy="12" r="6.5" fill="#f79e1b" fill-opacity=".92"/><path d="M19 6.6a6.5 6.5 0 0 1 0 10.8 6.5 6.5 0 0 1 0-10.8Z" fill="#ff5f00"/>',
+  };
+  F('payment_type_svg_tag', (type) => `<svg class="payment-icon" viewBox="0 0 38 24" width="38" height="24" role="img" aria-label="${esc(type)}">${PAYMENT_MARKS[type] || `<rect width="38" height="24" rx="4" fill="#f4e8d8" opacity=".9"/><text x="19" y="15" font-size="7" font-family="system-ui" text-anchor="middle" fill="#043222">${esc(String(type).replace(/_/g, ' ').slice(0, 10))}</text>`}</svg>`);
   F('payment_type_img_url', () => '');
   F('within', function (url, collection) {
     if (!collection?.handle || collection.handle === 'all') return url;

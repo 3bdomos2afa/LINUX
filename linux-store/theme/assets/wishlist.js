@@ -36,8 +36,8 @@
     const list = read();
     const i = list.indexOf(h);
     btn.classList.remove('is-popping'); void btn.offsetWidth; btn.classList.add('is-popping');
-    if (i > -1) { list.splice(i, 1); L.toast(L.strings.removed, { type: 'success' }); }
-    else { list.unshift(h); L.buzz(); L.toast(L.strings.saved, { action: { label: L.strings.view_bag.replace(/bag|الشنطة|الحقيبة/i, '♥'), href: `${root}/search?view=wishlist` } }); }
+    if (i > -1) { list.splice(i, 1); L.toast(L.strings.removed, { icon: 'heart' }); }
+    else { list.unshift(h); L.buzz(); L.toast(L.strings.saved, { icon: 'heart', action: { label: L.strings.view_saved || L.strings.view_bag, href: `${root}/search?view=wishlist` } }); }
     write(list);
   });
 

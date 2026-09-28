@@ -102,7 +102,7 @@
                   {%- if blogs['news'].url != blank -%}
                     <li><a href="{{ blogs['news'].url }}">{{ 'nav.menu.journal' | t }}</a></li>
                   {%- elsif settings.show_wishlist != false -%}
-                    <li><a href="/pages/wishlist">{{ 'wishlist.title' | t }}</a></li>
+                    <li><a href="{{ routes.search_url }}?view=wishlist">{{ 'wishlist.title' | t }}</a></li>
                   {%- else -%}
                     <li><a href="{{ routes.collections_url }}">{{ 'nav.menu.collections' | t }}</a></li>
                   {%- endif -%}
@@ -122,9 +122,7 @@
       </div>
       {%- endif -%}
       {%- if s.show_payment_icons and settings.show_payment_icons != false -%}
-        <div class="payment-icons" aria-label="{{ 'footer.payment' | t }}">
-          {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag }}{%- endfor -%}
-        </div>
+        {%- render 'payment-badges' -%}
       {%- endif -%}
     </div>
   </div>

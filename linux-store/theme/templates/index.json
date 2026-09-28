@@ -43,12 +43,42 @@
       },
       "block_order": ["c1", "c2", "c3", "c4"],
       "settings": {}
+    },
+    "offer": {
+      "type": "offer-spotlight",
+      "settings": {
+        "code": "LINUX10",
+        "hide_when_ended": true,
+        "cta_url": "/collections/winter-collection",
+        "show_badge": true,
+        "show_note": true
+      }
+    },
+    "reels": {
+      "type": "video-reels",
+      "blocks": {
+        "r1": { "type": "reel", "settings": { "start": 0, "product": "hoodie-anime-black" } },
+        "r2": { "type": "reel", "settings": { "start": 4, "product": "hoodie-sada-white" } },
+        "r3": { "type": "reel", "settings": { "start": 8, "product": "hoodie-customize" } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": {}
+    },
+    "props": {
+      "type": "value-props",
+      "blocks": {
+        "p1": { "type": "prop", "settings": { "icon": "truck", "key_title": "home.prop_1_title", "key_text": "home.prop_1_text" } },
+        "p2": { "type": "prop", "settings": { "icon": "package", "key_title": "home.prop_2_title", "key_text": "home.prop_2_text" } },
+        "p3": { "type": "prop", "settings": { "icon": "return", "key_title": "home.prop_3_title", "key_text": "home.prop_3_text" } },
+        "p4": { "type": "prop", "settings": { "icon": "needle", "key_title": "home.prop_4_title", "key_text": "home.prop_4_text" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"],
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
     }
   },
-  "order": [
-    "hero",
-    "marquee",
-    "bestsellers",
-    "collections"
-  ]
+  "order": ["hero", "marquee", "offer", "bestsellers", "collections", "reels", "props", "newsletter"]
 }

@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "3.4.0",
+    "theme_version": "4.0.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -58,6 +58,38 @@
         "step": 10,
         "unit": "%",
         "default": 100
+      },
+      {
+        "type": "range",
+        "id": "glass_tint",
+        "label": "Glass tint (lower = clearer)",
+        "min": 2,
+        "max": 24,
+        "step": 1,
+        "unit": "%",
+        "default": 7,
+        "info": "How much cream tint sits on the glass. Lower shows more of the page through it."
+      },
+      {
+        "type": "select",
+        "id": "glass_refraction",
+        "label": "Liquid refraction",
+        "default": "subtle",
+        "options": [
+          {
+            "value": "off",
+            "label": "Off"
+          },
+          {
+            "value": "subtle",
+            "label": "Subtle"
+          },
+          {
+            "value": "strong",
+            "label": "Strong"
+          }
+        ],
+        "info": "Bends the page at the edges of the header and tab bar like real glass. Chrome/Android only; other browsers keep the frosted glass."
       },
       {
         "type": "range",
@@ -401,6 +433,51 @@
         "type": "text",
         "id": "made_in",
         "label": "\"Made in\" line (blank = translated)"
+      }
+    ]
+  },
+  {
+    "name": "Payments",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Card icons come from your payment provider automatically. Switch on the local methods you actually accept — they show in the footer and under the checkout button."
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_cod",
+        "label": "Cash on delivery",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_instapay",
+        "label": "InstaPay",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_wallet",
+        "label": "Mobile wallets (Vodafone Cash, etc.)",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_fawry",
+        "label": "Fawry",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_valu",
+        "label": "valU instalments",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_card_badge",
+        "label": "Show a \"Cards\" badge when no card icons are available",
+        "default": true
       }
     ]
   },

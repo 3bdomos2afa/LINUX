@@ -1,0 +1,30 @@
+{%- comment -%}
+  Back-in-stock request for a sold-out variant. Shopify has no native restock
+  alerts, so this posts the standard contact form: the store email receives
+  the product, the exact variant, a link and the shopper's address, ready to
+  reply when it is back. Visible only while the selected variant is sold out;
+  product.js keeps it in sync on variant:change.
+  Params: product, current (selected variant), section_id
+{%- endcomment -%}
+{%- assign nm_id = 'notify-' | append: section_id -%}
+<div class="notify glass" data-notify{% if current.available %} hidden{% endif %}>
+  {%- form 'contact', id: nm_id, class: 'notify__form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="notify__done" role="status">{% render 'icon', name: 'check', px: 18 %}<span>{{ 'products.notify.success' | t }}</span></p>
+    {%- else -%}
+      <p class="notify__title">{% render 'icon', name: 'bell', px: 18 %}<strong>{{ 'products.notify.title' | t }}</strong></p>
+      <p class="notify__text">{{ 'products.notify.text' | t }}</p>
+      <input type="hidden" name="contact[tags]" value="back-in-stock">
+      <input type="hidden" name="contact[Request]" value="Back in stock">
+      <input type="hidden" name="contact[Product]" value="{{ product.title | escape }}">
+      <input type="hidden" name="contact[Variant]" value="{{ current.title | escape }}" data-notify-variant>
+      <input type="hidden" name="contact[Link]" value="{{ shop.url }}{{ product.url }}?variant={{ current.id }}" data-notify-url>
+      <div class="notify__row">
+        <label class="visually-hidden" for="{{ nm_id }}-email">{{ 'products.notify.email' | t }}</label>
+        <input class="input" id="{{ nm_id }}-email" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'products.notify.email' | t | escape }}" value="{{ customer.email }}">
+        <button class="btn btn--primary" type="submit">{% render 'icon', name: 'bell', px: 16 %}{{ 'products.notify.cta' | t }}</button>
+      </div>
+      {%- if form.errors -%}<p class="small notify__error" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div>

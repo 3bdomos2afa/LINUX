@@ -82,7 +82,16 @@
           <h1 class="pdp__title">{% render 'product-title', title: product.title %}</h1>
           <div class="pdp__price-row">
             <div class="pdp__price" data-price-wrap>{% render 'price', variant: current, product: product, class: 'price--lg' %}</div>
-            {%- if s.show_rating -%}{%- capture product_rating -%}{% render 'tr', value: s.rating_text, key: 'products.rating_text' %}{%- endcapture -%}<span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {% render 'digits', value: product_rating %}</span>{%- endif -%}
+            {%- if s.show_rating -%}
+              {%- comment -%} Only real review data (Shopify's standard reviews.* metafields, written by review apps). {%- endcomment -%}
+              {%- assign review_rating = product.metafields.reviews.rating.value -%}
+              {%- assign review_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+              {%- if review_rating != blank and review_count > 0 -%}
+                {%- assign review_score = review_rating.rating | round: 1 -%}
+                {%- capture review_label -%}{{ review_score }} · {{ 'products.reviews_count' | t: count: review_count }}{%- endcapture -%}
+                <span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {% render 'digits', value: review_label %}</span>
+              {%- endif -%}
+            {%- endif -%}
           </div>
         </div>
 
@@ -161,6 +170,7 @@
             <a class="btn btn--glass btn--block pdp__wa" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}?text={{ 'general.whatsapp_prefill' | t | append: ' ' | append: product.title | url_encode }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', px: 18 %}{{ 'general.whatsapp' | t }}</a>
           {%- endif -%}
         {%- endform -%}
+        {%- render 'notify-me', product: product, current: current, section_id: section.id -%}
 
         {%- if settings.show_delivery_estimate -%}
           <div class="pdp__delivery">
@@ -240,26 +250,14 @@
   "name": "Product",
   "settings": [
     { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
-    { "type": "checkbox", "id": "show_rating", "label": "Show rating chip", "default": true },
-    { "type": "text", "id": "rating_text", "label": "Rating text (blank = translated default)" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show star rating (needs a reviews app)", "default": true, "info": "Shows the average and count from the reviews.rating metafields a reviews app writes. Nothing shows until real reviews exist." },
     { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp button under Add to bag", "default": false }
   ],
   "blocks": [
     { "type": "description", "name": "Description", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" } ] },
     { "type": "fabric", "name": "Fabric & care", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" }, { "type": "richtext", "id": "content", "label": "Content" } ] },
     { "type": "shipping", "name": "Shipping & exchange", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" }, { "type": "richtext", "id": "content", "label": "Content" } ] },
-    { "type": "bundle", "name": "Bundle offer", "limit": 1, "settings": [
-      { "type": "paragraph", "content": "Admin > Discounts: create automatic Amount off products discounts on all eligible products, including color siblings. Defaults: minimum 2 items = 10%, minimum 3 = 15%. Disable product-discount combinations. Match any changed tiers below. Native rules count eligible items across the cart; exact per-group offers require a discount app/Function. Displayed savings are estimates only." },
-      { "type": "product_list", "id": "products", "label": "Bundle products / color siblings", "limit": 50, "info": "Current product is always included. For different sibling groups per product, create a product-reference list metafield custom.bundle_products and populate it on each sibling. That list overrides this block's selection. No title-based matching." },
-      { "type": "text", "id": "title", "label": "Title (blank = translated)" },
-      { "type": "text", "id": "subtitle", "label": "Subtitle (blank = translated)" },
-      { "type": "range", "id": "tier1_qty", "label": "Tier 1 quantity", "min": 2, "max": 6, "step": 1, "default": 2 },
-      { "type": "range", "id": "tier1_pct", "label": "Tier 1 discount %", "min": 5, "max": 50, "step": 5, "default": 10 },
-      { "type": "range", "id": "tier2_qty", "label": "Tier 2 quantity", "min": 2, "max": 8, "step": 1, "default": 3 },
-      { "type": "range", "id": "tier2_pct", "label": "Tier 2 discount %", "min": 5, "max": 50, "step": 5, "default": 15 },
-      { "type": "range", "id": "tier3_qty", "label": "Tier 3 quantity (0 = hide)", "min": 0, "max": 10, "step": 1, "default": 0 },
-      { "type": "range", "id": "tier3_pct", "label": "Tier 3 discount %", "min": 5, "max": 50, "step": 5, "default": 20 }
-    ] },
+    { "type": "bundle", "name": "Bundle offer", "limit": 1, "settings": [ { "type": "checkbox", "id": "discount_live", "label": "Matching automatic discount is live in Shopify", "default": false, "info": "Off: prices show as estimates and shoppers are told the final price appears in the bag. Turn on only after creating the matching automatic discount." }, { "type": "paragraph", "content": "Admin > Discounts: create automatic Amount off products discounts on all eligible products, including color siblings. Defaults: minimum 2 items = 10%, minimum 3 = 15%. Disable product-discount combinations. Match any changed tiers below. Native rules count eligible items across the cart; exact per-group offers require a discount app/Function. Displayed savings are estimates only." }, { "type": "product_list", "id": "products", "label": "Bundle products / color siblings", "limit": 50, "info": "Current product is always included. For different sibling groups per product, create a product-reference list metafield custom.bundle_products and populate it on each sibling. That list overrides this block's selection. No title-based matching." }, { "type": "text", "id": "title", "label": "Title (blank = translated)" }, { "type": "text", "id": "subtitle", "label": "Subtitle (blank = translated)" }, { "type": "range", "id": "tier1_qty", "label": "Tier 1 quantity", "min": 2, "max": 6, "step": 1, "default": 2 }, { "type": "range", "id": "tier1_pct", "label": "Tier 1 discount %", "min": 5, "max": 50, "step": 5, "default": 10 }, { "type": "range", "id": "tier2_qty", "label": "Tier 2 quantity", "min": 2, "max": 8, "step": 1, "default": 3 }, { "type": "range", "id": "tier2_pct", "label": "Tier 2 discount %", "min": 5, "max": 50, "step": 5, "default": 15 }, { "type": "range", "id": "tier3_qty", "label": "Tier 3 quantity (0 = hide)", "min": 0, "max": 10, "step": 1, "default": 0 }, { "type": "range", "id": "tier3_pct", "label": "Tier 3 discount %", "min": 5, "max": 50, "step": 5, "default": 20 } ] },
     { "type": "fit_finder", "name": "Find your size", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title (blank = translated)" } ] },
     { "type": "custom", "name": "Custom accordion", "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Details" }, { "type": "richtext", "id": "content", "label": "Content" } ] }
   ]

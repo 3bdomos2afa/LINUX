@@ -101,6 +101,13 @@ replacement.
 
 ---
 
+**New in 4.0 — check before publishing**
+- Discount codes shown by the theme (`LINUX10` in the announcement, offer spotlight and popup) must exist in **Discounts**; change or clear them in the editor otherwise.
+- Assign the **page.faq** template to your `faq` page (Online Store → Pages → faq → Theme template).
+- Payments: Theme settings → **Payments** — leave on only the methods you really accept.
+- The promo popup opens after 12 s / on exit, once every 7 days; turn it off under Footer → Promo popup if you prefer.
+- Email templates: `notifications/README.md` (paste per notification, then *Send test email*).
+
 ## Before you publish — store data the theme expects
 
 The zip only contains the theme. These live in your Shopify admin and the theme reads them by handle:
@@ -198,6 +205,13 @@ Use`، وده ما يثبتش حق الاستخدام التجاري أو على
 بهذه الطريقة، أو إزالة/استبدال ملفاته قبل توزيع الثيم. ما تعتبرش ترخيص الويب
 متحققاً. نسخة الـ PDF محفوظة للمراجعة الداخلية ومش ضمن حزمة العميل. خط **Machine**
 مش موجود بين المرفقات؛ Mochi هو الخط السابق ومش بندّعي إنه Machine.
+
+**جديد في 4.0 — راجعه قبل النشر**
+- أي كود الثيم بيعرضه (`LINUX10` في الإعلانات والعرض والنافذة) لازم يكون موجود في **Discounts**، وإلا غيّره أو امسحه من المحرر.
+- اختار القالب **page.faq** لصفحة `faq` (Online Store ← Pages ← faq ← Theme template).
+- الدفع: Theme settings ← **Payments** — سيب شغّال بس الطرق اللي بتقبلها فعلاً.
+- نافذة الترحيب بتفتح بعد ١٢ ثانية أو عند الخروج، مرة كل ٧ أيام؛ تقدر تقفلها من Footer ← Promo popup.
+- قوالب الإيميلات: `notifications/README.md` (انسخ كل قالب وبعدين *Send test email*).
 
 ## قبل النشر — البيانات اللي الثيم بيقرأها من المتجر
 

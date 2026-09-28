@@ -376,7 +376,7 @@
         if (bad.length) { freshErr.textContent = (strings.discount_invalid || 'Code not valid') + ': ' + bad.join(', '); freshErr.hidden = false; }
         else freshErr.hidden = true;
       }
-      if (!bad.length) L.toast(strings.discount_applied || 'Applied');
+      if (!bad.length) L.toast(strings.discount_applied || 'Applied', { icon: 'ticket' });
       L.buzz();
     } catch (e) { if (err) { err.textContent = e.message || strings.error; err.hidden = false; } }
     finally { btn && btn.classList.remove('is-loading'); }

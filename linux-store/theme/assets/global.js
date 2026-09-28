@@ -61,22 +61,60 @@
     return () => container.removeEventListener('keydown', onKey);
   };
 
-  L.toast = function (message, { type = 'success', image, action, duration = 3600 } = {}) {
+  /* Notifications — a "Dynamic Island" capsule that drops in at the top,
+     morphing out of a small pill. Swipe up or tap × to dismiss; hovering or
+     touching pauses the timer. API: L.toast(message, { type, icon, image,
+     action: { label, href, onClick }, duration }) */
+  const TOAST_ICONS = {
+    check: '<path d="m5 12.5 4.5 4.5L19 7"/>',
+    error: '<path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="9"/>',
+    ticket: '<path d="M4 6h16a1 1 0 0 1 1 1v3a2 2 0 0 0 0 4v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a2 2 0 0 0 0-4V7a1 1 0 0 1 1-1Z"/><path d="M14.5 6.5v1.5M14.5 11.2v1.6M14.5 16v1.5"/>',
+    heart: '<path d="m12 20-7.3-7.1a5 5 0 0 1 7.1-7.1l.2.2.2-.2a5 5 0 0 1 7.1 7.1L12 20Z" fill="currentColor"/>',
+    bag: '<path d="M5 8h14l1 11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2L5 8Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/>',
+    bell: '<path d="M6 9.8a6 6 0 0 1 12 0c0 4.4 1.7 5.9 2 6.4H4c.3-.5 2-2 2-6.4Z"/><path d="M10 19.5a2 2 0 0 0 4 0"/>',
+    truck: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'
+  };
+  const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  L.toast = function (message, { type = 'success', icon, image, action, duration = 3600 } = {}) {
     const stack = document.querySelector('.toast-stack');
     if (!stack) return;
     const el = document.createElement('div');
-    el.className = `toast glass glass--solid toast--${type}`;
-    el.setAttribute('role', 'status');
-    const icon = type === 'error'
-      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
-      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>';
-    el.innerHTML = `${image ? `<img class="toast__img" src="${image}" alt="">` : `<span class="toast__icon">${icon}</span>`}<span class="toast__msg">${message}</span>${action ? `<a class="toast__action" href="${action.href || '#'}" data-toast-action>${action.label}</a>` : ''}`;
-    if (action && action.onClick) el.querySelector('[data-toast-action]').addEventListener('click', (e) => { e.preventDefault(); action.onClick(); });
-    stack.appendChild(el);
-    while (stack.children.length > 3) stack.firstChild.remove();
-    const kill = () => { el.classList.add('is-leaving'); setTimeout(() => el.remove(), 400); };
-    const t = setTimeout(kill, duration);
-    el.addEventListener('click', () => { clearTimeout(t); kill(); });
+    el.className = `toast toast--${type}`;
+    el.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    const glyph = TOAST_ICONS[icon] || TOAST_ICONS[type === 'error' ? 'error' : 'check'];
+    const lead = image
+      ? `<img class="toast__img" src="${esc(image)}" alt="" width="36" height="44">`
+      : `<span class="toast__icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyph}</svg></span>`;
+    // Messages are theme strings that may carry markup (e.g. a bold amount); callers never pass shopper input.
+    el.innerHTML = `${lead}<span class="toast__msg">${message}</span>${action ? `<a class="toast__action" href="${esc(action.href || '#')}" data-toast-action>${esc(action.label)}</a>` : ''}<button class="toast__close" type="button" aria-label="${esc((L.strings && L.strings.close) || '×')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button><span class="toast__timer" aria-hidden="true"></span>`;
+    el.style.setProperty('--toast-d', duration + 'ms');
+    if (action && action.onClick) el.querySelector('[data-toast-action]').addEventListener('click', (e) => { e.preventDefault(); action.onClick(); kill(); });
+    stack.prepend(el);
+    while (stack.children.length > 3) stack.lastElementChild.remove();
+    let left = duration, started = Date.now(), t = null, gone = false;
+    const kill = (up) => {
+      if (gone) return; gone = true; clearTimeout(t);
+      el.classList.add(up ? 'is-flung' : 'is-leaving');
+      setTimeout(() => el.remove(), 420);
+    };
+    const run = () => { started = Date.now(); t = setTimeout(kill, left); el.classList.remove('is-paused'); };
+    const hold = () => { clearTimeout(t); left = Math.max(900, left - (Date.now() - started)); el.classList.add('is-paused'); };
+    el.addEventListener('pointerenter', hold);
+    el.addEventListener('pointerleave', () => { if (!gone) run(); });
+    el.querySelector('.toast__close').addEventListener('click', () => kill());
+    let y0 = null;
+    el.addEventListener('pointerdown', (e) => { y0 = e.clientY; hold(); });
+    el.addEventListener('pointermove', (e) => { if (y0 !== null) el.style.transform = `translateY(${Math.min(0, e.clientY - y0)}px)`; });
+    const release = (e) => {
+      if (y0 === null) return;
+      const dy = e.clientY - y0; y0 = null; el.style.transform = '';
+      if (dy < -24) kill(true); else if (!gone) run();
+    };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    run();
+    L.buzz && L.buzz(type === 'error' ? [12, 60, 12] : 8);
     return el;
   };
 
@@ -162,6 +200,7 @@
         end: parseEnd(el.dataset.countdownEnd),
         active,
         expired,
+        d: active && active.querySelector('[data-cd="days"]'),
         h: active && active.querySelector('[data-cd="hours"]'),
         m: active && active.querySelector('[data-cd="minutes"]'),
         s: active && active.querySelector('[data-cd="seconds"]'),
@@ -184,9 +223,12 @@
           return;
         }
         const secs = Math.ceil(left / 1000);
-        const h = Math.floor(secs / 3600);
+        // With a days unit the hours wrap at 24; without one they keep counting (72:10:05).
+        const d = t.d ? Math.floor(secs / 86400) : 0;
+        const h = t.d ? Math.floor((secs % 86400) / 3600) : Math.floor(secs / 3600);
         const m = Math.floor((secs % 3600) / 60);
         const s = secs % 60;
+        if (t.d) t.d.textContent = L.digits(pad(d));
         if (t.h) t.h.textContent = L.digits(pad(h));
         if (t.m) t.m.textContent = L.digits(pad(m));
         if (t.s) t.s.textContent = L.digits(pad(s));
@@ -205,7 +247,7 @@
     try {
       if (navigator.share && btn.dataset.share !== undefined) { await navigator.share({ title: document.title, url: btn.dataset.copy }); return; }
       await navigator.clipboard.writeText(btn.dataset.copy);
-      L.toast(L.strings.copied);
+      L.toast(btn.dataset.copyLabel || L.strings.copied, { icon: btn.dataset.copyLabel ? 'ticket' : 'check' });
     } catch {}
   });
 })();

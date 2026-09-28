@@ -62,5 +62,6 @@
     <li>{% render 'icon', name: 'truck', px: 16 %}<span>{{ t1 | escape }}</span></li>
     <li>{% render 'icon', name: 'return', px: 16 %}<span>{{ t2 | escape }}</span></li>
     <li>{% render 'icon', name: 'needle', px: 16 %}<span>{{ t3 | escape }}</span></li>
+    <li class="hero__trust-toggle"><button class="hero__toggle" type="button" data-hero-toggle aria-pressed="false" data-label-pause="{{ 'sections.hero.pause' | t | escape }}" data-label-play="{{ 'sections.hero.play' | t | escape }}">{% render 'icon', name: 'pause', px: 12 %}{% render 'icon', name: 'play', px: 12 %}<span>{{ 'sections.hero.pause' | t }}</span></button></li>
   </ul>
 {%- endif -%}

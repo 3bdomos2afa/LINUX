@@ -21,7 +21,7 @@
     {%- assign compare_float = compare | times: 1.0 -%}
     {%- assign discount_pct = compare | minus: price | times: 100 | divided_by: compare_float | round -%}
     {%- if request.locale.iso_code == 'ar' -%}
-      <span class="price__discount">خصم {% render 'digits', value: discount_pct %}%</span>
+      <span class="price__discount">خصم {% render 'digits', value: discount_pct %}٪</span>
     {%- else -%}
       <span class="price__discount">-{{ discount_pct }}%</span>
     {%- endif -%}

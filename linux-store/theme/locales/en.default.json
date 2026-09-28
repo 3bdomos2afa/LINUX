@@ -17,7 +17,10 @@
     "english": "English",
     "arabic": "العربية",
     "by_brand": "{{ brand }} · {{ type }}",
-    "page_title_sep": " – "
+    "page_title_sep": " – ",
+    "previous": "Previous",
+    "next": "Next",
+    "page_untranslated": "This page isn't available in English yet. Message us on WhatsApp and we'll help right away."
   },
   "accessibility": {
     "skip_to_content": "Skip to content",
@@ -73,8 +76,10 @@
       "collections": "Collections",
       "all": "All",
       "main_menu": "Menu",
-      "footer_menu": "Footer"
-    }
+      "footer_menu": "Footer",
+      "contact_us": "Contact us"
+    },
+    "tab_customize": "Design"
   },
   "sections": {
     "header": {
@@ -95,7 +100,8 @@
       "cta2": "Design your own",
       "trust_1": "Free delivery over LE 2,000",
       "trust_2": "14-day easy exchange",
-      "trust_3": "Embroidered, never printed"
+      "trust_3": "Embroidered, never printed",
+      "play": "Play video"
     },
     "reviews": {
       "verified": "Verified"
@@ -161,7 +167,8 @@
     "saved": "Saved ♥",
     "removed": "Removed from saved",
     "empty_title": "Nothing saved yet",
-    "empty_body": "Tap the heart on any piece and it will wait for you here."
+    "empty_body": "Tap the heart on any piece and it will wait for you here.",
+    "view_saved": "View saved"
   },
   "collections": {
     "title": "Collections",
@@ -314,7 +321,18 @@
     "by_type": "{{ brand }} · {{ type }}",
     "rating_text": "4.9 · 120 reviews",
     "desc_ar_hoodie": "<p>Relaxed-fit hoodie in heavyweight 340 gsm melton cotton. The LINUX mark is embroidered, never printed, so it stays sharp wash after wash.</p>",
-    "desc_ar_tee": "<p>Relaxed-fit tee in heavyweight cotton. The LINUX mark is embroidered, never printed, so it stays sharp wash after wash.</p>"
+    "desc_ar_tee": "<p>Relaxed-fit tee in heavyweight cotton. The LINUX mark is embroidered, never printed, so it stays sharp wash after wash.</p>",
+    "notify": {
+      "title": "Sold out — we'll tell you when it's back",
+      "text": "Leave your email and we'll message you as soon as this size is back.",
+      "email": "Your email",
+      "cta": "Notify me",
+      "success": "Done — we'll email you as soon as it's back."
+    },
+    "reviews_count": {
+      "one": "{{ count }} review",
+      "other": "{{ count }} reviews"
+    }
   },
   "size_guide": {
     "title": "Size guide",
@@ -764,7 +782,13 @@
     "save": "Save {{ percent }}%",
     "each": "{{ price }} / piece",
     "add": "Add {{ count }} to bag",
-    "mix": "Mix colours and sizes"
+    "mix": "Mix colours and sizes",
+    "estimate": "Estimate",
+    "subtitle_estimate": "Pick a quantity — your bag shows the final price before you pay.",
+    "note": "Pick the colour and size for each piece.",
+    "disclaimer": "Prices here are estimates; the actual discount and final price show in your bag before you pay.",
+    "product_color": "Product / colour",
+    "save_live": "Save {{ percent }}"
   },
   "fit": {
     "title": "Find your size",
@@ -782,5 +806,47 @@
     "oversized_fit": "Oversized Fit",
     "pdp_oversized_note": "Roomy by design. Between sizes? Take the smaller one.",
     "size_guide_oversized_note": "Hoodies and tees are intentionally cut oversized."
+  },
+  "announcement": {
+    "customize": "Design your own hoodie in the LINUX studio",
+    "welcome": "Welcome code for your first order",
+    "code_copied": "Code copied — paste it at checkout"
+  },
+  "offers": {
+    "spot_eyebrow": "Welcome offer",
+    "spot_heading": "Your first LINUX piece starts here",
+    "spot_text": "Copy your welcome code, pick your piece and paste the code at checkout. Heavyweight fabric, real embroidery, made in Cairo.",
+    "spot_cta": "Shop now",
+    "spot_note": "Paste the code in the discount field at checkout.",
+    "code_label": "Code",
+    "days": "days",
+    "hours": "hrs",
+    "minutes": "min",
+    "seconds": "sec"
+  },
+  "reels": {
+    "eyebrow": "On the feed",
+    "heading": "See it move",
+    "follow": "Follow LINUX",
+    "tag": "Reel",
+    "sound": "Sound on / off"
+  },
+  "promo": {
+    "eyebrow": "Welcome to LINUX",
+    "heading": "A welcome code for your first piece",
+    "text": "Copy the code for your first order, and join the list to hear about new drops before anyone else.",
+    "email": "Your email",
+    "join": "Join",
+    "subscribed": "You're on the list — keep an eye on your inbox.",
+    "fine": "Paste the code at checkout. Unsubscribe anytime.",
+    "skip": "Maybe later"
+  },
+  "payments": {
+    "cod": "Cash on delivery",
+    "instapay": "InstaPay",
+    "wallet": "Mobile wallets",
+    "fawry": "Fawry",
+    "valu": "valU instalments",
+    "card": "Cards"
   }
 }

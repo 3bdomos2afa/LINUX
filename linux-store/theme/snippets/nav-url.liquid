@@ -30,7 +30,7 @@
   assign force_view = false
   assign drop_query = false
   if normalized_title == 'saved' or normalized_title == 'المحفوظات' or normalized_title == 'المحفوظ' or normalized_title == 'wishlist' or normalized_title == 'favorites' or normalized_title == 'favourites'
-    assign normalized_url = '/pages/wishlist'
+    assign normalized_url = routes.search_url | append: '?view=wishlist'
     assign mapped = true
     assign force_view = true
   elsif normalized_title == 'home' or normalized_title == 'الرئيسية' or normalized_title == 'الرئيسيه' or normalized_title == 'الصفحة الرئيسية' or normalized_title == 'الصفحه الرئيسية'
@@ -44,7 +44,7 @@
     assign search_path = pages_prefix | append: 'search/'
     assign customize_path = pages_prefix | append: 'customize/'
     if path == '/pages/wishlist/' or path == wishlist_path
-      assign normalized_url = '/pages/wishlist'
+      assign normalized_url = routes.search_url | append: '?view=wishlist'
       assign mapped = true
       assign force_view = true
     elsif path == '/pages/search/' or path == search_path

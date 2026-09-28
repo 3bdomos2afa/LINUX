@@ -8,7 +8,7 @@
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  assign poster = 'hero-embroidery-poster-v2.png' | asset_url
+  assign poster = 'hero-embroidery-poster-v2.webp' | asset_url
   if s.poster != blank
     assign poster = s.poster | image_url: width: 1920
   endif

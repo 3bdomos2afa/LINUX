@@ -1,0 +1,27 @@
+{%- comment -%}
+  Payment marks: the official card icons Shopify provides for the store's
+  enabled gateways, plus the local methods the merchant switches on in
+  Theme settings → Payments (text badges, no third-party logos).
+  Params: compact (bool) — smaller row for the bag.
+{%- endcomment -%}
+{%- liquid
+  assign card_types = shop.enabled_payment_types
+  assign has_local = false
+  if settings.pay_cod or settings.pay_wallet or settings.pay_instapay or settings.pay_fawry or settings.pay_valu
+    assign has_local = true
+  endif
+-%}
+{%- if has_local or card_types.size > 0 or settings.pay_card_badge -%}
+  <ul class="pay-badges{% if compact %} pay-badges--compact{% endif %}" role="list" aria-label="{{ 'footer.payment' | t | escape }}">
+    {%- if settings.pay_cod -%}<li class="pay-badge">{% render 'icon', name: 'cash', px: 16 %}<span>{{ 'payments.cod' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_instapay -%}<li class="pay-badge">{% render 'icon', name: 'bolt', px: 16 %}<span>{{ 'payments.instapay' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_wallet -%}<li class="pay-badge">{% render 'icon', name: 'wallet', px: 16 %}<span>{{ 'payments.wallet' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_fawry -%}<li class="pay-badge">{% render 'icon', name: 'ticket', px: 16 %}<span>{{ 'payments.fawry' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_valu -%}<li class="pay-badge">{% render 'icon', name: 'calendar', px: 16 %}<span>{{ 'payments.valu' | t }}</span></li>{%- endif -%}
+    {%- if card_types.size > 0 -%}
+      {%- for type in card_types -%}<li class="pay-badge pay-badge--card">{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+    {%- elsif settings.pay_card_badge -%}
+      <li class="pay-badge">{% render 'icon', name: 'card', px: 16 %}<span>{{ 'payments.card' | t }}</span></li>
+    {%- endif -%}
+  </ul>
+{%- endif -%}

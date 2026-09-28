@@ -236,7 +236,7 @@ for (const locale of ['ar', 'en']) {
       const rendered = await liquid.renderFile('price', { variant: { price, compare_at_price: compare } });
       const percentage = L.digits(Math.round((compare - price) * 100 / compare));
       const badge = rendered.match(/class="price__discount">([^<]+)</)?.[1];
-      assert.ok(badge?.includes(`${percentage}%`), badge);
+      assert.ok(badge?.includes(`${percentage}${locale === 'ar' ? '٪' : '%'}`), badge);
       assert.doesNotMatch(badge, /\d[.,]\d|[٠-٩][.,][٠-٩]/);
     }
   });

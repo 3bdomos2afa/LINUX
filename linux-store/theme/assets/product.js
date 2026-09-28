@@ -8,11 +8,11 @@
   const root = S.root && S.root !== '/' ? S.root.replace(/\/$/, '') : '';
   const ar = (document.documentElement.lang || '').toLowerCase().startsWith('ar');
   const bundleText = ar ? {
-    piece: 'القطعة', estimate: 'تقديري', subtotal: 'الإجمالي قبل الخصومات', savings: 'التوفير التقديري', total: 'الإجمالي التقديري',
+    piece: 'القطعة', estimate: 'تقديري', subtotal: 'الإجمالي قبل الخصومات', savings: 'التوفير التقديري', total: 'الإجمالي التقديري', savingsLive: 'التوفير', totalLive: 'الإجمالي',
     choose: 'اختر خيارات متاحة لكل قطعة.', stock: 'الكمية المطلوبة تتجاوز المخزون المتاح.', quantity: 'أدخل كمية صحيحة أكبر من صفر.',
     select: 'اختر', average: 'متوسط سعر القطعة التقديري', oneTime: 'عروض المجموعة متاحة للشراء مرة واحدة فقط.',
   } : {
-    piece: 'Piece', estimate: 'Estimate', subtotal: 'Subtotal before discounts', savings: 'Estimated savings', total: 'Estimated total',
+    piece: 'Piece', estimate: 'Estimate', subtotal: 'Subtotal before discounts', savings: 'Estimated savings', total: 'Estimated total', savingsLive: 'You save', totalLive: 'Total',
     choose: 'Choose available options for every piece.', stock: 'The requested quantity exceeds available stock.', quantity: 'Enter a positive whole-number quantity.',
     select: 'Choose', average: 'Estimated average per piece', oneTime: 'Bundle offers support one-time purchases only.',
   };
@@ -160,6 +160,9 @@
         if (product.variants.length) bundleProducts.set(product.handle, product);
       });
       const bStrings = JSON.parse(bundle.querySelector('[data-bundle-strings]')?.textContent || '{}');
+      const live = bundle.dataset.discountLive === 'true';
+      const pctSign = ar ? '٪' : '%';
+      const pounds = (cents) => Math.round(cents / 100) * 100;
       const tiers = Array.from(bundle.querySelectorAll('[data-bundle-tier]'));
       const container = bundle.querySelector('[data-bundle-pieces]');
       const template = bundle.querySelector('[data-bundle-piece]');
@@ -242,8 +245,8 @@
           const pct = Number(tier.dataset.pct);
           const mixed = tier === activeTier && resolved.some((v) => v?.price !== resolved[0]?.price);
           if (each) each.textContent = price == null ? meta.strings.unavailable
-            : mixed ? `${bundleText.average}: ${L.money(Math.round(price * (100 - pct) / 100))}`
-              : `${pct ? bundleText.estimate + ': ' : ''}${(bStrings.each || '[price]').replace('[price]', L.money(Math.round(price * (100 - pct) / 100)))}`;
+            : mixed ? `${bundleText.average}: ${L.money(pounds(price * (100 - pct) / 100))}`
+              : `${pct && !live ? bundleText.estimate + ': ' : ''}${(bStrings.each || '[price]').replace('[price]', L.money(pounds(price * (100 - pct) / 100)))}`;
         });
         if (!pieces.length) return;
         const pct = Number(activeTier.dataset.pct);
@@ -287,7 +290,7 @@
           });
         });
         summary.textContent = invalid ? bundleText.choose : overstock ? bundleText.stock
-          : `${bundleText.subtotal}: ${L.money(total)}\n${bundleText.savings} (${L.digits(pct)}%): ${L.money(saving)}\n${bundleText.total}: ${L.money(total - saving)}`;
+          : `${bundleText.subtotal}: ${L.money(total)}\n${live ? bundleText.savingsLive : bundleText.savings} (${L.digits(pct)}${pctSign}): ${L.money(saving)}\n${live ? bundleText.totalLive : bundleText.total}: ${L.money(total - saving)}`;
         atc.disabled = invalid || overstock || form.dataset.cartSubmitting === '1';
         atcText.textContent = invalid || overstock ? bundleText.choose : meta.strings.addToBag;
         if (atcPrice) atcPrice.textContent = invalid ? '' : L.money(total);
@@ -612,4 +615,20 @@
       })).then((cards) => { const html = cards.join(''); if (html) { track.innerHTML = html; rv.hidden = false; } });
     }
   }
+})();
+
+/* Back-in-stock request follows the selected variant (snippets/notify-me.liquid) */
+(function () {
+  const L = window.LINUX;
+  if (!L || !L.on) return;
+  L.on('variant:change', ({ variant, root }) => {
+    const box = root && root.querySelector('[data-notify]');
+    if (!box) return;
+    box.hidden = !!(variant && variant.available);
+    if (!variant) return;
+    const name = box.querySelector('[data-notify-variant]');
+    if (name) name.value = variant.title || name.value;
+    const link = box.querySelector('[data-notify-url]');
+    if (link) link.value = link.value.replace(/variant=\d+/, 'variant=' + variant.id);
+  });
 })();

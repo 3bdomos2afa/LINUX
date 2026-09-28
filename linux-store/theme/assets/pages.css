@@ -106,8 +106,6 @@ html[dir="rtl"] .nf__code { letter-spacing: 0; }
 .nf__link-text small { font-size: var(--fs-xs); line-height: 1.4; }
 .nf__link > svg:last-child { color: var(--fg-50); transition: transform var(--t-med) var(--spring), color var(--t-fast); }
 .nf__link:hover > svg:last-child { transform: translate(3px, -3px); color: var(--accent); }
-html[dir="rtl"] .nf__link > svg:last-child { transform: scaleX(-1); }
-html[dir="rtl"] .nf__link:hover > svg:last-child { transform: scaleX(-1) translate(3px, -3px); }
 @media (max-width: 900px) {
   .nf { padding-top: calc(var(--header-h) + 16px); gap: 16px; }
   .nf__hero { grid-template-columns: 1fr; padding: 22px 18px 24px; border-radius: var(--r-xl); text-align: center; }
@@ -186,7 +184,6 @@ html[dir="rtl"] .checkout-steps__item { padding: 0 6px 0 14px; }
 .order-card__end { display: grid; justify-items: end; gap: 4px; text-align: end; }
 .order-card__total { font: var(--w-ui) 15px var(--font-body); color: var(--fg); }
 .order-card__cta { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-xs); color: var(--link); }
-html[dir="rtl"] .order-card__cta svg { transform: scaleX(-1); }
 .status svg { width: 12px; height: 12px; }
 .address-card__text { color: var(--fg-70); font-size: var(--fs-sm); line-height: 1.6; }
 .address-card__text p { margin: 0; }
@@ -207,7 +204,6 @@ html[dir="rtl"] .order-card__cta svg { transform: scaleX(-1); }
 .order__hero-copy { display: grid; gap: 8px; }
 .order__hero-copy .lede { font-size: 15px; }
 .order__back { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--link); margin-bottom: 6px; }
-html[dir="rtl"] .order__back svg { transform: scaleX(-1); }
 .order__hero-mascot { width: 150px; filter: drop-shadow(0 18px 24px rgb(0 0 0 / .4)); }
 .order__track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 0; padding: 14px 10px; list-style: none; border-radius: var(--r-xl); counter-reset: step; }
 .order__step { position: relative; display: grid; justify-items: center; gap: 8px; text-align: center; }

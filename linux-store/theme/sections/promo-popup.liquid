@@ -1,0 +1,95 @@
+{%- comment -%}
+  Welcome / campaign popup on a native <dialog> (focus handling, Esc and
+  backdrop close come from the browser). promo.js decides when to open it:
+  after a delay and/or on exit intent, at most once every N days, never on
+  the bag or the Customize studio. Newsletter sign-ups use Shopify's customer
+  form (tagged `newsletter`), so they land in Customers → Email subscribers.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign show_popup = s.enable
+  if template.name == 'cart' or template.suffix == 'customize' or template.name == 'password'
+    assign show_popup = false
+  endif
+  if s.scope == 'home' and template.name != 'index'
+    assign show_popup = false
+  endif
+  assign form_id = 'promo-form-' | append: section.id
+-%}
+{%- if show_popup -%}
+{{ 'section-promo.css' | asset_url | stylesheet_tag }}
+<dialog class="promo glass" data-promo data-delay="{{ s.delay }}" data-days="{{ s.frequency }}" data-trigger="{{ s.trigger }}" data-version="{{ s.version | default: 1 }}" aria-labelledby="promo-title-{{ section.id }}">
+  <button class="icon-btn promo__close" type="button" data-promo-close aria-label="{{ 'accessibility.close' | t | escape }}">{% render 'icon', name: 'close' %}</button>
+  <div class="promo__art" aria-hidden="true">
+    {%- if s.image != blank -%}
+      {{ s.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400, 600, 900', sizes: '(min-width: 640px) 360px, 100vw', class: 'promo__photo', alt: '' }}
+    {%- else -%}
+      <img src="{{ 'mascot-boombox.webp' | asset_url }}" alt="" width="600" height="600" loading="lazy" decoding="async">
+    {%- endif -%}
+  </div>
+  <div class="promo__body">
+    <p class="eyebrow">{% render 'tr', value: s.eyebrow, key: 'promo.eyebrow' %}</p>
+    <h2 class="promo__title" id="promo-title-{{ section.id }}">{% render 'tr', value: s.heading, key: 'promo.heading' %}</h2>
+    <p class="promo__text">{% render 'tr', value: s.text, key: 'promo.text' %}</p>
+    {%- if s.code != blank -%}
+      <button class="offer-code" type="button" data-copy="{{ s.code | strip | escape }}" data-copy-label="{{ 'announcement.code_copied' | t | escape }}" aria-label="{{ 'cart.offer_copy' | t: code: s.code | escape }}">
+        <span class="offer-code__label">{{ 'offers.code_label' | t }}</span>
+        <span class="offer-code__value">{{ s.code | strip }}</span>
+        {%- render 'icon', name: 'copy', px: 16 -%}
+      </button>
+    {%- endif -%}
+    {%- if s.show_newsletter -%}
+      {%- form 'customer', id: form_id, class: 'promo__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="promo__done" role="status" data-promo-done>{% render 'icon', name: 'check', px: 18 %}{{ 'promo.subscribed' | t }}</p>
+        {%- else -%}
+          <input type="hidden" name="contact[tags]" value="newsletter,promo-popup">
+          <div class="promo__row">
+            <label class="visually-hidden" for="{{ form_id }}-email">{{ 'promo.email' | t }}</label>
+            <input class="input" id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'promo.email' | t | escape }}">
+            <button class="btn btn--primary" type="submit">{{ 'promo.join' | t }}</button>
+          </div>
+          {%- if form.errors -%}<p class="small" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+    {%- elsif s.cta_url != blank -%}
+      <a class="btn btn--primary btn--block" href="{% render 'nav-url', url: s.cta_url %}">{% render 'tr', value: s.cta_label, key: 'offers.spot_cta' %}{% render 'icon', name: 'arrow-right' %}</a>
+    {%- endif -%}
+    <p class="promo__fine">{% render 'tr', value: s.fine, key: 'promo.fine' %}</p>
+    <button class="promo__skip" type="button" data-promo-close>{{ 'promo.skip' | t }}</button>
+  </div>
+</dialog>
+<script src="{{ 'promo.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Promo popup",
+  "tag": "div",
+  "class": "section-promo-popup",
+  "settings": [
+    { "type": "checkbox", "id": "enable", "label": "Show the popup", "default": true },
+    { "type": "select", "id": "trigger", "label": "Open", "default": "both", "options": [
+      { "value": "delay", "label": "After a delay" },
+      { "value": "exit", "label": "When leaving (desktop) / halfway down (phones)" },
+      { "value": "both", "label": "Whichever comes first" }
+    ] },
+    { "type": "range", "id": "delay", "label": "Delay", "min": 3, "max": 60, "step": 1, "unit": "s", "default": 12 },
+    { "type": "range", "id": "frequency", "label": "Show again after", "min": 1, "max": 30, "step": 1, "unit": "d", "default": 7 },
+    { "type": "select", "id": "scope", "label": "Pages", "default": "all", "options": [
+      { "value": "all", "label": "Every page (never the bag or Customize)" },
+      { "value": "home", "label": "Home page only" }
+    ] },
+    { "type": "range", "id": "version", "label": "Campaign version", "min": 1, "max": 50, "step": 1, "default": 1, "info": "Raise it to show a new campaign to people who already closed the popup." },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Blank = the LINUX penguin." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "text", "id": "code", "label": "Discount code (tap to copy)", "default": "LINUX10", "info": "Must exist in Shopify → Discounts." },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Newsletter sign-up", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Button label (when sign-up is off)" },
+    { "type": "url", "id": "cta_url", "label": "Button link (when sign-up is off)" },
+    { "type": "text", "id": "fine", "label": "Small print" }
+  ]
+}
+{% endschema %}

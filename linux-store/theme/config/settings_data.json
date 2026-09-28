@@ -21,7 +21,15 @@
     "social_instagram": "https://www.instagram.com/linux.eg",
     "social_facebook": "https://www.facebook.com/share/1CBF7WFvep",
     "social_tiktok": "",
-    "show_curtain": true
+    "show_curtain": true,
+    "glass_tint": 7,
+    "glass_refraction": "subtle",
+    "pay_cod": true,
+    "pay_card_badge": true,
+    "pay_instapay": false,
+    "pay_wallet": false,
+    "pay_fawry": false,
+    "pay_valu": false
   },
   "presets": {
     "Forest": {

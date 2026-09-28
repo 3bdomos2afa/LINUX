@@ -16,7 +16,7 @@
 {%- liquid
   assign threshold = settings.free_shipping_threshold | default: 0
   assign offer_text = s.offer_text
-  if offer_text == blank and threshold > 0
+  if offer_text == blank and threshold > 0 and show_threshold
     assign fs_cents = threshold | times: 100
     capture fs_amount
       render 'money', amount: fs_cents

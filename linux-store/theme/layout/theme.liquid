@@ -26,7 +26,15 @@
   {%- liquid
     assign seo_page_title = page_title
     assign seo_description = page_description
-    if is_rtl
+    if template.suffix == 'customize'
+      assign customize_title = 'customize.title' | t
+      capture seo_page_title
+        render 'localized-content', content: page_title, fallback: customize_title
+      endcapture
+      if template.name == 'index'
+        assign seo_page_title = customize_title
+      endif
+    elsif is_rtl
       if template.name == 'index'
         assign home_title = 'general.meta.home_title' | t
         assign home_description = 'home.footer_tagline' | t
@@ -115,6 +123,10 @@
       --gutter-scale: {{ gutter_scale | divided_by: 100.0 }};
       --section-gap: calc(clamp(64px, 9vw, 128px) * var(--section-gap-scale));
       --gutter: calc(clamp(16px, 4vw, 48px) * var(--gutter-scale));
+      {%- if settings.glass_tint != blank %}
+      --glass-fill: rgb(244 232 216 / {{ settings.glass_tint | divided_by: 100.0 }});
+      --glass-fill-lensed: rgb(244 232 216 / {{ settings.glass_tint | times: 0.7 | divided_by: 100.0 }});
+      {%- endif %}
       {%- if settings.brand_forest != blank and settings.brand_forest != 'rgba(0,0,0,0)' %}
       --forest: {{ settings.brand_forest }};
       --forest-deep: {{ settings.brand_forest | color_darken: 8 }};
@@ -138,6 +150,7 @@
     @media (max-width: 760px) { :root { --type-scale: {{ type_scale | times: mobile_type_scale | divided_by: 10000.0 }}; } }
     {%- if settings.motion_scale == 0 -%}
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    @view-transition { navigation: none; }
     {%- endif -%}
   {% endstyle %}
 
@@ -153,7 +166,8 @@
       freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }},
       cartType: {{ settings.cart_type | default: 'drawer' | json }},
       whatsapp: {{ settings.whatsapp_number | default: '' | json }},
-      showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }}
+      showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }},
+      refraction: {{ settings.glass_refraction | default: 'subtle' | json }}
     };
     LINUX.strings = {
       added: {{ 'cart.added' | t | json }},
@@ -174,7 +188,10 @@
       free_shipping_away: {{ 'cart.free_shipping_away' | t: amount: '[amount]' | json }},
       copied: {{ 'general.copied' | t | json }},
       view_full: {{ 'products.view_full' | t | json }},
-      quick_view: {{ 'products.quick_view' | t | json }}
+      quick_view: {{ 'products.quick_view' | t | json }},
+      close: {{ 'accessibility.close' | t | json }},
+      view_saved: {{ 'wishlist.view_saved' | t | json }},
+      notify_sent: {{ 'products.notify.success' | t | json }}
     };
     {%- if request.locale.iso_code == 'ar' -%}
     {%- assign ov_keys = 'hoodie,hoodies,shirt,shirts,t-shirt,tee,cap,black,white,beige,burgundy,olive,green,navy,grey,gray,red,blue,brown,cream,sada,anime,customize,flower,oversized,zip,classic,winter,summer,collection,embroidered,kids,men,women,unisex,pack,set' | split: ',' -%}
@@ -195,6 +212,8 @@
     <span class="atmosphere__orb atmosphere__orb--c"></span>
     <span class="atmosphere__grain"></span>
   </div>
+  <div class="scroll-edge scroll-edge--top" aria-hidden="true"></div>
+  <div class="scroll-edge scroll-edge--bottom" aria-hidden="true"></div>
 
   {% sections 'header-group' %}
 

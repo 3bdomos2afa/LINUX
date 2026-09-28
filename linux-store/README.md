@@ -113,11 +113,13 @@ than silently skipping import validation. The theme zip is written to
 
 | Area | Notes |
 | --- | --- |
-| `assets/glass.css` | Design tokens, glass material (regular / clear / solid), atmosphere, buttons, pills, swatches, forms |
+| `assets/glass.css` | Design tokens and the **Liquid Glass 2** material (lens · tint · sheen · rim · depth; regular / clear / solid / tinted), scroll-edge effect, view transitions, RTL mirroring, buttons, pills, forms |
+| `assets/glass.js` | Per-surface **refraction** maps for `[data-lens]` (Chromium only), tab-bar lens, header/tab-bar scroll states, announcement rotator, hero pause, reveal |
+| `assets/section-promo.css` + `promo.js` | Offer spotlight, video reels, promo popup (loaded only by those sections) |
 | Typography | EN: **Froople** headings + **Mochi Tubby** for other copy and prices. Arabic pages: **Thmanyah Sans** throughout — Regular 400 body, Medium 500 UI, Black 900 headings, including Arabic text and Latin digits. Brand fonts stay enabled; `assets/typography.css` loads last to keep heading levels consistent. See `INSTALL.md` for font-rights checks. |
 | `assets/components.css` | Header + mega menu, hero, marquee, cards, rails, bento, drawers, footer, search, tab bar, toasts |
 | `assets/*.js` | Vanilla, dependency-free: AJAX cart + section rendering, predictive search (with Arabic term mapping), wishlist (localStorage), product variants/gallery/sticky ATC/quick view, Customize studio |
-| `sections/` | 40 sections incl. all `main-*` templates, hero video, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |
+| `sections/` | 40 sections incl. all `main-*` templates, hero video, rotating announcement bar (header), **offer spotlight**, **video reels**, **promo popup**, bento collections, campaign, shop-the-look hotspots, testimonials, FAQ, newsletter, penguin row |
 | `templates/` | JSON templates for every Shopify template type, plus `password` and `gift_card` |
 | `locales/` | `en.default.json`, `ar.json` (Egyptian tone) |
 | Hero video | `hero-1080.mp4` (~1 MB, desktop) / `hero-720.mp4` (tablet) / `hero-mobile.mp4` (540×960 portrait crop, ~220 KB) + poster — the browser picks one via `<source media>`; cut from the brand's own embroidery footage with a seamless loop |
@@ -132,6 +134,8 @@ files through Shopify asset URLs and `@font-face`. Treat this as uncleared for
 public distribution until Thmanyah explicitly permits this Shopify CDN
 embedding model in writing, or the font is replaced. The private license copy is
 for internal review, not part of the delivery archive. See [INSTALL.md](INSTALL.md).
+
+**4.0 highlights** (details in [CHANGELOG.md](CHANGELOG.md)): Liquid Glass 2 with real edge refraction, iOS 26 tab bar, rotating offers bar, offer spotlight with live countdown, promo popup, shoppable video reels, Dynamic-Island notifications, back-in-stock requests, local payment badges, bilingual Shopify email templates (`notifications/`) and a social ad kit (`marketing/`).
 
 ## Local preview (no Shopify account needed)
 

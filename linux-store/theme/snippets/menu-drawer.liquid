@@ -34,7 +34,7 @@
         <a href="{% render 'customize-url' %}" class="menu-drawer__link">{{ 'nav.menu.customize' | t }}{% render 'icon', name: 'customize', px: 20 %}</a>
         <a href="{{ routes.search_url }}" class="menu-drawer__link">{{ 'nav.search' | t }}{% render 'icon', name: 'search', px: 20 %}</a>
         {%- if settings.show_wishlist != false -%}
-          <a href="/pages/wishlist" class="menu-drawer__link">{{ 'wishlist.title' | t }}{% render 'icon', name: 'heart', px: 20 %}</a>
+          <a href="{{ routes.search_url }}?view=wishlist" class="menu-drawer__link">{{ 'wishlist.title' | t }}{% render 'icon', name: 'heart', px: 20 %}</a>
         {%- endif -%}
       {%- endfor -%}
     </nav>

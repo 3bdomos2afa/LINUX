@@ -34,9 +34,23 @@
         "show_payment_icons": true,
         "show_mascot": true
       }
+    },
+    "promo": {
+      "type": "promo-popup",
+      "settings": {
+        "enable": true,
+        "trigger": "both",
+        "delay": 12,
+        "scope": "all",
+        "version": 1,
+        "code": "LINUX10",
+        "show_newsletter": true,
+        "frequency": 7
+      }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "promo"
   ]
 }

@@ -13,7 +13,7 @@
     <div>
       {%- capture review_label -%}{{ 'cart.review_eyebrow' | t }}{%- endcapture -%}
       <p class="eyebrow">{% render 'digits', value: review_label %}</p>
-      <h1>{{ 'cart.title' | t }} <span class="cart-page__count" data-cart-count>{% render 'digits', value: cart.item_count %}</span></h1>
+      <h1>{{ 'cart.title' | t }} <span class="cart-page__count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{% render 'digits', value: cart.item_count %}</span></h1>
     </div>
     <ol class="checkout-steps glass glass--pill" aria-label="{{ 'cart.steps_label' | t }}">
       {%- for st in steps -%}
@@ -27,7 +27,7 @@
     <div class="glass cart-page__lines" data-cart-region="body">
       {% render 'cart-body', cart: cart, context: 'page' %}
     </div>
-    <aside class="glass cart-page__summary" data-cart-region="foot">
+    <aside class="glass cart-page__summary" data-cart-region="foot"{% if cart.item_count == 0 %} hidden{% endif %}>
       <h2 class="h3 cart-page__summary-title">{{ 'cart.summary' | t }}</h2>
       {% render 'cart-foot', cart: cart, context: 'page' %}
       {%- if cart.item_count > 0 -%}
