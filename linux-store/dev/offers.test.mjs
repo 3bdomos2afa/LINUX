@@ -45,3 +45,10 @@ for (const locale of ['ar', 'en']) {
     assert.match(howto, /linux@instapay/);
   });
 }
+
+test('placement presets stored in English read in the shopper\'s language', async () => {
+  assert.equal((await render('placement-value', 'ar', { value: 'Center chest' })).trim(), 'نص الصدر');
+  assert.equal((await render('placement-value', 'ar', { value: 'Full back' })).trim(), 'الضهر كله');
+  assert.equal((await render('placement-value', 'en', { value: 'Left chest' })).trim(), 'Chest pocket');
+  assert.equal((await render('placement-value', 'ar', { value: 'Custom <b>spot</b>' })).trim(), 'Custom &lt;b&gt;spot&lt;/b&gt;');
+});

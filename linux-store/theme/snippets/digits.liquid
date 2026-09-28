@@ -1,11 +1,11 @@
 {%- comment -%}
   Arabic-Indic numerals on /ar, unchanged everywhere else — the same mapping
   snippets/money.liquid and snippets/price.liquid apply, so a rate printed beside
-  a price reads in the same numeral set (٢٥% beside ١,١٥٠ جنيه, not 25%).
+  a price reads in the same numeral set and the Arabic percent sign (٢٥٪ beside ١,١٥٠ جنيه, not 25%).
   Usage: {% render 'digits', value: block.settings.tier1_pct %}
 {%- endcomment -%}
 {%- if request.locale.iso_code == 'ar' -%}
-  {{- value | append: '' | replace: '0', '٠' | replace: '1', '١' | replace: '2', '٢' | replace: '3', '٣' | replace: '4', '٤' | replace: '5', '٥' | replace: '6', '٦' | replace: '7', '٧' | replace: '8', '٨' | replace: '9', '٩' -}}
+  {{- value | append: '' | replace: '0', '٠' | replace: '1', '١' | replace: '2', '٢' | replace: '3', '٣' | replace: '4', '٤' | replace: '5', '٥' | replace: '6', '٦' | replace: '7', '٧' | replace: '8', '٨' | replace: '9', '٩'  | replace: '%', '٪' -}}
 {%- else -%}
   {{- value -}}
 {%- endif -%}

@@ -186,7 +186,7 @@ for (const locale of ['ar', 'en']) {
     for (const value of [0, 1, 12, 100, '01:25:09', '50%', '−2.5']) {
       const rendered = await liquid.renderFile('digits', { value });
       assert.equal(rendered.trim(), L.digits(value));
-      if (locale === 'ar') assert.doesNotMatch(rendered, /[0-9]/);
+      if (locale === 'ar') { assert.doesNotMatch(rendered, /[0-9%]/); }
       else assert.equal(rendered.trim(), String(value));
     }
     for (const amount of [0, 50, 64900, 115000, 105055]) {

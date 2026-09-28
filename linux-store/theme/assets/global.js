@@ -123,7 +123,8 @@
 
   /* Arabic-Indic numerals for anything a script prints beside a price
      (percentages, counts), so numbers never mix numeral sets on the page. */
-  L.digits = (value) => (S.locale === 'ar' ? arDigits(value) : String(value));
+  // Same as snippets/digits.liquid: Arabic-Indic numerals and the Arabic percent sign.
+  L.digits = (value) => (S.locale === 'ar' ? arDigits(value).replace(/%/g, '٪') : String(value));
 
   // Shopify Section Rendering helper
   L.renderSection = async function (sectionId, url = window.location.pathname) {
@@ -137,30 +138,21 @@
     return tpl;
   };
 
-  /* Verify each declared Arabic face directly; same-width cuts are valid. */
+  /* Verify the Arabic brand faces chosen in Theme settings → Typography actually loaded. */
   if (S.locale === 'ar' && document.fonts) {
-    const cuts = [
-      { weight: 400, file: 'thmanyahsans-Regular.woff2' },
-      { weight: 500, file: 'thmanyahsans-Medium.woff2' },
-      { weight: 900, file: 'thmanyahsans-Black.woff2' }
-    ];
     const guard = async () => {
+      const css = getComputedStyle(document.documentElement);
+      const first = (name) => (css.getPropertyValue(name).split(',')[0] || '').trim().replace(/^["']|["']$/g, '');
       const sample = 'معمول يفضل معاك ٢٤٩';
-      const missing = await Promise.all(cuts.map(async ({ weight, file }) => {
-        const descriptor = `${weight} 16px "Thmanyah Sans"`;
+      const families = [...new Set([first('--font-display'), first('--font-body')])].filter(Boolean);
+      const failed = [];
+      for (const family of families) {
         try {
-          const faces = await document.fonts.load(descriptor, sample);
-          const loaded = faces.some((face) =>
-            face.family.replaceAll('"', '').toLowerCase() === 'thmanyah sans' &&
-            face.weight === String(weight) && face.status === 'loaded'
-          );
-          return loaded && document.fonts.check(descriptor, sample) ? null : file;
-        } catch {
-          return file;
-        }
-      }));
-      const failed = missing.filter(Boolean);
-      if (failed.length) console.warn(`[LINUX] Thmanyah Sans font cuts did not load: ${failed.join(', ')}. Check these theme assets.`);
+          const faces = await document.fonts.load(`16px "${family}"`, sample);
+          if (!faces.some((face) => face.family.replaceAll('"', '').toLowerCase() === family.toLowerCase() && face.status === 'loaded')) failed.push(family);
+        } catch { failed.push(family); }
+      }
+      if (failed.length) console.warn(`[LINUX] Arabic brand fonts did not load: ${failed.join(', ')}. Check Theme settings → Typography and the font files in assets.`);
     };
     document.fonts.ready.then(guard);
   }

@@ -400,7 +400,8 @@
     "error_confirm_size": "Could not confirm one customized size was added.",
     "bundle_offer": "Bundle offer",
     "bundle_actual": "Actual Shopify discount (this line):",
-    "bundle_note": "The bundle price is an estimate. Shopify confirms the real discount at checkout, and changing your bag can change it."
+    "bundle_note": "The bundle price is an estimate. Shopify confirms the real discount at checkout, and changing your bag can change it.",
+    "error_partial": "Could not add every custom piece. [confirmed] of [total] requested pieces are confirmed in your bag. No write was retried; review your bag, then retry to add only the missing quantities."
   },
   "customize": {
     "title": "Customize studio",

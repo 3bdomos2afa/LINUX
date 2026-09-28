@@ -83,7 +83,7 @@
                   <details class="cart-line__props"><summary>{{ 'cart.details' | t }} · {% render 'digits', value: prop_count %}</summary>
                     {%- for p in item.properties -%}{%- assign fc = p.first | slice: 0 -%}
                       {%- if p.last != blank and fc != '_' -%}
-                        <p class="cart-line__meta">{% render 'property-label', name: p.first %}: {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>{%- elsif p.first == 'Expected bundle discount' or p.first == 'Bundle piece' -%}{%- capture property_display -%}{% render 'digits', value: p.last %}{%- endcapture -%} {{ property_display | strip | escape }}{%- else -%} {{ p.last }}{%- endif -%}</p>
+                        <p class="cart-line__meta">{% render 'property-label', name: p.first %}: {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>{%- elsif p.first == 'Expected bundle discount' or p.first == 'Bundle piece' -%}{%- capture property_display -%}{% render 'digits', value: p.last %}{%- endcapture -%} {{ property_display | strip | escape }}{%- elsif p.first == 'Front placement' or p.first == 'Back placement' -%} {% render 'placement-value', value: p.last %}{%- else -%} {{ p.last }}{%- endif -%}</p>
                       {%- endif -%}
                     {%- endfor -%}
                   </details>

@@ -8,6 +8,8 @@
   const root = S.root && S.root !== '/' ? S.root.replace(/\/$/, '') : '';
   const ar = (document.documentElement.lang || '').toLowerCase().startsWith('ar');
   const bs = L.strings || {};
+  // Arabic counts: 1 and 2 have their own words, 3–10 take the plural, 11+ the singular.
+  const arPieces = (n) => (n === 1 ? 'قطعة واحدة' : n === 2 ? 'قطعتين' : n <= 10 ? `${L.digits(n)} قطع` : `${L.digits(n)} قطعة`);
   const bundleText = {
     piece: bs.b_piece, estimate: bs.b_estimate, subtotal: bs.b_subtotal, savings: bs.b_savings, total: bs.b_total, savingsLive: bs.b_savings_live, totalLive: bs.b_total_live,
     choose: bs.b_choose, stock: bs.b_stock, quantity: bs.b_quantity, select: bs.b_select, average: bs.b_average, oneTime: bs.b_one_time,
@@ -375,7 +377,7 @@
           id: variant.id, quantity,
           ...(fd.get('selling_plan') ? { selling_plan: fd.get('selling_plan') } : {}),
           properties: { ...properties, ...(group ? {
-            'Bundle offer': `${bundleOffer} · ${pieces.length} ${ar ? 'قطع' : 'pieces'}`,
+            'Bundle offer': `${bundleOffer} · ${ar ? arPieces(pieces.length) : `${pieces.length} pieces`}`,
             'Expected bundle discount': `${bundleDiscount}% (${L.strings?.bundle_estimate_note || (ar ? 'تقديري بس؛ Shopify بيحسب الخصم الفعلي' : 'estimate only; Shopify calculates actual discounts')})`,
             'Bundle piece': `${index + 1} / ${pieces.length}`,
             'Bundle selection': `${ar ? 'القطعة' : 'Piece'} ${index + 1}: ${selection}`,

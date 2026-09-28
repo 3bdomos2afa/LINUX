@@ -53,7 +53,7 @@
               <span>
                 <strong>{{ 'cart.bundle_offer' | t }}</strong>
                 <small>{{ item.properties['Bundle offer'] | escape }}</small>
-                {%- if item.properties['Expected bundle discount'] != blank -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%} {{ expected_discount | strip | escape }}</small>{%- endif -%}
+                {%- if item.properties['Expected bundle discount'] != blank -%}{%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {{ expected_discount | strip | escape }}</small>{%- endif -%}
               </span>
             </div>
           {%- endif -%}
@@ -101,6 +101,7 @@
                   {%- elsif p.first == 'Method' or p.first == 'Garment' or p.first == 'Colour' -%} {%- capture property_label -%}{% render 'option-value', value: property_value %}{%- endcapture -%} {{ property_label | escape }}
                   {%- elsif p.first == 'Expected bundle discount' or p.first == 'Bundle piece' -%} {%- capture property_display -%}{% render 'digits', value: property_value %}{%- endcapture -%} {{ property_display | strip | escape }}
                   {%- elsif p.first == 'Piece' -%} {%- capture piece_display -%}{% render 'digits', value: property_value %}{%- endcapture -%} {{ piece_display | strip | escape }}
+                  {%- elsif p.first == 'Front placement' or p.first == 'Back placement' -%} {% render 'placement-value', value: property_value %}
                   {%- elsif p.first == 'Size' -%} {%- capture size_display -%}{% render 'option-value', value: property_value %}{%- endcapture -%} {{ size_display | strip | escape }}
                   {%- elsif p.first == 'Sides' -%}
                     {%- if property_value == 'Front + Back' -%} {{ 'customize.both_sides' | t }}

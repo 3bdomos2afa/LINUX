@@ -98,8 +98,8 @@
     const total = L.digits ? L.digits(status.totalQuantity) : String(status.totalQuantity);
     const reason = causeText ? ` (${causeText})` : '';
     return ar
-      ? `تعذّرت إضافة كل قطع التصميم. الموجود في الشنطة ${confirmed} من ${total} قطعة. لم نعد محاولة الإضافة تلقائياً؛ راجع الشنطة ثم أعد المحاولة لإضافة الناقص فقط.${reason}`
-      : `Could not add every custom piece. ${confirmed} of ${total} requested pieces are confirmed in your bag. No write was retried; review your bag, then retry to add only the missing quantities.${reason}`;
+      ? `${(L.strings?.err_partial || 'مقدرناش نضيف كل القطع: اتضاف [confirmed] من [total] بس. ما حاولناش تاني لوحدنا — بص على الشنطة وجرّب تاني وهنضيف الناقص بس.').replace('[confirmed]', confirmed).replace('[total]', total)}${reason}`
+      : `${(L.strings?.err_partial || 'Could not add every custom piece. [confirmed] of [total] requested pieces are confirmed in your bag. No write was retried; review your bag, then retry to add only the missing quantities.').replace('[confirmed]', confirmed).replace('[total]', total)}${reason}`;
   }
 
   function customAddFailure(cause, jobs, cart, counts) {
