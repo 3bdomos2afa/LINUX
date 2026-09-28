@@ -13,12 +13,17 @@
     if (!L.words || /[\u0600-\u06FF]/.test(title)) return title;
     return String(title).split(' ').map((w) => L.words[w.toLowerCase()] || w).join(' ');
   };
+  /* Arabic-Indic numerals, so a price painted by JS looks exactly like the same
+     price painted by Liquid (see snippets/money.liquid) instead of switching
+     numeral sets when a variant changes. */
+  const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+  const arDigits = (s) => String(s).replace(/\d/g, (d) => AR_DIGITS[d]);
   L.money = function (cents) {
     if (cents == null || isNaN(cents)) return '';
     const n = Number(cents) / 100;
     const two = n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    // Arabic: "649 جنيه" (mirrors snippets/money.liquid); other locales: the shop's money format
-    if (S.locale === 'ar') return two.replace(/\.00$/, '') + ' ' + (S.currencyAr || 'جنيه');
+    // Arabic: "١,١٥٠ جنيه" (mirrors snippets/money.liquid); other locales: the shop's money format
+    if (S.locale === 'ar') return arDigits(two.replace(/\.00$/, '')) + ' ' + (S.currencyAr || 'جنيه');
     const fmt = S.moneyFormat || 'LE {{amount}}';
     return fmt
       .replace(/{{\s*amount_no_decimals\s*}}/g, Math.round(n).toLocaleString('en-US'))
@@ -33,7 +38,7 @@
     const text = await res.text();
     let data = null;
     try { data = text ? JSON.parse(text) : null; } catch { data = null; }
-    if (!res.ok) { const err = new Error((data && (data.description || data.message)) || res.statusText || 'Request failed'); err.status = res.status; err.body = data; throw err; }
+    if (!res.ok) { const err = new Error((data && (data.description || data.message)) || (L.strings && L.strings.error) || res.statusText || 'Request failed'); err.status = res.status; err.body = data; throw err; }
     return data;
   };
 
@@ -78,6 +83,10 @@
   // Haptic-ish feedback on supported devices for primary actions
   L.buzz = (ms = 8) => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch {} };
 
+  /* Arabic-Indic numerals for anything a script prints beside a price
+     (percentages, counts), so numbers never mix numeral sets on the page. */
+  L.digits = (value) => (S.locale === 'ar' ? arDigits(value) : String(value));
+
   // Shopify Section Rendering helper
   L.renderSection = async function (sectionId, url = window.location.pathname) {
     const u = new URL(url, window.location.origin);
@@ -89,6 +98,105 @@
     tpl.innerHTML = html;
     return tpl;
   };
+
+  /* Verify each declared Arabic face directly; same-width cuts are valid. */
+  if (S.locale === 'ar' && document.fonts) {
+    const cuts = [
+      { weight: 400, file: 'thmanyahsans-Regular.woff2' },
+      { weight: 500, file: 'thmanyahsans-Medium.woff2' },
+      { weight: 900, file: 'thmanyahsans-Black.woff2' }
+    ];
+    const guard = async () => {
+      const sample = 'معمول يفضل معاك ٢٤٩';
+      const missing = await Promise.all(cuts.map(async ({ weight, file }) => {
+        const descriptor = `${weight} 16px "Thmanyah Sans"`;
+        try {
+          const faces = await document.fonts.load(descriptor, sample);
+          const loaded = faces.some((face) =>
+            face.family.replaceAll('"', '').toLowerCase() === 'thmanyah sans' &&
+            face.weight === String(weight) && face.status === 'loaded'
+          );
+          return loaded && document.fonts.check(descriptor, sample) ? null : file;
+        } catch {
+          return file;
+        }
+      }));
+      const failed = missing.filter(Boolean);
+      if (failed.length) console.warn(`[LINUX] Thmanyah Sans font cuts did not load: ${failed.join(', ')}. Check these theme assets.`);
+    };
+    document.fonts.ready.then(guard);
+  }
+
+  /* Campaign countdowns use one absolute, timezone-qualified end timestamp. */
+  (function initCountdowns() {
+    const nodes = document.querySelectorAll('[data-countdown]');
+    if (!nodes.length) return;
+    const pad = (n) => String(n).padStart(2, '0');
+    const parseEnd = (raw) => {
+      if (typeof raw !== 'string') return null;
+      const value = raw.trim();
+      const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|[+-]\d{2}:\d{2})$/i);
+      if (!match) return null;
+      const [, year, month, day, hour, minute, second, zone] = match;
+      const y = Number(year), mo = Number(month), d = Number(day);
+      const h = Number(hour), m = Number(minute), s = Number(second);
+      if (h > 23 || m > 59 || s > 59) return null;
+      const civil = new Date(0);
+      civil.setUTCFullYear(y, mo - 1, d);
+      civil.setUTCHours(h, m, s, 0);
+      if (civil.getUTCFullYear() !== y || civil.getUTCMonth() !== mo - 1 || civil.getUTCDate() !== d) return null;
+      if (zone.toUpperCase() !== 'Z') {
+        const offset = zone.match(/[+-](\d{2}):(\d{2})/);
+        const offsetHours = Number(offset[1]), offsetMinutes = Number(offset[2]);
+        if (offsetHours > 14 || offsetMinutes > 59 || (offsetHours === 14 && offsetMinutes !== 0)) return null;
+      }
+      const timestamp = Date.parse(value);
+      return Number.isFinite(timestamp) ? timestamp : null;
+    };
+    const timers = Array.from(nodes, (el) => {
+      const active = el.querySelector('[data-countdown-active]');
+      const expired = el.querySelector('[data-countdown-expired]');
+      if (expired) expired.remove();
+      return {
+        el,
+        end: parseEnd(el.dataset.countdownEnd),
+        active,
+        expired,
+        h: active && active.querySelector('[data-cd="hours"]'),
+        m: active && active.querySelector('[data-cd="minutes"]'),
+        s: active && active.querySelector('[data-cd="seconds"]'),
+        finished: false
+      };
+    });
+
+    const paint = () => {
+      const now = Date.now();
+      timers.forEach((t) => {
+        if (t.end === null || !t.active || t.finished) return;
+        const left = t.end - now;
+        if (left <= 0) {
+          t.active.remove();
+          if (t.expired) {
+            t.el.appendChild(t.expired);
+            t.el.hidden = false;
+          }
+          t.finished = true;
+          return;
+        }
+        const secs = Math.ceil(left / 1000);
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        if (t.h) t.h.textContent = L.digits(pad(h));
+        if (t.m) t.m.textContent = L.digits(pad(m));
+        if (t.s) t.s.textContent = L.digits(pad(s));
+        t.el.hidden = false;
+      });
+    };
+
+    paint();
+    setInterval(paint, 1000);
+  })();
 
   // Copy-to-clipboard for share buttons
   document.addEventListener('click', async (e) => {

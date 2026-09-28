@@ -1,15 +1,17 @@
-/* LINUX — Customize studio v3 */
+/* LINUX — Customize studio */
 .cz { padding-top: calc(var(--header-h) + 40px); padding-bottom: var(--section-gap); }
 .cz__head { display: grid; gap: 10px; margin-bottom: 24px; max-width: 760px; }
 .cz__head .display { font-size: clamp(32px, 4.4vw, 64px); }
+.cz__fit { justify-self: start; }
 .cz__grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr); gap: 20px; align-items: start; }
+.cz__grid > * { min-width: 0; }
 
 /* Stage */
 .cz__stage { position: sticky; top: calc(var(--header-h) + 28px); border-radius: var(--r-hero); padding: clamp(14px, 2vw, 22px); display: grid; gap: 14px; overflow: hidden; }
 .cz__stage-top, .cz__stage-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .cz__colors { align-items: center; }
 .cz__stage-top .segmented__btn { gap: 6px; }
-.cz__canvas { position: relative; width: min(100%, 600px); aspect-ratio: 1; margin-inline: auto; display: grid; place-items: center; touch-action: none; border-radius: var(--r-xl); background: radial-gradient(ellipse at 50% 35%, rgb(244 232 216 / .10), transparent 64%), linear-gradient(180deg, rgb(255 255 255 / .02), rgb(0 0 0 / .12)); overflow: hidden; transition: box-shadow var(--t-med); }
+.cz__canvas { position: relative; width: min(100%, 520px); aspect-ratio: 1; margin-inline: auto; display: grid; place-items: center; touch-action: pan-y pinch-zoom; border-radius: var(--r-xl); background: radial-gradient(ellipse at 50% 35%, rgb(244 232 216 / .10), transparent 64%), linear-gradient(180deg, rgb(255 255 255 / .02), rgb(0 0 0 / .12)); overflow: hidden; transition: box-shadow var(--t-med); }
 .cz__canvas.is-over { box-shadow: inset 0 0 0 2px var(--accent); }
 .cz__garment { position: relative; width: 100%; height: 100%; }
 .cz__garment.is-swap { animation: cz-swap .5s var(--spring); }
@@ -25,7 +27,13 @@
 .cz__mock svg { width: 100%; height: 100%; display: block; }
 .cz__garment .mock [fill="var(--gc)"] { transition: fill var(--t-med) var(--ease); }
 /* Artwork layer: position/size/rotation come from CSS vars set by JS */
-.cz__design { position: absolute; left: var(--dx, 50%); top: var(--dy, 42%); width: calc(var(--ds, 42) * .66%); transform: translate(-50%, -50%) rotate(var(--dr, 0deg)); cursor: grab; touch-action: none; user-select: none; z-index: 2; outline: none; }
+.cz__design { position: absolute; left: var(--dx, 50%); top: var(--dy, 42%); width: calc(var(--ds, 42) * .66%); transform: translate(-50%, -50%) rotate(var(--dr, 0deg)); touch-action: pan-y pinch-zoom; user-select: none; z-index: 2; }
+.cz__canvas.is-editing .cz__design { cursor: grab; touch-action: none; }
+.cz__canvas:not(.is-editing) .cz__knob { visibility: hidden; }
+.cz__edit-toggle { justify-self: center; }
+.cz__edit-toggle[aria-pressed="true"] { border-color: var(--cream); }
+.cz__preview-note { margin: 0; font-size: var(--fs-xs); line-height: 1.6; color: var(--fg); }
+.cz[data-preparing="true"] :is(button, input, textarea, .cz__design) { pointer-events: none; }
 .cz__design.is-pop { animation: cz-pop .5s var(--spring); }
 @keyframes cz-pop { from { transform: translate(-50%, -50%) rotate(var(--dr, 0deg)) scale(.6); opacity: 0; } to { transform: translate(-50%, -50%) rotate(var(--dr, 0deg)) scale(1); opacity: 1; } }
 .cz__design:active, .cz__design.is-dragging { cursor: grabbing; }
@@ -39,14 +47,13 @@
 .cz__knob--scale { right: -16px; bottom: -16px; cursor: nwse-resize; }
 .cz__knob--rotate { left: 50%; top: -34px; transform: translateX(-50%); cursor: grab; }
 .cz__knob--rotate::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 14px; background: rgb(244 232 216 / .7); }
-.cz__canvas:hover .cz__frame, .cz__design:focus-visible .cz__frame, .cz__design.is-dragging .cz__frame,
-.cz__canvas:hover .cz__knob, .cz__design:focus-visible .cz__knob, .cz__design.is-dragging .cz__knob { opacity: 1; }
+.cz__canvas.is-editing .cz__frame, .cz__canvas.is-editing .cz__knob { opacity: 1; }
 .cz__knob:hover { transform: scale(1.12); }
 .cz__knob--rotate:hover { transform: translateX(-50%) scale(1.12); }
-@media (pointer: coarse) { .cz__frame, .cz__knob { opacity: 1; } .cz__knob { width: 34px; height: 34px; } .cz__knob--scale { right: -18px; bottom: -18px; } .cz__knob--rotate { top: -40px; } }
+@media (pointer: coarse) { .cz__knob { width: 44px; height: 44px; } .cz__knob--scale { right: -22px; bottom: -22px; } .cz__knob--rotate { top: -48px; } }
 /* Print-area guide */
 .cz__print-area { position: absolute; left: 50%; top: 45%; width: 52%; height: 52%; transform: translate(-50%, -50%); border: 1px dashed rgb(244 232 216 / .22); border-radius: 12px; opacity: 0; transition: opacity var(--t-med), left var(--t-med), top var(--t-med), width var(--t-med), height var(--t-med); pointer-events: none; z-index: 1; }
-.cz__canvas:hover .cz__print-area, .cz__design.is-dragging ~ .cz__print-area, .cz__garment:has(.cz__design.is-dragging) .cz__print-area { opacity: 1; }
+.cz__canvas.is-editing .cz__print-area { opacity: 1; }
 /* Empty prompt */
 .cz__empty { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 6px; padding: 20px 24px; border-radius: var(--r-lg); color: var(--fg); font: var(--w-ui) 14px var(--font-body); cursor: pointer; z-index: 2; transition: transform var(--t-med) var(--spring), background var(--t-fast); text-align: center; }
 .cz__empty small { font-weight: 500; font-size: var(--fs-xs); color: var(--fg-70); }
@@ -64,13 +71,14 @@
 /* Panel */
 .cz__panel { padding: clamp(18px, 2.4vw, 26px); border-radius: var(--r-xl); display: grid; gap: 20px; }
 .cz__step { display: grid; gap: 10px; }
-.cz__step-title { display: flex; align-items: center; gap: 10px; margin: 0; font: var(--w-ui) 14px var(--font-body); color: var(--fg); }
+.cz__step-title { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; font: var(--w-ui) 14px var(--font-body); color: var(--fg); }
 .cz__step-title .badge { background: var(--glass-fill-hover); color: var(--fg); flex: none; }
 .cz__step-note { margin-inline-start: auto; font-weight: var(--w-body); font-size: var(--fs-xs); color: var(--fg-50); text-align: end; }
 .cz__row { display: flex; gap: 8px; flex-wrap: wrap; }
 /* Two side cards */
 .cz__uploads { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .cz__upload { display: grid; min-width: 0; }
+.cz__upload-status { margin: 8px 0 0; color: var(--fg); }
 .cz__drop { position: relative; display: grid; justify-items: center; align-content: center; gap: 6px; min-height: 148px; padding: 26px 14px 18px; border-radius: var(--r-lg); border: 1.5px dashed var(--glass-stroke); background: var(--glass-fill); text-align: center; cursor: pointer; transition: background var(--t-fast), border-color var(--t-fast); }
 .cz__drop:hover, .cz__drop.is-over { background: var(--glass-fill-hover); border-color: var(--accent); }
 .cz__drop svg { color: var(--accent); }
@@ -121,11 +129,10 @@
 .cz__sizes { display: grid; gap: 8px; }
 .cz__sizes-title { margin: 0; font: var(--w-ui) 12px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-70); }
 .cz__sizes-list { display: grid; gap: 6px; }
-.cz__sizes.is-many .cz__sizes-list { max-height: 300px; overflow: auto; padding-inline-end: 4px; scrollbar-width: thin; }
-.cz__size-row { display: grid; grid-template-columns: 74px 1fr; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--r-md); background: var(--glass-fill); }
+.cz__size-row { display: grid; grid-template-columns: 74px 1fr; align-items: center; gap: 8px; padding: 8px; border-radius: var(--r-md); background: var(--glass-fill); }
+.cz__size-row.is-unavailable { outline: 1px solid var(--cream); }
 .cz__size-n { font: var(--w-ui) 12px var(--font-mono); color: var(--fg-70); }
-.pills--compact { gap: 4px; }
-.pills--compact .pill { min-width: 40px; min-height: 34px; padding: 0 10px; font-size: 12px; }
+/* Sizes are circles from assets/v2.css — the same control the bundle pieces use. */
 /* Range */
 .cz__range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--glass-fill-hover); outline: none; }
 .cz__range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--cream); border: 4px solid var(--forest); box-shadow: 0 4px 12px rgb(0 0 0 / .4); cursor: grab; }
@@ -136,6 +143,16 @@
 .cz__total strong { font: var(--w-heading) 30px/1 var(--font-display); letter-spacing: -.02em; color: var(--heading); }
 .cz__total small { color: var(--fg-70); font-size: var(--fs-sm); }
 .cz__breakdown { font: var(--w-ui) 12px var(--font-mono); }
+.cz__pricing { display: grid; gap: 12px; padding: 16px; border-radius: var(--r-lg); }
+.cz__pricing p { margin: 0; }
+.cz__price-summary { display: grid; gap: 8px; margin: 0; }
+.cz__price-summary > div { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; }
+.cz__price-summary dt { font-size: var(--fs-xs); }
+.cz__price-summary dd { margin: 0; font-weight: var(--w-ui); }
+.cz__price-tiers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cz__price-tier { padding: 10px; border: 1px solid var(--glass-stroke); border-radius: var(--r-sm); color: var(--fg); background: var(--glass-fill); font: var(--w-ui) var(--fs-xs)/1.5 var(--font-body); cursor: pointer; }
+.cz__price-tier.is-active { border-color: var(--cream); background: var(--glass-fill-hover); }
+.cz__pricing-note { font-size: var(--fs-xs); line-height: 1.6; }
 .cz__contact { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: var(--r-md); }
 .cz__contact > div { display: grid; gap: 2px; min-width: 0; }
 .cz__contact strong { font-size: 14px; }
@@ -148,6 +165,9 @@
   .cz__grid { grid-template-columns: 1fr; }
   .cz__stage { position: static; }
   .cz__steps { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1001px) and (max-height: 850px) {
+  .cz__stage { position: static; }
 }
 @media (max-width: 640px) {
   .cz { padding-top: calc(var(--header-h) + 16px); }
@@ -163,15 +183,21 @@
   .cz__uploads { gap: 8px; }
   .cz__drop, .cz__file { min-height: 132px; }
   .cz__drop strong { font-size: 12px; }
-  .cz__step-note { display: none; }
+  .cz__step-note { flex-basis: 100%; text-align: start; margin-inline-start: 34px; }
   .cz__stage-foot { flex-direction: column; align-items: stretch; gap: 8px; }
   .cz__hint { justify-content: center; }
   .cz__size-row { grid-template-columns: 1fr; gap: 6px; }
   .cz__contact { flex-direction: column; align-items: stretch; }
   .cz__contact .btn { width: 100%; }
   .cz__total strong { font-size: 26px; }
+  .cz__total { flex-wrap: wrap; }
   .cz__tools { bottom: 8px; max-width: calc(100% - 16px); overflow-x: auto; scrollbar-width: none; }
   .cz__tools .icon-btn { width: 34px; height: 34px; flex: none; }
   .cz__keys { display: none; }
   .cz__head .display { font-size: clamp(30px, 9vw, 40px); }
+}
+@media (max-width: 360px) {
+  .cz__uploads { grid-template-columns: 1fr; }
+  .cz__price-tiers { grid-template-columns: 1fr; }
+  .cz__panel { padding: 12px; }
 }

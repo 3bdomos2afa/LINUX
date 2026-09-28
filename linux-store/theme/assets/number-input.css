@@ -1,0 +1,39 @@
+.number-input {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.number-input > input[data-localized-number] {
+  position: relative;
+  z-index: 2;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  caret-color: var(--fg);
+}
+
+.number-input > input[data-localized-number]::selection {
+  color: transparent;
+  background: transparent;
+}
+
+.number-input__display {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: pre;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pdp__buy .qty > .number-input { flex: 1 1 0; }
+.pdp__buy .qty > .number-input > .qty__input { width: 100%; }

@@ -1,0 +1,9 @@
+{%- if pagination.pages > 1 -%}
+  <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+    {%- if pagination.previous -%}<a href="{{ pagination.previous.url }}" aria-label="{{ 'accessibility.previous' | t }}">{% render 'icon', name: 'arrow-left', px: 16 %}</a>{%- endif -%}
+    {%- for part in pagination.parts -%}
+      {%- if part.is_link -%}<a href="{{ part.url }}">{% render 'digits', value: part.title %}</a>{%- elsif part.title == pagination.current_page -%}<span class="is-current">{% render 'digits', value: part.title %}</span>{%- else -%}<span>{% render 'digits', value: part.title %}</span>{%- endif -%}
+    {%- endfor -%}
+    {%- if pagination.next -%}<a href="{{ pagination.next.url }}" aria-label="{{ 'accessibility.next' | t }}">{% render 'icon', name: 'arrow-right', px: 16 %}</a>{%- endif -%}
+  </nav>
+{%- endif -%}

@@ -6,7 +6,7 @@
 {%- endcomment -%}
 {%- if request.locale.iso_code == 'ar' -%}
   {%- assign v = value | replace: 'days', 'أيام' | replace: 'day', 'يوم' | replace: 'hours', 'ساعات' | replace: 'hour', 'ساعة' | replace: 'weeks', 'أسابيع' | replace: 'week', 'أسبوع' -%}
-  {{ v }}
+  {% render 'digits', value: v %}
 {%- else -%}
   {{ value }}
 {%- endif -%}

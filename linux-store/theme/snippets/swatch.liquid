@@ -37,4 +37,5 @@
       assign css = '#8fcb5a'
   endcase
 -%}
-<span class="swatch{% if small %} swatch--sm{% endif %}{% if active %} is-active{% endif %}" style="--swatch: {{ css }}" title="{{ value | escape }}" aria-label="{{ value | escape }}"></span>
+{%- capture localized_value -%}{% render 'option-value', value: value %}{%- endcapture -%}
+<span class="swatch{% if small %} swatch--sm{% endif %}{% if active %} is-active{% endif %}" style="--swatch: {{ css }}" title="{{ localized_value | strip | escape }}" aria-label="{{ localized_value | strip | escape }}"></span>

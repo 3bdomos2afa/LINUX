@@ -8,7 +8,7 @@
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  assign poster = 'hero-embroidery-poster.webp' | asset_url
+  assign poster = 'hero-embroidery-poster-v2.png' | asset_url
   if s.poster != blank
     assign poster = s.poster | image_url: width: 1920
   endif
@@ -99,6 +99,11 @@
     { "type": "url", "id": "cta_url", "label": "Primary link" },
     { "type": "text", "id": "cta2_label", "label": "Secondary button" },
     { "type": "url", "id": "cta2_url", "label": "Secondary link" },
+    { "type": "header", "content": "Offer countdown" },
+    { "type": "paragraph", "content": "The countdown uses one real campaign end time and stays accurate after refresh. Leave the end time blank to hide it; the label falls back to the theme translation." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show the countdown", "default": true },
+    { "type": "text", "id": "countdown_label", "label": "Countdown label (blank = translated)" },
+    { "type": "text", "id": "countdown_end_at", "label": "Campaign end timestamp", "info": "Use the same expiration as the Shopify offer. Enter YYYY-MM-DDTHH:mm:ss+03:00 or YYYY-MM-DDTHH:mm:ssZ. Leave blank to hide; the timer does not enforce discount eligibility." },
     { "type": "header", "content": "Trust row" },
     { "type": "checkbox", "id": "show_trust", "label": "Show trust row", "default": true },
     { "type": "text", "id": "trust_1", "label": "Trust 1" },

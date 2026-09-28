@@ -7,6 +7,7 @@
   assign n = name | downcase | strip
   assign name_design = 'customize.upload' | t
   assign name_pos = 'customize.position_label' | t
+  assign locale = request.locale.iso_code | slice: 0, 2
   case n
     when 'garment'
       echo 'customize.garment' | t
@@ -18,9 +19,15 @@
       echo 'customize.sizes_title' | t
     when 'notes'
       echo 'customize.notes' | t
+    when 'size'
+      echo 'products.option_names.size' | t
+    when 'piece'
+      echo 'cart.customized_pieces' | t
+    when 'sides'
+      echo 'cart.customized_sides' | t
     when 'design file'
       echo 'customize.upload' | t
-    when 'side' or 'sides'
+    when 'side'
       echo 'customize.side' | t
     when 'design position'
       echo 'customize.position_label' | t
@@ -32,7 +39,37 @@
       echo 'customize.front' | t | append: ' · ' | append: name_pos
     when 'back position'
       echo 'customize.back' | t | append: ' · ' | append: name_pos
+    when 'bundle offer'
+      if locale == 'ar'
+        echo 'عرض المجموعة'
+      else
+        echo 'Bundle offer'
+      endif
+    when 'expected bundle discount'
+      if locale == 'ar'
+        echo 'خصم المجموعة المتوقع (تقديري فقط)'
+      else
+        echo 'Expected bundle discount (estimate only)'
+      endif
+    when 'bundle id'
+      if locale == 'ar'
+        echo 'معرّف المجموعة'
+      else
+        echo 'Bundle ID'
+      endif
+    when 'bundle piece'
+      if locale == 'ar'
+        echo 'قطعة المجموعة'
+      else
+        echo 'Bundle piece'
+      endif
+    when 'bundle selection'
+      if locale == 'ar'
+        echo 'اختيار القطعة'
+      else
+        echo 'Bundle selection'
+      endif
     else
-      echo name
+      echo name | escape
   endcase
 -%}

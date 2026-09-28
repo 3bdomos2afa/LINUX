@@ -102,17 +102,26 @@
 
   /* Count-up numbers when they scroll into view: <strong data-count>4,000</strong> */
   if ('IntersectionObserver' in window && !reduce) {
+    const displayDigits = window.LINUX?.digits || ((value) => String(value));
+    const asciiDigits = (value) => String(value).replace(/[٠-٩]/g, (digit) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)));
     const cio = new IntersectionObserver((entries) => entries.forEach((en) => {
       if (!en.isIntersecting) return;
       cio.unobserve(en.target);
       const el = en.target, raw = el.textContent.trim();
-      const m = raw.match(/^([^\d]*)([\d,.]+)(.*)$/);
-      if (!m) return;
-      const target = parseFloat(m[2].replace(/,/g, ''));
-      const decimals = (m[2].split('.')[1] || '').length;
-      const useComma = m[2].includes(',');
+      const m = asciiDigits(raw).match(/^([^\d]*)([\d,.٬٫]+)(.*)$/);
+      if (!m || /[A-Za-z]/.test(m[1] + m[3])) return;
+      const number = m[2].replace(/٬/g, ',').replace(/٫/g, '.');
+      const target = parseFloat(number.replace(/,/g, ''));
+      if (!Number.isFinite(target)) return;
+      const decimals = (number.split('.')[1] || '').length;
+      const group = m[2].includes('٬') ? '٬' : m[2].includes(',') ? ',' : '';
+      const decimal = m[2].includes('٫') ? '٫' : '.';
       const t0 = performance.now(), dur = 1200;
-      const fmt = (v) => { let s = v.toFixed(decimals); if (useComma) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ','); return m[1] + s + m[3]; };
+      const fmt = (v) => {
+        let [whole, fraction] = v.toFixed(decimals).split('.');
+        if (group) whole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, group);
+        return displayDigits(m[1] + whole + (fraction ? decimal + fraction : '') + m[3]);
+      };
       const tick = (t) => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e); if (p < 1) requestAnimationFrame(tick); else el.textContent = raw; };
       requestAnimationFrame(tick);
     }), { threshold: 0.4 });

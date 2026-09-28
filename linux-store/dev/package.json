@@ -6,7 +6,9 @@
   "description": "Local Shopify-compatible preview harness for the LINUX Liquid Glass theme",
   "scripts": {
     "start": "node server.mjs",
+    "test": "node --test *.test.mjs",
     "check": "node check.mjs",
+    "check:import": "ruby shopify-lint.rb",
     "package": "node package.mjs"
   },
   "dependencies": {

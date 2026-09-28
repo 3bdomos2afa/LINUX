@@ -1,6 +1,10 @@
 node_modules/
 .hoplite/attachments/
 .hoplite/artifacts/
+.hoplite/runtime/
+.hoplite/tools/
+__pycache__/
+*.pyc
 *.log
 .DS_Store
 linux-store/dev/.uploads/

@@ -15,6 +15,8 @@ import { fileURLToPath } from 'node:url';
 import { Liquid, Tag, Value } from 'liquidjs';
 import { buildStore } from './store.mjs';
 import { registerFilters } from './filters.mjs';
+import { randomUUID } from 'node:crypto';
+import { nest } from './form-data.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const THEME = path.resolve(__dirname, '../theme');
@@ -243,6 +245,11 @@ function blocksOf(s) {
 async function renderSection(type, id, settings, blocks, env) {
   const sec = loadSection(type);
   if (!sec) return `<!-- section ${type} missing -->`;
+  if (type === 'main-customize' && env.request.query.__fixture === 'studio') {
+    const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/customize.json'), 'utf8'));
+    settings = { ...settings, ...fixture.settings };
+    blocks = blocks.map((block) => ({ ...block, settings: { ...block.settings, ...fixture.colorOverrides[block.id] } })).concat(fixture.tiers);
+  }
   const merged = { ...schemaDefaults(sec.schema.settings), ...resolveSettings(settings, env, sec.schema.settings) };
   const blockSchemas = Object.fromEntries((sec.schema.blocks || []).map((b) => [b.type, b]));
   const fullBlocks = blocks.map((b, i) => ({
@@ -252,7 +259,9 @@ async function renderSection(type, id, settings, blocks, env) {
   const section = { id, settings: merged, blocks: fullBlocks, index: 1, index0: 0, location: 'template' };
   try {
     const html = await engine.parseAndRender(sec.body, { ...env, section }, { globals: globalsOf(env) });
-    return `<div id="shopify-section-${id}" class="shopify-section shopify-section--${type}">${html}</div>`;
+    const fixtureNotice = type === 'main-customize' && env.request.query.__fixture === 'studio'
+      ? '<p style="position:relative;z-index:99;margin:90px 20px 0;padding:12px;background:#f4e8d8;color:#043222">LOCAL TEST FIXTURE — mockup substitutions and discount estimates are test data, not store offers.</p>' : '';
+    return `<div id="shopify-section-${id}" class="shopify-section shopify-section--${type}">${fixtureNotice}${html}</div>`;
   } catch (e) {
     console.error(`[render] section ${type}: ${e.message}`);
     return `<div style="padding:24px;background:#400;color:#fff;font:14px monospace"><b>Section "${type}" error:</b> ${escapeHtml(e.message)}</div>`;
@@ -352,7 +361,7 @@ function parseMultipart(raw, ct) {
     if (m[2] !== undefined) {
       if (!m[2]) { out[m[1]] = ''; continue; }
       const bytes = Buffer.from(m[3], 'latin1');
-      const name = `${Date.now().toString(36)}-${m[2].replace(/[^\w.-]+/g, '_')}`;
+      const name = `${randomUUID()}-${m[2].replace(/[^\w.-]+/g, '_')}`;
       fs.mkdirSync(UPLOADS, { recursive: true });
       fs.writeFileSync(path.join(UPLOADS, name), bytes);
       out[m[1]] = `/uploads/${name}`;
@@ -360,17 +369,6 @@ function parseMultipart(raw, ct) {
   }
   return out;
 }
-// Expand a[b][c]=v style keys into nested objects (properties[Design], etc.)
-function nest(flat) {
-  const out = {};
-  for (const [k, v] of Object.entries(flat)) {
-    const keys = k.replace(/\]/g, '').split('[');
-    let o = out;
-    keys.forEach((kk, i) => { if (i === keys.length - 1) o[kk] = v; else o = o[kk] = o[kk] || {}; });
-  }
-  return out;
-}
-
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
@@ -417,13 +415,13 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/cart/add.js' || pathname === '/cart/add') {
       const body = nest(await readBody(req));
       const items = body.items || [{ id: body.id, quantity: body.quantity || 1, properties: body.properties }];
-      let last;
+      const added = [];
       for (const it of items) {
-        try { last = store.cartAdd(Number(it.id), Number(it.quantity || 1), it.properties || {}); }
+        try { added.push(store.cartAdd(Number(it.id), Number(it.quantity || 1), it.properties || {})); }
         catch (e) { return json(res, { status: 422, message: 'Cart Error', description: e.message }, 422); }
       }
       if (pathname === '/cart/add') return send(res, 302, '', 'text/plain', { Location: `${rootPrefix}/cart` });
-      return json(res, items.length > 1 ? { items: store.cartJSON().items } : last);
+      return json(res, body.items ? { items: added } : added[0]);
     }
     if (pathname === '/cart/change.js') { const b = await readBody(req); store.cartChange(b.id || b.line, Number(b.quantity)); return json(res, store.cartJSON()); }
     if (pathname === '/cart/update.js') { const b = nest(await readBody(req)); if (b.discount !== undefined) store.setDiscounts(String(b.discount)); if (b.updates) for (const [k, q] of Object.entries(b.updates)) store.cartChange(k, Number(q)); if (b.note !== undefined) store.cart.note = b.note; return json(res, store.cartJSON()); }

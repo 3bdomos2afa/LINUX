@@ -1,42 +1,56 @@
-# AI University Student Assistant (Telegram)
+# LINUX — Shopify storefront theme
 
-مساعد ذكي لطالب جامعة سيناء عبر Telegram، مبني على بوابة الجامعة
-[UniCodeSIS](http://unicodesis.su.edu.eg) + Moodle/K-Moodle.
+This repository contains the LINUX Shopify Online Store 2.0 theme for
+[linux-eg.com](https://linux-eg.com). The uploadable theme lives in
+[`linux-store/theme/`](linux-store/theme/); the local preview and build tools
+live in [`linux-store/dev/`](linux-store/dev/).
 
-## الحالة الحالية (Phase 0 — القرار والاستطلاع)
+## Documentation
 
-- **القرار: «ابدأ من الصفر»** — تم فحص المستودع بالكامل: لا يوجد أي تصدير
-  workflow من n8n، ولا شيفرة سابقة، ولا سجل commits. لا يوجد شيء يمكن تعديله،
-  لذا يُبنى النظام **Modular من الصفر**.
-- **تم فحص بوابة الجامعة فعليًا** (وليس افتراضيًا): البنية، آلية الدخول، وكل
-  مسارات API الخاصة بالطالب موثقة بالأدلة في `docs/portal-recon.md`.
-- **لم يُفحص بعد (يحتاج جلسة حقيقية):** شكل الاستجابات الفعلية بعد الدخول،
-  وخرائط أسماء المستخدمين، وسلوك الخادم بعد تسجيل الدخول. لذلك **لا يُدّعى أن
-  الـ scraping جاهز** — انظر قسم «غير المتحقق منه» في تقرير الاستطلاع.
+- [Theme overview and local preview](linux-store/README.md)
+- [Installation and store setup](linux-store/INSTALL.md)
+- [Theme editor and order properties](linux-store/ADMIN-GUIDE.md)
+- [Checkout branding notes](linux-store/CHECKOUT-BRANDING.md)
 
-## الوثائق
+## Before deployment
 
-| الملف | المحتوى |
-| --- | --- |
-| `docs/portal-recon.md` | استطلاع بوابة UniCode بالأدلة: المكدس، تدفق الدخول، خريطة كاملة لمسارات API، وغير المتحقق منه |
-| `docs/architecture.md` | البنية المعيارية: الوحدات، آلة الحالات، كائن البيانات الموحّد، محرك التحقق، الأمان والتشغيل |
+Local checks do not establish a successful Shopify import, file upload or checkout.
+Keep the theme unpublished until the store configuration and a real Shopify preview
+have been verified. The supplied fonts are **not cleared for commercial webfont
+distribution**: resolve the Thmanyah embedding restriction, Mochi's personal-use
+notice and Froople's missing license before uploading or distributing those files.
+See [the installation guide](linux-store/INSTALL.md) for the release checklist.
 
-## قواعد ثابتة (لا تُكسر)
+## Quick start
 
-1. **لا تُرسل كلمة المرور أو Bot Token في الشات أو في أي مكان عام.**
-2. كلمة المرور تُستخدم في الذاكرة فقط لطلب الدخول، ولا تُحفظ ولا تُسجَّل ولا
-   تُرسل للذكاء الاصطناعي ولا تُصدَّر.
-3. نجاح الدخول ≠ نجاح استخراج البيانات: حالات منفصلة
-   `AUTHENTICATED → EXTRACTING_DATA → DATA_VALIDATED → DATA_SAVED → READY`.
-4. البيانات الفارغة ≠ فشل الاستخراج (HTTP 200 بقائمة فارغة = «لا توجد بيانات»،
-   بينما الفشل يُعاد فيه التحميل).
-5. كل أزرار البوت تقرأ من كائن البيانات الموحّد المخزَّن، وليس من إعادة فحص.
+Ruby is pinned in the repository-root `mise.toml` (`3.3.12`). With `mise`
+installed, prepare the rootless project runtime and dependencies from the
+repository root. The managed workspace setup hook runs the `npm ci` and pinned
+Liquid gem installation steps after the Ruby runtime is available.
 
-## المسار القادم
+```sh
+mise install
+npm ci --prefix linux-store/dev
+gem install liquid --version 5.8.7 --no-document
+npm run start --prefix linux-store/dev
+```
 
-1. تأكيد بيئة التشغيل: استيراد workflows في n8n الحالي أم خدمة كود (Python/Node).
-2. Phase 1: Gateway + Auth (اختيار اللغة، الدخول الآمن، آلة الحالات).
-3. Phase 2: Extraction adapters (تحتاج fixture لجلسة حقيقية لفحص أشكال الاستجابات).
-4. Phase 3: محرك التحقق deterministic + خطط 12/18/21 ساعة.
-5. Phase 4: Moodle assignments + تذكيرات بلا تكرار.
-6. Phase 5: التشغيل: refresh/logout، throttling، retries، سجل تشخيصي بلا أسرار.
+The local storefront is at `http://localhost:3000`. To create the Shopify theme
+upload and delivery bundle, run `npm run package --prefix linux-store/dev`. The
+package command always runs both theme-check and the Ruby Shopify-importer
+validator; a missing Ruby/Liquid runtime or any importer finding aborts packaging
+instead of silently skipping that check. No `sudo` or `apt` installation is
+required for the pinned runtime and project setup.
+
+Run `npm test --prefix linux-store/dev`, `npm run check --prefix linux-store/dev`
+and `npm run check:import --prefix linux-store/dev` for the local tests,
+theme-check and importer validation. The local preview is a best-effort Shopify
+emulator: the live Shopify cart/checkout is authoritative for prices, and the
+emulator does not verify touch behavior on a physical phone. Verify the finished
+theme and checkout on a real Shopify preview before publishing.
+
+With the managed preview running and `agent-browser` installed, run
+`node linux-store/dev/scripts/verify-responsive.mjs` for the bilingual viewport
+matrix and `node linux-store/dev/scripts/verify-commerce.mjs` for customization
+and cart interactions. The commerce checks mutate only the local preview cart;
+their synthetic pricing fixtures do not configure Shopify discounts.

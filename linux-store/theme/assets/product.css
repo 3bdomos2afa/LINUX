@@ -49,6 +49,9 @@ html[dir="rtl"] .gallery__nav svg { transform: scaleX(-1); }
 .pdp__size-guide:hover { color: var(--accent); }
 .pdp__fit { display: inline-flex; align-items: center; gap: 6px; margin-top: -6px; }
 .pdp__fit svg { color: var(--accent); }
+.pdp__fit strong { color: var(--fg); white-space: nowrap; }
+.size-guide__fit-note { margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--glass-stroke); border-radius: var(--r-md); background: var(--glass-fill); color: var(--fg-70); }
+.size-guide__fit-note strong { color: var(--fg); }
 .pdp__stock { display: inline-flex; align-items: center; gap: 8px; font: var(--w-ui) 13px var(--font-body); color: var(--fg-70); }
 .dot--warn { background: var(--cream); box-shadow: 0 0 10px rgb(244 232 216 / .6); }
 .dot--off { background: var(--fg-30); box-shadow: none; }

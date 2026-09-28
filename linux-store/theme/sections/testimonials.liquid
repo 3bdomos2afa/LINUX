@@ -2,16 +2,17 @@
 <section class="section wrap" id="s-{{ section.id }}">
   <div class="section-head">
     <div class="section-head__text" data-reveal>
-      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{{ s.number }}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.reviews_eyebrow' %}</p>
+      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{% render 'digits', value: s.number %}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.reviews_eyebrow' %}</p>
       <h2>{% render 'tr', value: s.heading, key: 'home.reviews_heading' %}</h2>
     </div>
-    <p class="chip" data-reveal>{% render 'icon', name: 'star', px: 14 %} {% render 'tr', value: s.rating_text, key: 'home.reviews_rating' %}</p>
+    {%- capture review_rating -%}{% render 'tr', value: s.rating_text, key: 'home.reviews_rating' %}{%- endcapture -%}
+    <p class="chip" data-reveal>{% render 'icon', name: 'star', px: 14 %} {% render 'digits', value: review_rating %}</p>
   </div>
   <div class="reviews">
     {%- for block in section.blocks -%}
       {%- assign b = block.settings -%}
       <blockquote class="review glass glass--hover" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
-        <div class="review__stars" aria-label="{{ b.rating }}/5">{%- for i in (1..5) -%}{%- if i <= b.rating -%}{% render 'icon', name: 'star', px: 16 %}{%- endif -%}{%- endfor -%}</div>
+        <div class="review__stars" aria-label="{% render 'digits', value: b.rating %}/{% render 'digits', value: 5 %}">{%- for i in (1..5) -%}{%- if i <= b.rating -%}{% render 'icon', name: 'star', px: 16 %}{%- endif -%}{%- endfor -%}</div>
         {%- capture who -%}{% render 'tr', value: b.name, key: b.key_name %}{%- endcapture -%}{%- capture where -%}{% render 'tr', value: b.meta, key: b.key_meta %}{%- endcapture -%}
         <p class="review__quote">“{% render 'tr', value: b.quote, key: b.key_quote %}”</p>
         <footer class="review__who">

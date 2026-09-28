@@ -1,4 +1,8 @@
-{%- assign s = section.settings -%}
+{%- liquid
+  assign s = section.settings
+  assign primary_href = s.primary_link | default: routes.all_products_collection_url
+  assign secondary_href = s.secondary_link | default: routes.all_products_collection_url
+-%}
 <section class="section wrap" id="s-{{ section.id }}">
   <div class="campaign glass{% if s.flip %} campaign--flip{% endif %}" data-specular data-reveal>
     <div class="campaign__media media media__zoom">
@@ -13,8 +17,8 @@
       <h2 class="display" style="font-size:clamp(34px,4.4vw,64px)">{% render 'tr', value: s.heading, key: 'home.campaign_heading' %}</h2>
       <p class="lede">{% render 'tr', value: s.body, key: 'home.campaign_body' %}</p>
       <div class="campaign__cta">
-        <a href="{{ s.primary_link | default: routes.all_products_collection_url }}" class="btn btn--primary" data-magnetic>{% render 'tr', value: s.primary_label, key: 'home.campaign_primary' %}{% render 'icon', name: 'arrow-right' %}</a>
-        <a href="{{ s.secondary_link | default: routes.all_products_collection_url }}" class="btn btn--glass">{% render 'tr', value: s.secondary_label, key: 'home.campaign_secondary' %}</a>
+        <a href="{% render 'nav-url', url: primary_href %}" class="btn btn--primary" data-magnetic>{% render 'tr', value: s.primary_label, key: 'home.campaign_primary' %}{% render 'icon', name: 'arrow-right' %}</a>
+        <a href="{% render 'nav-url', url: secondary_href %}" class="btn btn--glass">{% render 'tr', value: s.secondary_label, key: 'home.campaign_secondary' %}</a>
       </div>
       <p class="mono muted">{% render 'tr', value: s.note, key: 'home.campaign_note' %}</p>
     </div>

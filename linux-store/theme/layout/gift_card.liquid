@@ -13,7 +13,7 @@
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="{{ 'favicon-32.png' | asset_url }}">
   <title>{{ shop.name }} &ndash; {{ 'gift_card.title' | t }}</title>
-  {%- unless settings.type_system_fonts -%}{% render 'fonts', is_rtl: is_rtl %}{%- endunless -%}
+  {% render 'fonts', is_rtl: is_rtl %}
   {{ 'glass.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
   {{ 'pages.css' | asset_url | stylesheet_tag }}
@@ -27,6 +27,7 @@
     .gift__actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     @media print { .atmosphere, .gift__actions, .btn { display: none !important; } .gift__card { border: 1px solid #ccc; } }
   {% endstyle %}
+  {{ 'typography.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="template-gift-card{% if is_rtl %} is-rtl{% endif %}">

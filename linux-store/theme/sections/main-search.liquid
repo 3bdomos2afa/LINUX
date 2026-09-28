@@ -1,7 +1,9 @@
 {%- assign is_wishlist = false -%}
-{%- if request.query.view == 'wishlist' -%}{%- assign is_wishlist = true -%}{%- endif -%}
-<section class="search-page wrap" id="search-{{ section.id }}">
-  {%- if is_wishlist -%}
+{%- if template.suffix == 'wishlist' or request.query.view == 'wishlist' or search.terms == 'wishlist' -%}
+  {%- assign is_wishlist = true -%}
+{%- endif -%}
+<section class="search-page wrap" id="search-{{ section.id }}" data-search-page>
+  <div class="search-page__wishlist" data-search-wishlist-section{% unless is_wishlist %} hidden{% endunless %}>
     <header class="collection__head glass" data-reveal>
       <div><p class="eyebrow">{% render 'icon', name: 'heart', px: 12 %} {{ 'wishlist.title' | t }}</p><h1 class="collection__title">{{ 'wishlist.title' | t }}</h1></div>
     </header>
@@ -12,7 +14,9 @@
       <p class="muted">{{ 'wishlist.empty_body' | t }}</p>
       <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'cart.start_shopping' | t }}</a>
     </div>
-  {%- else -%}
+  </div>
+
+  <div class="search-page__normal" data-search-normal-section{% if is_wishlist %} hidden{% endif %}>
     <header data-reveal>
       <p class="eyebrow">{{ 'search.title' | t }}</p>
       <h1 class="collection__title">{% if search.performed %}{{ 'search.results_for' | t: terms: search.terms }}{% else %}{{ 'search.title' | t }}{% endif %}</h1>
@@ -21,7 +25,10 @@
         <input type="hidden" name="type" value="product">
         <button class="btn btn--primary" type="submit">{% render 'icon', name: 'search', px: 18 %}{{ 'search.title' | t }}</button>
       </form>
-      {%- if search.performed -%}<p class="mono muted">{{ 'search.results_count' | t: count: search.results_count }}</p>{%- endif -%}
+      {%- if search.performed -%}
+        {%- capture search_results_count -%}{{ 'search.results_count' | t: count: search.results_count }}{%- endcapture -%}
+        <p class="mono muted">{% render 'digits', value: search_results_count %}</p>
+      {%- endif -%}
     </header>
     {%- if search.performed -%}
       {%- paginate search.results by 24 -%}
@@ -35,7 +42,7 @@
               {%- endif -%}
             {%- endfor -%}
           </div>
-          {%- if paginate.pages > 1 -%}<nav class="pagination">{{ paginate | default_pagination }}</nav>{%- endif -%}
+          {% render 'localized-pagination', pagination: paginate %}
         {%- else -%}
           <div class="empty-state glass" style="margin-top:24px">
             {% render 'mascot', name: 'classic', width: 150 %}
@@ -46,7 +53,21 @@
         {%- endif -%}
       {%- endpaginate -%}
     {%- endif -%}
-  {%- endif -%}
+  </div>
+  <script>
+    (function() {
+      try {
+        if (new URLSearchParams(window.location.search).get('view') === 'wishlist') {
+          var wl = document.querySelector('[data-search-wishlist-section]');
+          var norm = document.querySelector('[data-search-normal-section]');
+          if (wl && norm) {
+            wl.hidden = false;
+            norm.hidden = true;
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
 </section>
 {% schema %}
 { "name": "Search", "settings": [] }

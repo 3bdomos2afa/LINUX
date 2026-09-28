@@ -1,6 +1,7 @@
 {
   "general": {
     "meta": {
+      "home_title": "LINUX — Cairo streetwear, embroidered",
       "page": "Page {{ page }}"
     },
     "view_all": "View all",
@@ -24,7 +25,8 @@
     "previous": "Previous",
     "next": "Next",
     "mobile_nav": "Mobile navigation",
-    "image_of": "Image {{ index }} of {{ total }}"
+    "image_of": "Image {{ index }} of {{ total }}",
+    "pagination": "Pagination"
   },
   "nav": {
     "home": "Home",
@@ -84,6 +86,8 @@
     "hero": {
       "scroll": "Scroll to content",
       "pause": "Pause video",
+      "countdown_label": "Offer ends in",
+      "countdown_expired": "This offer has ended.",
       "eyebrow": "LINUX · Cairo · FW26",
       "heading": "Made to be kept.",
       "subheading": "Heavyweight pieces, stitched by hand in Cairo. The kind you reach for every day.",
@@ -256,12 +260,15 @@
       "gray": "Gray",
       "print": "Print",
       "embroidery": "Embroidery",
+      "xs": "XS",
       "s": "S",
       "m": "M",
       "l": "L",
       "xl": "XL",
       "2xl": "2XL",
       "xxl": "XXL",
+      "3xl": "3XL",
+      "4xl": "4XL",
       "sada": "Sada",
       "anime": "Anime",
       "hoodie": "Hoodie",
@@ -311,6 +318,7 @@
   },
   "size_guide": {
     "title": "Size guide",
+    "measurements_intro": "All measurements in cm, garment laid flat.",
     "intro": "All measurements in cm, garment laid flat. Oversized fit.",
     "size": "Size",
     "chest": "Chest",
@@ -340,7 +348,6 @@
     "free_shipping_unlocked": "Free delivery unlocked",
     "free_shipping_away": "{{ amount }} away from free delivery",
     "view_file": "View file",
-    "free_shipping_away_html": "<strong>{{ amount }}</strong> away from free delivery",
     "continue": "Continue shopping",
     "update": "Update bag",
     "item_count": {
@@ -353,11 +360,16 @@
     "discount_hint": "Applied at checkout.",
     "discount_invalid": "This code doesn't apply to your bag",
     "discount_applied": "Code applied",
+    "offer_bar": "Free delivery on orders over {{ amount }}",
+    "offer_region": "Shipping and discount offer",
+    "offer_copy": "Tap to copy discount code {{ code }}",
     "details": "Details",
     "review_eyebrow": "Step 1 of 3",
     "steps_label": "Checkout steps",
     "step_bag": "Bag",
     "step_details": "Details",
+    "customized_pieces": "Pieces",
+    "customized_sides": "Sides",
     "step_payment": "Payment",
     "summary": "Order summary",
     "trust_secure": "Secure checkout",
@@ -386,7 +398,7 @@
     "add": "Add to bag",
     "need_design": "Add a design first",
     "need_size": "Pick a size",
-    "hint_3d": "Drag the design anywhere on the piece",
+    "hint_3d": "Upload your artwork, then adjust its position and size",
     "preview_alt": "Your design preview",
     "steps_title": "How it works",
     "step_1": "Upload your artwork",
@@ -418,7 +430,7 @@
     "smaller": "Smaller",
     "fit": "Fit to area",
     "drop_hint": "or drop a file here",
-    "hint_design": "Drag to move · corner knob to resize · top knob to rotate · pinch on phone",
+    "hint_design": "Choose Move design to edit, or keep scrolling to choose your sizes",
     "keys_hint": "Keyboard: arrows move · + / − resize · [ ] rotate · Shift = bigger steps",
     "mockup": "Preview",
     "view_mockup": "See the mockup",
@@ -428,7 +440,32 @@
     "upload_side": "Add {{ side }} design",
     "edit_side": "Adjust {{ side }} design",
     "both_sides": "Front + Back",
-    "two_sided_note": "Two designs on one piece"
+    "two_sided_note": "Two designs on one piece",
+    "oversized_fit": "Oversized Fit · Hoodies & tees",
+    "fit_help": "A naturally roomy cut. Choose a size for each piece and check the measurements before ordering.",
+    "preview_note": "Preview shows placement and scale. Fabric and thread colours may differ slightly from your screen.",
+    "edit_design": "Move design",
+    "finish_editing": "Done editing",
+    "browse_hint": "Scroll naturally over the preview. Choose Move design when you want to edit.",
+    "edit_hint": "Drag the artwork to move it; use the size and rotation tools. Scroll outside the artwork to continue.",
+    "garment_unavailable": "This garment is not available for customization right now.",
+    "tee_unavailable": "T-shirt customization is not available yet. Start with a hoodie or ask us on WhatsApp.",
+    "selection_unavailable": "A size is unavailable in this colour and method. Choose another size for each highlighted piece.",
+    "file_invalid": "This image could not be displayed. Try a valid image file.",
+    "processing_image": "Preparing your image preview…",
+    "mockup_failed": "We could not prepare the preview. Your artwork is still here; try again once the images finish loading.",
+    "kilobytes": "KB",
+    "pricing_title": "Quantity & price",
+    "pricing_standard": "Price depends on the garment, size and method. For a larger order, ask us about available offers.",
+    "pricing_more": "More pieces, a lower price per piece with the available quantity tiers.",
+    "unit_price": "Average price per piece",
+    "estimated_unit_price": "Estimated price per piece",
+    "savings": "Savings",
+    "estimated_total": "Estimated total after quantity discount",
+    "pricing_estimate_notice": "An estimate based on advertised quantity tiers. The actual discount appears in your bag when offer conditions are met. Shipping is calculated at checkout.",
+    "next_tier": "Choose {{ count }} pieces to reach the advertised {{ percent }}% quantity discount.",
+    "tier_label": "{{ count }}+ pieces · {{ percent }}%",
+    "tier_base": "Regular unit price"
   },
   "customer": {
     "account": {
@@ -741,6 +778,9 @@
     "result_alt": "or {{ size }} if you like it roomier",
     "disclaimer": "This is a rough guide, not a guarantee — every body is different. Not sure? WhatsApp us and we'll help.",
     "cta": "Calculate",
-    "select": "Select this size"
+    "select": "Select this size",
+    "oversized_fit": "Oversized Fit",
+    "pdp_oversized_note": "Roomy by design. Between sizes? Take the smaller one.",
+    "size_guide_oversized_note": "Hoodies and tees are intentionally cut oversized."
   }
 }

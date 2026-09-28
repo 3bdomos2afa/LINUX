@@ -8,7 +8,8 @@
       <nav class="crumbs" aria-label="{{ 'general.breadcrumb' | t }}"><a href="{{ routes.root_url }}">{{ 'nav.home' | t }}</a>{% render 'icon', name: 'chevron-right', px: 12 %}<span aria-current="page">{% render 'menu-title', title: collection.title %}</span></nav>
       <h1 class="collection__title">{% render 'menu-title', title: collection.title %}</h1>
       {%- if collection.description != blank -%}<div class="lede collection__desc">{{ collection.description }}</div>{%- endif -%}
-      <p class="mono muted collection__count" data-collection-count>{{ 'collections.showing' | t: count: collection.products_count }}</p>
+      {%- capture collection_count -%}{{ 'collections.showing' | t: count: collection.products_count }}{%- endcapture -%}
+      <p class="mono muted collection__count" data-collection-count>{% render 'digits', value: collection_count %}</p>
     </div>
   </header>
 
@@ -58,15 +59,7 @@
         <a href="{{ collection.url }}" class="btn btn--primary">{{ 'collections.clear' | t }}</a>
       </div>
     {%- endif -%}
-    {%- if paginate.pages > 1 -%}
-      <nav class="pagination" aria-label="Pagination">
-        {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="{{ 'accessibility.previous' | t }}">{% render 'icon', name: 'arrow-left', px: 16 %}</a>{%- endif -%}
-        {%- for part in paginate.parts -%}
-          {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span class="is-current">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}
-        {%- endfor -%}
-        {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="{{ 'accessibility.next' | t }}">{% render 'icon', name: 'arrow-right', px: 16 %}</a>{%- endif -%}
-      </nav>
-    {%- endif -%}
+    {% render 'localized-pagination', pagination: paginate %}
   {%- endpaginate -%}
 </section>
 

@@ -5,6 +5,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const readJSON = (f) => JSON.parse(fs.readFileSync(f, 'utf8'));
 
@@ -144,7 +145,21 @@ export function buildStore(dataDir) {
     },
 
     route(p, query, env) {
-      const set = (name, extra = {}, suffix = null) => ({ template: suffix ? `${name}.${suffix}` : name, env: { ...(env.__lz ? env.__lz(extra) : extra), template: { name: name.replace(/^customers\//, ''), suffix, directory: name.startsWith('customers/') ? 'customers' : null }, request: { ...env.request, page_type: name } } });
+      const set = (name, extra = {}, suffix = null) => {
+        const view = query.view;
+        if (typeof view === 'string' && /^[a-z0-9_-]+$/i.test(view)
+          && ['json', 'liquid'].some((extension) => fs.existsSync(path.join(themeDir, 'templates', `${name}.${view}.${extension}`)))) {
+          suffix = view;
+        }
+        return {
+          template: suffix ? `${name}.${suffix}` : name,
+          env: {
+            ...(env.__lz ? env.__lz(extra) : extra),
+            template: { name: name.replace(/^customers\//, ''), suffix, directory: name.startsWith('customers/') ? 'customers' : null },
+            request: { ...env.request, page_type: name },
+          },
+        };
+      };
       if (p === '/' || p === '') return set('index', { page_title: 'LINUX — Cairo streetwear, embroidered' });
       let m;
       if (p === '/collections' || p === '/collections/') return set('list-collections', { collections, page_title: 'Collections' });
@@ -245,8 +260,9 @@ export function buildStore(dataDir) {
       const hit = variantsById[variantId];
       if (!hit) throw new Error('Variant not found');
       if (!hit.variant.available) throw new Error(`${hit.product.title} — ${hit.variant.title} is sold out`);
-      const propKey = JSON.stringify(properties || {});
-      const key = `${variantId}:${Buffer.from(propKey).toString('base64').slice(0, 12)}`;
+      if (!Number.isSafeInteger(qty) || qty < 1) throw new Error('Quantity must be a positive integer');
+      const propKey = JSON.stringify(Object.entries(properties || {}).sort(([a], [b]) => a.localeCompare(b)));
+      const key = `${variantId}:${createHash('sha256').update(propKey).digest('hex').slice(0, 24)}`;
       let line = cart.items.find((i) => i.key === key);
       if (line) line.quantity += qty; else { line = { key, variant_id: variantId, quantity: qty, properties: properties || {} }; cart.items.unshift(line); }
       return this.lineJSON(line);

@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "3.2.0",
+    "theme_version": "3.4.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -42,7 +42,7 @@
       {
         "type": "color",
         "id": "brand_cream",
-        "label": "Cream (text on dark)"
+        "label": "Cream (headings and glass tint)"
       },
       {
         "type": "color",
@@ -111,10 +111,8 @@
         "content": "Typography"
       },
       {
-        "type": "checkbox",
-        "id": "type_system_fonts",
-        "label": "Use system fonts (skip Matcha / Disney Bubble / Thmanyah / Palestine)",
-        "default": false
+        "type": "paragraph",
+        "content": "Arabic uses Thmanyah Sans throughout, including numbers. English uses Froople headings and Mochi Tubby body text. Brand fonts are self-hosted and always enabled."
       },
       {
         "type": "range",
@@ -244,7 +242,7 @@
       {
         "type": "number",
         "id": "free_shipping_threshold",
-        "label": "Free shipping threshold (LE, 0 to hide meter)",
+        "label": "Free shipping threshold (LE, 0 hides the free-shipping island and message)",
         "default": 2000
       },
       {

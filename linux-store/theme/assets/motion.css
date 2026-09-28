@@ -69,6 +69,9 @@ html[dir="rtl"] [data-reveal="right"] { --reveal-x: -30px; }
 .drawer { transition: transform .6s var(--spring), visibility 0s linear .6s; }
 .drawer.is-open { transition: transform .6s var(--spring), visibility 0s; }
 .drawer.is-open .cart-line, .drawer.is-open .menu-drawer__link, .drawer.is-open .filters__group { animation: line-in .5s var(--ease-out) both; }
+/* The free-shipping island drops off the header ahead of the lines */
+@keyframes island-in { from { opacity: 0; transform: translateY(-14px) scale(.94); } }
+.drawer.is-open .drawer__island.is-live { animation: island-in .5s var(--ease-out) both; }
 .drawer.is-open .cart-line:nth-child(2), .drawer.is-open .menu-drawer__link:nth-of-type(2) { animation-delay: 60ms; }
 .drawer.is-open .cart-line:nth-child(3), .drawer.is-open .menu-drawer__link:nth-of-type(3) { animation-delay: 120ms; }
 .drawer.is-open .cart-line:nth-child(4), .drawer.is-open .menu-drawer__link:nth-of-type(4) { animation-delay: 180ms; }
@@ -83,9 +86,6 @@ html[dir="rtl"] [data-reveal="right"] { --reveal-x: -30px; }
 
 /* ---- Toast: slide + spring ----------------------------------------------------- */
 .toast { animation: toast-in .55s var(--spring) both; }
-
-/* ---- Meter fill eases ------------------------------------------------------------ */
-.meter__bar { transition: width .9s var(--ease-out); }
 
 /* ---- Penguin sticker: gentle bob is in components.css; add a subtle wobble on hover */
 .hero__sticker:hover img { animation: wobble .8s var(--spring); }

@@ -25,7 +25,34 @@
 
   {%- liquid
     assign seo_page_title = page_title
-    if template.name == 'search' and request.query.view == 'wishlist'
+    assign seo_description = page_description
+    if is_rtl
+      if template.name == 'index'
+        assign home_title = 'general.meta.home_title' | t
+        assign home_description = 'home.footer_tagline' | t
+        capture seo_page_title
+          render 'localized-content', content: page_title, fallback: home_title
+        endcapture
+        capture seo_description
+          render 'localized-content', content: page_description, fallback: home_description
+        endcapture
+        assign seo_description = seo_description | strip | default: home_description
+      elsif template.suffix == 'customize'
+        assign customize_title = 'customize.title' | t
+        capture seo_page_title
+          render 'localized-content', content: page_title, fallback: customize_title
+        endcapture
+      elsif template.name == 'product'
+        capture seo_page_title
+          render 'product-title', title: page_title
+        endcapture
+      elsif template.name == 'page' or template.name == 'collection' or template.name == 'blog'
+        capture seo_page_title
+          render 'menu-title', title: page_title
+        endcapture
+      endif
+    endif
+    if template.name == 'search' and template.suffix == 'wishlist'
       assign seo_page_title = 'wishlist.title' | t
     elsif template.name == 'search'
       assign seo_page_title = 'search.title' | t
@@ -49,10 +76,10 @@
     {{ seo_page_title }}{% if current_tags %} &ndash; {% for ct in current_tags %}{% render 'option-value', value: ct %}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless seo_page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
   {%- endcapture -%}
   <title>{{ seo_title | strip }}</title>
-  {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
-  {% render 'meta-tags' %}
+  {%- if seo_description != blank -%}<meta name="description" content="{{ seo_description | strip | escape }}">{%- endif -%}
+  {% render 'meta-tags', title: seo_page_title, description: seo_description %}
 
-  {%- unless settings.type_system_fonts -%}{% render 'fonts', is_rtl: is_rtl %}{%- endunless -%}
+  {% render 'fonts', is_rtl: is_rtl %}
 
   {{ 'glass.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
@@ -62,6 +89,9 @@
   {%- if template.name == 'collection' or template.name == 'search' or template.name == 'list-collections' -%}{{ 'collection.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.directory == 'customers' or template.name == 'cart' or template.name == 'page' or template.name == 'blog' or template.name == 'article' or template.name == '404' -%}{{ 'pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'product' or template.name == 'cart' or settings.cart_type != 'page' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {{ 'v2.css' | asset_url | stylesheet_tag }}
+  {{ 'typography.css' | asset_url | stylesheet_tag }}
+  {{ 'number-input.css' | asset_url | stylesheet_tag }}
 
   {%- liquid
     assign type_scale = settings.type_scale | default: 100
@@ -95,11 +125,6 @@
       {%- endif %}
       {%- if settings.brand_cream != blank and settings.brand_cream != 'rgba(0,0,0,0)' %}
       --cream: {{ settings.brand_cream }};
-      --fg: {{ settings.brand_cream }};
-      --fg-70: {{ settings.brand_cream | color_modify: 'alpha', 0.72 }};
-      --fg-50: {{ settings.brand_cream | color_modify: 'alpha', 0.52 }};
-      --fg-30: {{ settings.brand_cream | color_modify: 'alpha', 0.3 }};
-      --fg-12: {{ settings.brand_cream | color_modify: 'alpha', 0.12 }};
       --glass-fill: {{ settings.brand_cream | color_modify: 'alpha', 0.07 }};
       --glass-fill-hover: {{ settings.brand_cream | color_modify: 'alpha', 0.11 }};
       --glass-stroke: {{ settings.brand_cream | color_modify: 'alpha', 0.16 }};
@@ -147,7 +172,9 @@
       pages: {{ 'search.pages' | t | json }},
       free_shipping_unlocked: {{ 'cart.free_shipping_unlocked' | t | json }},
       free_shipping_away: {{ 'cart.free_shipping_away' | t: amount: '[amount]' | json }},
-      copied: {{ 'general.copied' | t | json }}
+      copied: {{ 'general.copied' | t | json }},
+      view_full: {{ 'products.view_full' | t | json }},
+      quick_view: {{ 'products.quick_view' | t | json }}
     };
     {%- if request.locale.iso_code == 'ar' -%}
     {%- assign ov_keys = 'hoodie,hoodies,shirt,shirts,t-shirt,tee,cap,black,white,beige,burgundy,olive,green,navy,grey,gray,red,blue,brown,cream,sada,anime,customize,flower,oversized,zip,classic,winter,summer,collection,embroidered,kids,men,women,unisex,pack,set' | split: ',' -%}
@@ -196,6 +223,7 @@
   <div class="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
   <script src="{{ 'global.js' | asset_url }}" defer></script>
+  <script src="{{ 'number-input.js' | asset_url }}" defer></script>
   <script src="{{ 'glass.js' | asset_url }}" defer></script>
   <script src="{{ 'cart.js' | asset_url }}" defer></script>
   <script src="{{ 'drawers.js' | asset_url }}" defer></script>
@@ -203,6 +231,9 @@
   <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
   <script src="{{ 'product.js' | asset_url }}" defer></script>
   {%- if template.name == 'collection' or template.name == 'search' -%}<script src="{{ 'collection.js' | asset_url }}" defer></script>{%- endif -%}
-  {%- if template.suffix == 'customize' -%}<script src="{{ 'customize.js' | asset_url }}" defer></script>{%- endif -%}
+  {%- if template.suffix == 'customize' -%}
+    <script src="{{ 'customize-model.js' | asset_url }}" defer></script>
+    <script src="{{ 'customize.js' | asset_url }}" defer></script>
+  {%- endif -%}
 </body>
 </html>

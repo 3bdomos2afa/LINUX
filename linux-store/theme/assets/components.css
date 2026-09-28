@@ -109,6 +109,17 @@ html[dir="rtl"] .hero__side { justify-items: start; }
 .hero__trust { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0 8px; list-style: none; }
 .hero__trust li { display: inline-flex; align-items: center; gap: 8px; font: 400 13px var(--font-body); color: var(--white-80); }
 .hero__trust svg { color: var(--accent); }
+/* Offer countdown inside the hero card — it borrows the accent-pill language the
+   card's chips and the offer strip's code chip already use, so it reads as part
+   of the panel rather than a widget dropped on top of it. */
+.hero__timer { display: inline-flex; align-items: center; gap: 10px; width: fit-content; margin: 0; padding: 6px 14px; border-radius: var(--r-pill); border: 1px solid rgb(143 203 90 / .4); background: rgb(143 203 90 / .14); font: var(--w-ui) 12px/1 var(--font-body); color: var(--fg); }
+.hero__timer-label { display: inline-flex; align-items: center; gap: 7px; color: var(--fg-70); }
+.hero__timer-label .icon { color: var(--accent); }
+.hero__timer-clock { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-weight: 700; font-size: 15px; letter-spacing: .06em; color: var(--accent); font-variant-numeric: tabular-nums; }
+/* Fixed-width digits: the row never twitches as the seconds tick over. */
+.hero__timer-unit { min-width: 2ch; text-align: center; }
+.hero__timer-sep { opacity: .55; }
+html[dir="rtl"] .hero__timer-clock { letter-spacing: .08em; }
 @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1.5deg); } }
 [data-float] { animation: bob 6s ease-in-out infinite; }
 @media (max-width: 900px) {
@@ -125,6 +136,7 @@ html[dir="rtl"] .hero__side { justify-items: start; }
   .hero__cta .btn { --btn-h: 50px; padding: 0 12px; font-size: 14px; min-width: 0; white-space: normal; text-align: center; }
   .hero__trust { gap: 6px 14px; padding: 0 4px; }
   .hero__trust li { font-size: 12px; }
+  .hero__timer { width: 100%; justify-content: center; gap: 8px; }
 }
 /* ---- Marquee -------------------------------------------------------------- */
 .marquee { overflow: hidden; padding: 14px 0; border-block: 1px solid var(--glass-stroke); mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
@@ -132,6 +144,8 @@ html[dir="rtl"] .hero__side { justify-items: start; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee__item { display: inline-flex; align-items: center; gap: 28px; padding-inline-end: 28px; font: var(--w-ui) clamp(14px, 1.3vw, 18px)/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--fg-70); white-space: nowrap; }
 .marquee__item svg { color: var(--accent); }
+.marquee__code { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--r-pill); border: 1px solid var(--lime); background: rgb(143 203 90 / .15); color: var(--lime); font: 700 12px/1 var(--font-body); cursor: pointer; transition: background var(--t-fast); white-space: nowrap; }
+.marquee__code:hover { background: rgb(143 203 90 / .3); }
 html[dir="rtl"] .marquee__track { animation-direction: reverse; }
 
 /* ---- Product card --------------------------------------------------------- */
@@ -160,23 +174,23 @@ html[dir="rtl"] .marquee__track { animation-direction: reverse; }
 .card__size { min-width: 40px; min-height: 36px; padding: 0 10px; border-radius: var(--r-pill); border: 1px solid var(--glass-stroke); background: rgb(244 232 216 / .06); color: var(--fg); font: var(--w-ui) 12px var(--font-body); text-transform: uppercase; cursor: pointer; transition: background var(--t-fast), color var(--t-fast), transform var(--t-med) var(--spring); }
 .card__size:hover:not(:disabled) { background: var(--cream); color: var(--forest); transform: translateY(-2px); }
 .card__size:disabled { color: var(--fg-30); text-decoration: line-through; cursor: not-allowed; }
-.card__body { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px 4px 2px; align-content: start; }
-.card__title { grid-column: 1; font: var(--w-ui) 15px/1.3 var(--font-body); color: var(--fg); letter-spacing: -.01em; }
-.card__title a { color: var(--fg); }
+.card__body { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 14px 4px 2px; align-content: start; text-align: center; justify-items: center; }
+.card__title { font: var(--w-heading) clamp(18px, 1.3vw, 22px)/1.2 var(--font-display); color: var(--heading); letter-spacing: -.01em; }
+.card__title a { color: var(--heading); }
 .card:hover .card__title a { color: var(--link); }
 .card__title a::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
-.card__meta { grid-column: 1; font-size: var(--fs-xs); color: var(--fg-50); text-transform: uppercase; letter-spacing: .08em; }
-.card__price { grid-column: 2; grid-row: 1 / span 2; text-align: end; font: var(--w-ui) 15px var(--font-mono); letter-spacing: -.02em; }
-.card__swatches { grid-column: 1 / -1; display: flex; gap: 6px; margin-top: 8px; position: relative; z-index: 3; }
-.price { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-family: var(--font-mono); }
-.price__sale { color: var(--accent); }
+.card__price { text-align: center; font: var(--w-ui) 15px var(--font-body); letter-spacing: -.02em; }
+.card__swatches { grid-column: 1 / -1; display: flex; gap: 6px; margin-top: 8px; position: relative; z-index: 3; justify-content: center; }
+.price { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-family: var(--font-body); }
+.price__sale { color: var(--lime); font-weight: var(--w-ui); }
 .price__compare { color: var(--fg-50); text-decoration: line-through; font-size: .85em; }
+.price__discount { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: var(--r-pill); background: var(--lime); color: #04241a; font: 700 12px/1 var(--font-body); letter-spacing: .02em; box-shadow: 0 2px 8px rgb(143 203 90 / .35); }
 .price__unit { font-size: .8em; color: var(--fg-50); }
 @media (max-width: 760px) {
   .card { padding: 10px; --r-inner: calc(var(--r-lg) - 10px); }
-  .card__body { padding: 10px 2px 0; grid-template-columns: 1fr; }
-  .card__price { grid-column: 1; grid-row: auto; text-align: start; font-size: 14px; }
-  .card__title { font-size: 14px; }
+  .card__body { padding: 10px 2px 0; }
+  .card__price { font-size: 14px; }
+  .card__title { font-size: 15px; }
   .card__quick { display: none; }
   .card__wish { width: 34px; height: 34px; }
 }
@@ -319,6 +333,55 @@ html[dir="rtl"] .drawer__head { padding: 18px 24px 14px 16px; }
 .backdrop { position: fixed; inset: 0; z-index: calc(var(--z-drawer) - 1); background: rgb(2 26 18 / .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity var(--t-med), visibility 0s linear var(--t-med); }
 .backdrop.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
 body.drawer-open { overflow: hidden; }
+
+/* ---- Free-shipping island ----------------------------------------------------- */
+/* The cart drawer runs one extra row between its head and body: a glass capsule
+   that hangs off the top edge and fills with brand green as the bag climbs toward
+   free delivery (snippets/ship-meter.liquid). Only the cart drawer gets the row,
+   and it collapses to nothing when the threshold is 0 — the wrapper stays in the
+   DOM either way, because assets/cart.js re-renders into it. */
+.drawer--cart { grid-template-rows: auto auto 1fr auto; }
+.drawer__island { position: relative; z-index: 2; display: grid; justify-items: center; margin: 0 20px; }
+.drawer__island:not(.is-live) { display: none; }
+.ship-meter { position: relative; isolation: isolate; display: flex; align-items: center; max-width: 100%; overflow: hidden; border-radius: var(--r-pill); }
+.ship-meter--island {
+  gap: 9px;
+  margin-top: -6px;
+  padding: 9px 16px;
+  font: var(--w-ui) 12.5px/1.25 var(--font-body);
+  color: var(--fg);
+  box-shadow: var(--glass-shadow-lift);
+}
+/* The bar itself: one width-driven layer behind the label, plus a crisp 2px line
+   along its leading edge so the fill reads as progress and not just as tint. */
+.ship-meter__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: -1;
+  width: var(--ship-meter-fill, 0%);
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgb(143 203 90 / .3), rgb(163 218 108 / .52));
+  box-shadow: inset 0 -2px 0 rgb(143 203 90 / .85);
+  transition: width var(--t-slow) var(--ease-out);
+}
+/* The marks inherit the capsule's own colour, which is --fg while the bag is still
+   short. They must not be --accent: the fill behind them IS accent, and lime on
+   the lime fill measured 2.93:1 — under the 3:1 floor for graphics. The green fill
+   is the accent signal here; the marks only have to stay legible on top of it. */
+.ship-meter__icon { display: inline-flex; flex: none; }
+.ship-meter__icon svg { display: block; }
+.ship-meter__text { font: inherit; }
+.ship-meter__pct { flex: none; font: var(--w-ui) 11px/1 var(--font-mono); letter-spacing: .04em; }
+/* Unlocked: the capsule turns solid brand green and every mark on it flips to the
+   dark foreground — the same accent-on-lime pairing as .badge and .btn--primary.
+   Cream-on-lime measured ~3:1 and a lime icon on a lime fill vanished, so this is
+   the readable reward state, not just a brighter one. */
+.ship-meter--island.is-unlocked,
+.ship-meter--island.is-unlocked .ship-meter__icon,
+.ship-meter--island.is-unlocked .ship-meter__pct { color: var(--accent-fg); }
+.ship-meter--island.is-unlocked .ship-meter__fill { background: var(--accent); box-shadow: none; }
+
 @media (max-width: 640px) { .drawer, html[dir="rtl"] .drawer, .drawer--start, html[dir="rtl"] .drawer--start { --drawer-closed: translateY(100%); top: auto; bottom: 0; inset-inline: 0; width: 100%; max-height: 92svh; border-radius: var(--r-xl) var(--r-xl) 0 0; } .drawer__head::before { content: ""; position: absolute; top: 8px; left: 50%; width: 42px; height: 5px; margin-left: -21px; border-radius: 3px; background: var(--fg-30); } }
 
 /* Menu drawer */
@@ -360,10 +423,6 @@ body.drawer-open { overflow: hidden; }
 .cart-empty { display: grid; justify-items: center; text-align: center; gap: 16px; padding: 40px 12px; }
 .cart-empty img { width: 140px; height: auto; }
 .cart-empty h3 { font-size: 22px; }
-.ship-meter { display: grid; gap: 10px; padding: 14px 16px; border-radius: var(--r-md); margin-bottom: 14px; }
-.ship-meter__text { font-size: var(--fs-sm); color: var(--fg-70); display: flex; gap: 8px; align-items: center; }
-.ship-meter__text strong { color: var(--fg); }
-.ship-meter.is-unlocked .ship-meter__text { color: var(--accent); }
 .cart-upsell { margin-top: 20px; display: grid; gap: 10px; }
 .cart-upsell__title { font: var(--w-ui) 11px var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-70); }
 .cart-upsell__list { display: grid; gap: 8px; }
@@ -437,6 +496,7 @@ body.drawer-open { overflow: hidden; }
 .tab-bar__item .badge { position: absolute; top: 4px; inset-inline-end: calc(50% - 20px); }
 .tab-bar__item--primary { color: var(--accent-fg); background: var(--accent); }
 .tab-bar__item--primary:hover { color: var(--accent-fg); background: var(--accent); }
+.tab-bar__item--primary.is-active, .tab-bar__item--primary.is-active:hover { color: var(--fg); background: var(--glass-fill-hover); }
 @media (max-width: 760px) { .tab-bar { display: grid; } .tab-bar--4 { grid-template-columns: repeat(4, 1fr); } body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); } body.mobile-one-col .product-grid { grid-template-columns: 1fr; } body.mobile-one-col .rail__track > * { flex-basis: 86%; } }
 
 /* WhatsApp FAB */
@@ -544,6 +604,9 @@ html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
   .drawer__title .badge { height: 18px; min-width: 18px; font-size: 10px; }
   .drawer__body { padding: 8px 10px; }
   .drawer__foot { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); gap: 6px; }
+  .drawer__island { margin: 0 10px; }
+  .ship-meter--island { margin-top: -4px; padding: 8px 13px; font-size: 11.5px; gap: 7px; }
+  .ship-meter__pct { display: none; }
   .cart-lines { gap: 6px; }
   .cart-line { grid-template-columns: 56px 1fr; gap: 8px; padding: 6px; border-radius: var(--r-sm); }
   .cart-line__media { width: 56px; height: 68px; border-radius: 8px; }
@@ -559,10 +622,6 @@ html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
   .cart-line .qty--sm .qty__input { width: 26px; font-size: 12px; }
   .cart-line__price, html[dir="rtl"] .cart-line__price { font-size: 13px; }
   .cart-line__remove { font-size: 10.5px; padding: 0; }
-  .ship-meter { padding: 8px 10px; gap: 6px; margin-bottom: 6px; border-radius: var(--r-sm); }
-  .ship-meter__text { font-size: 11px; gap: 6px; }
-  .ship-meter__text svg { width: 14px; height: 14px; }
-  .meter { height: 4px; }
   .cart-upsell { margin-top: 8px; gap: 4px; }
   .cart-upsell__title { font-size: 10px; }
   .cart-upsell__list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -10px; padding: 0 10px 2px; }
@@ -573,19 +632,19 @@ html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
   .upsell .price { font-size: 11px; }
   .upsell .btn { --btn-h: 30px; padding: 0 10px; font-size: 11px; }
   /* discount + note share one compact row */
-  .cart-extras { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6px; }
-  .cart-discount { gap: 4px; }
-  .cart-discount__row { padding: 3px 3px 3px 10px; gap: 6px; }
-  html[dir="rtl"] .cart-discount__row { padding: 3px 10px 3px 3px; }
-  .cart-discount__row > .icon { width: 14px; height: 14px; }
-  .cart-discount__row .input { height: 30px; font-size: 12px; }
-  .cart-discount__row .btn { --btn-h: 30px; padding: 0 10px; font-size: 11px; }
+  .cart-extras { display: grid; gap: 4px; }
+  .cart-discount { gap: 2px; }
+  .cart-discount__row { padding: 2px 2px 2px 8px; gap: 4px; }
+  html[dir="rtl"] .cart-discount__row { padding: 2px 8px 2px 2px; }
+  .cart-discount__row > .icon { width: 12px; height: 12px; }
+  .cart-discount__row .input { height: 28px; font-size: 11px; }
+  .cart-discount__row .btn { --btn-h: 28px; padding: 0 8px; font-size: 10px; }
   .cart-discount__codes:empty { display: none; }
-  .cart-discount .form-error { grid-column: 1 / -1; }
-  .cart-note summary { font-size: 11px; padding: 6px 4px; white-space: nowrap; }
-  .cart-note summary svg { width: 13px; height: 13px; }
+  .cart-discount .form-error { grid-column: 1 / -1; font-size: 10px; }
+  .cart-note summary { font-size: 10px; padding: 4px 2px; white-space: nowrap; }
+  .cart-note summary svg { width: 12px; height: 12px; }
   .cart-note[open] { grid-column: 1 / -1; }
-  .cart-note .textarea { min-height: 48px; margin-top: 4px; font-size: 12px; }
+  .cart-note .textarea { min-height: 40px; margin-top: 2px; font-size: 11px; }
   .cart-totals { gap: 0; }
   .cart-totals__row { font-size: 11px; }
   .cart-totals__row--total { font-size: 15px; align-items: center; }
@@ -597,10 +656,9 @@ html[dir="rtl"] .crumbs svg { transform: scaleX(-1); }
   .drawer__foot .payment-icons { display: none; }
 }
 
-/* Arabic (Palestine) fixed-size text bumps — the face is optically small */
+/* Keep compact Arabic controls comfortably readable. */
 html[dir="rtl"] .bento__label strong { font-size: clamp(16px, 1.3vw, 19px); }
 html[dir="rtl"] .bento__label small { font-size: 12.5px; }
-html[dir="rtl"] .card__title { font-size: 17px; }
 html[dir="rtl"] .card__price { font-size: 16px; }
 html[dir="rtl"] .nav-link { font-size: 16px; }
 html[dir="rtl"] .btn { font-size: 16px; }

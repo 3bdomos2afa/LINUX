@@ -20,7 +20,7 @@
         "menu": "main-menu",
         "logo_height": 22,
         "show_shop_cta": true,
-        "show_announcement": true
+        "show_announcement": false
       }
     }
   },

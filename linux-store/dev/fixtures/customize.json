@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "mockup_hoodie_front": "shopify://shop_images/cz-hoodie-back-beige.webp",
+    "mockup_hoodie_back": "shopify://shop_images/cz-hoodie-back-white.webp",
+    "mockup_tee_front": "shopify://shop_images/cz-hoodie-back-beige.webp",
+    "mockup_tee_back": "shopify://shop_images/cz-hoodie-back-white.webp",
+    "volume_pricing_enabled": true
+  },
+  "colorOverrides": {
+    "black": { "hoodie_front": "shopify://shop_images/cz-hoodie-back-black.webp" }
+  },
+  "tiers": [
+    { "id": "test-two", "type": "price_tier", "settings": { "quantity": 2, "discount": 5 } },
+    { "id": "test-five", "type": "price_tier", "settings": { "quantity": 5, "discount": 10 } }
+  ]
+}

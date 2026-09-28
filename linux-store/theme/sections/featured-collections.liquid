@@ -2,7 +2,7 @@
 <section class="section wrap" id="s-{{ section.id }}">
   <div class="section-head">
     <div class="section-head__text" data-reveal>
-      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{{ s.number }}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.collections_eyebrow' %}</p>
+      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{% render 'digits', value: s.number %}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.collections_eyebrow' %}</p>
       <h2>{% render 'tr', value: s.heading, key: 'home.collections_heading' %}</h2>
     </div>
     <a href="{{ routes.collections_url }}" class="btn btn--ghost btn--sm" data-reveal>{{ 'general.view_all' | t }}</a>
@@ -52,7 +52,7 @@
           {% render 'mascot', name: tile_mascot, width: 150, class: 'bento__mascot' %}
         {%- endif -%}
         <span class="bento__label glass glass--solid">
-          <span><strong>{{ label }}</strong>{% if coll.products_count %}<small>{{ 'collections.count' | t: count: coll.products_count }}</small>{% elsif sub != blank %}<small>{{ sub }}</small>{% endif %}</span>
+          <span><strong>{{ label }}</strong>{% if coll.products_count %}{%- capture collection_count -%}{{ 'collections.count' | t: count: coll.products_count }}{%- endcapture -%}<small>{% render 'digits', value: collection_count %}</small>{% elsif sub != blank %}<small>{{ sub }}</small>{% endif %}</span>
           <span class="bento__arrow">{% render 'icon', name: 'arrow-right', px: 18 %}</span>
         </span>
       </a>

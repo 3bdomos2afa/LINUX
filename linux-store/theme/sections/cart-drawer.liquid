@@ -1,10 +1,27 @@
-<div class="drawer glass glass--solid" id="cart-drawer" data-drawer="cart" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}" aria-hidden="true" inert>
+<div class="drawer drawer--cart glass glass--solid" id="cart-drawer" data-drawer="cart" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}" aria-hidden="true" inert>
   <div class="drawer__head">
-    <h2 class="drawer__title">{{ 'cart.title' | t }} <span class="badge" data-cart-count>{{ cart.item_count }}</span></h2>
+    <h2 class="drawer__title">{{ 'cart.title' | t }} <span class="badge" data-cart-count>{% render 'digits', value: cart.item_count %}</span></h2>
     <button class="icon-btn" type="button" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
   </div>
 
+  {%- comment -%}
+    The free-shipping island, in the row between the head and the body so it hangs
+    off the top and survives a long bag. It owns [data-cart-region="meter"].
+    context: 'drawer' is what lets snippets/ship-meter.liquid render at all — the
+    drawer is the only surface that carries a free-shipping pitch.
+  {%- endcomment -%}
+  {% render 'ship-meter', cart: cart, context: 'drawer' %}
+
   <div class="drawer__body">
+    {%- comment -%}
+      The offer strip that used to hang under the header. It lives outside
+      [data-cart-region="body"] so the cart re-render never wipes it.
+    {%- endcomment -%}
+    {%- if section.settings.show_offer != false -%}
+      <div class="drawer__offer" data-drawer-offer>
+        {% render 'offer-bar', s: section.settings %}
+      </div>
+    {%- endif -%}
     <div data-cart-region="body">
       {% render 'cart-body', cart: cart, context: 'drawer' %}
     </div>
@@ -25,7 +42,12 @@
 {
   "name": "Cart drawer",
   "settings": [
-    { "type": "checkbox", "id": "show_upsell", "label": "Show \"Complete the look\" suggestions", "default": true }
+    { "type": "checkbox", "id": "show_upsell", "label": "Show \"Complete the look\" suggestions", "default": true },
+    { "type": "header", "content": "Offer strip" },
+    { "type": "paragraph", "content": "The slim promo strip shows under the free-shipping island. Blank text shows the free-shipping message built from Cart & checkout → Free shipping threshold." },
+    { "type": "checkbox", "id": "show_offer", "label": "Show the offer strip", "default": true },
+    { "type": "text", "id": "offer_text", "label": "Offer text (blank = free-shipping message)" },
+    { "type": "text", "id": "offer_code", "label": "Discount code", "default": "LINUX10", "info": "The chip copies the code to the clipboard when tapped. Create the matching code in Shopify → Discounts. Blank hides the chip." }
   ]
 }
 {% endschema %}

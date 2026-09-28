@@ -64,7 +64,8 @@
     <div class="nf__links" role="list">
       {%- for block in section.blocks -%}
         {%- if block.type == 'link' -%}
-          <a class="nf__link glass glass--hover" href="{{ block.settings.url | default: routes.root_url }}" role="listitem" data-reveal style="--i: {{ forloop.index }}" {{ block.shopify_attributes }}>
+          {%- assign link_href = block.settings.url | default: routes.root_url -%}
+          <a class="nf__link glass glass--hover" href="{% render 'nav-url', url: link_href, title: block.settings.title %}" role="listitem" data-reveal style="--i: {{ forloop.index }}" {{ block.shopify_attributes }}>
             {%- assign link_icon = block.settings.icon | default: 'tag' -%}
             <span class="prop__icon">{% render 'icon', name: link_icon, px: 20 %}</span>
             <span class="nf__link-text">

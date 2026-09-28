@@ -9,7 +9,7 @@
 <section class="section wrap" id="s-{{ section.id }}">
   <div class="section-head">
     <div class="section-head__text" data-reveal>
-      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{{ s.number }}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.bestsellers_eyebrow' %}</p>
+      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{% render 'digits', value: s.number %}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.bestsellers_eyebrow' %}</p>
       <h2>{% render 'tr', value: s.heading, key: 'home.bestsellers_heading' %}</h2>
     </div>
     <div class="rail__nav" data-reveal style="--i:1">

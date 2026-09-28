@@ -17,10 +17,14 @@
     });
     // Only write when changed: this runs from a MutationObserver, and setting
     // textContent to the same value would still queue a mutation → loop.
-    const n = String(list.length);
+    const n = list.length;
+    const label = L.digits ? L.digits(n) : String(n);
     document.querySelectorAll('[data-wishlist-count]').forEach((el) => {
-      if (el.textContent !== n) el.textContent = n;
+      if (el.textContent !== label) el.textContent = label;
       if (el.hidden !== (list.length === 0)) el.hidden = list.length === 0;
+    });
+    document.querySelectorAll('[data-wishlist-count-big]').forEach((el) => {
+      if (el.textContent !== label) el.textContent = label;
     });
   }
 

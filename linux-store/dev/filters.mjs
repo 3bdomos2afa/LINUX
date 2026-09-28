@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const THEME = path.resolve(__dirname, '../theme');
 
 const locales = {};
+const pluralRules = new Map();
 function loadLocale(code) {
   const file = path.join(THEME, 'locales', code === 'en' ? 'en.default.json' : `${code}.json`);
   // Re-read when the file changes so locale edits show up without a restart.
@@ -132,7 +133,8 @@ export function registerFilters(engine, store) {
     if (val === undefined) val = lookup(loadLocale('en'), key);
     if (val && typeof val === 'object') {
       const n = Number(h.count);
-      val = (n === 1 ? val.one : n === 0 && val.zero ? val.zero : val.other) ?? val.other ?? val.one;
+      if (!pluralRules.has(locale)) pluralRules.set(locale, new Intl.PluralRules(locale));
+      val = val[pluralRules.get(locale).select(n)] ?? val.other ?? val.one;
     }
     if (val === undefined) return `Translation missing: ${locale}.${key}`; // same casing as Shopify
     return String(val).replace(/{{\s*(\w+)\s*}}/g, (m, k) => (h[k] !== undefined ? h[k] : m));

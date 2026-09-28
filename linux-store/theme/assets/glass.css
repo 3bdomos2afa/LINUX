@@ -28,25 +28,25 @@
   --success:       var(--lime);
 
   --white:         #ffffff;
-  --white-90:      rgb(255 255 255 / .9);
-  --white-80:      rgb(255 255 255 / .8);
+  --white-90:      var(--white);
+  --white-80:      var(--white);
 
   --bg:            var(--forest-deep);
-  /* Type roles: headings = cream, bold · body/sub-headings = white, light · links = green */
+  /* Cream headings, white copy; keep inverse controls legible. */
   --heading:       var(--cream);
   --fg:            var(--white);
-  --fg-70:         rgb(255 255 255 / .74);
-  --fg-50:         rgb(255 255 255 / .52);
+  --fg-70:         var(--white);
+  --fg-50:         var(--white);
   --fg-30:         rgb(255 255 255 / .3);
   --fg-12:         rgb(255 255 255 / .12);
   --link:          var(--lime);
   --link-hover:    #a9dd7a;
   --accent:        var(--lime);
   --accent-fg:     var(--forest-deep);
-  --w-heading:     800;   /* Thmanyah Display Black / Matcha Rounded (single bold cut) */
-  --w-sub:         400;   /* sub-headings: one step lighter than body labels */
-  --w-body:        300;
-  --w-ui:          500;
+  --w-heading:     400;
+  --w-sub:         400;
+  --w-body:        400;
+  --w-ui:          400;
 
   /* Glass material */
   --glass-fill:        rgb(244 232 216 / .07);
@@ -81,10 +81,10 @@
   --r-inner: calc(var(--r-lg) - var(--pad-card));
 
   /* Type */
-  --font-display: "Matcha Rounded", "Disney Bubble", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-body:    "Disney Bubble", "Matcha Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  /* prices / codes: brand body face first, mono only as a fallback for missing glyphs */
-  --font-mono:    "Disney Bubble", "JetBrains Mono", ui-monospace, monospace;
+  /* Thmanyah also covers Arabic text in the English language switcher. */
+  --font-display: "Froople", "Thmanyah Sans", sans-serif;
+  --font-body:    "Mochi Tubby", "Thmanyah Sans", sans-serif;
+  --font-mono:    var(--font-body);
   /* --type-scale / --heading-scale come from Theme settings (layout sets them) */
   --type-scale: 1;
   --heading-scale: 1;
@@ -116,21 +116,20 @@
 
 html[dir="rtl"] {
   --tracking-body: 0;
-  --font-display: "Thmanyah Display", "Matcha Rounded", system-ui, sans-serif;
-  --font-body: "Palestine", "Disney Bubble", system-ui, sans-serif;
-  --font-mono: "Palestine", "Disney Bubble", ui-monospace, monospace;
+  --font-display: "Thmanyah Sans", sans-serif;
+  --font-body: "Thmanyah Sans", sans-serif;
+  --font-mono: var(--font-body);
   --w-heading: 900;
-  --w-sub: 400;
+  --w-sub: 500;
   --w-body: 400;
-  --w-ui: 400;
+  --w-ui: 500;
   --tracking-label: 0;
-  /* Palestine sits small on the em box: run Arabic text ~15% larger */
-  --fs-body: calc(19px * var(--type-scale));
-  --fs-sm: calc(16.5px * var(--type-scale));
-  --fs-xs: calc(14px * var(--type-scale));
-  --fs-display: calc(clamp(34px, 5.2vw, 72px) * var(--heading-scale));
-  --fs-h1: calc(clamp(28px, 3.7vw, 48px) * var(--heading-scale));
-  --fs-h2: calc(clamp(24px, 2.8vw, 36px) * var(--heading-scale));
+  --fs-body: calc(17px * var(--type-scale));
+  --fs-sm: calc(15px * var(--type-scale));
+  --fs-xs: calc(13px * var(--type-scale));
+  --fs-display: calc(clamp(36px, 5.6vw, 76px) * var(--heading-scale));
+  --fs-h1: calc(clamp(30px, 4vw, 52px) * var(--heading-scale));
+  --fs-h2: calc(clamp(26px, 3vw, 38px) * var(--heading-scale));
 }
 
 /* ---- Light scheme (Theme Editor: Cream) ---------------------------------- */
@@ -277,7 +276,7 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
 .pdp__option-label strong { color: var(--fg); text-transform: none; letter-spacing: 0; font-size: 14px; margin-inline-start: 8px; }
 .pdp__option-label > * { vertical-align: middle; }
 .pdp__option > .pills, .pdp__option > .swatches { clear: both; }
-.pill--swatch { width: 40px; height: 40px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; }
+.pill--swatch { width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 0; border-radius: 50%; aspect-ratio: 1; }
 .pill.is-missing { display: none; }
 .skip-link { position: absolute; top: -100px; inset-inline-start: 16px; z-index: 1000; padding: 12px 18px; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-fg); font-weight: var(--w-ui); }
 .skip-link:focus { top: 16px; }
@@ -285,9 +284,8 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
 /* ==========================================================================
    Typography
    ========================================================================== */
-/* Hierarchy: h1/h2 = cream, heavy · h3/h4 + .lede + labels = white, light · links = green */
-h1, h2 { font-family: var(--font-display); font-weight: var(--w-heading); letter-spacing: -.02em; line-height: 1.04; margin: 0; text-wrap: balance; color: var(--heading); }
-h3, h4, h5, h6 { font-family: var(--font-body); font-weight: var(--w-sub); letter-spacing: -.01em; line-height: 1.25; margin: 0; text-wrap: balance; color: var(--fg); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: var(--w-heading); letter-spacing: -.02em; line-height: 1.25; margin: 0; text-wrap: balance; color: var(--heading); }
+h1, h2 { line-height: 1.04; }
 html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { letter-spacing: 0; line-height: 1.3; }
 html[dir="rtl"] body { line-height: 1.75; }
 h1, .h1 { font-size: var(--fs-h1); }
@@ -308,7 +306,7 @@ p a:not(.btn):hover, .rte a:hover, .link:hover, .text-link:hover, .footer__polic
 .link:hover { text-decoration-color: var(--link-hover); }
 .rte { color: var(--fg); font-weight: var(--w-body); font-size: clamp(16px, 1.1vw, 17px); line-height: 1.75; }
 .rte h2 { color: var(--heading); margin: 1.6em 0 .6em; }
-.rte h3, .rte h4 { color: var(--fg); margin: 1.4em 0 .5em; }
+.rte h3, .rte h4 { color: var(--heading); margin: 1.4em 0 .5em; }
 .rte p { margin: 0 0 1.1em; }
 .rte ul, .rte ol { padding-inline-start: 1.3em; margin: 0 0 1.1em; }
 .rte a { text-decoration: underline; text-underline-offset: 3px; }
@@ -411,18 +409,40 @@ html[dir="rtl"] .select { background-position: left 18px center; }
 .pill.is-active, .pill:has(input:checked) { background: var(--cream); color: var(--forest); border-color: var(--cream); }
 .pill.is-disabled, .pill:has(input:disabled) { color: var(--fg-30); text-decoration: line-through; background: transparent; }
 .pill input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
-.swatch { width: 36px; height: 36px; padding: 0; min-width: 0; border-radius: 50%; border: 2px solid transparent; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px transparent; background: var(--swatch, #ccc) !important; }
-.swatch.is-active, .swatch:has(input:checked) { box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px var(--bg), 0 0 0 4px var(--cream); }
-.swatch--sm { width: 16px; height: 16px; border-width: 1px; }
+.swatch, .pill--swatch, .pill.swatch {
+  display: inline-grid !important;
+  place-items: center;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: none !important;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px transparent;
+  background: var(--swatch, #ccc) !important;
+}
+.swatch.is-active, .swatch:has(input:checked), .pill.swatch.is-active, .pill.swatch:has(input:checked) {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px var(--bg), 0 0 0 4px var(--cream);
+}
+.swatch--sm, .pill--swatch.swatch--sm {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  border-width: 1px;
+}
 
 /* Badges & dots */
 .badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-fg); font: var(--w-ui) 11px/1 var(--font-body); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
 .divider { height: 1px; background: var(--glass-stroke); border: 0; margin: 0; }
-
-/* Progress meter */
-.meter { height: 8px; border-radius: var(--r-pill); background: var(--fg-12); overflow: hidden; }
-.meter__bar { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--lime-deep), var(--lime)); transition: width var(--t-slow) var(--ease-out); }
 
 /* Media */
 img, video, svg { display: block; max-width: 100%; }
@@ -495,7 +515,7 @@ img, video, svg { display: block; max-width: 100%; }
   .btn--lg { --btn-h: 52px; padding: 0 22px; font-size: 15px; }
   .btn--sm { --btn-h: 40px; padding: 0 14px; font-size: 13px; }
   .icon-btn { width: 42px; height: 42px; }
-  .pill { min-width: 46px; min-height: 42px; padding: 0 12px; font-size: 13px; }
+  .pill:not(.swatch):not(.pill--swatch) { min-width: 46px; min-height: 42px; padding: 0 12px; font-size: 13px; }
   .chip { min-height: 28px; padding: 0 10px; font-size: 11px; }
   .qty { height: 44px; }
 }

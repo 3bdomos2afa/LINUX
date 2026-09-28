@@ -11,7 +11,7 @@
 
   function paintBadge() {
     const n = Array.from(new FormData(form).entries()).filter(([k, v]) => v && k !== 'sort_by').length;
-    if (badge) { badge.textContent = n; badge.hidden = n === 0; }
+    if (badge) { badge.textContent = L.digits ? L.digits(n) : String(n); badge.hidden = n === 0; }
   }
   paintBadge();
 
