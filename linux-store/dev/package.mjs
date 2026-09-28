@@ -22,12 +22,13 @@ if (errors.length) {
   process.exit(1);
 }
 
-// Shopify's importer is stricter than theme-check (Ruby Liquid tokenizer, schema limits). Run the mirror lint when Ruby is present.
+// Do not label a release import-checked when the required runtime is missing.
 try {
-  execFileSync('ruby', ['--version'], { stdio: 'ignore' });
-  try { execFileSync('ruby', [path.join(root, 'dev', 'shopify-lint.rb')], { stdio: 'inherit' }); }
-  catch { console.error('shopify-lint: importer-level findings — fix them before packaging'); process.exit(1); }
-} catch { console.warn('shopify-lint skipped (ruby + liquid gem not installed: apt install ruby && gem install liquid)'); }
+  execFileSync('ruby', [path.join(root, 'dev', 'shopify-lint.rb')], { stdio: 'inherit' });
+} catch {
+  console.error('Shopify import validation failed. Use the declared Ruby runtime and install liquid 5.8.7, then resolve all findings before packaging.');
+  process.exit(1);
+}
 
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
@@ -48,9 +49,36 @@ fs.copyFileSync(themeZip, path.join(stage, `${name}.zip`));
 fs.copyFileSync(path.join(root, 'INSTALL.md'), path.join(stage, 'INSTALL.md'));
 fs.copyFileSync(path.join(root, 'ADMIN-GUIDE.md'), path.join(stage, 'ADMIN-GUIDE.md'));
 fs.copyFileSync(path.join(root, 'CHECKOUT-BRANDING.md'), path.join(stage, 'CHECKOUT-BRANDING.md'));
-for (const f of ['hero-1080.mp4', 'hero-720.mp4', 'hero-mobile.mp4', 'hero-embroidery-poster.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
+fs.copyFileSync(path.join(root, 'CHANGELOG.md'), path.join(stage, 'CHANGELOG.md'));
+for (const f of ['hero-1080.mp4', 'hero-720.mp4', 'hero-mobile.mp4', 'hero-embroidery-poster.webp', 'hero-embroidery-poster-v2.webp']) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'hero-video', f));
 for (const f of fs.readdirSync(path.join(themeRoot, 'assets')).filter((f) => /^(mascot-|brand-|favicon-|wordmark)/.test(f))) fs.copyFileSync(path.join(themeRoot, 'assets', f), path.join(stage, 'brand-assets', f));
+// 3) Optional kits: Shopify email notification templates and the social ad kit
+const copyTree = (src, dst, keep = () => true, rel = '') => {
+  for (const entry of fs.readdirSync(path.join(src, rel), { withFileTypes: true })) {
+    const child = path.join(rel, entry.name);
+    if (!keep(child, entry)) continue;
+    if (entry.isDirectory()) copyTree(src, dst, keep, child);
+    else { fs.mkdirSync(path.dirname(path.join(dst, child)), { recursive: true }); fs.copyFileSync(path.join(src, child), path.join(dst, child)); }
+  }
+};
+const notifications = path.join(root, 'notifications');
+if (fs.existsSync(notifications)) copyTree(notifications, path.join(stage, 'email-notifications'), (child) => !/^(dev|node_modules)(\/|$)/.test(child) && !child.endsWith('.DS_Store'));
+const marketing = path.join(root, 'marketing');
+if (fs.existsSync(path.join(marketing, 'out'))) {
+  copyTree(path.join(marketing, 'out'), path.join(stage, 'ad-kit'), (child) => /\.(jpe?g|mp4)$/i.test(child));
+  for (const f of ['README.md', 'copy.json']) if (fs.existsSync(path.join(marketing, f))) fs.copyFileSync(path.join(marketing, f), path.join(stage, 'ad-kit', f));
+}
+const licences = path.join(root, 'licenses');
+if (fs.existsSync(licences)) copyTree(licences, path.join(stage, 'licenses'), (child) => !child.endsWith('.DS_Store'));
 const bundle = path.join(dist, 'LINUX-theme-delivery.zip');
 execFileSync('zip', ['-qr', '-X', bundle, 'LINUX-theme-delivery'], { cwd: dist, stdio: 'inherit' });
 fs.rmSync(stage, { recursive: true, force: true });
 console.log(`${path.relative(process.cwd(), bundle)} — ${(fs.statSync(bundle).size / 1024 / 1024).toFixed(1)} MB`);
+
+// 4) Studio product photos — upload per product in Shopify (not part of the theme)
+const photos = path.join(root, 'photos');
+if (fs.existsSync(path.join(photos, 'manifest.json'))) {
+  const photoZip = path.join(dist, 'LINUX-product-photos.zip');
+  execFileSync('zip', ['-qr', '-X', photoZip, 'photos', '-x', '*.DS_Store', 'photos/_*'], { cwd: root, stdio: 'inherit' });
+  console.log(`${path.relative(process.cwd(), photoZip)} — ${(fs.statSync(photoZip).size / 1024 / 1024).toFixed(1)} MB`);
+}

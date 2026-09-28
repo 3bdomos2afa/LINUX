@@ -8,7 +8,9 @@
   {%- assign m = date | date: '%m' | plus: 0 -%}
   {%- assign months = 'يناير,فبراير,مارس,أبريل,مايو,يونيو,يوليو,أغسطس,سبتمبر,أكتوبر,نوفمبر,ديسمبر' | split: ',' -%}
   {%- assign idx = m | minus: 1 -%}
-  {{ date | date: '%e' | strip }} {{ months[idx] }} {{ date | date: '%Y' }}
+  {%- assign day = date | date: '%e' | strip -%}
+  {%- assign year = date | date: '%Y' -%}
+  {% render 'digits', value: day %} {{ months[idx] }} {% render 'digits', value: year %}
 {%- else -%}
   {{ date | date: format: 'month_day_year' }}
 {%- endif -%}

@@ -1,8 +1,13 @@
 {%- comment -%}
   Tiered "buy more, save more" offer for the PDP. Merchant-editable tiers via block
-  settings (qty + percent). Purely presentational + a quantity shortcut: it sets the
-  form quantity and adds to bag; the actual discount is a Shopify automatic discount
-  the merchant creates in Admin → Discounts (documented in INSTALL.md).
+  settings (qty + percent). Each piece resolves to a real product variant.
+  custom.bundle_products is an optional product-reference list of color siblings;
+  otherwise use the block's product list. Never infer siblings from product titles.
+  Prices are estimates, not discounts. Configure matching automatic percentage
+  product discounts on ALL eligible products: minimum 2 items / 10%, 3 / 15%
+  (or the block's quantities/rates). Disable product-discount combinations.
+  Native minimum-quantity rules are cart-wide, not per bundle group. Exact group
+  pricing requires a discount app/Function that validates the private properties.
   Params: block, product, current
 {%- endcomment -%}
 {%- liquid
@@ -14,45 +19,138 @@
   assign t2_p = bs.tier2_pct | default: 15
   assign t3_q = bs.tier3_qty | default: 0
   assign t3_p = bs.tier3_pct | default: 20
+  assign locale = request.locale.iso_code | slice: 0, 2
+  assign source = bs.source | default: 'store'
+  if source == 'same'
+    assign bundle_products = nil
+  elsif source == 'list'
+    assign bundle_products = product.metafields.custom.bundle_products.value | default: bs.products
+  else
+    assign source_coll = bs.collection
+    if source_coll == blank
+      assign source_coll = collections.all
+    endif
+    assign bundle_products = source_coll.products
+  endif
+  assign sibling_count = bundle_products.size | default: 0 | at_most: 50
+  assign live = bs.discount_live
+  assign estimate_label = 'bundle.estimate' | t
+  assign pct_sign = '%'
+  if locale == 'ar'
+    assign pct_sign = '٪'
+  endif
 -%}
-<div class="bundle glass" data-bundle {{ block.shopify_attributes }}>
+{%- comment -%} Tier counts print in the same numerals as the prices beside them. {%- endcomment -%}
+{%- capture tier_1 -%}{% render 'digits', value: 1 %}{%- endcapture -%}
+{%- capture tier_1_q -%}{% render 'digits', value: t1_q %}{%- endcapture -%}
+{%- capture tier_2_q -%}{% render 'digits', value: t2_q %}{%- endcapture -%}
+{%- capture tier_3_q -%}{% render 'digits', value: t3_q %}{%- endcapture -%}
+{%- capture offer_title -%}{% render 'tr', value: bs.title, key: 'bundle.title' %}{%- endcapture -%}
+<div class="bundle glass" data-bundle data-discount-live="{% if live %}true{% else %}false{% endif %}" data-offer-title="{{ offer_title | strip | escape }}" {{ block.shopify_attributes }}>
   <div class="bundle__head">
     <span class="bundle__icon">{% render 'icon', name: 'tag', px: 18 %}</span>
     <div>
       <strong>{% render 'tr', value: bs.title, key: 'bundle.title' %}</strong>
-      <small class="muted">{% render 'tr', value: bs.subtitle, key: 'bundle.subtitle' %}</small>
+      {%- if live -%}<small class="muted">{% render 'tr', value: bs.subtitle, key: 'bundle.subtitle' %}</small>{%- else -%}<small class="muted">{{ 'bundle.subtitle_estimate' | t }}</small>{%- endif -%}
     </div>
   </div>
-  <div class="bundle__tiers" role="radiogroup" aria-label="{{ 'bundle.title' | t }}">
+  <div class="bundle__tiers" role="group" aria-label="{{ 'bundle.title' | t | escape }}">
     <button class="bundle__tier is-active" type="button" data-bundle-tier data-qty="1" data-pct="0" aria-pressed="true">
-      <span class="bundle__qty">{{ 'bundle.tier' | t: count: 1 }}</span>
+      <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_1 }}</span>
       {%- capture m0 -%}{% render 'money', amount: base %}{%- endcapture -%}{%- assign m0 = m0 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m0 }}</span>
     </button>
     {%- if t1_q > 1 -%}
-      {%- assign p1 = 100 | minus: t1_p | times: base | divided_by: 100 -%}
+      {%- assign p1 = 100 | minus: t1_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t1_q }}" data-pct="{{ t1_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ 'bundle.save' | t: percent: t1_p }}</span>
-        <span class="bundle__qty">{{ 'bundle.tier' | t: count: t1_q }}</span>
+        {%- capture pct_1 -%}{% render 'digits', value: t1_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_1 }}{% else %}{{ estimate_label }} · {{ pct_1 }}{% endif %}</span>
+        <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_1_q }}</span>
         {%- capture m1 -%}{% render 'money', amount: p1 %}{%- endcapture -%}{%- assign m1 = m1 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m1 }}</span>
       </button>
     {%- endif -%}
     {%- if t2_q > 1 -%}
-      {%- assign p2 = 100 | minus: t2_p | times: base | divided_by: 100 -%}
+      {%- assign p2 = 100 | minus: t2_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier bundle__tier--hot" type="button" data-bundle-tier data-qty="{{ t2_q }}" data-pct="{{ t2_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ 'bundle.save' | t: percent: t2_p }}</span>
-        <span class="bundle__qty">{{ 'bundle.tier' | t: count: t2_q }}</span>
+        {%- capture pct_2 -%}{% render 'digits', value: t2_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_2 }}{% else %}{{ estimate_label }} · {{ pct_2 }}{% endif %}</span>
+        <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_2_q }}</span>
         {%- capture m2 -%}{% render 'money', amount: p2 %}{%- endcapture -%}{%- assign m2 = m2 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m2 }}</span>
       </button>
     {%- endif -%}
     {%- if t3_q > 1 -%}
-      {%- assign p3 = 100 | minus: t3_p | times: base | divided_by: 100 -%}
+      {%- assign p3 = 100 | minus: t3_p | times: base | divided_by: 100 | divided_by: 100.0 | round | times: 100 -%}
       <button class="bundle__tier" type="button" data-bundle-tier data-qty="{{ t3_q }}" data-pct="{{ t3_p }}" aria-pressed="false">
-        <span class="bundle__save">{{ 'bundle.save' | t: percent: t3_p }}</span>
-        <span class="bundle__qty">{{ 'bundle.tier' | t: count: t3_q }}</span>
+        {%- capture pct_3 -%}{% render 'digits', value: t3_p %}{{ pct_sign }}{%- endcapture -%}
+        <span class="bundle__save">{% if live %}{{ 'bundle.save_live' | t: percent: pct_3 }}{% else %}{{ estimate_label }} · {{ pct_3 }}{% endif %}</span>
+        <span class="bundle__qty">{{ 'bundle.tier' | t: count: tier_3_q }}</span>
         {%- capture m3 -%}{% render 'money', amount: p3 %}{%- endcapture -%}{%- assign m3 = m3 | strip -%}<span class="bundle__each" data-bundle-each>{{ 'bundle.each' | t: price: m3 }}</span>
       </button>
     {%- endif -%}
   </div>
-  <p class="bundle__note small muted">{% render 'icon', name: 'sparkle', px: 12 %} {{ 'bundle.mix' | t }}</p>
+  <div class="bundle__pieces" data-bundle-pieces hidden></div>
+  <template data-bundle-piece>
+    <fieldset class="bundle__piece">
+      <legend class="bundle__piece-title" data-bundle-piece-title></legend>
+      <div class="bundle__selection">
+        <img class="bundle__image" data-bundle-image src="{{ product.featured_image | image_url: width: 160 }}" width="48" height="60" alt="" loading="lazy" hidden>
+        <label class="bundle__option" data-bundle-product-label>
+          <span>{% if source == 'store' %}{{ 'bundle.pick_any' | t }}{% else %}{{ 'bundle.product_color' | t }}{% endif %}</span>
+          <select class="input" data-bundle-product></select>
+        </label>
+      </div>
+      <div class="bundle__options" data-bundle-options></div>
+      <p class="bundle__piece-status small" data-bundle-piece-status aria-live="polite"></p>
+    </fieldset>
+  </template>
+  <p class="bundle__summary small" data-bundle-summary aria-live="polite" hidden></p>
+  <p class="bundle__note small muted">{% render 'icon', name: 'sparkle', px: 12 %} {% if source == 'store' %}{{ 'bundle.note_any' | t }}{% else %}{{ 'bundle.note' | t }}{% endif %}</p>
+  {%- unless live -%}<p class="bundle__disclaimer small muted">{{ 'bundle.disclaimer' | t }}</p>{%- endunless -%}
   <script type="application/json" data-bundle-strings>{"each": {{ 'bundle.each' | t: price: '[price]' | json }}}</script>
+  {%- capture json_lt -%}\u003c{%- endcapture -%}
+  {%- capture bundle_data -%}
+    [
+    {%- assign separator = '' -%}
+    {%- assign seen_titles = '|' -%}
+    {%- for product_index in (0..sibling_count) -%}
+      {%- liquid
+        assign bundle_product = product
+        if product_index > 0
+          assign sibling_index = product_index | minus: 1
+          assign bundle_product = bundle_products[sibling_index]
+          if bundle_product == blank or bundle_product.id == product.id
+            continue
+          endif
+          comment
+            A bundle piece must be a ready-made product the shopper can add as is.
+          endcomment
+          if bundle_product.available == false or bundle_product.gift_card? or bundle_product.handle contains 'customize' or bundle_product.tags contains 'no-bundle'
+            continue
+          endif
+          comment
+            Two catalog products with the same title look identical in the picker.
+          endcomment
+          assign title_key = '|' | append: bundle_product.title | append: '|'
+          if seen_titles contains title_key
+            continue
+          endif
+        endif
+        assign seen_titles = seen_titles | append: bundle_product.title | append: '|'
+      -%}
+      {{- separator -}}{
+        "handle": {{ bundle_product.handle | json }},
+        "title": {% capture bundle_title %}{% render 'product-title', title: bundle_product.title %}{% endcapture %}{{ bundle_title | strip | json }},
+        "image": {{ bundle_product.featured_image | image_url: width: 160 | json }},
+        "options": [{% unless bundle_product.has_only_default_variant %}{% for option in bundle_product.options_with_values %}
+          {"name": {{ option.name | json }}, "label": {% capture option_name %}{% render 'option-name', name: option.name %}{% endcapture %}{{ option_name | strip | json }}, "values": [
+            {% for value in option.values %}{% assign raw_value = value.name | default: value | append: '' %}{% capture option_label %}{% render 'option-value', value: raw_value %}{% endcapture %}{"value": {{ raw_value | json }}, "label": {{ option_label | strip | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}
+          ]}{% unless forloop.last %},{% endunless %}{% endfor %}{% endunless %}],
+        "variants": [{% for variant in bundle_product.variants %}
+          {"id": {{ variant.id | json }}, "options": {{ variant.options | json }}, "available": {{ variant.available | json }}, "price": {{ variant.price | json }}, "featured_image": {{ variant.featured_image | json }}, "inventory_management": {{ variant.inventory_management | json }}, "inventory_policy": {{ variant.inventory_policy | json }}, "inventory_quantity": {{ variant.inventory_quantity | json }}, "requires_selling_plan": {{ variant.requires_selling_plan | json }}}
+          {% unless forloop.last %},{% endunless %}{% endfor %}]
+      }
+      {%- assign separator = ',' -%}
+    {%- endfor -%}
+    ]
+  {%- endcapture -%}
+  <script type="application/json" data-bundle-products>{{ bundle_data | replace: '<', json_lt }}</script>
 </div>

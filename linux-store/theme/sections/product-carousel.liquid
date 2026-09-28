@@ -6,10 +6,10 @@
   endif
   assign limit = s.limit | default: 8
 -%}
-<section class="section wrap" id="s-{{ section.id }}">
+<section class="section wrap{% if section.settings.scheme == 'cream' or section.settings.scheme == 'lime' %} sheet scheme-{{ section.settings.scheme }}{% endif %}" id="s-{{ section.id }}">
   <div class="section-head">
     <div class="section-head__text" data-reveal>
-      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{{ s.number }}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.bestsellers_eyebrow' %}</p>
+      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{% render 'digits', value: s.number %}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.bestsellers_eyebrow' %}</p>
       <h2>{% render 'tr', value: s.heading, key: 'home.bestsellers_heading' %}</h2>
     </div>
     <div class="rail__nav" data-reveal style="--i:1">
@@ -32,6 +32,26 @@
 {
   "name": "Product carousel",
   "settings": [
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour",
+      "default": "forest",
+      "options": [
+        {
+          "value": "forest",
+          "label": "Forest (dark)"
+        },
+        {
+          "value": "cream",
+          "label": "Cream sheet"
+        },
+        {
+          "value": "lime",
+          "label": "Lime sheet"
+        }
+      ]
+    },
     {
       "type": "text",
       "id": "number",

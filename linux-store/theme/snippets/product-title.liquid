@@ -14,12 +14,28 @@
     {{- title -}}
   {%- else -%}
     {%- assign words = title | split: ' ' -%}
+    {%- comment -%} Arabic puts the garment first: "Anime Shirt Black" → تيشيرت أنمي أسود. {%- endcomment -%}
+    {%- assign noun_at = -1 -%}
+    {%- for w in words -%}
+      {%- assign lw = w | downcase -%}
+      {%- if lw == 'hoodie' or lw == 'shirt' or lw == 't-shirt' or lw == 'tshirt' or lw == 'tee' or lw == 'sweatshirt' -%}{%- assign noun_at = forloop.index0 -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if noun_at > 0 -%}
+      {%- capture reordered -%}{{ words[noun_at] }}{%- for w in words -%}{%- unless forloop.index0 == noun_at %} {{ w }}{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+      {%- assign words = reordered | split: ' ' -%}
+    {%- endif -%}
     {%- capture out -%}
       {%- for w in words -%}
-        {%- assign k = w | downcase | strip | replace: '-', '_' -%}
+        {%- comment -%} Hyphenated words keep their key first (t-shirt, as in LINUX.words), then fall back to the underscore form. {%- endcomment -%}
+        {%- assign k = w | downcase | strip -%}
         {%- assign key = 'products.option_values.' | append: k -%}
         {%- assign tr = key | t -%}
         {%- assign tr_lc = tr | downcase -%}
+        {%- if tr_lc contains 'translation missing' and k contains '-' -%}
+          {%- assign key = 'products.option_values.' | append: k | replace: '-', '_' -%}
+          {%- assign tr = key | t -%}
+          {%- assign tr_lc = tr | downcase -%}
+        {%- endif -%}
         {%- if tr_lc contains 'translation missing' -%}{{ w }}{%- else -%}{{ tr }}{%- endif -%}
         {%- unless forloop.last %} {% endunless -%}
       {%- endfor -%}

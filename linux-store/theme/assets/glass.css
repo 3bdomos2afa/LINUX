@@ -28,25 +28,25 @@
   --success:       var(--lime);
 
   --white:         #ffffff;
-  --white-90:      rgb(255 255 255 / .9);
-  --white-80:      rgb(255 255 255 / .8);
+  --white-90:      var(--white);
+  --white-80:      var(--white);
 
   --bg:            var(--forest-deep);
-  /* Type roles: headings = cream, bold · body/sub-headings = white, light · links = green */
+  /* Cream headings, white copy; keep inverse controls legible. */
   --heading:       var(--cream);
   --fg:            var(--white);
-  --fg-70:         rgb(255 255 255 / .74);
-  --fg-50:         rgb(255 255 255 / .52);
+  --fg-70:         var(--white);
+  --fg-50:         var(--white);
   --fg-30:         rgb(255 255 255 / .3);
   --fg-12:         rgb(255 255 255 / .12);
   --link:          var(--lime);
   --link-hover:    #a9dd7a;
   --accent:        var(--lime);
   --accent-fg:     var(--forest-deep);
-  --w-heading:     800;   /* Thmanyah Display Black / Matcha Rounded (single bold cut) */
-  --w-sub:         400;   /* sub-headings: one step lighter than body labels */
-  --w-body:        300;
-  --w-ui:          500;
+  --w-heading:     400;
+  --w-sub:         400;
+  --w-body:        400;
+  --w-ui:          400;
 
   /* Glass material */
   --glass-fill:        rgb(244 232 216 / .07);
@@ -81,16 +81,16 @@
   --r-inner: calc(var(--r-lg) - var(--pad-card));
 
   /* Type */
-  --font-display: "Matcha Rounded", "Disney Bubble", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-body:    "Disney Bubble", "Matcha Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  /* prices / codes: brand body face first, mono only as a fallback for missing glyphs */
-  --font-mono:    "Disney Bubble", "JetBrains Mono", ui-monospace, monospace;
+  /* Thmanyah also covers Arabic text in the English language switcher. */
+  --font-display: "Froople", "Thmanyah Sans", sans-serif;
+  --font-body:    "Mochi Tubby", "Thmanyah Sans", sans-serif;
+  --font-mono:    var(--font-body);
   /* --type-scale / --heading-scale come from Theme settings (layout sets them) */
   --type-scale: 1;
   --heading-scale: 1;
-  --fs-display: calc(clamp(36px, 5.6vw, 80px) * var(--heading-scale));
-  --fs-h1: calc(clamp(30px, 4vw, 52px) * var(--heading-scale));
-  --fs-h2: calc(clamp(26px, 3vw, 38px) * var(--heading-scale));
+  --fs-display: calc(clamp(36px, 5.6vw, 80px) * var(--heading-scale) * var(--display-scale, 1));
+  --fs-h1: calc(clamp(30px, 4vw, 52px) * var(--heading-scale) * var(--display-scale, 1));
+  --fs-h2: calc(clamp(26px, 3vw, 38px) * var(--heading-scale) * var(--display-scale, 1));
   --fs-h3: calc(clamp(18px, 1.6vw, 22px) * var(--heading-scale));
   --fs-body: calc(17px * var(--type-scale));
   --fs-sm: calc(14.5px * var(--type-scale));
@@ -116,21 +116,20 @@
 
 html[dir="rtl"] {
   --tracking-body: 0;
-  --font-display: "Thmanyah Display", "Matcha Rounded", system-ui, sans-serif;
-  --font-body: "Palestine", "Disney Bubble", system-ui, sans-serif;
-  --font-mono: "Palestine", "Disney Bubble", ui-monospace, monospace;
+  --font-display: "Thmanyah Sans", sans-serif;
+  --font-body: "Thmanyah Sans", sans-serif;
+  --font-mono: var(--font-body);
   --w-heading: 900;
-  --w-sub: 400;
+  --w-sub: 500;
   --w-body: 400;
-  --w-ui: 400;
+  --w-ui: 500;
   --tracking-label: 0;
-  /* Palestine sits small on the em box: run Arabic text ~15% larger */
-  --fs-body: calc(19px * var(--type-scale));
-  --fs-sm: calc(16.5px * var(--type-scale));
-  --fs-xs: calc(14px * var(--type-scale));
-  --fs-display: calc(clamp(34px, 5.2vw, 72px) * var(--heading-scale));
-  --fs-h1: calc(clamp(28px, 3.7vw, 48px) * var(--heading-scale));
-  --fs-h2: calc(clamp(24px, 2.8vw, 36px) * var(--heading-scale));
+  --fs-body: calc(17px * var(--type-scale));
+  --fs-sm: calc(15px * var(--type-scale));
+  --fs-xs: calc(13px * var(--type-scale));
+  --fs-display: calc(clamp(36px, 5.6vw, 76px) * var(--heading-scale));
+  --fs-h1: calc(clamp(30px, 4vw, 52px) * var(--heading-scale));
+  --fs-h2: calc(clamp(26px, 3vw, 38px) * var(--heading-scale));
 }
 
 /* ---- Light scheme (Theme Editor: Cream) ---------------------------------- */
@@ -208,13 +207,35 @@ body {
 main > .shopify-section:not(:first-child) { content-visibility: auto; contain-intrinsic-size: auto 600px; }
 
 /* ==========================================================================
-   The material
+   The material — Liquid Glass 2
+   Five layers, back to front:
+     1. lens   backdrop blur · saturate · brightness; on Chromium glass.js adds
+               a per-surface refraction map to [data-lens] (.is-lensed)
+     2. tint   --glass-fill (alpha comes from Theme settings → Glass tint)
+     3. sheen  soft diagonal light band
+     4. rim    ::before — masked ring: warm catchlight top-start, lime bounce
+               light bottom-end (light always comes from the top-left)
+     5. depth  inset edge light + two-step drop shadow
    ========================================================================== */
+:root {
+  --lg-sheen: linear-gradient(162deg, rgb(255 255 255 / .15) 0%, rgb(255 255 255 / .05) 26%, rgb(255 255 255 / 0) 52%);
+  --lg-rim: linear-gradient(138deg, rgb(255 255 255 / .78) 0%, rgb(255 255 255 / .18) 20%, rgb(255 255 255 / 0) 42%, rgb(255 255 255 / 0) 60%, rgb(190 240 150 / .26) 84%, rgb(255 255 255 / .5) 100%);
+  --lg-depth: inset 0 1px 1px rgb(255 255 255 / .26), inset 0 -1px 1px rgb(255 255 255 / .07), inset 0 14px 28px -20px rgb(255 255 255 / .22);
+  --lg-drop: 0 1px 2px rgb(1 12 8 / .22), 0 18px 44px -14px rgb(1 18 12 / .62);
+  --lg-drop-lift: 0 2px 6px rgb(1 12 8 / .24), 0 34px 80px -20px rgb(1 18 12 / .74);
+  --glass-shadow: var(--lg-depth), var(--lg-drop);
+  --glass-shadow-lift: var(--lg-depth), var(--lg-drop-lift);
+}
+[data-scheme="light"] {
+  --lg-sheen: linear-gradient(162deg, rgb(255 255 255 / .6) 0%, rgb(255 255 255 / .18) 30%, rgb(255 255 255 / 0) 56%);
+  --lg-rim: linear-gradient(138deg, rgb(255 255 255 / 1) 0%, rgb(255 255 255 / .4) 24%, rgb(255 255 255 / 0) 46%, rgb(4 48 32 / .06) 70%, rgb(255 255 255 / .8) 100%);
+  --lg-depth: inset 0 1px 1px rgb(255 255 255 / .9), inset 0 -1px 1px rgb(4 36 26 / .05);
+  --lg-drop: 0 1px 2px rgb(4 36 26 / .08), 0 18px 44px -18px rgb(4 36 26 / .3);
+  --lg-drop-lift: 0 2px 6px rgb(4 36 26 / .1), 0 34px 80px -24px rgb(4 36 26 / .36);
+}
 .glass {
   position: relative;
-  background:
-    linear-gradient(150deg, rgb(255 255 255 / .09) 0%, rgb(255 255 255 / .02) 40%, transparent 62%),
-    var(--glass-fill);
+  background: var(--lg-sheen), var(--glass-fill);
   border: 1px solid var(--glass-stroke);
   box-shadow: var(--glass-shadow);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -222,33 +243,62 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
   border-radius: var(--r-lg);
   transition: background var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), transform var(--t-med) var(--spring), border-color var(--t-med) var(--ease);
 }
-.glass--clear { background: var(--glass-fill-clear); box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 10px 30px -14px rgb(1 18 12 / .5); }
-.glass--solid { background: linear-gradient(150deg, rgb(255 255 255 / .07), transparent 55%), var(--glass-fill-solid); -webkit-backdrop-filter: var(--glass-blur-solid); backdrop-filter: var(--glass-blur-solid); }
+.glass--clear {
+  background: var(--lg-sheen), var(--glass-fill-clear);
+  box-shadow: var(--lg-depth), 0 10px 30px -14px rgb(1 18 12 / .5);
+  -webkit-backdrop-filter: blur(12px) saturate(185%) brightness(1.06);
+  backdrop-filter: blur(12px) saturate(185%) brightness(1.06);
+}
+.glass--solid { background: linear-gradient(162deg, rgb(255 255 255 / .08), transparent 55%), var(--glass-fill-solid); -webkit-backdrop-filter: var(--glass-blur-solid); backdrop-filter: var(--glass-blur-solid); }
+/* Tinted glass (Apple's prominent style): brand lime through the lens */
+.glass--tinted {
+  color: var(--accent-fg);
+  background: linear-gradient(180deg, rgb(255 255 255 / .34), rgb(255 255 255 / 0) 62%), rgb(143 203 90 / .86);
+  border-color: rgb(255 255 255 / .34);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / .7), inset 0 -2px 6px rgb(4 48 32 / .18), 0 14px 34px -12px rgb(143 203 90 / .6);
+}
 .glass--pill { border-radius: var(--r-pill); }
-.glass--hover:hover { background: linear-gradient(150deg, rgb(255 255 255 / .12), rgb(255 255 255 / .03) 40%, transparent 62%), var(--glass-fill-hover); box-shadow: var(--glass-shadow-lift); transform: translateY(-3px); }
+.glass--hover:hover { background: linear-gradient(162deg, rgb(255 255 255 / .2), rgb(255 255 255 / .06) 30%, transparent 58%), var(--glass-fill-hover); box-shadow: var(--glass-shadow-lift); transform: translateY(-3px); }
 
 /* Specular rim — masked gradient ring that reads as light catching the edge */
 .glass::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   padding: 1px;
-  background: linear-gradient(135deg, var(--glass-stroke-hi) 0%, rgb(255 255 255 / .08) 30%, transparent 50%, rgb(255 255 255 / .08) 75%, rgb(255 255 255 / .3) 100%);
+  background: var(--lg-rim);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  opacity: .9;
+  opacity: .95;
 }
 /* Pointer-tracked sheen (glass.js sets --mx/--my) */
 .glass[data-specular]::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / .16), transparent 60%);
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / .18), transparent 62%);
   opacity: 0; transition: opacity var(--t-med) var(--ease);
 }
 .glass[data-specular]:hover::after { opacity: 1; }
+/* Refraction is on: the lens carries the depth, so the tint can be clearer */
+.glass.is-lensed { --glass-fill: var(--glass-fill-lensed, rgb(244 232 216 / .05)); }
 
-/* Fallback when backdrop-filter is unsupported */
+/* Scroll edge (iOS 26): content softens as it slides under the floating bars */
+.scroll-edge { position: fixed; inset-inline: 0; z-index: calc(var(--z-header) - 1); height: 104px; pointer-events: none; opacity: 0; transition: opacity var(--t-med) var(--ease); -webkit-backdrop-filter: blur(8px) saturate(140%); backdrop-filter: blur(8px) saturate(140%); }
+.scroll-edge--top { top: 0; background: linear-gradient(to bottom, rgb(2 26 18 / .62), rgb(2 26 18 / 0)); -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent); mask-image: linear-gradient(to bottom, #000 35%, transparent); }
+.scroll-edge--bottom { bottom: 0; height: 128px; display: none; background: linear-gradient(to top, rgb(2 26 18 / .66), rgb(2 26 18 / 0)); -webkit-mask-image: linear-gradient(to top, #000 45%, transparent); mask-image: linear-gradient(to top, #000 45%, transparent); }
+[data-scheme="light"] .scroll-edge--top { background: linear-gradient(to bottom, rgb(239 228 210 / .7), rgb(239 228 210 / 0)); }
+[data-scheme="light"] .scroll-edge--bottom { background: linear-gradient(to top, rgb(239 228 210 / .75), rgb(239 228 210 / 0)); }
+html.is-scrolled .scroll-edge--top { opacity: 1; }
+@media (max-width: 760px) { body:has(.tab-bar) .scroll-edge--bottom { display: block; opacity: 1; } }
+
+/* Fallbacks: no backdrop-filter, or the shopper asked for less transparency */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass { background: rgb(6 44 31 / .92); }
-  .glass--solid { background: rgb(4 40 27 / .96); }
+  .glass, .glass--clear { background: rgb(6 44 31 / .94); }
+  .glass--solid { background: rgb(4 40 27 / .97); }
+  .scroll-edge { display: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass--clear, .glass--solid, .glass.is-lensed { background: rgb(6 44 31 / .97); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  [data-scheme="light"] :is(.glass, .glass--clear, .glass--solid) { background: rgb(247 239 226 / .98); }
+  .scroll-edge { display: none !important; }
 }
 
 /* ==========================================================================
@@ -277,7 +327,7 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
 .pdp__option-label strong { color: var(--fg); text-transform: none; letter-spacing: 0; font-size: 14px; margin-inline-start: 8px; }
 .pdp__option-label > * { vertical-align: middle; }
 .pdp__option > .pills, .pdp__option > .swatches { clear: both; }
-.pill--swatch { width: 40px; height: 40px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; }
+.pill--swatch { width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 0; border-radius: 50%; aspect-ratio: 1; }
 .pill.is-missing { display: none; }
 .skip-link { position: absolute; top: -100px; inset-inline-start: 16px; z-index: 1000; padding: 12px 18px; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-fg); font-weight: var(--w-ui); }
 .skip-link:focus { top: 16px; }
@@ -285,9 +335,8 @@ main > .shopify-section:not(:first-child) { content-visibility: auto; contain-in
 /* ==========================================================================
    Typography
    ========================================================================== */
-/* Hierarchy: h1/h2 = cream, heavy · h3/h4 + .lede + labels = white, light · links = green */
-h1, h2 { font-family: var(--font-display); font-weight: var(--w-heading); letter-spacing: -.02em; line-height: 1.04; margin: 0; text-wrap: balance; color: var(--heading); }
-h3, h4, h5, h6 { font-family: var(--font-body); font-weight: var(--w-sub); letter-spacing: -.01em; line-height: 1.25; margin: 0; text-wrap: balance; color: var(--fg); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: var(--w-heading); letter-spacing: var(--display-tracking, -.02em); line-height: 1.25; margin: 0; text-wrap: balance; color: var(--heading); }
+h1, h2 { line-height: 1.04; }
 html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { letter-spacing: 0; line-height: 1.3; }
 html[dir="rtl"] body { line-height: 1.75; }
 h1, .h1 { font-size: var(--fs-h1); }
@@ -308,7 +357,7 @@ p a:not(.btn):hover, .rte a:hover, .link:hover, .text-link:hover, .footer__polic
 .link:hover { text-decoration-color: var(--link-hover); }
 .rte { color: var(--fg); font-weight: var(--w-body); font-size: clamp(16px, 1.1vw, 17px); line-height: 1.75; }
 .rte h2 { color: var(--heading); margin: 1.6em 0 .6em; }
-.rte h3, .rte h4 { color: var(--fg); margin: 1.4em 0 .5em; }
+.rte h3, .rte h4 { color: var(--heading); margin: 1.4em 0 .5em; }
 .rte p { margin: 0 0 1.1em; }
 .rte ul, .rte ol { padding-inline-start: 1.3em; margin: 0 0 1.1em; }
 .rte a { text-decoration: underline; text-underline-offset: 3px; }
@@ -327,14 +376,29 @@ p a:not(.btn):hover, .rte a:hover, .link:hover, .text-link:hover, .footer__polic
   transition: transform var(--t-med) var(--spring), background var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease), color var(--t-fast);
   -webkit-tap-highlight-color: transparent; user-select: none;
 }
-.btn:active { transform: scale(.97); }
+.btn:active { transform: scale(.96); transition-duration: 90ms; }
 .btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
 .btn svg { width: 18px; height: 18px; flex: none; }
-.btn--primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 10px 30px -10px rgb(143 203 90 / .6), inset 0 1px 0 rgb(255 255 255 / .35); }
-.btn--primary:hover { background: #a2dc6c; box-shadow: 0 16px 40px -12px rgb(143 203 90 / .75), inset 0 1px 0 rgb(255 255 255 / .4); transform: translateY(-2px); }
+.btn--primary {
+  background: linear-gradient(180deg, rgb(255 255 255 / .3) 0%, rgb(255 255 255 / .06) 48%, rgb(255 255 255 / 0) 100%), var(--accent);
+  color: var(--accent-fg); border-color: rgb(255 255 255 / .28);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / .62), inset 0 -2px 5px rgb(4 48 32 / .16), 0 10px 30px -10px rgb(143 203 90 / .62);
+}
+.btn--primary:hover { background: linear-gradient(180deg, rgb(255 255 255 / .38) 0%, rgb(255 255 255 / .1) 48%, rgb(255 255 255 / 0) 100%), #a2dc6c; box-shadow: inset 0 1px 1px rgb(255 255 255 / .7), inset 0 -2px 5px rgb(4 48 32 / .14), 0 16px 40px -12px rgb(143 203 90 / .78); transform: translateY(-2px); }
+[data-scheme="light"] .btn--primary { background: linear-gradient(180deg, rgb(255 255 255 / .16), rgb(255 255 255 / 0) 60%), var(--accent); border-color: transparent; box-shadow: inset 0 1px 1px rgb(255 255 255 / .28), 0 10px 26px -12px rgb(4 48 32 / .5); }
 [data-scheme="light"] .btn--primary:hover { background: #0a4a33; }
-.btn--glass { color: var(--fg); background: var(--glass-fill); border-color: var(--glass-stroke); box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), 0 8px 24px -12px rgb(1 18 12 / .5); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
-.btn--glass:hover { background: var(--glass-fill-hover); transform: translateY(-2px); }
+.btn--glass {
+  color: var(--fg); background: var(--lg-sheen), var(--glass-fill); border-color: var(--glass-stroke);
+  box-shadow: var(--lg-depth), 0 8px 24px -12px rgb(1 18 12 / .5);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+}
+.btn--glass::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; padding: 1px;
+  background: var(--lg-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.btn--glass:hover { background: linear-gradient(162deg, rgb(255 255 255 / .2), transparent 58%), var(--glass-fill-hover); transform: translateY(-2px); }
 .btn--ghost { color: var(--fg); background: transparent; border-color: var(--glass-stroke); }
 .btn--ghost:hover { background: var(--glass-fill); }
 .btn--cream { background: var(--cream); color: var(--forest); }
@@ -411,18 +475,40 @@ html[dir="rtl"] .select { background-position: left 18px center; }
 .pill.is-active, .pill:has(input:checked) { background: var(--cream); color: var(--forest); border-color: var(--cream); }
 .pill.is-disabled, .pill:has(input:disabled) { color: var(--fg-30); text-decoration: line-through; background: transparent; }
 .pill input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
-.swatch { width: 36px; height: 36px; padding: 0; min-width: 0; border-radius: 50%; border: 2px solid transparent; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px transparent; background: var(--swatch, #ccc) !important; }
-.swatch.is-active, .swatch:has(input:checked) { box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px var(--bg), 0 0 0 4px var(--cream); }
-.swatch--sm { width: 16px; height: 16px; border-width: 1px; }
+.swatch, .pill--swatch, .pill.swatch {
+  display: inline-grid !important;
+  place-items: center;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: none !important;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px transparent;
+  background: var(--swatch, #ccc) !important;
+}
+.swatch.is-active, .swatch:has(input:checked), .pill.swatch.is-active, .pill.swatch:has(input:checked) {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 2px var(--bg), 0 0 0 4px var(--cream);
+}
+.swatch--sm, .pill--swatch.swatch--sm {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  border-width: 1px;
+}
 
 /* Badges & dots */
 .badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-fg); font: var(--w-ui) 11px/1 var(--font-body); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
 .divider { height: 1px; background: var(--glass-stroke); border: 0; margin: 0; }
-
-/* Progress meter */
-.meter { height: 8px; border-radius: var(--r-pill); background: var(--fg-12); overflow: hidden; }
-.meter__bar { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--lime-deep), var(--lime)); transition: width var(--t-slow) var(--ease-out); }
 
 /* Media */
 img, video, svg { display: block; max-width: 100%; }
@@ -495,7 +581,31 @@ img, video, svg { display: block; max-width: 100%; }
   .btn--lg { --btn-h: 52px; padding: 0 22px; font-size: 15px; }
   .btn--sm { --btn-h: 40px; padding: 0 14px; font-size: 13px; }
   .icon-btn { width: 42px; height: 42px; }
-  .pill { min-width: 46px; min-height: 42px; padding: 0 12px; font-size: 13px; }
+  .pill:not(.swatch):not(.pill--swatch) { min-width: 46px; min-height: 42px; padding: 0 12px; font-size: 13px; }
   .chip { min-height: 28px; padding: 0 10px; font-size: 11px; }
   .qty { height: 44px; }
 }
+
+/* ==========================================================================
+   Page transitions — cross-document view transitions (Chrome 126+, Safari 18.2+).
+   The header and tab bar hold still while the page cross-fades beneath them.
+   ========================================================================== */
+@view-transition { navigation: auto; }
+.header { view-transition-name: site-header; }
+::view-transition-old(root) { animation: 180ms var(--ease) both vt-out; }
+::view-transition-new(root) { animation: 260ms var(--ease-out) both vt-in; }
+::view-transition-group(tab-lens) { animation-duration: 520ms; animation-timing-function: var(--spring); }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
+
+/* RTL: every directional glyph mirrors in one place. `scale` (not transform)
+   composes with component hover/animation transforms instead of fighting them. */
+html[dir="rtl"] :is(.icon--arrow-right, .icon--arrow-left, .icon--arrow-up-right, .icon--chevron-right, .icon--chevron-left, .icon--undo) { scale: -1 1; }
+
+/* Typography polish: headlines break into balanced lines (no lonely last word),
+   paragraphs avoid orphans — in both scripts. */
+:is(h1, h2, h3, .h1, .h2, .h3, .display) { text-wrap: balance; }
+:is(p, li, .lede, .rte) { text-wrap: pretty; }

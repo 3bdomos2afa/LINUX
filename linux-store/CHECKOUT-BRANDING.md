@@ -1,8 +1,9 @@
 # LINUX — Checkout, Thank-you & Order-status branding
 
 Shopify renders **checkout**, the **thank-you page** and the **order-status page**
-itself; a theme cannot change their HTML or CSS (the old `checkout.liquid`
-route is retired). Everything below is set once in
+in its hosted checkout surface; the storefront theme's CSS and font assets do
+not apply there (the old `checkout.liquid` route is retired). Everything below
+is set once in
 **Shopify admin → Settings → Checkout → Customize** (the *Checkout and
 accounts editor*) and applies to all three pages plus the new customer
 accounts. Takes about ten minutes.
@@ -34,14 +35,13 @@ Assignments:
 
 ## 2. Typography (Branding → Typography)
 
-Shopify's editor only allows fonts from its own library, so the storefront
-faces (Matcha Rounded / Disney Bubble / Thmanyah / Palestine) cannot be
-uploaded there. Pick the closest library matches so the hand-off feels
-continuous:
+The storefront's **Froople**, **Mochi Tubby** and **Thmanyah Sans** files are
+theme assets and do not load in Shopify-hosted checkout. Choose checkout fonts
+separately from the fonts available in Shopify's editor:
 
 | Role | Library font | Size | Weight |
 | --- | --- | --- | --- |
-| Headings (EN) | **Fredoka** (rounded, friendly, closest to Matcha) — fallback *Nunito* | Large | Bold |
+| Headings (EN) | **Fredoka** — fallback *Nunito* | Large | Bold |
 | Body (EN) | **Nunito** — fallback *Poppins* | Base | Regular |
 | Headings (AR) | **Tajawal** — fallback *Cairo* | Large | Bold |
 | Body (AR) | **Tajawal** | Base | Regular |
@@ -66,11 +66,12 @@ Letter-case for headings: *Sentence case*. Button text: *Uppercase*.
 
 ## 4. Language
 
-Settings → Languages → **Arabic (ar) published** so checkout switches with the
-storefront. Then *Translate & Adapt* → Checkout → review the auto-translations
-for: "Shipping", "Cash on delivery", "Discount code", "Order summary". Egyptian
-Arabic wording used in the theme (for consistency): الشحن · الدفع عند الاستلام
-· كود خصم · ملخص الطلب · كمّل الطلب.
+Settings → Languages → **Arabic (ar) published** so Shopify can offer Arabic in
+checkout. The theme's locale files and CSS do not translate or style this hosted
+checkout surface. Then *Translate & Adapt* → Checkout → review the
+auto-translations for: "Shipping", "Cash on delivery", "Discount code", "Order
+summary". Egyptian Arabic wording used in the theme (for consistency): الشحن ·
+الدفع عند الاستلام · كود خصم · ملخص الطلب · كمّل الطلب.
 
 ## 5. Customer accounts (new)
 

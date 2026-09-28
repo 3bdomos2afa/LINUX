@@ -54,11 +54,16 @@
   endfor
   assign alt_image = product.images[1]
 -%}
+{%- capture localized_title -%}{% render 'product-title', title: product.title %}{%- endcapture -%}
+{%- assign localized_title = localized_title | strip -%}
+{%- assign image_alt = product.featured_image.alt | default: localized_title -%}
+{%- comment -%} Catalog alts that only repeat the English title read as English on Arabic pages. {%- endcomment -%}
+{%- if request.locale.iso_code == 'ar' and image_alt contains product.title -%}{%- assign image_alt = localized_title -%}{%- endif -%}
 <article class="card glass glass--hover" data-tilt data-product-card data-handle="{{ product.handle }}" data-reveal style="--i: {{ index | default: 0 | modulo: 4 }}">
   <div class="card__media">
     <a href="{{ url }}" tabindex="-1" aria-hidden="true">
       {%- if product.featured_image -%}
-        <img class="card__img--main" src="{{ product.featured_image | image_url: width: 720 }}" srcset="{{ product.featured_image | image_url: width: 360 }} 360w, {{ product.featured_image | image_url: width: 720 }} 720w, {{ product.featured_image | image_url: width: 1000 }} 1000w" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 33vw, 25vw" alt="{{ product.featured_image.alt | default: product.title | escape }}" width="720" height="960" loading="{% if lazy %}lazy{% else %}eager{% endif %}" decoding="async">
+        <img class="card__img--main" src="{{ product.featured_image | image_url: width: 720 }}" srcset="{{ product.featured_image | image_url: width: 360 }} 360w, {{ product.featured_image | image_url: width: 720 }} 720w, {{ product.featured_image | image_url: width: 1000 }} 1000w" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 33vw, 25vw" alt="{{ image_alt | escape }}" width="720" height="960" loading="{% if lazy %}lazy{% else %}eager{% endif %}" decoding="async">
         {%- if alt_image -%}
           <img class="card__img--alt" data-src="{{ alt_image | image_url: width: 540 }}" alt="" width="540" height="720" loading="lazy" decoding="async" aria-hidden="true" data-hover-only>
         {%- endif -%}
@@ -67,9 +72,9 @@
       {%- endif -%}
     </a>
     <div class="card__badges">
-      {%- unless product.available -%}<span class="chip chip--soldout">{{ 'products.sold_out' | t }}</span>
-      {%- elsif on_sale -%}<span class="chip chip--sale">{{ 'products.sale' | t }}</span>
-      {%- elsif is_new -%}<span class="chip chip--accent">{{ 'products.new' | t }}</span>{%- endunless -%}
+      {%- unless product.available -%}<span class="patch patch--sold">{{ 'products.sold_out' | t }}</span>
+      {%- elsif on_sale -%}<span class="patch">{{ 'products.sale' | t }}</span>
+      {%- elsif is_new -%}<span class="patch patch--cream">{% render 'icon', name: 'sparkle', px: 12 %}{{ 'products.new' | t }}</span>{%- endunless -%}
     </div>
     {%- if settings.show_wishlist != false -%}
     <button class="card__wish" type="button" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'wishlist.add' | t }}" aria-pressed="false">
@@ -77,6 +82,7 @@
     </button>
     {%- endif -%}
     {%- if show_quick and product.available -%}
+      <button class="card__plus" type="button" data-card-plus aria-expanded="false" aria-label="{{ 'products.quick_add' | t | escape }}">{% render 'icon', name: 'plus', px: 18 %}</button>
       <div class="card__quick glass glass--solid">
         {%- if product.has_only_default_variant -%}
           <button class="btn btn--cream btn--sm btn--block" type="button" data-quick-add="{{ product.first_available_variant.id }}">{% render 'icon', name: 'plus', px: 16 %}{{ 'products.quick_add' | t }}</button>
@@ -119,9 +125,7 @@
     {%- endif -%}
   </div>
   <div class="card__body">
-    <h3 class="card__title"><a href="{{ url }}">{% render 'product-title', title: product.title %}</a></h3>
-    {%- assign ptype_l = product.type | downcase -%}{%- assign pvendor_l = product.vendor | downcase -%}
-    {%- if settings.card_show_vendor != false and ptype_l != blank and ptype_l != pvendor_l and ptype_l != 'linux' -%}<p class="card__meta">{% render 'option-value', value: product.type %}</p>{%- endif -%}
+    <h3 class="card__title"><a href="{{ url }}">{{ localized_title }}</a></h3>
     <div class="card__price">{% render 'price', product: product %}</div>
     {%- if color_option and color_option.values.size > 1 -%}
       <div class="card__swatches" aria-label="{% render 'option-name', name: color_option.name %}">

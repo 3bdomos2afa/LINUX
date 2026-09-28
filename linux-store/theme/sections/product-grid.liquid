@@ -5,10 +5,10 @@
     assign coll = collections.all
   endif
 -%}
-<section class="section wrap" id="s-{{ section.id }}">
+<section class="section wrap{% if section.settings.scheme == 'cream' or section.settings.scheme == 'lime' %} sheet scheme-{{ section.settings.scheme }}{% endif %}" id="s-{{ section.id }}">
   <div class="section-head">
     <div class="section-head__text" data-reveal>
-      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{{ s.number }}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.arrivals_eyebrow' %}</p>
+      <p class="eyebrow">{% if s.number != blank %}<span class="eyebrow__num">{% render 'digits', value: s.number %}</span>{% endif %}{% render 'tr', value: s.eyebrow, key: 'home.arrivals_eyebrow' %}</p>
       <h2>{% render 'tr', value: s.heading, key: 'home.arrivals_heading' %}</h2>
       {%- if s.body != blank -%}<p class="lede" style="margin-top:12px">{{ s.body }}</p>{%- endif -%}
     </div>
@@ -24,6 +24,26 @@
 {
   "name": "Product grid",
   "settings": [
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour",
+      "default": "forest",
+      "options": [
+        {
+          "value": "forest",
+          "label": "Forest (dark)"
+        },
+        {
+          "value": "cream",
+          "label": "Cream sheet"
+        },
+        {
+          "value": "lime",
+          "label": "Lime sheet"
+        }
+      ]
+    },
     {
       "type": "text",
       "id": "number",

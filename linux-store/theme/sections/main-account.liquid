@@ -13,9 +13,9 @@
       <p class="lede">{{ 'customer.account.intro' | t }}</p>
     </div>
     <ul class="account__stats" role="list">
-      <li class="glass glass--clear"><strong data-count>{{ customer.orders_count }}</strong><span>{{ 'customer.account.stat_orders' | t }}</span></li>
+      <li class="glass glass--clear"><strong data-count>{% render 'digits', value: customer.orders_count %}</strong><span>{{ 'customer.account.stat_orders' | t }}</span></li>
       <li class="glass glass--clear"><strong>{%- assign spent = customer.total_spent | default: 0 -%}{% render 'money', amount: spent %}</strong><span>{{ 'customer.account.stat_spent' | t }}</span></li>
-      <li class="glass glass--clear"><strong data-wishlist-count-big>0</strong><span>{{ 'customer.account.stat_saved' | t }}</span></li>
+      <li class="glass glass--clear"><strong data-wishlist-count-big>{% render 'digits', value: 0 %}</strong><span>{{ 'customer.account.stat_saved' | t }}</span></li>
     </ul>
     <div class="account__hero-mascot" aria-hidden="true">{% render 'mascot', name: 'hoodie-sit', width: 150, loading: 'eager' %}</div>
   </div>
@@ -26,7 +26,10 @@
       <div class="account__panel glass" data-reveal>
         <div class="account__panel-head">
           <h2 class="h3">{{ 'customer.account.orders' | t }}</h2>
-          {%- if customer.orders.size > 0 -%}<span class="chip">{{ 'customer.account.orders_count' | t: count: customer.orders_count }}</span>{%- endif -%}
+          {%- if customer.orders.size > 0 -%}
+            {%- capture orders_count_label -%}{{ 'customer.account.orders_count' | t: count: customer.orders_count }}{%- endcapture -%}
+            <span class="chip">{% render 'digits', value: orders_count_label %}</span>
+          {%- endif -%}
         </div>
         {%- paginate customer.orders by 10 -%}
           {%- if customer.orders.size > 0 -%}
@@ -37,7 +40,7 @@
                     {%- for item in order.line_items limit: 3 -%}
                       {%- if item.image -%}<img src="{{ item.image | image_url: width: 120 }}" alt="" width="48" height="60" loading="lazy">{%- endif -%}
                     {%- endfor -%}
-                    {%- if order.line_items.size > 3 -%}<span class="order-card__more">+{{ order.line_items.size | minus: 3 }}</span>{%- endif -%}
+                    {%- if order.line_items.size > 3 -%}{%- assign extra_lines = order.line_items.size | minus: 3 -%}<span class="order-card__more">+{% render 'digits', value: extra_lines %}</span>{%- endif -%}
                   </div>
                   <div class="order-card__body">
                     <div class="order-card__top">
@@ -56,7 +59,7 @@
                 </a>
               {%- endfor -%}
             </div>
-            {%- if paginate.pages > 1 -%}<nav class="pagination">{{ paginate | default_pagination }}</nav>{%- endif -%}
+            {% render 'localized-pagination', pagination: paginate %}
           {%- else -%}
             <div class="empty-state account__empty">
               {% render 'mascot', name: 'classic', width: 110 %}

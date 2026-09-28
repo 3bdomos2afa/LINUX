@@ -1,0 +1,35 @@
+/* Loaded after components so every heading keeps the same brand hierarchy. */
+body :is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .cart-line__title, .bento__label strong) {
+  font-family: var(--font-display);
+  font-weight: var(--w-heading);
+  color: var(--heading);
+}
+body :is(h1, h2, h3, h4, h5, h6) > :is(a, strong, em) {
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.marquee__item, .menu-drawer__link, .review__avatar, .account__avatar {
+  font-family: var(--font-body);
+}
+.cz__total strong, .gift__value {
+  font-family: var(--font-body);
+}
+.footer__col h4 { font-size: 16px; }
+.hero__sub, .hero__trust li { color: var(--fg); }
+
+/* Arabic joins must not inherit Latin tracking, even on standalone layouts. */
+html[dir="rtl"] body {
+  letter-spacing: 0;
+  font-synthesis: none;
+}
+html[dir="rtl"] :is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .rte, .gift__value) {
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+html[dir="rtl"] .footer__col h4 { font-size: 16px; }
+
+@media (max-width: 760px) {
+  .footer__col h4, html[dir="rtl"] .footer__col h4 { font-size: 14px; }
+}

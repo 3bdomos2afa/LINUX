@@ -11,13 +11,14 @@
 <section class="cart-page wrap" id="cart-{{ section.id }}">
   <header class="cart-page__head" data-reveal>
     <div>
-      <p class="eyebrow">{{ 'cart.review_eyebrow' | t }}</p>
-      <h1>{{ 'cart.title' | t }} <span class="cart-page__count" data-cart-count>{{ cart.item_count }}</span></h1>
+      {%- capture review_label -%}{{ 'cart.review_eyebrow' | t }}{%- endcapture -%}
+      <p class="eyebrow">{% render 'digits', value: review_label %}</p>
+      <h1>{{ 'cart.title' | t }} <span class="cart-page__count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{% render 'digits', value: cart.item_count %}</span></h1>
     </div>
     <ol class="checkout-steps glass glass--pill" aria-label="{{ 'cart.steps_label' | t }}">
       {%- for st in steps -%}
         {%- assign key = 'cart.step_' | append: st -%}
-        <li class="checkout-steps__item{% if forloop.first %} is-current{% endif %}"><span class="checkout-steps__n">{{ forloop.index }}</span>{{ key | t }}</li>
+        <li class="checkout-steps__item{% if forloop.first %} is-current{% endif %}"><span class="checkout-steps__n">{% render 'digits', value: forloop.index %}</span>{{ key | t }}</li>
       {%- endfor -%}
     </ol>
   </header>
@@ -26,7 +27,7 @@
     <div class="glass cart-page__lines" data-cart-region="body">
       {% render 'cart-body', cart: cart, context: 'page' %}
     </div>
-    <aside class="glass cart-page__summary" data-cart-region="foot">
+    <aside class="glass cart-page__summary" data-cart-region="foot"{% if cart.item_count == 0 %} hidden{% endif %}>
       <h2 class="h3 cart-page__summary-title">{{ 'cart.summary' | t }}</h2>
       {% render 'cart-foot', cart: cart, context: 'page' %}
       {%- if cart.item_count > 0 -%}

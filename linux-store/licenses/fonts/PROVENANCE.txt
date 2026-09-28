@@ -1,0 +1,115 @@
+google/fonts main @ 23e54b51ddffbc7713c583748e3bd86f62b1fa4a
+alexandria	Alexandria[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/alexandria/Alexandria%5Bwght%5D.ttf
+alexandria	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/alexandria/METADATA.pb
+alexandria	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/alexandria/OFL.txt
+fustat	Fustat[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/fustat/Fustat%5Bwght%5D.ttf
+fustat	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/fustat/METADATA.pb
+fustat	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/fustat/OFL.txt
+unbounded	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/unbounded/METADATA.pb
+unbounded	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/unbounded/OFL.txt
+unbounded	Unbounded[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/unbounded/Unbounded%5Bwght%5D.ttf
+lemonada	Lemonada[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lemonada/Lemonada%5Bwght%5D.ttf
+lemonada	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lemonada/METADATA.pb
+lemonada	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lemonada/OFL.txt
+baloobhaijaan2	BalooBhaijaan2[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/baloobhaijaan2/BalooBhaijaan2%5Bwght%5D.ttf
+baloobhaijaan2	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/baloobhaijaan2/METADATA.pb
+baloobhaijaan2	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/baloobhaijaan2/OFL.txt
+readexpro	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/readexpro/METADATA.pb
+readexpro	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/readexpro/OFL.txt
+readexpro	ReadexPro[HEXP,wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/readexpro/ReadexPro%5BHEXP%2Cwght%5D.ttf
+beiruti	Beiruti[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/beiruti/Beiruti%5Bwght%5D.ttf
+beiruti	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/beiruti/METADATA.pb
+beiruti	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/beiruti/OFL.txt
+kufam	Kufam[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/kufam/Kufam%5Bwght%5D.ttf
+kufam	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/kufam/METADATA.pb
+kufam	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/kufam/OFL.txt
+bricolagegrotesque	BricolageGrotesque[opsz,wdth,wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bricolagegrotesque/BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf
+bricolagegrotesque	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bricolagegrotesque/METADATA.pb
+bricolagegrotesque	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bricolagegrotesque/OFL.txt
+bagelfatone	BagelFatOne-Regular.ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bagelfatone/BagelFatOne-Regular.ttf
+bagelfatone	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bagelfatone/METADATA.pb
+bagelfatone	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/bagelfatone/OFL.txt
+rammettoone	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rammettoone/METADATA.pb
+rammettoone	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rammettoone/OFL.txt
+rammettoone	RammettoOne-Regular.ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rammettoone/RammettoOne-Regular.ttf
+titanone	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/titanone/METADATA.pb
+titanone	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/titanone/OFL.txt
+titanone	TitanOne-Regular.ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/titanone/TitanOne-Regular.ttf
+dynapuff	DynaPuff[wdth,wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/dynapuff/DynaPuff%5Bwdth%2Cwght%5D.ttf
+dynapuff	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/dynapuff/METADATA.pb
+dynapuff	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/dynapuff/OFL.txt
+marhey	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/marhey/METADATA.pb
+marhey	Marhey[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/marhey/Marhey%5Bwght%5D.ttf
+marhey	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/marhey/OFL.txt
+badeendisplay	BadeenDisplay-Regular.ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/badeendisplay/BadeenDisplay-Regular.ttf
+badeendisplay	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/badeendisplay/METADATA.pb
+badeendisplay	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/badeendisplay/OFL.txt
+rubik	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rubik/METADATA.pb
+rubik	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rubik/OFL.txt
+rubik	Rubik[wght].ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rubik/Rubik%5Bwght%5D.ttf
+lalezar	Lalezar-Regular.ttf	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lalezar/Lalezar-Regular.ttf
+lalezar	METADATA.pb	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lalezar/METADATA.pb
+lalezar	OFL.txt	https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/lalezar/OFL.txt
+
+=== 4.2 additions (Rakkas, Alyamama, Alan Sans, Badeen Display) ===
+LINUX Arabic typography kit — font provenance (generated 2026-09-28)
+Source repository: https://github.com/google/fonts  commit 23e54b51ddffbc7713c583748e3bd86f62b1fa4a
+Subsetting: fontTools 4.66.0 subset, flavor=woff2, hinting=False (unhinted), layout_features=*, layout_scripts=*, name_IDs=*, name_languages=*, notdef_outline=True; variable axes kept.
+Arabic file cmap : U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F,U+0020,U+00A0,U+002E,U+003A,U+0021  (U+0020,U+00A0,U+002E,U+003A,U+0021 are inside the file but NOT in the advertised unicode-range)
+Arabic unicode-range: U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F
+Latin unicode-range : U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-200B,U+2010-206F,U+20AC,U+2122,U+2190-2199,U+2212
+
+[rakkas] HEADING (recommended)
+  family      : Rakkas  (Version 2.000)
+  designer    : Zeynep Akay
+  licence     : SIL Open Font License 1.1 — licenses/rakkas-OFL.txt  (http://scripts.sil.org/OFL)
+  source file : ofl/rakkas/Rakkas-Regular.ttf  sha256 54278882e4774c14d50c3b555f127d0fe586366d5b787316ebbcbd8108829e60
+  source URL  : https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/rakkas/Rakkas-Regular.ttf
+  upstream    : https://github.com/zeynepakay/Rakkas  commit 3bdb0ba164c9e987a5ab4de7f7cc8842a04d267a
+  axes/weight : static 400
+  out         : rakkas-ar.woff2 20368 B sha256 0c1f3734de640726ca0e8d69a125c2f682534b54bc00efb35578297a7235cd37
+                rakkas-la.woff2 13368 B sha256 52d81153cbbe1cf6e349a3892a8a36ffe1799b902638ca6af151c632e4a522bc
+
+[alyamama] HEADING runner-up
+  family      : Alyamama  (Version 1.213)
+  designer    : Yazeed Omar
+  licence     : SIL Open Font License 1.1 — licenses/alyamama-OFL.txt  (https://openfontlicense.org)
+  source file : ofl/alyamama/Alyamama[wght].ttf  sha256 f09eb4ad2eaf1b0a7c990cb9b3b7658414405804d74775269fdddc25efdb1883
+  source URL  : https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/alyamama/Alyamama%5Bwght%5D.ttf
+  upstream    : https://github.com/Mestaratype/AlYamama  commit aecc9e395072c0e1d4cdd9dc296c0da5744f3360
+  axes/weight : {'wght': (300.0, 300.0, 900.0)}
+  out         : alyamama-ar.woff2 28316 B sha256 0f816a0852382e05abec107dbf8af104cc8655dcacf3ab046a587fb3f44d4479
+                alyamama-la.woff2 36316 B sha256 b1243cd3394420daec2b4d0db3932c13c287877fdaae4d964a34310e08dda320
+
+[alan-sans] BODY (recommended)
+  family      : Alan Sans  (Version 1.100)
+  designer    : Raphaël Ronot, Samar Zureik
+  licence     : SIL Open Font License 1.1 — licenses/alan-sans-OFL.txt  (https://openfontlicense.org)
+  source file : ofl/alansans/AlanSans[wght].ttf  sha256 96e93ac16fd488698a88489e297a5de00b2c5dbd8f20c298ebd4d3acc4421b2a
+  source URL  : https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/alansans/AlanSans%5Bwght%5D.ttf
+  upstream    : https://github.com/alan-eu/Alan-Sans  commit 281c0703f74926de5a211b980e55e739986ace6f
+  axes/weight : {'wght': (300.0, 300.0, 900.0)}
+  out         : alan-sans-ar.woff2 25412 B sha256 22c59d4dc1ba010236f8b75fc288cf88f9ed2aa0ea51c09bc5b36ec203331478
+                alan-sans-la.woff2 45892 B sha256 82657fd877340bc4ae6a2390dedb8db966d8088763a983ffd6813ec368e07507
+
+[fustat] BODY runner-up (current)
+  family      : Fustat  (Version 1.010)
+  designer    : Mohamed Gaber, Khaled Hosny, Laura Garcia Mut
+  licence     : SIL Open Font License 1.1 — licenses/fustat-OFL.txt  (https://openfontlicense.org)
+  source file : ofl/fustat/Fustat[wght].ttf  sha256 ba09d90e6180e79334aadd42ea1ed0e97a405fadcd34412c1d02a6b8f679d402
+  source URL  : https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/fustat/Fustat%5Bwght%5D.ttf
+  upstream    : https://github.com/Kief-Type-Foundry/Fustat  commit 642499b606f79bc6c25e63a4f8335a40afd96a13
+  axes/weight : {'wght': (200.0, 400.0, 800.0)}
+  out         : fustat-ar.woff2 31928 B sha256 cb8708fb7844671ff76250ffa17acde5ef42eec3f5dd01a3f29b172d5aed94ce
+                fustat-la.woff2 26288 B sha256 31c07968c69a204526f55353e285ed72542475e15ce2b2eeaba0f1bc0d01072a
+
+[badeen-display] ACCENT (recommended) / alt heading
+  family      : Badeen Display  (Version 1.000; ttfautohint (v1.8.4.7-5d5b))
+  designer    : None
+  licence     : SIL Open Font License 1.1 — licenses/badeen-display-OFL.txt  (https://openfontlicense.org)
+  source file : ofl/badeendisplay/BadeenDisplay-Regular.ttf  sha256 274805b3ee44f9b45a99bdcecf25cd44944c0a81f6cf8086b5cf30d00e860537
+  source URL  : https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/badeendisplay/BadeenDisplay-Regular.ttf
+  upstream    : https://github.com/haniadnansd/Badeen-Display  commit c1370b602b4a9819c4ddce4af17962a42edb8bc3
+  axes/weight : static 400
+  out         : badeen-display-ar.woff2 7072 B sha256 fadbffd70cad01eff6d85fb9cabbf4bcd7260cde66835d7cc71f7173c1be9ee6
+                badeen-display-la.woff2 6344 B sha256 3deba05b1cb7a87a99d70324126402135971ee898b6968ddd925ea77d9f2a2e8

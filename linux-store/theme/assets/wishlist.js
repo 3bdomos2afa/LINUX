@@ -17,10 +17,14 @@
     });
     // Only write when changed: this runs from a MutationObserver, and setting
     // textContent to the same value would still queue a mutation → loop.
-    const n = String(list.length);
+    const n = list.length;
+    const label = L.digits ? L.digits(n) : String(n);
     document.querySelectorAll('[data-wishlist-count]').forEach((el) => {
-      if (el.textContent !== n) el.textContent = n;
+      if (el.textContent !== label) el.textContent = label;
       if (el.hidden !== (list.length === 0)) el.hidden = list.length === 0;
+    });
+    document.querySelectorAll('[data-wishlist-count-big]').forEach((el) => {
+      if (el.textContent !== label) el.textContent = label;
     });
   }
 
@@ -32,8 +36,8 @@
     const list = read();
     const i = list.indexOf(h);
     btn.classList.remove('is-popping'); void btn.offsetWidth; btn.classList.add('is-popping');
-    if (i > -1) { list.splice(i, 1); L.toast(L.strings.removed, { type: 'success' }); }
-    else { list.unshift(h); L.buzz(); L.toast(L.strings.saved, { action: { label: L.strings.view_bag.replace(/bag|الشنطة|الحقيبة/i, '♥'), href: `${root}/search?view=wishlist` } }); }
+    if (i > -1) { list.splice(i, 1); L.toast(L.strings.removed, { icon: 'heart' }); }
+    else { list.unshift(h); L.buzz(); L.burst && L.burst(btn, 'heart'); L.toast(L.strings.saved, { icon: 'heart', action: { label: L.strings.view_saved || L.strings.view_bag, href: `${root}/search?view=wishlist` } }); }
     write(list);
   });
 

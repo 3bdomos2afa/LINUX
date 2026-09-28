@@ -1,0 +1,13 @@
+{%- comment -%}
+  Placement presets are stored in English on the order line (for the merchant);
+  shoppers see them in their language. Unknown values pass through.
+{%- endcomment -%}
+{%- case value -%}
+  {%- when 'Center chest' -%}{{ 'customize.place_center' | t }}
+  {%- when 'Left chest' -%}{{ 'customize.place_pocket' | t }}
+  {%- when 'Full front' -%}{{ 'customize.place_full_front' | t }}
+  {%- when 'Upper back' -%}{{ 'customize.place_upper' | t }}
+  {%- when 'Center back' -%}{{ 'customize.place_middle' | t }}
+  {%- when 'Full back' -%}{{ 'customize.place_full_back' | t }}
+  {%- else -%}{{ value | escape }}
+{%- endcase -%}

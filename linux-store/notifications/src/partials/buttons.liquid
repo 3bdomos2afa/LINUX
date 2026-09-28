@@ -1,0 +1,26 @@
+<table role="presentation" class="lx-btns" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="margin-top:24px;border-collapse:separate;">
+<tr>
+{%- if lx_btn_url != blank -%}
+<td class="lx-btn-cell" style="{% if lx_btn2_url != blank %}padding-[[end]]:10px;{% endif %}">
+<table role="presentation" class="lx-btn-table" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+<tr>
+<td align="center" bgcolor="[[c.lime]]" style="border-radius:999px;background-color:[[c.lime]];mso-padding-alt:14px 28px;">
+<a class="lx-btn-link" href="{{ lx_btn_url }}" target="_blank" style="display:inline-block;padding:14px 28px;font-family:[[font]];font-size:15px;line-height:20px;font-weight:800;color:[[c.ink]];text-decoration:none;border-radius:999px;">{{ lx_btn_text }}</a>
+</td>
+</tr>
+</table>
+</td>
+{%- endif -%}
+{%- if lx_btn2_url != blank -%}
+<td class="lx-btn-cell">
+<table role="presentation" class="lx-btn-table" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+<tr>
+<td align="center" style="border-radius:999px;border:1px solid [[c.btn_line]];mso-padding-alt:13px 24px;">
+<a class="lx-btn-link" href="{{ lx_btn2_url }}" target="_blank" style="display:inline-block;padding:13px 24px;font-family:[[font]];font-size:15px;line-height:20px;font-weight:700;color:[[c.cream]];text-decoration:none;border-radius:999px;">{{ lx_btn2_text }}</a>
+</td>
+</tr>
+</table>
+</td>
+{%- endif -%}
+</tr>
+</table>

@@ -1,0 +1,48 @@
+{%- comment -%}
+  Slim offer strip. It opens the cart drawer's body with the two things a
+  shopper can act on immediately:
+    1. the free-shipping threshold, pulled from the theme settings — the island
+       above the body (snippets/ship-meter.liquid) counts down the distance to
+       it, this states the number, and
+    2. a discount code that copies to the clipboard on tap.
+
+  Rendered from sections/cart-drawer.liquid, so everything is editable in the
+  theme editor under Cart drawer → "Offer strip". Merchant text wins; blank
+  falls back to the theme translation (Arabic/English), so it switches language
+  on its own.
+
+  Params: s = the cart drawer section's settings
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0
+  assign offer_text = s.offer_text
+  if offer_text == blank and threshold > 0 and show_threshold
+    assign fs_cents = threshold | times: 100
+    capture fs_amount
+      render 'money', amount: fs_cents
+    endcapture
+    assign fs_amount = fs_amount | strip
+    assign offer_text = 'cart.offer_bar' | t: amount: fs_amount
+  endif
+-%}
+{%- if offer_text != blank or s.offer_code != blank -%}
+  <div class="offer-bar glass" role="region" aria-label="{{ 'cart.offer_region' | t }}">
+    {%- if offer_text != blank -%}
+      <p class="offer-bar__text">{% render 'icon', name: 'truck', px: 15 %}<span>{{ offer_text }}</span></p>
+    {%- endif -%}
+    {%- if s.offer_code != blank -%}
+      <button
+        class="offer-bar__code"
+        type="button"
+        data-copy="{{ s.offer_code | strip | escape }}"
+        data-offer-code
+        aria-label="{{ 'cart.offer_copy' | t: code: s.offer_code }}"
+        title="{{ 'cart.offer_copy' | t: code: s.offer_code }}"
+      >
+        {% render 'icon', name: 'tag', px: 12 %}
+        <span class="offer-bar__code-value">{{ s.offer_code | strip }}</span>
+        {% render 'icon', name: 'copy', px: 13 %}
+      </button>
+    {%- endif -%}
+  </div>
+{%- endif -%}

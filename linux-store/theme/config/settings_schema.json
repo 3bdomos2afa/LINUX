@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "LINUX Liquid Glass",
-    "theme_version": "3.2.0",
+    "theme_version": "4.2.0",
     "theme_author": "LINUX",
     "theme_documentation_url": "https://linux-eg.com",
     "theme_support_url": "https://wa.me/201110351549"
@@ -42,7 +42,7 @@
       {
         "type": "color",
         "id": "brand_cream",
-        "label": "Cream (text on dark)"
+        "label": "Cream (headings and glass tint)"
       },
       {
         "type": "color",
@@ -58,6 +58,38 @@
         "step": 10,
         "unit": "%",
         "default": 100
+      },
+      {
+        "type": "range",
+        "id": "glass_tint",
+        "label": "Glass tint (lower = clearer)",
+        "min": 2,
+        "max": 24,
+        "step": 1,
+        "unit": "%",
+        "default": 7,
+        "info": "How much cream tint sits on the glass. Lower shows more of the page through it."
+      },
+      {
+        "type": "select",
+        "id": "glass_refraction",
+        "label": "Liquid refraction",
+        "default": "off",
+        "options": [
+          {
+            "value": "off",
+            "label": "Off"
+          },
+          {
+            "value": "subtle",
+            "label": "Subtle"
+          },
+          {
+            "value": "strong",
+            "label": "Strong"
+          }
+        ],
+        "info": "Bends the page at the edges of the header and tab bar like real glass (Chrome/Android). It re-renders on every frame of the video underneath, so it stays off unless you want the effect over performance on low-end phones."
       },
       {
         "type": "range",
@@ -111,10 +143,8 @@
         "content": "Typography"
       },
       {
-        "type": "checkbox",
-        "id": "type_system_fonts",
-        "label": "Use system fonts (skip Matcha / Disney Bubble / Thmanyah / Palestine)",
-        "default": false
+        "type": "paragraph",
+        "content": "Arabic uses Thmanyah Sans throughout, including numbers. English uses Froople headings and Mochi Tubby body text. Brand fonts are self-hosted and always enabled."
       },
       {
         "type": "range",
@@ -135,6 +165,163 @@
         "step": 5,
         "unit": "%",
         "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "One font per role and language. Fonts marked \"licence needed\" are the previous set: use them only with the foundry's written permission. Every other font is SIL OFL (licenses/fonts)."
+      },
+      {
+        "type": "header",
+        "content": "Arabic / العربي"
+      },
+      {
+        "type": "select",
+        "id": "font_ar_heading",
+        "label": "Arabic headings",
+        "default": "rakkas",
+        "options": [
+          {
+            "value": "rakkas",
+            "label": "Rakkas — Egyptian film-poster lettering (default)"
+          },
+          {
+            "value": "alyamama",
+            "label": "Alyamama — modern Naskh, Thmanyah-like"
+          },
+          {
+            "value": "alexandria",
+            "label": "Alexandria — geometric"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2 — rounded"
+          },
+          {
+            "value": "badeen",
+            "label": "Badeen Display — bold poster"
+          },
+          {
+            "value": "thmanyah",
+            "label": "Thmanyah Sans — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "font_ar_body",
+        "label": "Arabic text",
+        "default": "alan",
+        "options": [
+          {
+            "value": "alan",
+            "label": "Alan Sans (default)"
+          },
+          {
+            "value": "fustat",
+            "label": "Fustat"
+          },
+          {
+            "value": "alyamama",
+            "label": "Alyamama"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "thmanyah",
+            "label": "Thmanyah Sans — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "English"
+      },
+      {
+        "type": "select",
+        "id": "font_en_heading",
+        "label": "English headings",
+        "default": "unbounded",
+        "options": [
+          {
+            "value": "unbounded",
+            "label": "Unbounded — wide (default)"
+          },
+          {
+            "value": "bagel",
+            "label": "Bagel Fat One — bubbly"
+          },
+          {
+            "value": "rakkas",
+            "label": "Rakkas"
+          },
+          {
+            "value": "alexandria",
+            "label": "Alexandria"
+          },
+          {
+            "value": "froople",
+            "label": "Froople — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "font_en_body",
+        "label": "English text",
+        "default": "fustat",
+        "options": [
+          {
+            "value": "fustat",
+            "label": "Fustat (default)"
+          },
+          {
+            "value": "alan",
+            "label": "Alan Sans"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "mochi",
+            "label": "Mochi Tubby — licence needed"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Accent"
+      },
+      {
+        "type": "select",
+        "id": "font_accent",
+        "label": "Accent font (stickers, seasonal badges, the Studio's \"Fun\" text)",
+        "default": "badeen",
+        "options": [
+          {
+            "value": "badeen",
+            "label": "Badeen Display (default)"
+          },
+          {
+            "value": "rakkas",
+            "label": "Rakkas"
+          },
+          {
+            "value": "baloo",
+            "label": "Baloo Bhaijaan 2"
+          },
+          {
+            "value": "none",
+            "label": "None — use the heading font"
+          }
+        ]
       }
     ]
   },
@@ -244,7 +431,7 @@
       {
         "type": "number",
         "id": "free_shipping_threshold",
-        "label": "Free shipping threshold (LE, 0 to hide meter)",
+        "label": "Free shipping threshold (LE, 0 hides the free-shipping island and message)",
         "default": 2000
       },
       {
@@ -403,6 +590,106 @@
         "type": "text",
         "id": "made_in",
         "label": "\"Made in\" line (blank = translated)"
+      }
+    ]
+  },
+  {
+    "name": "Payments",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Badges show in the footer and under the checkout button. Turn on only what you really accept, then add the same methods in Shopify → Settings → Payments → Manual payment methods (see INSTALL.md)."
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_cod",
+        "label": "Cash on delivery",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_instapay",
+        "label": "InstaPay",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_instapay_address",
+        "label": "InstaPay address or phone (optional)",
+        "info": "e.g. linux@instapay — shown in \"How to pay\". Blank = \"we'll send the details on WhatsApp\"."
+      },
+      {
+        "type": "image_picker",
+        "id": "pay_instapay_logo",
+        "label": "InstaPay logo (optional)",
+        "info": "Upload the official mark if you have it; blank = LINUX badge."
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_vodafone",
+        "label": "Vodafone Cash",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_vodafone_number",
+        "label": "Vodafone Cash number (optional)",
+        "info": "Shown in \"How to pay\". Blank = \"we'll send the details on WhatsApp\"."
+      },
+      {
+        "type": "image_picker",
+        "id": "pay_vodafone_logo",
+        "label": "Vodafone Cash logo (optional)"
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_wallet",
+        "label": "Other mobile wallets",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_fawry",
+        "label": "Fawry",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_valu",
+        "label": "valU instalments",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_card_icons",
+        "label": "Show card logos (Visa, Mastercard…)",
+        "default": false,
+        "info": "Only if your payment provider really takes cards. The logos come from the provider automatically."
+      },
+      {
+        "type": "header",
+        "content": "How to pay"
+      },
+      {
+        "type": "checkbox",
+        "id": "pay_howto",
+        "label": "Show \"How to pay\" in the bag",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "pay_cod_note",
+        "label": "Cash on delivery note (blank = translated)"
+      },
+      {
+        "type": "text",
+        "id": "pay_instapay_note",
+        "label": "InstaPay note (blank = translated)"
+      },
+      {
+        "type": "text",
+        "id": "pay_vodafone_note",
+        "label": "Vodafone Cash note (blank = translated)"
       }
     ]
   },

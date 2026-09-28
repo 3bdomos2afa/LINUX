@@ -1,0 +1,69 @@
+{%- comment -%}
+  Free-shipping island — a small glass capsule that hangs off the top edge of the
+  cart drawer (sections/cart-drawer.liquid) and fills with brand green as the bag
+  climbs toward free delivery.
+
+  DRAWER ONLY, enforced here. `context` must be 'drawer' or this renders nothing,
+  so the free-shipping surface can never reappear on /cart (sections/main-cart.liquid)
+  or in the header, however the snippet is called — that is the whole point of the
+  guard, not a leftover. The three surfaces stay: 
+    * cart drawer  → this island, and the offer strip for the threshold
+    * /cart page   → order lines, summary and the trust list, no shipping pitch
+    * header       → no shipping box at all
+
+  It renders into its own [data-cart-region="meter"] wrapper between the drawer's
+  head and body instead of riding inside [data-cart-region="body"]. That buys two
+  things: assets/cart.js can re-paint it whenever the bag changes without touching
+  the lines' scroll position, and a long bag can never scroll it out of view.
+
+  Nothing renders while Cart & checkout → Free shipping threshold is 0, or while
+  the bag is empty — the wrapper stays in the DOM (so the re-render always finds a
+  region to fill) and the row collapses.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0
+  assign live = false
+  if context == 'drawer' and threshold > 0 and cart.item_count > 0
+    assign live = true
+  endif
+-%}
+<div class="drawer__island{% if live %} is-live{% endif %}" data-cart-region="meter">
+  {%- if live -%}
+    {%- liquid
+      assign target = threshold | times: 100
+      assign remaining = target | minus: cart.total_price
+      assign pct = cart.total_price | times: 100 | divided_by: target
+      if pct > 100
+        assign pct = 100
+      endif
+      if pct < 0
+        assign pct = 0
+      endif
+      assign unlocked = false
+      assign meter_icon = 'truck'
+      if remaining <= 0
+        assign unlocked = true
+        assign meter_icon = 'check'
+      endif
+    -%}
+    {%- if unlocked -%}
+      {%- assign meter_text = 'cart.free_shipping_unlocked' | t -%}
+    {%- else -%}
+      {%- capture meter_amount -%}{% render 'money', amount: remaining %}{%- endcapture -%}
+      {%- assign meter_amount = meter_amount | strip -%}
+      {%- assign meter_text = 'cart.free_shipping_away' | t: amount: meter_amount -%}
+    {%- endif -%}
+    <div class="ship-meter ship-meter--island glass glass--solid{% if unlocked %} is-unlocked{% endif %}"
+      data-ship-meter
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ pct }}"
+      aria-valuetext="{{ meter_text | escape }}">
+      <span class="ship-meter__fill" style="--ship-meter-fill: {{ pct }}%" aria-hidden="true"></span>
+      <span class="ship-meter__icon" aria-hidden="true">{% render 'icon', name: meter_icon, px: 16 %}</span>
+      <span class="ship-meter__text" aria-hidden="true">{{ meter_text }}</span>
+      <span class="ship-meter__pct" aria-hidden="true">{% render 'digits', value: pct %}%</span>
+    </div>
+  {%- endif -%}
+</div>

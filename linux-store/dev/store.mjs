@@ -5,10 +5,21 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const readJSON = (f) => JSON.parse(fs.readFileSync(f, 'utf8'));
 
+// Preview the studio photo set (linux-store/photos) in place of the live store's
+// images. LINUX_PHOTOS=0 shows the original catalog photos.
+function loadPhotoManifest(dataDir) {
+  const file = path.join(dataDir, '../../photos/manifest.json');
+  if (process.env.LINUX_PHOTOS === '0' || !fs.existsSync(file)) return { products: {}, collections: {} };
+  try { const m = JSON.parse(fs.readFileSync(file, 'utf8')); return { products: m.products || {}, collections: m.collections || {} }; }
+  catch { return { products: {}, collections: {} }; }
+}
+
 export function buildStore(dataDir) {
+  const PHOTOS = loadPhotoManifest(dataDir);
   const themeDir = path.resolve(dataDir, '../../theme');
   const listing = readJSON(path.join(dataDir, 'products.json')).products;
   const collectionsRaw = readJSON(path.join(dataDir, 'collections.json')).collections;
@@ -95,7 +106,7 @@ export function buildStore(dataDir) {
     refund_policy: { title: 'Refund policy', url: '/policies/refund-policy', body: '<p>Mock policy.</p>' },
     shipping_policy: { title: 'Shipping policy', url: '/policies/shipping-policy', body: '<p>Mock policy.</p>' },
     terms_of_service: { title: 'Terms of service', url: '/policies/terms-of-service', body: '<p>Mock policy.</p>' },
-    enabled_payment_types: ['visa', 'master', 'meeza', 'cash_on_delivery'], metafields: {}, brand: {}, types: [...new Set(products.map((p) => p.type))], vendors: ['LINUX'],
+    enabled_payment_types: ['visa', 'master'], metafields: {}, brand: {}, types: [...new Set(products.map((p) => p.type))], vendors: ['LINUX'],
   };
 
   const store = {
@@ -144,7 +155,21 @@ export function buildStore(dataDir) {
     },
 
     route(p, query, env) {
-      const set = (name, extra = {}, suffix = null) => ({ template: suffix ? `${name}.${suffix}` : name, env: { ...(env.__lz ? env.__lz(extra) : extra), template: { name: name.replace(/^customers\//, ''), suffix, directory: name.startsWith('customers/') ? 'customers' : null }, request: { ...env.request, page_type: name } } });
+      const set = (name, extra = {}, suffix = null) => {
+        const view = query.view;
+        if (typeof view === 'string' && /^[a-z0-9_-]+$/i.test(view)
+          && ['json', 'liquid'].some((extension) => fs.existsSync(path.join(themeDir, 'templates', `${name}.${view}.${extension}`)))) {
+          suffix = view;
+        }
+        return {
+          template: suffix ? `${name}.${suffix}` : name,
+          env: {
+            ...(env.__lz ? env.__lz(extra) : extra),
+            template: { name: name.replace(/^customers\//, ''), suffix, directory: name.startsWith('customers/') ? 'customers' : null },
+            request: { ...env.request, page_type: name },
+          },
+        };
+      };
       if (p === '/' || p === '') return set('index', { page_title: 'LINUX — Cairo streetwear, embroidered' });
       let m;
       if (p === '/collections' || p === '/collections/') return set('list-collections', { collections, page_title: 'Collections' });
@@ -245,8 +270,9 @@ export function buildStore(dataDir) {
       const hit = variantsById[variantId];
       if (!hit) throw new Error('Variant not found');
       if (!hit.variant.available) throw new Error(`${hit.product.title} — ${hit.variant.title} is sold out`);
-      const propKey = JSON.stringify(properties || {});
-      const key = `${variantId}:${Buffer.from(propKey).toString('base64').slice(0, 12)}`;
+      if (!Number.isSafeInteger(qty) || qty < 1) throw new Error('Quantity must be a positive integer');
+      const propKey = JSON.stringify(Object.entries(properties || {}).sort(([a], [b]) => a.localeCompare(b)));
+      const key = `${variantId}:${createHash('sha256').update(propKey).digest('hex').slice(0, 24)}`;
       let line = cart.items.find((i) => i.key === key);
       if (line) line.quantity += qty; else { line = { key, variant_id: variantId, quantity: qty, properties: properties || {} }; cart.items.unshift(line); }
       return this.lineJSON(line);
@@ -334,10 +360,18 @@ export function buildStore(dataDir) {
     return { src, url: src, alt, width, height, aspect_ratio: width / height, media_type: 'image', id: Math.abs(hash(src)), position: 1, preview_image: { src, width, height, aspect_ratio: width / height }, ...extra };
   }
   function makeProduct(js, listing, idx) {
-    const media = (js.media || []).map((m, i) => imageObject(m.src, m.alt || js.title, m.width, m.height, { position: i + 1, id: m.id, media_type: m.media_type }));
+    // Studio photo overlay (../photos/manifest.json): same order as the store's media.
+    const studio = PHOTOS.products[js.handle] || [];
+    const swap = new Map();
+    const media = (js.media || []).map((m, i) => {
+      const shot = m.media_type === 'image' && studio.find((x) => x.source_index === i);
+      if (shot) { const src = `/__photos/${shot.file}`; swap.set(m.src, src); return imageObject(src, m.alt || js.title, shot.width, shot.height, { position: i + 1, id: m.id, media_type: m.media_type }); }
+      return imageObject(m.src, m.alt || js.title, m.width, m.height, { position: i + 1, id: m.id, media_type: m.media_type });
+    });
     const images = media.filter((m) => m.media_type === 'image');
     const variants = js.variants.map((v) => {
-      const fi = v.featured_image ? imageObject(v.featured_image.src, js.title, v.featured_image.width, v.featured_image.height) : null;
+      const vsrc = v.featured_image && (swap.get(v.featured_image.src) || v.featured_image.src);
+      const fi = v.featured_image ? imageObject(vsrc, js.title, vsrc === v.featured_image.src ? v.featured_image.width : 1600, vsrc === v.featured_image.src ? v.featured_image.height : 2000) : null;
       const qty = v.available ? (hash(String(v.id)) % 9) + 1 : 0;
       return { id: v.id, title: v.title, option1: v.option1, option2: v.option2, option3: v.option3, options: v.options, price: v.price, compare_at_price: v.compare_at_price, available: v.available, featured_image: fi, featured_media: fi, image: fi, sku: v.sku || '', requires_shipping: true, taxable: false, weight: v.weight, weight_unit: 'g', inventory_quantity: qty, inventory_management: 'shopify', inventory_policy: 'deny', barcode: v.barcode, url: `${js.url}?variant=${v.id}`, incoming: false, unit_price: null, selling_plan_allocations: [] };
     });
@@ -355,7 +389,9 @@ export function buildStore(dataDir) {
     };
   }
   function makeCollection(c, list) {
-    return { id: c.id, title: c.title, handle: c.handle, url: `/collections/${c.handle}`, description: c.description || '', image: c.image ? imageObject(c.image.src, c.title, c.image.width, c.image.height) : null, products: list, products_count: list.length, all_products_count: list.length, all_tags: [...new Set(list.flatMap((p) => p.tags))].sort(), all_types: [...new Set(list.map((p) => p.type))], all_vendors: ['LINUX'], sort_by: '', default_sort_by: 'manual', sort_options: [{ name: 'Featured', value: 'manual' }, { name: 'Best selling', value: 'best-selling' }, { name: 'Alphabetically, A-Z', value: 'title-ascending' }, { name: 'Alphabetically, Z-A', value: 'title-descending' }, { name: 'Price, low to high', value: 'price-ascending' }, { name: 'Price, high to low', value: 'price-descending' }, { name: 'Date, new to old', value: 'created-descending' }, { name: 'Date, old to new', value: 'created-ascending' }], filters: [], featured_image: list[0]?.featured_image || null, template_suffix: null, metafields: {}, published_at: c.published_at };
+    const cover = PHOTOS.collections[c.handle];
+    const image = cover ? imageObject(`/__photos/${cover.wide}`, c.title, 1600, 1200) : (c.image ? imageObject(c.image.src, c.title, c.image.width, c.image.height) : null);
+    return { id: c.id, title: c.title, handle: c.handle, url: `/collections/${c.handle}`, description: c.description || '', image, products: list, products_count: list.length, all_products_count: list.length, all_tags: [...new Set(list.flatMap((p) => p.tags))].sort(), all_types: [...new Set(list.map((p) => p.type))], all_vendors: ['LINUX'], sort_by: '', default_sort_by: 'manual', sort_options: [{ name: 'Featured', value: 'manual' }, { name: 'Best selling', value: 'best-selling' }, { name: 'Alphabetically, A-Z', value: 'title-ascending' }, { name: 'Alphabetically, Z-A', value: 'title-descending' }, { name: 'Price, low to high', value: 'price-ascending' }, { name: 'Price, high to low', value: 'price-descending' }, { name: 'Date, new to old', value: 'created-descending' }, { name: 'Date, old to new', value: 'created-ascending' }], filters: [], featured_image: list[0]?.featured_image || null, template_suffix: null, metafields: {}, published_at: c.published_at };
   }
   function page(handle, title, content) { return { id: hash(handle), handle, title, content, url: `/pages/${handle}`, template_suffix: null, author: 'LINUX', published_at: '2026-06-01T00:00:00Z', metafields: {} }; }
   function article(handle, title, date, asset, content, tags) {

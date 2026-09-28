@@ -1,0 +1,34 @@
+[[> file_header]]
+[[> setup]]
+{%- assign lx_context = 'order' -%}
+{%- assign lx_step = 2 -%}
+{%- if fulfillment.item_count == blank or fulfillment.item_count == item_count -%}
+{%- assign lx_ship_case = 'full' -%}
+{%- elsif fulfillment_status == 'fulfilled' -%}
+{%- assign lx_ship_case = 'last' -%}
+{%- else -%}
+{%- assign lx_ship_case = 'partial' -%}
+{%- endif -%}
+[[> head]]
+[[> shell_open]]
+[[> hero_open]]
+[[> eyebrow]]
+<h1 class="lx-h1" style="[[s.h1]]">{%- case lx_ship_case -%}{%- when 'partial' -%}[[h1_partial]]{%- when 'last' -%}[[h1_last]]{%- else -%}[[h1]]{%- endcase -%}</h1>
+<p style="[[s.body]]">{%- case lx_ship_case -%}{%- when 'partial' -%}[[body_partial]]{%- when 'last' -%}[[body_last]]{%- else -%}[[body_full]]{%- endcase -%}</p>
+[[> steps]]
+[[> tracking]]
+[[> hero_close]]
+[[> card_open]]
+<p style="[[s.label]]">[[shipment_items]]</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+{%- for lx_fl in fulfillment.fulfillment_line_items -%}
+{%- assign lx_line = lx_fl.line_item -%}
+{%- assign lx_qty = lx_fl.quantity -%}
+{%- assign lx_show_price = false -%}
+[[> line_item]]
+{%- endfor -%}
+</table>
+[[> card_close]]
+[[> address]]
+[[> help]]
+[[> footer]]

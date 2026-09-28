@@ -1,0 +1,92 @@
+/* LINUX social ad kit — shared Liquid Glass design system.
+   Fonts load straight from the theme (../../theme/assets/): their licences do not cover
+   redistribution, so the files are never copied into marketing/. */
+@font-face{font-family:"Thmanyah Sans";src:url("../../theme/assets/thmanyahsans-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Thmanyah Sans";src:url("../../theme/assets/thmanyahsans-Medium.woff2") format("woff2");font-weight:500;font-display:block}
+@font-face{font-family:"Thmanyah Sans";src:url("../../theme/assets/thmanyahsans-Black.woff2") format("woff2");font-weight:900;font-display:block}
+@font-face{font-family:"Froople";src:url("../../theme/assets/froople.otf") format("opentype");font-weight:400;font-display:block}
+@font-face{font-family:"Mochi Tubby";src:url("../../theme/assets/mochi-tubby.ttf") format("truetype");font-weight:400;font-display:block}
+
+:root{
+  --forest:#043020;--deep:#021a12;--cream:#f4e8d8;--lime:#8fcb5a;--ink:#021a12;
+  --head:"Froople","Thmanyah Sans",sans-serif;
+  --body:"Mochi Tubby","Thmanyah Sans",sans-serif;
+  --head-w:400;--ui-w:400;--strong-w:400;
+  --pad:64px;
+}
+html[lang="ar"]{--head:"Thmanyah Sans",sans-serif;--body:"Thmanyah Sans",sans-serif;--head-w:900;--ui-w:500;--strong-w:900}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--deep)}
+body{width:var(--w);height:var(--h);overflow:hidden;font-family:var(--body);color:#fff;font-synthesis:none;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img{display:block;max-width:none}
+em{font-style:normal;color:var(--lime)}
+b,strong{font-weight:var(--strong-w)}
+.ltr{direction:ltr;unicode-bidi:isolate}
+
+.stage{position:relative;width:var(--w);height:var(--h);overflow:hidden;isolation:isolate}
+
+/* Atmosphere: deep forest with a lime key light and a cream bounce, plus print grain. */
+.atmo{position:absolute;inset:0;z-index:-3;background:
+  radial-gradient(62% 42% at 90% 4%,rgba(143,203,90,.34),rgba(143,203,90,0) 70%),
+  radial-gradient(55% 40% at 4% 100%,rgba(244,232,216,.16),rgba(244,232,216,0) 72%),
+  radial-gradient(130% 95% at 50% 35%,#07563a 0%,#043020 46%,#021a12 100%)}
+.grain{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Type */
+.h{font-family:var(--head);font-weight:var(--head-w);color:var(--cream);line-height:.96;letter-spacing:-.005em;text-wrap:balance}
+html[lang="ar"] .h{line-height:1.14;letter-spacing:0}
+.ui{font-family:var(--body);font-weight:var(--ui-w)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.wordmark{height:40px;width:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
+
+svg.i{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+svg.i.is-fill{fill:currentColor;stroke:none}
+html[dir="rtl"] .flip{transform:scaleX(-1)}
+
+/* Liquid Glass: frosted, saturated backdrop + specular rim (light from the top-left) + soft depth. */
+.glass{position:relative;border-radius:var(--r,44px);
+  background:linear-gradient(160deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.09) 38%,rgba(255,255,255,.05) 62%,rgba(255,255,255,.14) 100%);
+  -webkit-backdrop-filter:blur(var(--blur,26px)) saturate(var(--sat,190%)) brightness(var(--dim,1));
+  backdrop-filter:blur(var(--blur,26px)) saturate(var(--sat,190%)) brightness(var(--dim,1));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.12),0 28px 60px -20px rgba(0,0,0,.6),0 3px 10px rgba(0,0,0,.2)}
+.glass::before{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;padding:var(--rim,2px);pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.3) 18%,rgba(255,255,255,0) 42%,rgba(255,255,255,0) 60%,rgba(255,255,255,.22) 82%,rgba(255,255,255,.75) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.glass::after{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(120% 80% at 15% -20%,rgba(255,255,255,.26),rgba(255,255,255,0) 52%)}
+.glass>:where(:not(.abs)){position:relative}
+.glass>*{z-index:1}
+.glass--dark{background:linear-gradient(160deg,rgba(7,72,48,.68) 0%,rgba(2,26,18,.6) 55%,rgba(4,48,32,.68) 100%)}
+.glass--clear{background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 50%,rgba(255,255,255,.1))}
+.glass--bright{background:linear-gradient(160deg,rgba(255,255,255,.42),rgba(255,255,255,.16) 50%,rgba(255,255,255,.28))}
+/* Smoke: the adaptive, darker glass iOS uses over bright content, so cream type stays legible on photos. */
+.glass--smoke{--dim:.78;background:linear-gradient(160deg,rgba(8,70,47,.52) 0%,rgba(2,26,18,.46) 55%,rgba(4,48,32,.54) 100%)}
+.glass--smoke .h{text-shadow:0 2px 26px rgba(2,26,18,.45)}
+.pill{--r:999px;border-radius:999px}
+
+/* Discount-code capsule: dark well with a lime glow and a dashed "coupon" ring. */
+.codebox{display:flex;align-items:center;justify-content:center;gap:26px;border-radius:999px;
+  background:linear-gradient(180deg,rgba(2,26,18,.78),rgba(4,48,32,.66));
+  outline:3px dashed rgba(143,203,90,.8);outline-offset:-14px;
+  box-shadow:inset 0 0 0 2px rgba(143,203,90,.9),inset 0 3px 14px rgba(0,0,0,.45),0 0 48px -10px rgba(143,203,90,.6),0 18px 40px -18px rgba(0,0,0,.6)}
+.codebox .i{color:var(--lime)}
+
+.eyebrow{display:inline-flex;align-items:center;gap:12px;padding:14px 26px 15px;font-size:28px;line-height:1.1;color:#fff;white-space:nowrap}
+.eyebrow .i{color:var(--lime)}
+.chip{display:inline-flex;align-items:center;gap:12px;padding:14px 24px 15px;font-size:27px;line-height:1.1;color:#fff;white-space:nowrap}
+.chip .i{color:var(--lime);font-size:1.05em}
+.site{padding:16px 28px 17px;font-size:27px;line-height:1.1;letter-spacing:.03em;color:rgba(255,255,255,.9);white-space:nowrap}
+
+/* Lime capsule CTA with a glassy top sheen. */
+.cta{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:16px;padding:26px 46px 27px;border-radius:999px;
+  font-family:var(--body);font-weight:var(--strong-w);font-size:36px;line-height:1.05;color:var(--ink);white-space:nowrap;
+  background:linear-gradient(180deg,#bdea92 0%,#8fcb5a 48%,#77b444 100%);
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.65),inset 0 -4px 8px rgba(2,26,18,.2),0 24px 48px -16px rgba(143,203,90,.75),0 8px 18px rgba(0,0,0,.3)}
+.cta::before{content:"";position:absolute;left:14px;right:14px;top:4px;height:44%;border-radius:999px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0))}
+.cta>*{position:relative}
+.cta .i{stroke-width:2.6}

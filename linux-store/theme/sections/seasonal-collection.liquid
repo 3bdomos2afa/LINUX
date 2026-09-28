@@ -1,0 +1,310 @@
+{%- comment -%}
+  Seasonal collection: a playful scene (summer sun and heat / winter snowman and
+  falling snow) beside a collection headline and a product rail.
+  - Blank text settings use the translation for the chosen season
+    (locales → seasonal.*), so the copy follows the storefront language.
+  - Blank collection → the collection with the handle "<season>-collection", then all.
+  - The scene is CSS-only; seasonal.js runs it while the section is on screen.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign season = s.season | default: 'summer'
+  assign coll = s.collection
+  if coll == blank
+    assign fallback_handle = season | append: '-collection'
+    assign coll = collections[fallback_handle]
+  endif
+  if coll == blank
+    assign coll = collections.all
+  endif
+  assign limit = s.limit | default: 8
+  assign shown = coll.products_count | at_most: limit
+  assign key = 'seasonal.' | append: season | append: '_'
+  assign k_eyebrow = key | append: 'eyebrow'
+  assign k_heading = key | append: 'heading'
+  assign k_text = key | append: 'text'
+  assign k_cta = key | append: 'cta'
+  assign side = s.art_side | default: 'start'
+
+  assign tone = s.scheme | default: 'auto'
+  if tone == 'auto'
+    if season == 'summer'
+      assign tone = 'sun'
+    elsif season == 'winter'
+      assign tone = 'frost'
+    else
+      assign tone = 'forest'
+    endif
+  endif
+  assign sheet = ''
+  if tone == 'sun' or tone == 'cream'
+    assign sheet = ' scheme-cream'
+  elsif tone == 'lime'
+    assign sheet = ' scheme-lime'
+  endif
+
+  assign mascot_name = ''
+  if s.show_mascot
+    assign mascot_name = s.mascot | default: 'auto'
+    if mascot_name == 'auto'
+      if season == 'summer'
+        assign mascot_name = 'skate'
+      elsif season == 'winter'
+        assign mascot_name = 'hoodie-sit'
+      else
+        assign mascot_name = 'classic'
+      endif
+    endif
+  endif
+  assign link = s.button_link | default: coll.url
+-%}
+{%- if season != 'none' -%}
+  {%- assign k_badge = key | append: 'badge' -%}
+  {%- assign k_caption = key | append: 'badge_caption' -%}
+  {%- capture badge_raw -%}{% render 'tr', value: s.badge, key: k_badge %}{%- endcapture -%}
+  {%- capture badge -%}{% render 'digits', value: badge_raw %}{%- endcapture -%}
+  {%- capture caption -%}{% render 'tr', value: s.badge_caption, key: k_caption %}{%- endcapture -%}
+{%- endif -%}
+{{ 'section-seasonal.css' | asset_url | stylesheet_tag }}
+<section id="s-{{ section.id }}" class="section seasonal seasonal--{{ season }} seasonal--{{ tone }} seasonal--art-{{ side }} seasonal--snow-{{ s.snow | default: 'medium' }}{% unless s.effects %} seasonal--still{% endunless %}" style="--sp-top: {{ s.space_top }}px; --sp-bottom: {{ s.space_bottom }}px" aria-labelledby="seasonal-title-{{ section.id }}" data-seasonal>
+  <div class="wrap">
+    <div class="seasonal__panel{{ sheet }}">
+      {%- if season == 'winter' -%}<div class="seasonal__snow" aria-hidden="true"><i></i><i></i><i></i></div>{%- endif -%}
+      <div class="sa sa--{{ season }}" aria-hidden="true">
+        {%- case season -%}
+          {%- when 'summer' -%}
+            {% render 'season-art-summer', badge: badge, caption: caption, show_badge: s.show_badge, mascot: mascot_name %}
+          {%- when 'winter' -%}
+            {% render 'season-art-winter', badge: badge, caption: caption, show_badge: s.show_badge, mascot: mascot_name %}
+          {%- else -%}
+            {%- if mascot_name != blank -%}{% render 'mascot', name: mascot_name, width: 260, class: 'sa__mascot' %}{%- endif -%}
+        {%- endcase -%}
+      </div>
+      <div class="seasonal__body">
+        <p class="eyebrow seasonal__eyebrow" data-reveal>
+          {%- case season -%}
+            {%- when 'summer' -%}{% render 'season-art-summer', part: 'icon' %}
+            {%- when 'winter' -%}{% render 'season-art-winter', part: 'icon' %}
+          {%- endcase -%}
+          {%- render 'tr', value: s.eyebrow, key: k_eyebrow -%}
+        </p>
+        <h2 class="seasonal__title" id="seasonal-title-{{ section.id }}" data-reveal style="--i: 1">{% render 'tr', value: s.heading, key: k_heading %}</h2>
+        <p class="seasonal__text" data-reveal style="--i: 2">{% render 'tr', value: s.text, key: k_text %}</p>
+        <div class="rail seasonal__rail" data-rail>
+          <div class="seasonal__bar" data-reveal style="--i: 3">
+            <a class="btn btn--primary seasonal__cta" href="{{ link }}">{% render 'tr', value: s.button_label, key: k_cta %}{% render 'icon', name: 'arrow-right', px: 18 %}</a>
+            {%- if shown > 0 -%}
+              <div class="rail__nav seasonal__nav">
+                <button class="icon-btn glass rail__btn" type="button" data-rail-prev aria-label="{{ 'accessibility.previous' | t }}">{% render 'icon', name: 'arrow-left' %}</button>
+                <button class="icon-btn glass rail__btn" type="button" data-rail-next aria-label="{{ 'accessibility.next' | t }}">{% render 'icon', name: 'arrow-right' %}</button>
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="rail__track">
+            {%- for product in coll.products limit: limit -%}
+              {% render 'product-card', product: product, collection: coll, index: forloop.index0 %}
+            {%- else -%}
+              {%- for i in (1..3) -%}<div class="card glass"><div class="card__media skeleton"></div><div class="card__body"><span class="skeleton" style="height:14px;border-radius:7px"></span></div></div>{%- endfor -%}
+            {%- endfor -%}
+            {%- if shown > 0 -%}
+              <a class="seasonal__more" href="{{ coll.url }}">
+                <span class="seasonal__more-ico">{% render 'icon', name: 'arrow-right', px: 22 %}</span>
+                <span class="seasonal__more-txt">{{ 'seasonal.see_all' | t }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="{{ 'seasonal.js' | asset_url }}" defer></script>
+{% schema %}
+{
+  "name": "Seasonal collection",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A seasonal scene beside a collection and its products. Text fields left empty use the translated Arabic/English copy for the chosen season."
+    },
+    {
+      "type": "header",
+      "content": "Season and collection"
+    },
+    {
+      "type": "select",
+      "id": "season",
+      "label": "Season",
+      "options": [
+        { "value": "summer", "label": "Summer — sun and heat" },
+        { "value": "winter", "label": "Winter — snowman and falling snow" },
+        { "value": "none", "label": "No season (penguin only)" }
+      ],
+      "default": "summer"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Empty = the collection with the handle summer-collection or winter-collection, otherwise all products."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (blank = translated)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (blank = translated)"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text (blank = translated)"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label (blank = translated)"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link (blank = collection page)"
+    },
+    {
+      "type": "header",
+      "content": "Temperature badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show the temperature badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge text (blank = translated: 40° summer, 3° winter)"
+    },
+    {
+      "type": "text",
+      "id": "badge_caption",
+      "label": "Badge caption (blank = translated)"
+    },
+    {
+      "type": "header",
+      "content": "Scene"
+    },
+    {
+      "type": "select",
+      "id": "art_side",
+      "label": "Scene side",
+      "options": [
+        { "value": "start", "label": "Start (right in Arabic, left in English)" },
+        { "value": "end", "label": "End (left in Arabic, right in English)" }
+      ],
+      "default": "start",
+      "info": "On phones the scene is always a banner above the text."
+    },
+    {
+      "type": "checkbox",
+      "id": "effects",
+      "label": "Animate the scene (sun rays, heat shimmer, falling snow)",
+      "default": true,
+      "info": "Runs only while the section is on screen; visitors who prefer reduced motion see a still scene."
+    },
+    {
+      "type": "select",
+      "id": "snow",
+      "label": "Snow amount (winter)",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "heavy", "label": "Heavy" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mascot",
+      "label": "Show the penguin",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "mascot",
+      "label": "Penguin",
+      "options": [
+        { "value": "auto", "label": "Auto (skate in summer, hoodie in winter)" },
+        { "value": "classic", "label": "Classic" },
+        { "value": "skate", "label": "Skate" },
+        { "value": "skate-spray", "label": "Spray can" },
+        { "value": "hoodie-sit", "label": "Hoodie, sitting" },
+        { "value": "boombox", "label": "Boombox" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Colour and spacing"
+    },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour",
+      "options": [
+        { "value": "auto", "label": "Auto (warm sand in summer, icy forest in winter)" },
+        { "value": "forest", "label": "Forest (dark)" },
+        { "value": "cream", "label": "Cream sheet" },
+        { "value": "lime", "label": "Lime sheet" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "label": "Space above",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "label": "Space below",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seasonal — summer",
+      "settings": { "season": "summer", "art_side": "start" }
+    },
+    {
+      "name": "Seasonal — winter",
+      "settings": { "season": "winter", "art_side": "end" }
+    }
+  ]
+}
+{% endschema %}

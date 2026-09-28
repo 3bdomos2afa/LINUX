@@ -1,0 +1,28 @@
+{%- comment -%}
+  "How to pay" for the local methods, under the checkout button. Each note is
+  editable in Theme settings → Payments; blank = the theme's translation.
+{%- endcomment -%}
+{%- if settings.pay_howto != false -%}
+  {%- if settings.pay_cod or settings.pay_instapay or settings.pay_vodafone -%}
+    <details class="pay-howto">
+      <summary>{% render 'icon', name: 'info', px: 15 %}<span>{{ 'payments.howto_title' | t }}</span>{% render 'icon', name: 'chevron-down', px: 14 %}</summary>
+      <ul class="pay-howto__list" role="list">
+        {%- if settings.pay_cod -%}
+          <li>{% render 'icon', name: 'cash', px: 15 %}<p><strong>{{ 'payments.cod' | t }}</strong> {% render 'tr', value: settings.pay_cod_note, key: 'payments.howto_cod' %}</p></li>
+        {%- endif -%}
+        {%- if settings.pay_instapay -%}
+          <li>{% render 'icon', name: 'bolt', px: 15 %}<p><strong>{{ 'payments.instapay' | t }}</strong>
+            {%- if settings.pay_instapay_note != blank %} {{ settings.pay_instapay_note }}
+            {%- elsif settings.pay_instapay_address != blank %} {{ 'payments.howto_instapay' | t: address: settings.pay_instapay_address }}
+            {%- else %} {{ 'payments.howto_instapay_generic' | t }}{%- endif -%}</p></li>
+        {%- endif -%}
+        {%- if settings.pay_vodafone -%}
+          <li>{% render 'icon', name: 'smartphone', px: 15 %}<p><strong>{{ 'payments.vodafone' | t }}</strong>
+            {%- if settings.pay_vodafone_note != blank %} {{ settings.pay_vodafone_note }}
+            {%- elsif settings.pay_vodafone_number != blank %} {{ 'payments.howto_vodafone' | t: number: settings.pay_vodafone_number }}
+            {%- else %} {{ 'payments.howto_vodafone_generic' | t }}{%- endif -%}</p></li>
+        {%- endif -%}
+      </ul>
+    </details>
+  {%- endif -%}
+{%- endif -%}

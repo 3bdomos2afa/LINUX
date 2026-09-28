@@ -1,16 +1,15 @@
 {%- comment -%}
-  Localised price. Shopify's `money` filter always uses the shop's money format
-  ("LE 649.00"), so Arabic pages showed a Latin "LE". In Arabic we print the
-  amount with the theme's own currency word (Theme settings → currency_ar) and
-  drop the ".00" when the price is a whole number.
+  Localised price. Arabic pages print amount with Arabic-Indic numerals
+  and the theme's own currency word. English pages use the shop's format without trailing .00 (LE 699, LE 1,050.50).
   Usage: {% render 'money', amount: variant.price %}
 {%- endcomment -%}
 {%- if request.locale.iso_code == 'ar' -%}
   {%- assign a = amount | money_without_currency -%}
   {%- assign tail = a | slice: -3, 3 -%}
   {%- if tail == '.00' -%}{%- assign a = a | remove_last: '.00' -%}{%- endif -%}
+  {%- assign a = a | replace: '0', '٠' | replace: '1', '١' | replace: '2', '٢' | replace: '3', '٣' | replace: '4', '٤' | replace: '5', '٥' | replace: '6', '٦' | replace: '7', '٧' | replace: '8', '٨' | replace: '9', '٩' -%}
   {%- assign cur = settings.currency_ar | default: 'جنيه' -%}
   {{ a }} {{ cur }}
 {%- else -%}
-  {{ amount | money }}
+  {{ amount | money_without_trailing_zeros }}
 {%- endif -%}

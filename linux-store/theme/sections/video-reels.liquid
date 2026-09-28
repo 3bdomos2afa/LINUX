@@ -1,0 +1,87 @@
+{%- comment -%}
+  Shoppable video reels: 9:16 clips that play muted only while on screen
+  (promo.js), a sound toggle, and a product plate per reel. Upload clips with
+  the native Shopify video picker; without one, the brand's embroidery footage
+  plays so the section never renders empty.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign fallback_src = 'hero-mobile.mp4' | asset_url
+  assign fallback_poster = 'hero-embroidery-poster.webp' | asset_url
+-%}
+{{ 'section-promo.css' | asset_url | stylesheet_tag }}
+<section class="section reels" data-reels>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">{% render 'tr', value: s.eyebrow, key: 'reels.eyebrow' %}</p>
+        <h2 class="h2">{% render 'tr', value: s.heading, key: 'reels.heading' %}</h2>
+      </div>
+      {%- if s.social_url != blank or settings.social_instagram != blank -%}
+        {%- assign reels_social = s.social_url | default: settings.social_instagram -%}
+        <a class="btn btn--glass btn--sm" href="{{ reels_social }}" target="_blank" rel="noopener">{% render 'icon', name: 'instagram', px: 16 %}{{ 'reels.follow' | t }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="reels__track" role="list">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign reel_product = block.settings.product
+        assign start = block.settings.start | default: 0
+      -%}
+      <article class="reel glass" role="listitem" data-reel {{ block.shopify_attributes }}>
+        {%- if block.settings.video != blank -%}
+          {{ block.settings.video | video_tag: image_size: '720x', muted: true, loop: true, playsinline: true, controls: false, preload: 'none', class: 'reel__video' }}
+        {%- else -%}
+          {%- assign reel_src = block.settings.video_url | default: fallback_src -%}
+          <img class="reel__poster" src="{{ fallback_poster }}" alt="" width="540" height="960" loading="lazy" decoding="async">
+          <video class="reel__video" muted loop playsinline preload="none" poster="{{ fallback_poster }}" data-src="{{ reel_src }}{% if start > 0 %}#t={{ start }}{% endif %}"></video>
+        {%- endif -%}
+        <span class="reel__shade" aria-hidden="true"></span>
+        <span class="reel__tag glass glass--clear">{% render 'icon', name: 'play', px: 11 %}{% render 'tr', value: block.settings.tag, key: 'reels.tag' %}</span>
+        <button class="reel__sound glass glass--clear" type="button" data-reel-sound aria-pressed="false" aria-label="{{ 'reels.sound' | t | escape }}">{% render 'icon', name: 'volume-off', px: 18 %}{% render 'icon', name: 'volume', px: 18 %}</button>
+        <div class="reel__info glass glass--clear">
+          {%- assign reel_title = block.settings.title -%}
+          {%- if reel_title != blank -%}<p class="reel__title">{{ reel_title }}</p>{%- endif -%}
+          {%- if reel_product != blank -%}
+            <a class="reel__product" href="{{ reel_product.url }}">
+              {%- if reel_product.featured_image -%}{{ reel_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+              <span><span class="reel__product-name">{% render 'product-title', title: reel_product.title %}</span><span class="reel__product-price">{% render 'money', amount: reel_product.price %}</span></span>
+              <span class="reel__buy" aria-hidden="true">{% render 'icon', name: 'arrow-right', px: 16 %}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+<script src="{{ 'promo.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Video reels",
+  "tag": "div",
+  "class": "section-video-reels",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "url", "id": "social_url", "label": "Follow button link", "info": "Blank = your Instagram link from Theme settings." }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "Reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (9:16 works best)" },
+        { "type": "url", "id": "video_url", "label": "…or an .mp4 link" },
+        { "type": "range", "id": "start", "label": "Start at (seconds, fallback clip only)", "min": 0, "max": 20, "step": 1, "unit": "s", "default": 0 },
+        { "type": "text", "id": "tag", "label": "Tag" },
+        { "type": "text", "id": "title", "label": "Caption" },
+        { "type": "product", "id": "product", "label": "Product to shop" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "Video reels", "blocks": [{ "type": "reel" }, { "type": "reel" }, { "type": "reel" }] }]
+}
+{% endschema %}

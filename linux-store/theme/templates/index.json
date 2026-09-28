@@ -14,13 +14,34 @@
         "show_trust": true
       }
     },
+    "summer": {
+      "type": "seasonal-collection",
+      "settings": {
+        "season": "summer",
+        "collection": "summer-collection",
+        "art_side": "start",
+        "space_top": 40,
+        "space_bottom": 12
+      }
+    },
+    "winter": {
+      "type": "seasonal-collection",
+      "settings": {
+        "season": "winter",
+        "collection": "winter-collection",
+        "art_side": "end",
+        "space_top": 12,
+        "space_bottom": 40
+      }
+    },
     "marquee": {
       "type": "marquee",
       "blocks": {
         "m1": {
           "type": "item",
           "settings": {
-            "key": "home.marquee_1"
+            "key": "home.marquee_1",
+            "code": "LINUX10"
           }
         },
         "m2": {
@@ -55,18 +76,21 @@
         "m4",
         "m5"
       ],
-      "settings": {}
+      "settings": {
+        "style": "ribbons"
+      }
     },
     "bestsellers": {
       "type": "product-carousel",
       "settings": {
-        "number": "01",
         "collection": "winter-collection",
-        "limit": 8
+        "limit": 8,
+        "scheme": "cream"
       }
     },
     "collections": {
       "type": "featured-collections",
+      "disabled": true,
       "blocks": {
         "c1": {
           "type": "collection",
@@ -106,53 +130,49 @@
         "c3",
         "c4"
       ],
+      "settings": {}
+    },
+    "offer": {
+      "type": "offer-spotlight",
       "settings": {
-        "number": "02"
+        "code": "LINUX10",
+        "hide_when_ended": true,
+        "cta_url": "/collections/winter-collection",
+        "show_badge": true,
+        "show_note": true
       }
     },
-    "campaign": {
-      "type": "campaign",
-      "settings": {
-        "primary_link": "/collections/winter-collection",
-        "secondary_link": "/pages/customize"
-      }
-    },
-    "arrivals": {
-      "type": "product-grid",
-      "settings": {
-        "number": "03",
-        "collection": "all",
-        "limit": 8,
-        "columns": 4
-      }
-    },
-    "look": {
-      "type": "shop-the-look",
+    "reels": {
+      "type": "video-reels",
       "blocks": {
-        "h1": {
-          "type": "hotspot",
+        "r1": {
+          "type": "reel",
           "settings": {
-            "product": "hoodie-anime-black",
-            "x": 50,
-            "y": 40
+            "start": 0,
+            "product": "hoodie-anime-black"
           }
         },
-        "h2": {
-          "type": "hotspot",
+        "r2": {
+          "type": "reel",
           "settings": {
-            "product": "anime-shirt",
-            "x": 42,
-            "y": 75
+            "start": 4,
+            "product": "hoodie-sada-white"
+          }
+        },
+        "r3": {
+          "type": "reel",
+          "settings": {
+            "start": 8,
+            "product": "hoodie-customize"
           }
         }
       },
       "block_order": [
-        "h1",
-        "h2"
+        "r1",
+        "r2",
+        "r3"
       ],
-      "settings": {
-        "number": "04"
-      }
+      "settings": {}
     },
     "props": {
       "type": "value-props",
@@ -196,154 +216,70 @@
         "p3",
         "p4"
       ],
-      "settings": {}
-    },
-    "statement": {
-      "type": "brand-statement",
       "settings": {
-        "show_mascots": true,
-        "cta_url": "/pages/about"
-      }
-    },
-    "reviews": {
-      "type": "testimonials",
-      "blocks": {
-        "t1": {
-          "type": "quote",
-          "settings": {
-            "rating": 5,
-            "key_quote": "home.review_1_quote",
-            "key_name": "home.review_1_name",
-            "key_meta": "home.review_1_meta"
-          }
-        },
-        "t2": {
-          "type": "quote",
-          "settings": {
-            "rating": 5,
-            "key_quote": "home.review_2_quote",
-            "key_name": "home.review_2_name",
-            "key_meta": "home.review_2_meta"
-          }
-        },
-        "t3": {
-          "type": "quote",
-          "settings": {
-            "rating": 5,
-            "key_quote": "home.review_3_quote",
-            "key_name": "home.review_3_name",
-            "key_meta": "home.review_3_meta"
-          }
-        }
-      },
-      "block_order": [
-        "t1",
-        "t2",
-        "t3"
-      ],
-      "settings": {
-        "number": "05"
-      }
-    },
-    "ugc": {
-      "type": "instagram-feed",
-      "blocks": {
-        "u1": {
-          "type": "post"
-        },
-        "u2": {
-          "type": "post"
-        },
-        "u3": {
-          "type": "post"
-        },
-        "u4": {
-          "type": "post"
-        },
-        "u5": {
-          "type": "post"
-        },
-        "u6": {
-          "type": "post"
-        }
-      },
-      "block_order": [
-        "u1",
-        "u2",
-        "u3",
-        "u4",
-        "u5",
-        "u6"
-      ],
-      "settings": {
-        "handle": "@linux.eg"
-      }
-    },
-    "faq": {
-      "type": "faq",
-      "blocks": {
-        "q1": {
-          "type": "question",
-          "settings": {
-            "key_q": "home.faq_1_q",
-            "key_a": "home.faq_1_a"
-          }
-        },
-        "q2": {
-          "type": "question",
-          "settings": {
-            "key_q": "home.faq_2_q",
-            "key_a": "home.faq_2_a"
-          }
-        },
-        "q3": {
-          "type": "question",
-          "settings": {
-            "key_q": "home.faq_3_q",
-            "key_a": "home.faq_3_a"
-          }
-        },
-        "q4": {
-          "type": "question",
-          "settings": {
-            "key_q": "home.faq_4_q",
-            "key_a": "home.faq_4_a"
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4"
-      ],
-      "settings": {
-        "open_first": true
+        "scheme": "cream"
       }
     },
     "newsletter": {
       "type": "newsletter",
-      "settings": {}
+      "settings": {
+        "scheme": "lime"
+      }
     },
-    "penguins": {
-      "type": "penguin-row",
+    "cats": {
+      "type": "category-chips",
+      "blocks": {
+        "k1": {
+          "type": "category",
+          "settings": {
+            "collection": "winter-collection",
+            "key": "cats.hoodies",
+            "hot": true
+          }
+        },
+        "k2": {
+          "type": "category",
+          "settings": {
+            "collection": "summer-collection",
+            "key": "cats.tees"
+          }
+        },
+        "k3": {
+          "type": "category",
+          "settings": {
+            "studio": true,
+            "key": "cats.customize",
+            "icon": "star"
+          }
+        },
+        "k4": {
+          "type": "category",
+          "settings": {
+            "collection": "all",
+            "key": "cats.all"
+          }
+        }
+      },
+      "block_order": [
+        "k1",
+        "k2",
+        "k3",
+        "k4"
+      ],
       "settings": {}
     }
   },
   "order": [
     "hero",
+    "summer",
+    "winter",
+    "cats",
     "marquee",
     "bestsellers",
+    "offer",
     "collections",
-    "campaign",
-    "arrivals",
-    "look",
+    "reels",
     "props",
-    "statement",
-    "reviews",
-    "ugc",
-    "faq",
-    "newsletter",
-    "penguins"
+    "newsletter"
   ]
 }

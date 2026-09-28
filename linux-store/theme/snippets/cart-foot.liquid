@@ -35,5 +35,6 @@
       <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--sm btn--block">{{ 'cart.view_bag' | t }}</a>
     {%- endif -%}
   </form>
-  {%- if context != 'drawer' -%}<div class="payment-icons">{%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag }}{%- endfor -%}</div>{%- endif -%}
+  {%- if settings.show_payment_icons != false -%}{%- render 'payment-badges', compact: true -%}{%- endif -%}
+  {%- render 'payment-howto' -%}
 {%- endif -%}

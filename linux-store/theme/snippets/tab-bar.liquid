@@ -1,12 +1,52 @@
-{%- comment -%} iOS-style bottom tab bar, mobile only. {%- endcomment -%}
-<nav class="tab-bar glass glass--solid{% if settings.show_wishlist == false %} tab-bar--4{% endif %}" aria-label="{{ 'accessibility.mobile_nav' | t }}">
-  <a class="tab-bar__item{% if template.name == 'index' %} is-active{% endif %}" href="{{ routes.root_url }}">{% render 'icon', name: 'grid' %}<span>{{ 'nav.home' | t }}</span></a>
-  <a class="tab-bar__item{% if template.name == 'collection' or template.name == 'list-collections' %} is-active{% endif %}" href="{{ routes.all_products_collection_url }}">{% render 'icon', name: 'tag' %}<span>{{ 'nav.shop' | t }}</span></a>
-  <button class="tab-bar__item tab-bar__item--primary" type="button" data-drawer-open="search" aria-label="{{ 'search.title' | t }}">{% render 'icon', name: 'search' %}<span>{{ 'nav.search' | t }}</span></button>
-  {%- if settings.show_wishlist != false -%}<a class="tab-bar__item" href="{{ routes.search_url }}?view=wishlist" data-wishlist-link>{% render 'icon', name: 'heart' %}<span>{{ 'nav.saved' | t }}</span><span class="badge" data-wishlist-count hidden>0</span></a>{%- endif -%}
-  {%- if settings.cart_type == 'page' -%}
-    <a class="tab-bar__item" href="{{ routes.cart_url }}">{% render 'icon', name: 'bag' %}<span>{{ 'nav.bag' | t }}</span><span class="badge" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span></a>
-  {%- else -%}
-    <button class="tab-bar__item" type="button" data-drawer-open="cart">{% render 'icon', name: 'bag' %}<span>{{ 'nav.bag' | t }}</span><span class="badge" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span></button>
+{%- comment -%}
+  iOS 26 floating tab bar (phones). A glass lens sits under the current tab and
+  springs to the tapped one before the page changes (glass.js); the centre star
+  opens the Customize studio. Active tabs swap to the filled glyph.
+{%- endcomment -%}
+{%- liquid
+  assign on_home = false
+  if template.name == 'index' and template.suffix != 'customize'
+    assign on_home = true
+  endif
+  assign on_shop = false
+  if template.name == 'collection' or template.name == 'list-collections' or template.name == 'product'
+    assign on_shop = true
+  endif
+  assign on_saved = false
+  if template.suffix == 'wishlist'
+    assign on_saved = true
+  endif
+  assign on_bag = false
+  if template.name == 'cart'
+    assign on_bag = true
+  endif
+-%}
+<nav class="tab-bar glass glass--solid{% if settings.show_wishlist == false %} tab-bar--4{% endif %}" aria-label="{{ 'accessibility.mobile_nav' | t }}" data-tab-bar data-lens>
+  <span class="tab-bar__lens" aria-hidden="true"></span>
+  <a class="tab-bar__item{% if on_home %} is-active{% endif %}" href="{{ routes.root_url }}"{% if on_home %} aria-current="page"{% endif %}>
+    {%- render 'icon', name: 'home', class: 'icon--line' -%}{%- render 'icon', name: 'home-fill', class: 'icon--fill' -%}
+    <span class="tab-bar__label">{{ 'nav.home' | t }}</span>
+  </a>
+  <a class="tab-bar__item{% if on_shop %} is-active{% endif %}" href="{{ routes.all_products_collection_url }}"{% if on_shop %} aria-current="page"{% endif %}>
+    {%- render 'icon', name: 'tag', class: 'icon--line' -%}{%- render 'icon', name: 'tag-fill', class: 'icon--fill' -%}
+    <span class="tab-bar__label">{{ 'nav.shop' | t }}</span>
+  </a>
+  <a class="tab-bar__item tab-bar__item--primary{% if template.suffix == 'customize' %} is-active{% endif %}" href="{% render 'customize-url' %}" aria-label="{{ 'nav.menu.customize' | t }}"{% if template.suffix == 'customize' %} aria-current="page"{% endif %}>
+    <span class="tab-bar__orb">{%- render 'icon', name: 'star' -%}</span>
+    <span class="tab-bar__label">{{ 'nav.tab_customize' | t }}</span>
+  </a>
+  {%- if settings.show_wishlist != false -%}
+    <a class="tab-bar__item{% if on_saved %} is-active{% endif %}" href="{{ routes.search_url }}?view=wishlist" data-wishlist-link{% if on_saved %} aria-current="page"{% endif %}>
+      {%- render 'icon', name: 'heart', class: 'icon--line' -%}{%- render 'icon', name: 'heart-fill', class: 'icon--fill' -%}
+      <span class="tab-bar__label">{{ 'nav.saved' | t }}</span><span class="badge" data-wishlist-count hidden>0</span>
+    </a>
   {%- endif -%}
+  {%- if settings.cart_type == 'page' -%}
+    <a class="tab-bar__item{% if on_bag %} is-active{% endif %}" href="{{ routes.cart_url }}"{% if on_bag %} aria-current="page"{% endif %}>
+  {%- else -%}
+    <button class="tab-bar__item{% if on_bag %} is-active{% endif %}" type="button" data-drawer-open="cart">
+  {%- endif -%}
+      {%- render 'icon', name: 'bag', class: 'icon--line' -%}{%- render 'icon', name: 'bag-fill', class: 'icon--fill' -%}
+      <span class="tab-bar__label">{{ 'nav.bag' | t }}</span><span class="badge" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{% render 'digits', value: cart.item_count %}</span>
+  {%- if settings.cart_type == 'page' -%}</a>{%- else -%}</button>{%- endif -%}
 </nav>

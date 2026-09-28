@@ -1,0 +1,12 @@
+{%- if lx_step > 0 -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="margin-top:24px;">
+<tr>
+{%- for lx_i in (1..4) -%}
+<td width="25%" valign="top" style="width:25%;{% unless forloop.last %}padding-[[end]]:6px;{% endunless %}">
+<div style="height:6px;line-height:6px;font-size:1px;border-radius:999px;background-color:{% if lx_i <= lx_step %}[[c.lime]]{% else %}[[c.border]]{% endif %};">&nbsp;</div>
+<p style="margin:8px 0 0;font-family:[[font]];font-size:12px;line-height:16px;font-weight:{% if lx_i == lx_step %}800{% else %}600{% endif %};color:{% if lx_i <= lx_step %}[[c.cream]]{% else %}[[c.muted2]]{% endif %};text-align:[[start]];">{%- case lx_i -%}{%- when 1 -%}[[step1]]{%- when 2 -%}[[step2]]{%- when 3 -%}[[step3]]{%- else -%}[[step4]]{%- endcase -%}</p>
+</td>
+{%- endfor -%}
+</tr>
+</table>
+{%- endif -%}

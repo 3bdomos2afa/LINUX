@@ -13,14 +13,16 @@
   <div class="about-stats">
     {%- for block in section.blocks -%}
       {%- if block.type == 'stat' -%}
-        <div class="about-stat glass" data-reveal="scale" style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}><strong data-count>{% render 'tr', value: block.settings.value, key: block.settings.key_value %}</strong><span>{% render 'tr', value: block.settings.label, key: block.settings.key_label %}</span></div>
+        {%- capture stat_value -%}{% render 'tr', value: block.settings.value, key: block.settings.key_value %}{%- endcapture -%}
+        <div class="about-stat glass" data-reveal="scale" style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}><strong data-count>{% render 'digits', value: stat_value %}</strong><span>{% render 'tr', value: block.settings.label, key: block.settings.key_label %}</span></div>
       {%- endif -%}
     {%- endfor -%}
   </div>
   <div class="timeline">
     {%- for block in section.blocks -%}
       {%- if block.type == 'moment' -%}
-        <div class="timeline__item glass" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}><span class="mono">{% render 'tr', value: block.settings.year, key: block.settings.key_year %}</span><div><strong>{% render 'tr', value: block.settings.title, key: block.settings.key_title %}</strong><p class="muted small" style="margin-top:4px">{% render 'tr', value: block.settings.text, key: block.settings.key_text %}</p></div></div>
+        {%- capture moment_year -%}{% render 'tr', value: block.settings.year, key: block.settings.key_year %}{%- endcapture -%}
+        <div class="timeline__item glass" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}><span class="mono">{% render 'digits', value: moment_year %}</span><div><strong>{% render 'tr', value: block.settings.title, key: block.settings.key_title %}</strong><p class="muted small" style="margin-top:4px">{% render 'tr', value: block.settings.text, key: block.settings.key_text %}</p></div></div>
       {%- endif -%}
     {%- endfor -%}
   </div>

@@ -39,7 +39,7 @@
       {%- assign n = forloop.index -%}
       {%- assign key = 'customer.order.step_' | append: l -%}
       <li class="order__step{% if n < step or n == step %} is-done{% endif %}{% if n == step %} is-current{% endif %}">
-        <span class="order__step-dot">{%- if n < step -%}{% render 'icon', name: 'check', px: 14 %}{%- elsif n == step -%}<span class="dot"></span>{%- else -%}{{ n }}{%- endif -%}</span>
+        <span class="order__step-dot">{%- if n < step -%}{% render 'icon', name: 'check', px: 14 %}{%- elsif n == step -%}<span class="dot"></span>{%- else -%}{% render 'digits', value: n %}{%- endif -%}</span>
         <span class="order__step-label">{{ key | t }}</span>
       </li>
     {%- endfor -%}
@@ -48,7 +48,7 @@
   <div class="account__grid order__grid">
     <div class="account__main">
       <div class="account__panel glass" data-reveal style="--i:2">
-        <div class="account__panel-head"><h2 class="h3">{{ 'customer.order.items' | t }}</h2>{%- assign oc = 0 -%}{%- for li in order.line_items -%}{%- assign oc = oc | plus: li.quantity -%}{%- endfor -%}<span class="chip">{{ 'cart.item_count' | t: count: oc }}</span></div>
+        <div class="account__panel-head"><h2 class="h3">{{ 'customer.order.items' | t }}</h2>{%- assign oc = 0 -%}{%- for li in order.line_items -%}{%- assign oc = oc | plus: li.quantity -%}{%- endfor -%}{%- capture order_count_label -%}{{ 'cart.item_count' | t: count: oc }}{%- endcapture -%}<span class="chip">{% render 'digits', value: order_count_label %}</span></div>
         <ul class="cart-lines" role="list">
           {%- for item in order.line_items -%}
             {%- liquid
@@ -68,19 +68,27 @@
               </a>
               <div class="cart-line__body">
                 <strong class="cart-line__title">{% render 'product-title', title: item.title %}</strong>
-                {%- if item.variant_title -%}<p class="cart-line__meta">{{ item.variant_title }}</p>{%- endif -%}
+                {%- if item.variant_title and item.variant_title != 'Default Title' -%}
+                  <p class="cart-line__meta">{%- if item.variant -%}{%- for option_value in item.variant.options -%}{% render 'option-value', value: option_value %}{%- unless forloop.last %} / {% endunless -%}{%- endfor -%}{%- else -%}{{ item.variant_title | escape }}{%- endif -%}</p>
+                {%- endif -%}
+                {%- if item.properties['Bundle offer'] != blank -%}
+                  <div class="cart-line__bundle">
+                    <span class="cart-line__bundle-icon">{% render 'icon', name: 'tag', px: 14 %}</span>
+                    <span><strong>{{ 'cart.bundle_offer' | t }}</strong><small>{{ item.properties['Bundle offer'] | escape }}</small>{%- if item.properties['Expected bundle discount'] != blank -%}<small class="muted">{% render 'property-label', name: 'Expected bundle discount' %}: {%- capture expected_discount -%}{% render 'digits', value: item.properties['Expected bundle discount'] %}{%- endcapture -%} {{ expected_discount | strip | escape }}</small>{%- endif -%}</span>
+                  </div>
+                {%- endif -%}
                 {%- assign prop_count = 0 -%}
                 {%- for p in item.properties -%}{%- assign fc = p.first | slice: 0 -%}{%- if p.last != blank and fc != '_' -%}{%- assign prop_count = prop_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
                 {%- if prop_count > 0 -%}
-                  <details class="cart-line__props"><summary>{{ 'cart.details' | t }} · {{ prop_count }}</summary>
+                  <details class="cart-line__props"><summary>{{ 'cart.details' | t }} · {% render 'digits', value: prop_count %}</summary>
                     {%- for p in item.properties -%}{%- assign fc = p.first | slice: 0 -%}
                       {%- if p.last != blank and fc != '_' -%}
-                        <p class="cart-line__meta">{% render 'property-label', name: p.first %}: {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>{%- else -%} {{ p.last }}{%- endif -%}</p>
+                        <p class="cart-line__meta">{% render 'property-label', name: p.first %}: {%- if p.last contains '/uploads/' -%} <a href="{{ p.last }}" target="_blank" rel="noopener">{{ 'cart.view_file' | t }}</a>{%- elsif p.first == 'Expected bundle discount' or p.first == 'Bundle piece' -%}{%- capture property_display -%}{% render 'digits', value: p.last %}{%- endcapture -%} {{ property_display | strip | escape }}{%- elsif p.first == 'Front placement' or p.first == 'Back placement' -%} {% render 'placement-value', value: p.last %}{%- else -%} {{ p.last }}{%- endif -%}</p>
                       {%- endif -%}
                     {%- endfor -%}
                   </details>
                 {%- endif -%}
-                <div class="cart-line__row"><span class="muted small">× {{ item.quantity }}</span><span class="cart-line__price">{% render 'money', amount: item.final_line_price %}</span></div>
+                <div class="cart-line__row"><span class="muted small">× {% render 'digits', value: item.quantity %}</span><span class="cart-line__price">{% render 'money', amount: item.final_line_price %}</span></div>
               </div>
             </li>
           {%- endfor -%}

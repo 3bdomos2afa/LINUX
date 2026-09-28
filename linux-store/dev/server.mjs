@@ -15,9 +15,15 @@ import { fileURLToPath } from 'node:url';
 import { Liquid, Tag, Value } from 'liquidjs';
 import { buildStore } from './store.mjs';
 import { registerFilters } from './filters.mjs';
+import { randomUUID } from 'node:crypto';
+import { nest } from './form-data.mjs';
+import zlib from 'node:zlib';
+import { execFileSync } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const THEME = path.resolve(__dirname, '../theme');
+const PHOTOS = path.resolve(__dirname, '../photos');
+const PHOTO_CACHE = path.join(__dirname, '.cache/photos');
 const PORT = Number(process.env.PORT || 3000);
 
 const store = buildStore(path.join(__dirname, 'data'));
@@ -243,6 +249,11 @@ function blocksOf(s) {
 async function renderSection(type, id, settings, blocks, env) {
   const sec = loadSection(type);
   if (!sec) return `<!-- section ${type} missing -->`;
+  if (type === 'main-customize' && env.request.query.__fixture === 'studio') {
+    const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/customize.json'), 'utf8'));
+    settings = { ...settings, ...fixture.settings };
+    blocks = blocks.map((block) => ({ ...block, settings: { ...block.settings, ...fixture.colorOverrides[block.id] } })).concat(fixture.tiers);
+  }
   const merged = { ...schemaDefaults(sec.schema.settings), ...resolveSettings(settings, env, sec.schema.settings) };
   const blockSchemas = Object.fromEntries((sec.schema.blocks || []).map((b) => [b.type, b]));
   const fullBlocks = blocks.map((b, i) => ({
@@ -252,7 +263,9 @@ async function renderSection(type, id, settings, blocks, env) {
   const section = { id, settings: merged, blocks: fullBlocks, index: 1, index0: 0, location: 'template' };
   try {
     const html = await engine.parseAndRender(sec.body, { ...env, section }, { globals: globalsOf(env) });
-    return `<div id="shopify-section-${id}" class="shopify-section shopify-section--${type}">${html}</div>`;
+    const fixtureNotice = type === 'main-customize' && env.request.query.__fixture === 'studio'
+      ? '<p style="position:relative;z-index:99;margin:90px 20px 0;padding:12px;background:#f4e8d8;color:#043222">LOCAL TEST FIXTURE — mockup substitutions and discount estimates are test data, not store offers.</p>' : '';
+    return `<div id="shopify-section-${id}" class="shopify-section shopify-section--${type}">${fixtureNotice}${html}</div>`;
   } catch (e) {
     console.error(`[render] section ${type}: ${e.message}`);
     return `<div style="padding:24px;background:#400;color:#fff;font:14px monospace"><b>Section "${type}" error:</b> ${escapeHtml(e.message)}</div>`;
@@ -324,7 +337,16 @@ function escapeHtml(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&am
 // ---------------------------------------------------------------------------
 const MIME = { '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.mp4': 'video/mp4', '.webm': 'video/webm', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.txt': 'text/plain' };
 
+// Shopify serves every text response compressed; the harness does the same so
+// local performance measurements are not dominated by uncompressed transfer.
+const COMPRESSIBLE = /^(text\/|application\/(json|javascript)|image\/svg)/;
 function send(res, status, body, type = 'text/html; charset=utf-8', headers = {}) {
+  const gzip = res.req && /\bgzip\b/.test(res.req.headers['accept-encoding'] || '') && COMPRESSIBLE.test(type) && body != null && String(body).length > 1024;
+  if (gzip) {
+    const data = zlib.gzipSync(Buffer.isBuffer(body) ? body : Buffer.from(String(body)));
+    res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding', ...headers });
+    return res.end(data);
+  }
   res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', ...headers });
   res.end(body);
 }
@@ -352,7 +374,7 @@ function parseMultipart(raw, ct) {
     if (m[2] !== undefined) {
       if (!m[2]) { out[m[1]] = ''; continue; }
       const bytes = Buffer.from(m[3], 'latin1');
-      const name = `${Date.now().toString(36)}-${m[2].replace(/[^\w.-]+/g, '_')}`;
+      const name = `${randomUUID()}-${m[2].replace(/[^\w.-]+/g, '_')}`;
       fs.mkdirSync(UPLOADS, { recursive: true });
       fs.writeFileSync(path.join(UPLOADS, name), bytes);
       out[m[1]] = `/uploads/${name}`;
@@ -360,17 +382,6 @@ function parseMultipart(raw, ct) {
   }
   return out;
 }
-// Expand a[b][c]=v style keys into nested objects (properties[Design], etc.)
-function nest(flat) {
-  const out = {};
-  for (const [k, v] of Object.entries(flat)) {
-    const keys = k.replace(/\]/g, '').split('[');
-    let o = out;
-    keys.forEach((kk, i) => { if (i === keys.length - 1) o[kk] = v; else o = o[kk] = o[kk] || {}; });
-  }
-  return out;
-}
-
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
@@ -401,8 +412,30 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(206, { 'Content-Range': `bytes ${start}-${end}/${stat.size}`, 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1, 'Content-Type': MIME[ext] });
         return fs.createReadStream(file, { start, end }).pipe(res);
       }
+      if (['.css', '.js', '.svg', '.json'].includes(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '')) {
+        res.writeHead(200, { 'Content-Type': MIME[ext], 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding', 'Cache-Control': 'no-cache' });
+        return res.end(zlib.gzipSync(fs.readFileSync(file)));
+      }
       res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream', 'Content-Length': stat.size, 'Cache-Control': 'no-cache', 'Accept-Ranges': 'bytes' });
       return fs.createReadStream(file).pipe(res);
+    }
+
+    // Studio photo set (../photos) — resized on demand like Shopify's image CDN (?width=N)
+    if (pathname.startsWith('/__photos/')) {
+      const rel = path.normalize(pathname.slice('/__photos/'.length)).replace(/^(\.\.[/\\])+/, '');
+      const file = path.join(PHOTOS, rel);
+      if (!file.startsWith(PHOTOS) || !fs.existsSync(file)) return send(res, 404, 'not found', 'text/plain');
+      let out = file;
+      const width = Math.min(3000, Math.max(0, Number(query.width) || 0));
+      if (width) {
+        out = path.join(PHOTO_CACHE, String(width), rel);
+        if (!fs.existsSync(out)) {
+          fs.mkdirSync(path.dirname(out), { recursive: true });
+          try { execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', file, '-vf', `scale='min(${width},iw)':-2`, '-quality', '82', out]); } catch { out = file; }
+        }
+      }
+      res.writeHead(200, { 'Content-Type': MIME[path.extname(out).toLowerCase()] || 'image/webp', 'Content-Length': fs.statSync(out).size, 'Cache-Control': 'max-age=3600' });
+      return fs.createReadStream(out).pipe(res);
     }
 
     // Locale prefix (/ar/...)
@@ -417,13 +450,13 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/cart/add.js' || pathname === '/cart/add') {
       const body = nest(await readBody(req));
       const items = body.items || [{ id: body.id, quantity: body.quantity || 1, properties: body.properties }];
-      let last;
+      const added = [];
       for (const it of items) {
-        try { last = store.cartAdd(Number(it.id), Number(it.quantity || 1), it.properties || {}); }
+        try { added.push(store.cartAdd(Number(it.id), Number(it.quantity || 1), it.properties || {})); }
         catch (e) { return json(res, { status: 422, message: 'Cart Error', description: e.message }, 422); }
       }
       if (pathname === '/cart/add') return send(res, 302, '', 'text/plain', { Location: `${rootPrefix}/cart` });
-      return json(res, items.length > 1 ? { items: store.cartJSON().items } : last);
+      return json(res, body.items ? { items: added } : added[0]);
     }
     if (pathname === '/cart/change.js') { const b = await readBody(req); store.cartChange(b.id || b.line, Number(b.quantity)); return json(res, store.cartJSON()); }
     if (pathname === '/cart/update.js') { const b = nest(await readBody(req)); if (b.discount !== undefined) store.setDiscounts(String(b.discount)); if (b.updates) for (const [k, q] of Object.entries(b.updates)) store.cartChange(k, Number(q)); if (b.note !== undefined) store.cart.note = b.note; return json(res, store.cartJSON()); }

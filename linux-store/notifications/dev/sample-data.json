@@ -1,0 +1,211 @@
+{
+  "_about": "Fake data for dev/render.mjs. Money is in piastres (1/100 EGP) like Shopify Liquid. \"@line:key\" and {\"$line\": key, ...overrides} pull from \"lines\". \"lang\" overrides apply per preview language; \"scenarios\" pick a template and override the base.",
+  "lines": {
+    "anime_black": {
+      "title": "Hoodie Anime Black - L",
+      "product": { "title": "Hoodie Anime Black" },
+      "variant": { "title": "L" },
+      "quantity": 1,
+      "price": 77900,
+      "line_price": 77900,
+      "original_line_price": 77900,
+      "final_line_price": 77900,
+      "image": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Anime_Black_1.jpg?v=1779443294",
+      "properties": {},
+      "discount_allocations": [
+        { "amount": 2723, "discount_application": { "title": "WELCOME100", "target_selection": "all", "target_type": "line_item" } }
+      ]
+    },
+    "sada_beige": {
+      "title": "Hoodie Sada Beige - M",
+      "product": { "title": "Hoodie Sada Beige" },
+      "variant": { "title": "M" },
+      "quantity": 2,
+      "price": 64900,
+      "line_price": 129800,
+      "original_line_price": 129800,
+      "final_line_price": 123310,
+      "image": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/Sada_Beige_2.jpg?v=1779443297",
+      "properties": {
+        "Bundle offer": "2 hoodies · 5% off",
+        "Expected bundle discount": "LE 64.90",
+        "_bundle_id": "b-7f2c"
+      },
+      "discount_allocations": [
+        { "amount": 6490, "discount_application": { "title": "BUY 2 SAVE 5%", "target_selection": "entitled", "target_type": "line_item" } },
+        { "amount": 4310, "discount_application": { "title": "WELCOME100", "target_selection": "all", "target_type": "line_item" } }
+      ]
+    },
+    "customize": {
+      "title": "Hoodie Customize - Black / M / Print",
+      "product": { "title": "Hoodie Customize" },
+      "variant": { "title": "Black / M / Print" },
+      "quantity": 1,
+      "price": 84900,
+      "line_price": 84900,
+      "original_line_price": 84900,
+      "final_line_price": 84900,
+      "image": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/image_1766404985975029.png?v=1779443286",
+      "properties": {
+        "Garment": "Hoodie",
+        "Colour": "Black",
+        "Method": "Print",
+        "Sides": "Front + Back",
+        "Notes": "Please keep the chest logo small.\nThank you!",
+        "_customize_group": "5b0e6c1e-3f7a-4c2e-9d61-2a8f0b9c7d11",
+        "Front design": "https://cdn.shopify.com/s/files/1/1002/7640/4538/uploads/linux-front-design.png",
+        "Front mockup": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/ANIME_BLACK2.png?v=1779443290",
+        "Front position": "x:50,y:32,scale:90,rotate:0",
+        "Back design": "https://cdn.shopify.com/s/files/1/1002/7640/4538/uploads/linux-back-design.png",
+        "Back mockup": "https://cdn.shopify.com/s/files/1/1002/7640/4538/files/image_1766404985975029.png?v=1779443286",
+        "Back position": "x:50,y:40,scale:120,rotate:0",
+        "Size": "M",
+        "Piece": "1"
+      },
+      "discount_allocations": [
+        { "amount": 2967, "discount_application": { "title": "WELCOME100", "target_selection": "all", "target_type": "line_item" } }
+      ]
+    }
+  },
+  "base": {
+    "shop": {
+      "name": "LINUX",
+      "url": "https://linux-eg.com",
+      "email": "hello@linux-eg.com",
+      "email_logo_url": "",
+      "email_logo_width": 150,
+      "money_format": "LE {{amount}}",
+      "money_with_currency_format": "LE {{amount}} EGP"
+    },
+    "customer": {
+      "first_name": "Omar",
+      "last_name": "Hassan",
+      "email": "omar.hassan@example.com",
+      "account_activation_url": "https://linux-eg.com/account/activate/7392019/4f9ab1c2d3e4",
+      "reset_password_url": "https://linux-eg.com/account/reset/7392019/9e8d7c6b5a41"
+    },
+    "name": "#1042",
+    "order_name": "#1042",
+    "order_number": 1042,
+    "email": "omar.hassan@example.com",
+    "created_at": "2026-09-28T14:05:00+03:00",
+    "order_status_url": "https://linux-eg.com/10027640/orders/8f1c2b7e9a/authenticate?key=3d5e",
+    "financial_status": "pending",
+    "fulfillment_status": "unfulfilled",
+    "requires_shipping": true,
+    "item_count": 4,
+    "line_items": ["@line:anime_black", "@line:sada_beige", "@line:customize"],
+    "subtotal_line_items": ["@line:anime_black", "@line:sada_beige", "@line:customize"],
+    "discount_applications": [
+      { "title": "BUY 2 SAVE 5%", "type": "automatic", "target_selection": "entitled", "target_type": "line_item", "value_type": "percentage", "value": 5, "total_allocated_amount": 6490 },
+      { "title": "WELCOME100", "type": "discount_code", "target_selection": "all", "target_type": "line_item", "value_type": "fixed_amount", "value": 100, "total_allocated_amount": 10000 }
+    ],
+    "subtotal_price": 276110,
+    "shipping_price": 6000,
+    "tax_price": 34645,
+    "total_price": 282110,
+    "shipping_method": { "title": "Standard delivery (2–4 days)" },
+    "shipping_address": {
+      "first_name": "Omar",
+      "last_name": "Hassan",
+      "address1": "12 Road 9",
+      "address2": "Maadi",
+      "city": "Cairo",
+      "province": "",
+      "zip": "11431",
+      "country": "Egypt"
+    },
+    "fulfillment": {
+      "item_count": 4,
+      "tracking_company": "Bosta",
+      "tracking_numbers": ["BST58201947"],
+      "tracking_urls": ["https://bosta.co/tracking-shipments?shipment-number=58201947"],
+      "estimated_delivery_at": "2026-10-01T18:00:00+03:00",
+      "fulfillment_line_items": [
+        { "line_item": "@line:anime_black", "quantity": 1 },
+        { "line_item": "@line:sada_beige", "quantity": 2 },
+        { "line_item": "@line:customize", "quantity": 1 }
+      ]
+    },
+    "custom_message": ""
+  },
+  "lang": {
+    "ar": {
+      "customer": { "first_name": "عمر", "last_name": "حسن" },
+      "shipping_method": { "title": "توصيل عادي (٢–٤ أيام)" },
+      "shipping_address": {
+        "first_name": "عمر",
+        "last_name": "حسن",
+        "address1": "١٢ شارع ٩",
+        "address2": "المعادي",
+        "city": "القاهرة",
+        "province": "",
+        "zip": "11431",
+        "country": "مصر"
+      }
+    }
+  },
+  "scenarios": [
+    { "id": "order_confirmation", "template": "order_confirmation" },
+    {
+      "id": "order_confirmation--paid-logo",
+      "template": "order_confirmation",
+      "data": { "financial_status": "paid", "shop": { "email_logo_url": "@logo" }, "tax_price": 0, "line_items": ["@line:anime_black"], "subtotal_line_items": [{ "$line": "anime_black", "discount_allocations": [] }], "discount_applications": [], "subtotal_price": 77900, "total_price": 83900, "item_count": 1 }
+    },
+    { "id": "shipping_confirmation", "template": "shipping_confirmation", "data": { "financial_status": "paid", "fulfillment_status": "fulfilled" } },
+    {
+      "id": "shipping_confirmation--partial",
+      "template": "shipping_confirmation",
+      "data": {
+        "fulfillment_status": "partial",
+        "fulfillment": { "item_count": 1, "tracking_company": "", "tracking_numbers": [], "tracking_urls": [], "estimated_delivery_at": null, "fulfillment_line_items": [{ "line_item": "@line:anime_black", "quantity": 1 }] }
+      }
+    },
+    { "id": "shipping_update", "template": "shipping_update", "data": { "fulfillment_status": "fulfilled", "fulfillment": { "tracking_numbers": ["BST58209911"], "tracking_urls": ["https://bosta.co/tracking-shipments?shipment-number=58209911"], "estimated_delivery_at": null } } },
+    { "id": "out_for_delivery", "template": "out_for_delivery", "data": { "fulfillment_status": "fulfilled" } },
+    { "id": "delivered", "template": "delivered", "data": { "financial_status": "paid", "fulfillment_status": "fulfilled" } },
+    {
+      "id": "order_cancelled",
+      "template": "order_cancelled",
+      "data": {
+        "financial_status": "refunded",
+        "cancel_reason": "inventory",
+        "discount_applications": [
+          { "title": "BUY 2 SAVE 5%", "type": "automatic", "target_selection": "entitled", "target_type": "line_item", "value_type": "percentage", "value": 5, "total_allocated_amount": 6490 },
+          { "title": "WELCOME100", "type": "discount_code", "target_selection": "all", "target_type": "line_item", "value_type": "fixed_amount", "value": 100, "total_allocated_amount": 10000 },
+          { "title": "FREESHIP", "type": "discount_code", "target_selection": "all", "target_type": "shipping_line", "value_type": "percentage", "value": 100, "total_allocated_amount": 6000 }
+        ],
+        "tax_price": 0,
+        "total_price": 276110
+      }
+    },
+    {
+      "id": "abandoned_checkout",
+      "template": "abandoned_checkout",
+      "data": {
+        "url": "https://linux-eg.com/checkouts/cn/Z2NwLWV1cm9wZS13ZXN0NDowMUo/recover?key=5f1e9a",
+        "line_items": [
+          { "$line": "anime_black", "discount_allocations": [] },
+          { "$line": "sada_beige", "discount_allocations": [{ "amount": 6490, "discount_application": { "title": "BUY 2 SAVE 5%", "target_selection": "entitled", "target_type": "line_item" } }] }
+        ],
+        "subtotal_price": 201210
+      },
+      "lang": {
+        "ar": {
+          "line_items": [
+            { "$line": "anime_black", "discount_allocations": [] },
+            { "$line": "sada_beige", "title": "هودي سادة بيج - M", "discount_allocations": [{ "amount": 6490, "discount_application": { "title": "اشتري ٢ ووفّر ٥٪", "target_selection": "entitled", "target_type": "line_item" } }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "customer_account_invite",
+      "template": "customer_account_invite",
+      "data": { "custom_message": "Hi Omar, we set up your account from your last order so you can track it anytime." },
+      "lang": { "ar": { "custom_message": "أهلاً يا عمر، جهّزنالك الحساب من آخر طلب ليك عشان تتابعه في أي وقت." } }
+    },
+    { "id": "customer_account_welcome", "template": "customer_account_welcome" },
+    { "id": "customer_password_reset", "template": "customer_password_reset" }
+  ]
+}

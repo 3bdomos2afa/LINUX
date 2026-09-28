@@ -3,6 +3,15 @@
   either under the video (default) or floating over it, from hero-embroidery.
   Params: s (section.settings), eyebrow, heading, sub, cta, cta2 (resolved strings)
 {%- endcomment -%}
+{%- liquid
+  assign primary_href = s.cta_url | default: routes.all_products_collection_url
+  assign secondary_href = s.cta2_url | default: routes.collections_url
+  assign cd_label = s.countdown_label
+  if cd_label == blank
+    assign cd_label = 'sections.hero.countdown_label' | t
+  endif
+  assign cd_end_at = s.countdown_end_at | default: '' | strip
+-%}
 <div class="hero__strip glass" data-specular data-reveal>
   {%- unless s.show_headline == false -%}
     <div class="hero__copy">
@@ -11,11 +20,24 @@
     </div>
   {%- endunless -%}
   <div class="hero__side">
+    {%- unless s.show_countdown == false -%}
+      {%- if cd_end_at != blank -%}
+        <div class="hero__countdown" data-countdown data-countdown-end="{{ cd_end_at | escape }}" hidden>
+          <p class="hero__timer" data-countdown-active>
+            <span class="hero__timer-label">{% render 'icon', name: 'clock', px: 15 %}<span>{{ cd_label | escape }}</span></span>
+            <span class="hero__timer-clock" dir="ltr" role="timer">
+              <span class="hero__timer-unit" data-cd="hours">--</span><span class="hero__timer-sep">:</span><span class="hero__timer-unit" data-cd="minutes">--</span><span class="hero__timer-sep">:</span><span class="hero__timer-unit" data-cd="seconds">--</span>
+            </span>
+          </p>
+          <p class="hero__timer" data-countdown-expired role="status">{{ 'sections.hero.countdown_expired' | t }}</p>
+        </div>
+      {%- endif -%}
+    {%- endunless -%}
     <p class="hero__sub">{{ sub | escape }}</p>
     {%- unless s.show_cta == false -%}
       <div class="hero__cta">
-        <a href="{{ s.cta_url | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg" data-magnetic>{{ cta | escape }}{% render 'icon', name: 'arrow-right' %}</a>
-        {%- if cta2 != blank -%}<a href="{{ s.cta2_url | default: routes.collections_url }}" class="btn btn--glass btn--lg" data-magnetic>{{ cta2 | escape }}</a>{%- endif -%}
+        <a href="{% render 'nav-url', url: primary_href %}" class="btn btn--primary btn--lg" data-magnetic>{{ cta | escape }}{% render 'icon', name: 'arrow-right' %}</a>
+        {%- if cta2 != blank -%}<a href="{% render 'nav-url', url: secondary_href %}" class="btn btn--glass btn--lg" data-magnetic>{{ cta2 | escape }}</a>{%- endif -%}
       </div>
     {%- endunless -%}
   </div>
@@ -40,5 +62,6 @@
     <li>{% render 'icon', name: 'truck', px: 16 %}<span>{{ t1 | escape }}</span></li>
     <li>{% render 'icon', name: 'return', px: 16 %}<span>{{ t2 | escape }}</span></li>
     <li>{% render 'icon', name: 'needle', px: 16 %}<span>{{ t3 | escape }}</span></li>
+    <li class="hero__trust-toggle"><button class="hero__toggle" type="button" data-hero-toggle aria-pressed="false" data-label-pause="{{ 'sections.hero.pause' | t | escape }}" data-label-play="{{ 'sections.hero.play' | t | escape }}">{% render 'icon', name: 'pause', px: 12 %}{% render 'icon', name: 'play', px: 12 %}<span>{{ 'sections.hero.pause' | t }}</span></button></li>
   </ul>
 {%- endif -%}

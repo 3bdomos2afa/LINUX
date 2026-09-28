@@ -1,0 +1,3 @@
+{%- comment -%} Sets lx_tdir to rtl when lx_dir_text contains Arabic letters, so shopper-typed text keeps its punctuation in place. {%- endcomment -%}
+{%- assign lx_tdir = 'ltr' -%}
+{%- for lx_ch in lx_probe -%}{%- if lx_dir_text contains lx_ch -%}{%- assign lx_tdir = 'rtl' -%}{%- break -%}{%- endif -%}{%- endfor -%}

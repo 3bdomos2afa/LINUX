@@ -19,7 +19,7 @@
         </article>
       {%- endfor -%}
     </div>
-    {%- if paginate.pages > 1 -%}<nav class="pagination">{{ paginate | default_pagination }}</nav>{%- endif -%}
+    {% render 'localized-pagination', pagination: paginate %}
   {%- endpaginate -%}
 </section>
 {% schema %}

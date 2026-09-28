@@ -9,8 +9,17 @@
       assign size_option = opt
     endif
   endfor
+  assign fit_identity = product.handle | append: ' ' | append: product.type | append: ' ' | append: product.title | downcase
+  assign oversized_fit = false
+  if fit_identity contains 'hoodie' or fit_identity contains 'shirt' or fit_identity contains 'tee' or fit_identity contains 'هودي' or fit_identity contains 'تيشيرت'
+    assign oversized_fit = true
+  endif
   assign form_image = current.featured_image | default: product.featured_image | image_url: width: 200
+  assign product_form_id = 'product-form-' | append: section.id
 -%}
+{%- comment -%} Counts print in the same numerals as the prices beside them. {%- endcomment -%}
+{%- capture stock_count_label -%}{% render 'digits', value: current.inventory_quantity %}{%- endcapture -%}
+{%- assign stock_count_label = stock_count_label | strip -%}
 <section class="pdp wrap" id="pdp-{{ section.id }}" data-product data-product-handle="{{ product.handle }}" data-section-id="{{ section.id }}">
   {%- if s.show_breadcrumb -%}
     <nav class="crumbs pdp__crumbs" aria-label="{{ 'general.breadcrumb' | t }}">
@@ -26,9 +35,11 @@
       <div class="gallery__main glass" data-gallery-main>
         <div class="gallery__track" data-gallery-track role="region" aria-label="{{ 'products.media_gallery' | t }}">
           {%- for media in product.media -%}
+            {%- capture media_alt -%}{%- if media.alt != blank -%}{{ media.alt }}{%- else -%}{% render 'product-title', title: product.title %}{%- endif -%}{%- endcapture -%}
+            {%- if request.locale.iso_code == 'ar' and media_alt contains product.title -%}{%- capture media_alt -%}{% render 'product-title', title: product.title %}{%- endcapture -%}{%- endif -%}
             <figure class="gallery__slide" data-gallery-slide data-media-id="{{ media.id }}" data-index="{{ forloop.index0 }}">
               {%- if media.media_type == 'image' -%}
-                <img src="{{ media | image_url: width: 1200 }}" srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1800 }} 1800w" sizes="(max-width: 900px) 100vw, 55vw" alt="{{ media.alt | default: product.title | escape }}" width="1200" height="{{ 1200 | divided_by: media.aspect_ratio | round }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async" data-zoom-src="{{ media | image_url: width: 2400 }}">
+                <img src="{{ media | image_url: width: 1200 }}" srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1800 }} 1800w" sizes="(max-width: 900px) 100vw, 55vw" alt="{{ media_alt | strip | escape }}" width="1200" height="{{ 1200 | divided_by: media.aspect_ratio | round }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async" data-zoom-src="{{ media | image_url: width: 2400 }}">
               {%- elsif media.media_type == 'video' -%}
                 {{ media | video_tag: controls: true, muted: true, loop: true, playsinline: true, class: 'gallery__video' }}
               {%- else -%}
@@ -53,7 +64,9 @@
       {%- if media_count > 1 -%}
         <div class="gallery__thumbs" data-gallery-thumbs>
           {%- for media in product.media -%}
-            <button class="gallery__thumb{% if forloop.first %} is-active{% endif %}" type="button" data-gallery-thumb="{{ forloop.index0 }}" aria-label="{{ 'accessibility.image_of' | t: index: forloop.index, total: media_count }}">
+            {%- capture media_label -%}{{ 'accessibility.image_of' | t: index: forloop.index, total: media_count }}{%- endcapture -%}
+            {%- capture media_label -%}{% render 'digits', value: media_label %}{%- endcapture -%}
+            <button class="gallery__thumb{% if forloop.first %} is-active{% endif %}" type="button" data-gallery-thumb="{{ forloop.index0 }}" aria-label="{{ media_label | strip | escape }}">
               <img src="{{ media.preview_image | image_url: width: 160 }}" alt="" width="72" height="90" loading="lazy">
             </button>
           {%- endfor -%}
@@ -70,16 +83,26 @@
           <h1 class="pdp__title">{% render 'product-title', title: product.title %}</h1>
           <div class="pdp__price-row">
             <div class="pdp__price" data-price-wrap>{% render 'price', variant: current, product: product, class: 'price--lg' %}</div>
-            {%- if s.show_rating -%}<span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {% render 'tr', value: s.rating_text, key: 'products.rating_text' %}</span>{%- endif -%}
+            {%- if s.show_rating -%}
+              {%- comment -%} Only real review data (Shopify's standard reviews.* metafields, written by review apps). {%- endcomment -%}
+              {%- assign review_rating = product.metafields.reviews.rating.value -%}
+              {%- assign review_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+              {%- if review_rating != blank and review_count > 0 -%}
+                {%- assign review_score = review_rating.rating | round: 1 -%}
+                {%- capture review_label -%}{{ review_score }} · {{ 'products.reviews_count' | t: count: review_count }}{%- endcapture -%}
+                <span class="pdp__rating">{% render 'icon', name: 'star', px: 14 %} {% render 'digits', value: review_label %}</span>
+              {%- endif -%}
+            {%- endif -%}
           </div>
         </div>
 
-        {%- form 'product', product, id: 'product-form', class: 'pdp__form', data-product-form: '', data-image: form_image -%}
+        {%- form 'product', product, id: product_form_id, class: 'pdp__form', data-product-form: '', data-image: form_image -%}
           <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
               {%- liquid
                 assign lower = option.name | downcase
+                assign option_index = option.position | minus: 1
                 assign is_color = false
                 if lower == 'color' or lower == 'colour' or lower == 'اللون'
                   assign is_color = true
@@ -92,27 +115,29 @@
               <fieldset class="pdp__option" data-option-index="{{ forloop.index0 }}">
                 <legend class="pdp__option-label">
                   <span>{% render 'option-name', name: option.name %}</span>
-                  <strong data-option-value="{{ forloop.index0 }}">{% render 'option-value', value: option.selected_value %}</strong>
+                  <strong data-option-value="{{ forloop.index0 }}">{% render 'option-value', value: current.options[option_index] %}</strong>
                   {%- if is_size and settings.show_size_guide -%}
                     <button class="pdp__size-guide" type="button" data-drawer-open="size-guide">{% render 'icon', name: 'ruler', px: 14 %}{{ 'products.size_guide' | t }}</button>
                   {%- endif -%}
                 </legend>
                 <div class="pills">
                   {%- for value in option.values -%}
-                    <label class="pill{% if is_color %} swatch pill--swatch{% endif %}" {% if is_color %}style="--swatch: {% render 'swatch-color', value: value %}"{% endif %} title="{{ value | escape }}">
-                      <input type="radio" name="option{{ option.position }}" value="{{ value | escape }}" data-option-input="{{ option.position | minus: 1 }}" {% if option.selected_value == value %}checked{% endif %}>
-                      {%- unless is_color -%}{% render 'option-value', value: value %}{%- else -%}<span class="visually-hidden">{% render 'option-value', value: value %}</span>{%- endunless -%}
+                    {%- assign raw_value = value.name | default: value | append: '' -%}
+                    {%- capture localized_value -%}{% render 'option-value', value: raw_value %}{%- endcapture -%}
+                    <label class="pill{% if is_color %} swatch pill--swatch{% endif %}" {% if is_color %}style="--swatch: {% render 'swatch-color', value: raw_value %}"{% endif %} title="{{ localized_value | strip | escape }}">
+                      <input type="radio" name="option{{ option.position }}" value="{{ raw_value | escape }}" data-option-input="{{ option_index }}" {% if current.options[option_index] == raw_value %}checked{% endif %}>
+                      {%- unless is_color -%}{{ localized_value | strip }}{%- else -%}<span class="visually-hidden">{{ localized_value | strip }}</span>{%- endunless -%}
                     </label>
                   {%- endfor -%}
                 </div>
               </fieldset>
             {%- endfor -%}
-            {%- if size_option -%}<p class="small muted pdp__fit">{% render 'icon', name: 'sparkle', px: 14 %} {{ 'products.true_to_size' | t }}</p>{%- endif -%}
+            {%- if size_option and oversized_fit -%}<p class="small muted pdp__fit">{% render 'icon', name: 'sparkle', px: 14 %}<strong>{{ 'fit.oversized_fit' | t }}</strong><span>{{ 'fit.pdp_oversized_note' | t }}</span></p>{%- endif -%}
           {%- endunless -%}
 
           {%- for block in section.blocks -%}
             {%- case block.type -%}
-              {%- when 'fit_finder' -%}{%- if size_option -%}{% render 'fit-finder', block: block, product: product, size_option: size_option %}{%- endif -%}
+              {%- when 'fit_finder' -%}{%- if size_option and oversized_fit -%}{% render 'fit-finder', block: block, product: product, size_option: size_option %}{%- endif -%}
               {%- when 'bundle' -%}{% render 'bundle-offer', block: block, product: product, current: current %}
             {%- endcase -%}
           {%- endfor -%}
@@ -120,7 +145,7 @@
           <div class="pdp__stock" data-stock>
             {%- if current.available -%}
               {%- if settings.show_stock_hint and current.inventory_management == 'shopify' and current.inventory_quantity > 0 and current.inventory_quantity <= settings.low_stock -%}
-                <span class="dot dot--warn"></span>{{ 'products.low_stock' | t: count: current.inventory_quantity }}
+                <span class="dot dot--warn"></span>{{ 'products.low_stock' | t: count: stock_count_label }}
               {%- else -%}
                 <span class="dot"></span>{{ 'products.in_stock' | t }}
               {%- endif -%}
@@ -129,10 +154,11 @@
             {%- endif -%}
           </div>
 
+          <p class="small" data-product-error role="alert" hidden></p>
           <div class="pdp__buy">
             <div class="qty">
               <button class="qty__btn" type="button" data-qty-step="-1" aria-label="{{ 'cart.decrease' | t }}">−</button>
-              <input class="qty__input" type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="{{ 'products.quantity' | t }}">
+              <input class="qty__input" type="number" name="quantity" value="1" min="1" step="1" inputmode="numeric" data-localized-number aria-label="{{ 'products.quantity' | t }}">
               <button class="qty__btn" type="button" data-qty-step="1" aria-label="{{ 'cart.increase' | t }}">+</button>
             </div>
             <button class="btn btn--primary btn--lg pdp__atc" type="submit" data-atc {% unless current.available %}disabled{% endunless %}>
@@ -145,6 +171,7 @@
             <a class="btn btn--glass btn--block pdp__wa" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}?text={{ 'general.whatsapp_prefill' | t | append: ' ' | append: product.title | url_encode }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', px: 18 %}{{ 'general.whatsapp' | t }}</a>
           {%- endif -%}
         {%- endform -%}
+        {%- render 'notify-me', product: product, current: current, section_id: section.id -%}
 
         {%- if settings.show_delivery_estimate -%}
           <div class="pdp__delivery">
@@ -190,9 +217,16 @@
   </div>
 
   {%- comment -%} ---------- Variant data for product.js ---------- {%- endcomment -%}
-  <script type="application/json" data-option-labels>{ {%- for option in product.options_with_values -%}{%- for value in option.values -%}{%- capture lv -%}{% render 'option-value', value: value %}{%- endcapture -%}{{ value | json }}: {{ lv | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }</script>
-  <script type="application/json" data-variants>{{ product.variants | json }}</script>
-  <script type="application/json" data-product-json>{"id":{{ product.id }},"handle":{{ product.handle | json }},"title":{{ product.title | json }},"url":{{ product.url | json }},"image":{{ product.featured_image | image_url: width: 400 | json }},"price":{{ product.price }},"type":{{ product.type | json }},"lowStock":{{ settings.low_stock | default: 5 }},"strings":{"lowStock":{{ 'products.low_stock' | t: count: '[count]' | json }},"inStock":{{ 'products.in_stock' | t | json }},"soldOut":{{ 'products.sold_out' | t | json }},"unavailable":{{ 'products.unavailable' | t | json }},"addToBag":{{ 'products.add_to_bag' | t | json }}}}</script>
+  {%- capture json_lt -%}\u003c{%- endcapture -%}
+  {%- capture option_label_data -%}{ {%- for option in product.options_with_values -%}{%- for value in option.values -%}{%- assign raw_value = value.name | default: value | append: '' -%}{%- capture lv -%}{% render 'option-value', value: raw_value %}{%- endcapture -%}{{ raw_value | json }}: {{ lv | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%} }{%- endcapture -%}
+  <script type="application/json" data-option-labels>{{ option_label_data | replace: '<', json_lt }}</script>
+  {%- comment -%} Serialize inventory explicitly; Shopify's product JSON omits inventory quantities/policies. {%- endcomment -%}
+  {%- capture variant_data -%}[{%- for variant in product.variants -%}
+    {"id": {{ variant.id | json }}, "options": {{ variant.options | json }}, "available": {{ variant.available | json }}, "price": {{ variant.price | json }}, "compare_at_price": {{ variant.compare_at_price | json }}, "featured_image": {{ variant.featured_image | json }}, "featured_media": {"id": {{ variant.featured_media.id | json }}}, "inventory_management": {{ variant.inventory_management | json }}, "inventory_policy": {{ variant.inventory_policy | json }}, "inventory_quantity": {{ variant.inventory_quantity | json }}, "requires_selling_plan": {{ variant.requires_selling_plan | json }}}
+    {%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- endcapture -%}
+  <script type="application/json" data-variants>{{ variant_data | replace: '<', json_lt }}</script>
+  {%- capture product_data -%}{"id":{{ product.id }},"handle":{{ product.handle | json }},"title":{{ product.title | json }},"url":{{ product.url | json }},"image":{{ product.featured_image | image_url: width: 400 | json }},"price":{{ product.price }},"type":{{ product.type | json }},"lowStock":{{ settings.low_stock | default: 5 }},"strings":{"lowStock":{{ 'products.low_stock' | t: count: '[count]' | json }},"inStock":{{ 'products.in_stock' | t | json }},"soldOut":{{ 'products.sold_out' | t | json }},"unavailable":{{ 'products.unavailable' | t | json }},"addToBag":{{ 'products.add_to_bag' | t | json }}}}{%- endcapture -%}
+  <script type="application/json" data-product-json>{{ product_data | replace: '<', json_lt }}</script>
 </section>
 
 {%- if settings.show_sticky_atc -%}
@@ -204,7 +238,7 @@
 {%- endif -%}
 
 {%- if settings.show_size_guide -%}
-  {% render 'size-guide-drawer', product: product %}
+  {% render 'size-guide-drawer', product: product, oversized_fit: oversized_fit %}
 {%- endif -%}
 
 <div class="lightbox" data-lightbox aria-hidden="true" inert>
@@ -217,25 +251,14 @@
   "name": "Product",
   "settings": [
     { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
-    { "type": "checkbox", "id": "show_rating", "label": "Show rating chip", "default": true },
-    { "type": "text", "id": "rating_text", "label": "Rating text (blank = translated default)" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show star rating (needs a reviews app)", "default": true, "info": "Shows the average and count from the reviews.rating metafields a reviews app writes. Nothing shows until real reviews exist." },
     { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp button under Add to bag", "default": false }
   ],
   "blocks": [
     { "type": "description", "name": "Description", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" } ] },
     { "type": "fabric", "name": "Fabric & care", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" }, { "type": "richtext", "id": "content", "label": "Content" } ] },
     { "type": "shipping", "name": "Shipping & exchange", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title" }, { "type": "richtext", "id": "content", "label": "Content" } ] },
-    { "type": "bundle", "name": "Bundle offer", "limit": 1, "settings": [
-      { "type": "paragraph", "content": "Create matching automatic discounts in Admin → Discounts (e.g. Buy 2 get 10% off). This block only shows the tiers and sets the quantity." },
-      { "type": "text", "id": "title", "label": "Title (blank = translated)" },
-      { "type": "text", "id": "subtitle", "label": "Subtitle (blank = translated)" },
-      { "type": "range", "id": "tier1_qty", "label": "Tier 1 quantity", "min": 2, "max": 6, "step": 1, "default": 2 },
-      { "type": "range", "id": "tier1_pct", "label": "Tier 1 discount %", "min": 5, "max": 50, "step": 5, "default": 10 },
-      { "type": "range", "id": "tier2_qty", "label": "Tier 2 quantity", "min": 2, "max": 8, "step": 1, "default": 3 },
-      { "type": "range", "id": "tier2_pct", "label": "Tier 2 discount %", "min": 5, "max": 50, "step": 5, "default": 15 },
-      { "type": "range", "id": "tier3_qty", "label": "Tier 3 quantity (0 = hide)", "min": 0, "max": 10, "step": 1, "default": 0 },
-      { "type": "range", "id": "tier3_pct", "label": "Tier 3 discount %", "min": 5, "max": 50, "step": 5, "default": 20 }
-    ] },
+    { "type": "bundle", "name": "Bundle offer", "limit": 1, "settings": [ { "type": "checkbox", "id": "discount_live", "label": "Matching automatic discount is live in Shopify", "default": false, "info": "Off: prices show as estimates and shoppers are told the final price appears in the bag. Turn on only after creating the matching automatic discount." }, { "type": "paragraph", "content": "Admin > Discounts: create automatic Amount off products discounts on all eligible products, including color siblings. Defaults: minimum 2 items = 10%, minimum 3 = 15%. Disable product-discount combinations. Match any changed tiers below. Native rules count eligible items across the cart; exact per-group offers require a discount app/Function. Displayed savings are estimates only." }, { "type": "select", "id": "source", "label": "Other pieces can be", "default": "store", "options": [ { "value": "store", "label": "Any product from the store (collection below)" }, { "value": "list", "label": "Only the products picked below" }, { "value": "same", "label": "Only this product (other colours/sizes)" } ], "info": "Products tagged no-bundle and the Customize product are always left out." }, { "type": "collection", "id": "collection", "label": "Collection for \"any product\"", "info": "Blank = all products (first 50)." }, { "type": "product_list", "id": "products", "label": "Products for \"only the products picked below\"", "limit": 50, "info": "Current product is always included. A custom.bundle_products metafield on a product overrides this list." }, { "type": "text", "id": "title", "label": "Title (blank = translated)" }, { "type": "text", "id": "subtitle", "label": "Subtitle (blank = translated)" }, { "type": "range", "id": "tier1_qty", "label": "Tier 1 quantity", "min": 2, "max": 6, "step": 1, "default": 2 }, { "type": "range", "id": "tier1_pct", "label": "Tier 1 discount %", "min": 5, "max": 50, "step": 5, "default": 10 }, { "type": "range", "id": "tier2_qty", "label": "Tier 2 quantity", "min": 2, "max": 8, "step": 1, "default": 3 }, { "type": "range", "id": "tier2_pct", "label": "Tier 2 discount %", "min": 5, "max": 50, "step": 5, "default": 15 }, { "type": "range", "id": "tier3_qty", "label": "Tier 3 quantity (0 = hide)", "min": 0, "max": 10, "step": 1, "default": 0 }, { "type": "range", "id": "tier3_pct", "label": "Tier 3 discount %", "min": 5, "max": 50, "step": 5, "default": 20 } ] },
     { "type": "fit_finder", "name": "Find your size", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title (blank = translated)" } ] },
     { "type": "custom", "name": "Custom accordion", "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Details" }, { "type": "richtext", "id": "content", "label": "Content" } ] }
   ]

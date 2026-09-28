@@ -1,0 +1,14 @@
+<tr>
+<td align="center" style="padding:30px 18px 0;font-family:[[font]];">
+<p style="margin:0;font-family:[[font]];font-size:13px;line-height:20px;font-weight:700;color:[[c.cream]];">[[footer_tagline]]</p>
+<p style="margin:6px 0 0;font-family:[[font]];font-size:12px;line-height:19px;color:[[c.muted2]];">{%- case lx_context -%}{%- when 'order' -%}[[footer_order]]{%- when 'checkout' -%}[[footer_checkout]]{%- else -%}[[footer_account]]{%- endcase -%}</p>
+<p style="margin:10px 0 0;font-family:[[font]];font-size:12px;line-height:18px;"><a href="{{ store_url }}" target="_blank" style="color:[[c.lime]];text-decoration:none;font-weight:700;"><span dir="ltr">{{ shop.url | remove: 'https://' | remove: 'http://' }}</span></a></p>
+</td>
+</tr>
+</table>
+<!--[if mso]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+</body>
+</html>

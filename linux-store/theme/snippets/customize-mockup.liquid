@@ -1,0 +1,8 @@
+{%- if photo != blank or builtin != blank -%}
+  {%- if photo != blank -%}
+    {%- assign source = photo | image_url: width: 1000 -%}
+  {%- else -%}
+    {%- assign source = builtin | asset_url -%}
+  {%- endif -%}
+  <img class="cz__photo" data-cz-photo="{{ key | escape }}" data-src="{{ source }}" alt="{{ label | escape }}" width="{{ photo.width | default: 720 }}" height="{{ photo.height | default: 720 }}" decoding="async" hidden>
+{%- endif -%}

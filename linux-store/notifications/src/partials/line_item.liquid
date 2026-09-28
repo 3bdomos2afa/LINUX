@@ -1,0 +1,65 @@
+{%- comment -%} One line row. Inputs: lx_line (line item), lx_qty, lx_show_price. {%- endcomment -%}
+{%- assign lx_is_first = forloop.first -%}
+{%- assign lx_variant = lx_line.variant.title | default: '' -%}
+{%- if lx_variant == 'Default Title' -%}{%- assign lx_variant = '' -%}{%- endif -%}
+[[> line_title]]
+{%- comment -%} Customize-studio pieces show the shopper's own mockup (back first, like the storefront bag). {%- endcomment -%}
+{%- assign lx_mock = '' -%}
+{%- for p in lx_line.properties -%}
+{%- assign lx_pv = p.last | append: '' -%}
+{%- assign lx_pv8 = lx_pv | slice: 0, 8 -%}
+{%- if lx_pv8 == 'https://' and p.first == 'Back mockup' -%}{%- assign lx_mock = lx_pv -%}{%- endif -%}
+{%- if lx_pv8 == 'https://' and p.first == 'Front mockup' and lx_mock == '' -%}{%- assign lx_mock = lx_pv -%}{%- endif -%}
+{%- endfor -%}
+{%- if lx_mock != '' -%}
+{%- assign lx_img = lx_mock -%}
+{%- elsif lx_line.image -%}
+{%- assign lx_img = lx_line | img_url: 'compact_cropped' -%}
+{%- else -%}
+{%- assign lx_img = '' -%}
+{%- endif -%}
+{%- assign lx_img2 = lx_img | slice: 0, 2 -%}
+{%- if lx_img2 == '//' -%}{%- assign lx_img = lx_img | prepend: 'https:' -%}{%- endif -%}
+{%- capture lx_variant_label -%}
+{%- if lx_variant != '' -%}
+{%- assign lx_parts = lx_variant | split: ' / ' -%}
+{%- for lx_val in lx_parts -%}[[> value_map]]{%- unless forloop.last %} / {% endunless -%}{%- endfor -%}
+{%- endif -%}
+{%- endcapture -%}
+<tr>
+<td style="padding:{% if lx_is_first %}6px{% else %}16px{% endif %} 0 16px;{% unless lx_is_first %}border-top:1px solid [[c.border]];{% endunless %}">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+<tr>
+<td class="lx-thumb" width="72" valign="top" style="width:72px;">
+{%- if lx_img != '' -%}
+<img src="{{ lx_img }}" width="72" height="72" alt="{{ lx_title }}" style="display:block;width:72px;height:72px;border:1px solid [[c.border]];border-radius:18px;object-fit:cover;background-color:[[c.panel]];">
+{%- else -%}
+<div style="width:72px;height:72px;border:1px solid [[c.border]];border-radius:18px;background-color:[[c.panel]];"></div>
+{%- endif -%}
+</td>
+<td width="14" style="width:14px;font-size:1px;line-height:1px;">&nbsp;</td>
+<td valign="top" style="text-align:[[start]];font-family:[[font]];">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]">
+<tr>
+<td valign="top" style="text-align:[[start]];font-family:[[font]];font-size:15px;line-height:22px;font-weight:700;color:[[c.cream]];">{{ lx_title }}</td>
+{%- if lx_show_price -%}
+<td valign="top" style="padding-[[start]]:12px;text-align:[[end]];white-space:nowrap;font-family:[[font]];">
+{%- if lx_line.original_line_price > lx_line.final_line_price -%}
+<p style="margin:0;font-size:12px;line-height:18px;color:[[c.muted2]];text-decoration:line-through;"><span dir="ltr">{{ lx_line.original_line_price | money }}</span></p>
+{%- endif -%}
+<p style="margin:0;font-size:15px;line-height:22px;font-weight:800;color:[[c.text]];">{%- if lx_line.final_line_price > 0 -%}<span dir="ltr">{{ lx_line.final_line_price | money }}</span>{%- else -%}[[free]]{%- endif -%}</p>
+</td>
+{%- endif -%}
+</tr>
+</table>
+{%- if lx_variant_label != '' -%}
+<p style="margin:2px 0 0;font-family:[[font]];font-size:13px;line-height:20px;color:[[c.muted]];">{{ lx_variant_label }}</p>
+{%- endif -%}
+[[> line_props]]
+[[> line_discounts]]
+<p style="margin:8px 0 0;font-family:[[font]];font-size:13px;line-height:18px;color:[[c.muted]];">[[qty]]: <span dir="ltr">{{ lx_qty }}</span></p>
+</td>
+</tr>
+</table>
+</td>
+</tr>

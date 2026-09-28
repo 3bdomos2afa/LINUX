@@ -21,4 +21,5 @@
   endcase
   assign h = w | divided_by: ratio | round
 -%}
-<img class="mascot mascot--{{ n }}{% if class %} {{ class }}{% endif %}" src="{{ file | asset_url }}" alt="{{ alt | default: '' }}" width="{{ w }}" height="{{ h }}" loading="{{ loading | default: 'lazy' }}" decoding="async" draggable="false">
+{%- assign small = 'mascot-' | append: n | append: '-320.webp' -%}
+<img class="mascot mascot--{{ n }}{% if class %} {{ class }}{% endif %}" src="{{ file | asset_url }}" srcset="{{ small | asset_url }} 320w, {{ file | asset_url }} 859w" sizes="{{ w }}px" alt="{{ alt | default: '' }}" width="{{ w }}" height="{{ h }}" loading="{{ loading | default: 'lazy' }}" decoding="async" draggable="false">

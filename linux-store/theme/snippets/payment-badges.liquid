@@ -1,0 +1,38 @@
+{%- comment -%}
+  Payment marks for the methods the store really takes (Theme settings →
+  Payments). Local methods show an uploaded official logo when there is one,
+  otherwise a LINUX badge. Card logos only when "Show card logos" is on.
+  Params: compact (bool) — smaller row for the bag.
+{%- endcomment -%}
+{%- liquid
+  assign any = false
+  if settings.pay_cod or settings.pay_instapay or settings.pay_vodafone or settings.pay_wallet or settings.pay_fawry or settings.pay_valu
+    assign any = true
+  endif
+  if settings.pay_card_icons and shop.enabled_payment_types.size > 0
+    assign any = true
+  endif
+-%}
+{%- if any -%}
+  <ul class="pay-badges{% if compact %} pay-badges--compact{% endif %}" role="list" aria-label="{{ 'footer.payment' | t | escape }}">
+    {%- if settings.pay_cod -%}<li class="pay-badge pay-badge--cod">{% render 'icon', name: 'cash', px: 16 %}<span>{{ 'payments.cod' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_instapay -%}
+      <li class="pay-badge pay-badge--instapay">
+        {%- if settings.pay_instapay_logo != blank -%}{{ settings.pay_instapay_logo | image_url: height: 48 | image_tag: height: 22, class: 'pay-badge__logo', alt: '' }}{%- else -%}{% render 'icon', name: 'bolt', px: 16 %}{%- endif -%}
+        <span>{{ 'payments.instapay' | t }}</span>
+      </li>
+    {%- endif -%}
+    {%- if settings.pay_vodafone -%}
+      <li class="pay-badge pay-badge--vodafone">
+        {%- if settings.pay_vodafone_logo != blank -%}{{ settings.pay_vodafone_logo | image_url: height: 48 | image_tag: height: 22, class: 'pay-badge__logo', alt: '' }}{%- else -%}{% render 'icon', name: 'smartphone', px: 16 %}{%- endif -%}
+        <span>{{ 'payments.vodafone' | t }}</span>
+      </li>
+    {%- endif -%}
+    {%- if settings.pay_wallet -%}<li class="pay-badge">{% render 'icon', name: 'wallet', px: 16 %}<span>{{ 'payments.wallet' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_fawry -%}<li class="pay-badge">{% render 'icon', name: 'ticket', px: 16 %}<span>{{ 'payments.fawry' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_valu -%}<li class="pay-badge">{% render 'icon', name: 'calendar', px: 16 %}<span>{{ 'payments.valu' | t }}</span></li>{%- endif -%}
+    {%- if settings.pay_card_icons -%}
+      {%- for type in shop.enabled_payment_types -%}<li class="pay-badge pay-badge--card">{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+    {%- endif -%}
+  </ul>
+{%- endif -%}

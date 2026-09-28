@@ -1,0 +1,65 @@
+{%- comment -%}
+  Anchored to Shopify's documented totals: subtotal_price is after line and order discounts and shipping_price is
+  before shipping discounts, so Subtotal − discounts + shipping (+ taxes) always lands on total_price.
+{%- endcomment -%}
+{%- assign lx_order_disc = 0 -%}
+{%- assign lx_ship_disc = 0 -%}
+{%- for lx_app in discount_applications -%}
+{%- if lx_app.target_type == 'shipping_line' -%}
+{%- assign lx_ship_disc = lx_ship_disc | plus: lx_app.total_allocated_amount -%}
+{%- elsif lx_app.target_selection == 'all' -%}
+{%- assign lx_order_disc = lx_order_disc | plus: lx_app.total_allocated_amount -%}
+{%- endif -%}
+{%- endfor -%}
+{%- assign lx_line_disc = 0 -%}
+{%- for lx_sl in subtotal_line_items -%}
+{%- for lx_da in lx_sl.discount_allocations -%}
+{%- if lx_da.discount_application.target_selection != 'all' -%}{%- assign lx_line_disc = lx_line_disc | plus: lx_da.amount -%}{%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+{%- assign lx_savings = lx_order_disc | plus: lx_ship_disc | plus: lx_line_disc -%}
+{%- assign lx_items_subtotal = subtotal_price | plus: lx_order_disc -%}
+{%- assign lx_ship_after = shipping_price | minus: lx_ship_disc -%}
+{%- if lx_ship_after < 0 -%}{%- assign lx_ship_after = 0 -%}{%- endif -%}
+{%- comment -%} Tax-inclusive prices: subtotal + shipping already equals the total, so taxes become a note instead of a row. {%- endcomment -%}
+{%- assign lx_tax_included = false -%}
+{%- assign lx_pre_tax = subtotal_price | plus: lx_ship_after -%}
+{%- if tax_price > 0 and lx_pre_tax == total_price -%}{%- assign lx_tax_included = true -%}{%- endif -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" style="margin-top:4px;border-top:1px solid [[c.border]];">
+<tr><td colspan="2" style="height:10px;font-size:1px;line-height:1px;">&nbsp;</td></tr>
+<tr>
+<td style="[[s.tl]]">[[subtotal]]</td>
+<td style="[[s.tv]]"><span dir="ltr">{{ lx_items_subtotal | money }}</span></td>
+</tr>
+{%- for lx_app in discount_applications -%}
+{%- if lx_app.target_type != 'shipping_line' and lx_app.target_selection == 'all' and lx_app.total_allocated_amount > 0 -%}
+<tr>
+<td style="[[s.tl]]">[[discount]] <span style="[[s.pill]]">{{ lx_app.title | escape }}</span></td>
+<td style="[[s.tv]]color:[[c.lime]];"><span dir="ltr">−{{ lx_app.total_allocated_amount | money }}</span></td>
+</tr>
+{%- endif -%}
+{%- endfor -%}
+{%- if requires_shipping or shipping_price > 0 -%}
+<tr>
+<td style="[[s.tl]]">[[shipping]]{%- for lx_app in discount_applications -%}{%- if lx_app.target_type == 'shipping_line' and lx_app.total_allocated_amount > 0 %} <span style="[[s.pill]]">{{ lx_app.title | escape }}</span>{%- endif -%}{%- endfor -%}</td>
+<td style="[[s.tv]]">{%- if lx_ship_disc > 0 -%}<span dir="ltr" style="color:[[c.muted2]];text-decoration:line-through;">{{ shipping_price | money }}</span>&nbsp;&nbsp;{%- endif -%}{%- if lx_ship_after > 0 -%}<span dir="ltr">{{ lx_ship_after | money }}</span>{%- else -%}[[free]]{%- endif -%}</td>
+</tr>
+{%- endif -%}
+{%- if tax_price > 0 and lx_tax_included == false -%}
+<tr>
+<td style="[[s.tl]]">[[taxes]]</td>
+<td style="[[s.tv]]"><span dir="ltr">{{ tax_price | money }}</span></td>
+</tr>
+{%- endif -%}
+<tr><td colspan="2" style="height:10px;font-size:1px;line-height:1px;">&nbsp;</td></tr>
+<tr>
+<td style="padding:14px 0 0;border-top:1px solid [[c.border]];font-family:[[font]];font-size:16px;line-height:24px;font-weight:800;color:[[c.cream]];text-align:[[start]];">[[total]]</td>
+<td class="lx-total-v" style="padding:14px 0 0;border-top:1px solid [[c.border]];font-family:[[font]];font-size:20px;line-height:26px;font-weight:800;color:[[c.cream]];text-align:[[end]];white-space:nowrap;"><span dir="ltr">{{ total_price | money_with_currency }}</span></td>
+</tr>
+</table>
+{%- if lx_tax_included -%}
+<p style="margin:6px 0 0;font-family:[[font]];font-size:12px;line-height:18px;color:[[c.muted]];text-align:[[end]];">[[taxes_included_note]]</p>
+{%- endif -%}
+{%- if lx_savings > 0 -%}
+<p style="margin:14px 0 0;font-family:[[font]];font-size:13px;line-height:20px;font-weight:700;color:[[c.lime]];text-align:[[start]];">[[you_saved]]</p>
+{%- endif -%}

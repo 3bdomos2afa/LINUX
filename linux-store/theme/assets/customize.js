@@ -1,24 +1,24 @@
-/* LINUX — Customize studio v4
-   Two independent designs (front + back), each with its own file, position,
-   scale and rotation, on real garment photos per colour/side. The shopper can
-   drag, pinch, wheel-zoom, rotate (knob, slider, keyboard) and nudge with the
-   arrow keys. On submit each side that carries a design gets a composited
-   JPEG mockup attached as a file property, so the order shows the garment
-   exactly as designed. Variant/price: colour → the product's "Color" option,
-   method → its "Type" option. */
+/* LINUX — two-sided artwork, exact size variants and native page scrolling. */
 (function () {
   'use strict';
   const L = window.LINUX;
   const root = document.querySelector('[data-customize]');
-  if (!root) return;
+  if (!root || !root.querySelector('[data-cz-form]')) return;
   const meta = JSON.parse(root.querySelector('[data-product-json]')?.textContent || '{}');
-  const variants = JSON.parse(root.querySelector('[data-variants]')?.textContent || '[]');
-  const strings = meta.strings || {};
+  const catalog = JSON.parse(root.querySelector('[data-cz-catalog]')?.textContent || '{}');
+  const mapping = JSON.parse(root.querySelector('[data-cz-config]')?.textContent || '{}');
+  const model = L.customizeModel;
+  const strings = { ...meta.strings, ...JSON.parse(root.querySelector('[data-cz-strings]')?.textContent || '{}') };
   const MAX = Number(root.dataset.maxMb || 10) * 1024 * 1024;
   const MIN_EMB = Number(root.dataset.minEmbroidery || 10);
   const MAX_QTY = Number(root.dataset.maxQty || 50);
+  const tiers = model.tiersFrom(mapping.tiers).filter((tier) => tier.quantity <= MAX_QTY);
   const AREA = meta.area || {};
   const SCALE_MIN = 10, SCALE_MAX = 90;
+  const PRINT_CM = mapping.print || {};
+  const SHOW_QUALITY = mapping.quality !== false;
+  const PLACE_EN = { center: 'Center chest', pocket: 'Left chest', upper: 'Upper back', middle: 'Center back' };
+  let syncTextLabel = () => {};
   const SIDES = ['front', 'back'];
 
   const q = (s) => root.querySelector(s);
@@ -32,6 +32,9 @@
   const minNotice = q('[data-cz-min-notice]'), eta = q('[data-cz-eta]'), idInput = q('[data-variant-id]'), atcPrice = q('[data-atc-price]'), wa = q('[data-cz-wa]');
   const tools = q('[data-cz-tools]'), hint = q('[data-cz-hint]'), area = q('[data-cz-area]'), colorLabel = q('[data-cz-color-label]'), fine = q('[data-cz-fine]'), fineSide = q('[data-cz-fine-side]');
   const firstColor = q('[data-cz-color].is-active') || q('[data-cz-color]');
+  const editToggle = q('[data-cz-edit-toggle]');
+  const photos = qa('[data-cz-photo]');
+  const mocks = qa('[data-cz-mock]');
 
   // per-side design state
   const design = {};
@@ -44,8 +47,8 @@
   const state = {
     side: root.dataset.side || 'back', shape: root.dataset.shape || 'hoodie',
     label: q('[data-cz-garment-opt].is-active')?.dataset.label || 'Hoodie',
-    colorKey: firstColor?.dataset.czColor, color: firstColor?.dataset.czColorName || '', colorValue: firstColor?.dataset.czVariantValue || '', hex: firstColor?.dataset.czHex || '#181818',
-    method: 'Print', qty: 1, sizes: [], unit: meta.price || 0,
+    colorKey: firstColor?.dataset.czColor, color: firstColor?.dataset.czColorName || '', colorValue: firstColor?.dataset.czVariantKey || '', hex: firstColor?.dataset.czTone || '#181818',
+    method: 'Print', qty: 1, sizes: [], unit: meta.price || 0, editing: false,
   };
   const cur = () => design[state.side];
   const sideName = (s) => (s === 'back' ? strings.back : strings.front) || s;
@@ -63,26 +66,76 @@
     d.y = Math.max(cy - h / 2 + Math.min(half, h / 2) * .35, Math.min(cy + h / 2 - Math.min(half, h / 2) * .35, d.y));
   }
   function centerInArea(d = cur(), side = state.side) { const [cx, cy] = printArea(side); d.x = cx; d.y = cy; }
+  // A new design starts at 80% of its print area (drawn width = s × .66% of the stage).
+  const aspectOf = (d) => (d && d.img && d.img.naturalWidth && d.img.naturalHeight ? d.img.naturalWidth / d.img.naturalHeight : 1);
+  const clampS = (s) => Math.max(SCALE_MIN, Math.min(SCALE_MAX, s));
+  function defaultScale(side = state.side, d = design[side]) { return clampS(model.fitWidth(printArea(side), .8, aspectOf(d)) / .66); }
+  function fitScale(side = state.side, d = design[side]) { return clampS(model.fitWidth(printArea(side), 1, aspectOf(d)) / .66); }
 
   /* ---- Variant / price ---- */
-  const lc = (v) => String(v == null ? '' : v).toLowerCase().trim();
-  function pickVariant() {
-    const wantMethod = lc((meta.methodValues || {})[state.method] || state.method);
-    const wantColor = lc(state.colorValue || state.color);
-    const has = (v, val) => v.options.some((o) => lc(o) === val);
-    let list = variants.filter((v) => has(v, wantMethod));
-    if (!list.length) list = variants.slice();
-    const byColor = list.filter((v) => has(v, wantColor));
-    if (byColor.length) list = byColor;
-    return list.find((v) => v.available) || list[0] || variants.find((v) => v.available) || variants[0];
+  function pickVariant(size) {
+    return model.variantFor(catalog[state.shape], { color: state.colorValue || state.color, method: state.method, size }, mapping);
+  }
+  const selectedVariants = () => state.sizes.slice(0, state.qty).map(pickVariant);
+  const interpolate = (text, values) => Object.entries(values).reduce((result, [key, value]) => result.replaceAll(`[${key}]`, value), text || '');
+  let priceSignature = '';
+
+  function paintPricing() {
+    const selected = selectedVariants();
+    const signature = `${state.shape}|${state.method}|${state.colorKey}|${state.qty}|${state.sizes.slice(0, state.qty).join(',')}`;
+    const priced = model.quote(selected, tiers);
+    idInput.value = selected[0]?.available ? selected[0].id : '';
+    q('[data-cz-submit]').disabled = root.dataset.preparing === 'true' || !priced || SIDES.some((side) => design[side].loading);
+    q('[data-cz-availability]').hidden = !!priced;
+    if (signature === priceSignature) return;
+    priceSignature = signature;
+    sizesList.querySelectorAll('.cz__size-row').forEach((row, index) => {
+      row.classList.toggle('is-unavailable', !selected[index]?.available);
+      row.querySelectorAll('input').forEach((input) => {
+        input.disabled = !pickVariant(input.value)?.available;
+        input.closest('label').classList.toggle('is-disabled', input.disabled);
+      });
+    });
+    const amount = priced ? L.money(priced.total) : '—';
+    if (total) total.textContent = amount;
+    if (atcPrice) { atcPrice.textContent = amount; atcPrice.hidden = !!priced?.estimated; }
+    state.unit = priced?.unit || 0;
+    q('[data-cz-unit]').textContent = priced ? L.money(priced.unit) : '—';
+    q('[data-cz-summary-qty]').textContent = L.digits(state.qty);
+    q('[data-cz-unit-label]').textContent = priced?.estimated ? strings.estimated_unit_price : strings.unit_price;
+    q('[data-cz-total-label]').textContent = priced?.estimated ? strings.estimated_total : strings.total;
+    q('[data-cz-savings-row]').hidden = !priced?.savings;
+    q('[data-cz-savings]').textContent = priced ? L.money(priced.savings) : '';
+    q('[data-cz-pricing-hint]').textContent = tiers.length || priced?.savings ? strings.pricing_more : strings.pricing_standard;
+    q('[data-cz-pricing-note]').hidden = !tiers.length;
+    const next = q('[data-cz-next-tier]');
+    next.hidden = !priced?.next;
+    next.textContent = priced?.next ? interpolate(strings.next_tier, { count: L.digits(priced.next.quantity), percent: L.digits(priced.next.discount) }) : '';
+    const list = q('[data-cz-price-tiers]');
+    list.hidden = !tiers.length;
+    list.replaceChildren();
+    tiers.filter((tier) => tier.quantity <= MAX_QTY).forEach((tier) => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'cz__price-tier';
+      button.classList.toggle('is-active', priced?.tier?.quantity === tier.quantity);
+      button.setAttribute('aria-pressed', String(priced?.tier?.quantity === tier.quantity));
+      button.textContent = interpolate(strings.tier_label, { count: L.digits(tier.quantity), percent: L.digits(tier.discount) });
+      button.addEventListener('click', () => setQty(tier.quantity));
+      list.append(button);
+    });
+    if (breakdown) breakdown.textContent = '';
   }
 
   /* ---- Photo / mockup layers ---- */
-  function showLayer(side = state.side) {
+  function photoFor(side = state.side) {
     const want = `${state.colorKey}|${state.shape}-${side}`;
-    let photo = null;
-    qa('[data-cz-photo]').forEach((img) => { const on = img.dataset.czPhoto === want; img.hidden = !on; if (on) photo = img; });
-    qa('[data-cz-mock]').forEach((m) => { m.hidden = !!photo || m.dataset.czMock !== `${state.shape}-${side}`; });
+    return photos.find((img) => img.dataset.czPhoto === want) || photos.find((img) => img.dataset.czPhoto === `shared|${state.shape}-${side}`);
+  }
+  function showLayer(side = state.side) {
+    const photo = photoFor(side);
+    photos.forEach((img) => { img.hidden = img !== photo; });
+    if (photo && !photo.getAttribute('src')) photo.src = photo.dataset.src;
+    mocks.forEach((m) => { m.hidden = !!photo || m.dataset.czMock !== `${state.shape}-${side}`; });
     garment.style.setProperty('--gc', state.hex);
     garment.classList.toggle('has-photo', !!photo);
     const hex = state.hex.replace('#', ''); const n = parseInt(hex.length === 3 ? hex.split('').map((c) => c + c).join('') : hex, 16);
@@ -90,6 +143,19 @@
     garment.classList.toggle('is-light', lum > .6);
     return photo;
   }
+
+  /* Print quality of an uploaded design at its current size on the garment */
+  function quality(side) {
+    const d = design[side];
+    if (!d.has || !SHOW_QUALITY) return null;
+    if (d.vector) return { level: 'great', label: strings.quality_vector, title: strings.quality_vector };
+    const [, , w] = printArea(side);
+    const cm = (PRINT_CM[state.shape] || {})[side] || (side === 'back' ? 36 : 28);
+    const r = model.printQuality(d.px, d.s, w, cm);
+    return { level: r.level, label: strings['quality_' + r.level], title: `${L.digits(Math.round(r.dpi))} DPI · ${L.digits(Math.round(r.cm))} cm` };
+  }
+  // A preset label only travels with the order while the design still sits exactly there.
+  const placeName = (d) => d.place && Math.abs(d.x - d.place.x) < .6 && Math.abs(d.y - d.place.y) < .6 && Math.abs(d.s - d.place.s) < .6 && Math.abs(d.r) < .5 ? d.place.name : '';
 
   function paintDesign(side) {
     const d = design[side];
@@ -100,7 +166,15 @@
     d.pos.value = `x:${Math.round(d.x)},y:${Math.round(d.y)},scale:${Math.round(d.s)},rotate:${Math.round(d.r)}`;
     d.pos.disabled = !d.has;
     d.drop.hidden = d.has; d.row.hidden = !d.has;
+    d.drop.setAttribute('aria-busy', String(!!d.loading));
+    q(`[data-cz-upload="${side}"] [data-cz-upload-status]`).hidden = !d.loading;
     if (d.dot) d.dot.hidden = !d.has;
+    const chip = q(`[data-cz-quality="${side}"]`);
+    if (chip) {
+      const qual = quality(side);
+      chip.hidden = !qual;
+      if (qual) { chip.dataset.level = qual.level; chip.textContent = qual.label; chip.title = qual.title; }
+    }
   }
 
   function paint() {
@@ -111,57 +185,75 @@
     colorProp.value = state.color;
     const withDesign = SIDES.filter((s) => design[s].has);
     sidesProp.value = withDesign.length === 2 ? (strings.both || 'Front + Back') : withDesign.map(sideName).join('');
-    if (scale) { scale.value = Math.round(d.s); if (scaleOut) scaleOut.value = Math.round(d.s) + '%'; }
-    if (rotate) { rotate.value = Math.round(d.r); if (rotateOut) rotateOut.value = Math.round(d.r) + '°'; }
+    if (scale) { scale.value = Math.round(d.s); if (scaleOut) scaleOut.value = L.digits(Math.round(d.s)) + (L.settings.locale === 'ar' ? '٪' : '%'); }
+    if (rotate) { rotate.value = Math.round(d.r); if (rotateOut) rotateOut.value = L.digits(Math.round(d.r)) + '°'; }
     root.dataset.shape = state.shape; root.dataset.side = state.side;
     showLayer(); paintArea();
     empty.hidden = d.has;
+    const stageQuality = q('[data-cz-quality-stage]');
+    if (stageQuality) {
+      const qual = quality(state.side);
+      stageQuality.hidden = !qual;
+      if (qual) { stageQuality.dataset.level = qual.level; stageQuality.textContent = qual.label; stageQuality.title = qual.title; }
+    }
+    const places = q('[data-cz-places]');
+    if (places) {
+      places.hidden = !d.has;
+      const active = placeName(d);
+      qa('[data-cz-place]').forEach((b) => { b.hidden = b.dataset.side !== state.side; const on = !!active && active === b.dataset.czPlace && b.dataset.side === state.side; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on)); });
+    }
+    syncTextLabel();
+    const stickyTotal = q('[data-cz-sticky-total]');
+    if (stickyTotal && total) stickyTotal.textContent = total.textContent;
     if (emptyLabel) emptyLabel.textContent = (strings.uploadSide || 'Upload [side] design').replace('[side]', sideName(state.side));
     if (fineSide) fineSide.textContent = sideName(state.side);
     if (fine) fine.classList.toggle('is-disabled', !d.has);
     qtyField.value = state.qty;
-    sizesProp.value = state.sizes.map((sz, i) => `${i + 1}:${sz}`).join(', ');
-    const v = pickVariant();
-    if (v) { state.unit = v.price; idInput.value = v.id; }
-    const sum = state.unit * state.qty;
-    if (total) total.textContent = L.money(sum);
-    if (atcPrice) atcPrice.textContent = L.money(sum);
-    if (breakdown) breakdown.textContent = state.qty > 1 && strings.perPiece ? strings.perPiece.replace('[price]', L.money(state.unit)) : '';
+    sizesProp.value = state.sizes.slice(0, state.qty).map((sz, i) => `${i + 1}:${sz}`).join(', ');
+    paintPricing();
     const short = state.method === 'Embroidery' && state.qty < MIN_EMB;
     minNotice.hidden = state.method !== 'Embroidery';
     minNotice.classList.toggle('is-blocking', short);
     if (eta) eta.textContent = state.method === 'Embroidery' ? (strings.etaEmbroidery || '') : (strings.etaPrint || '');
-    if (tools) tools.hidden = !d.has;
-    if (hint) hint.textContent = d.has ? (strings.hintDesign || strings.hint || '') : (strings.hint || '');
+    if (tools) tools.hidden = !d.has || !state.editing;
+    if (hint) hint.textContent = d.has ? (state.editing ? strings.edit_hint : strings.browse_hint) : strings.hint;
+    canvas.classList.toggle('is-editing', state.editing && d.has);
+    editToggle.hidden = !d.has;
+    editToggle.textContent = state.editing ? strings.finish_editing : strings.edit_design;
+    editToggle.setAttribute('aria-pressed', String(state.editing));
     if (colorLabel) colorLabel.textContent = q('[data-cz-color].is-active')?.getAttribute('aria-label') || state.color;
     if (wa) {
-      const txt = `${strings.wa || ''} ${state.label} · ${state.color} · ${state.method} · ${sidesProp.value || '-'} · ${state.qty} pcs${state.sizes.length ? ' (' + state.sizes.join(', ') + ')' : ''}`;
+      const methodLabel = q('[data-cz-method].is-active strong')?.textContent || state.method;
+      const txt = `${strings.wa || ''} ${state.label} · ${colorLabel.textContent} · ${methodLabel} · ${sidesProp.value || '-'} · ${L.digits(state.qty)} (${state.sizes.slice(0, state.qty).join(', ')})`;
       wa.href = wa.href.replace(/\?text=.*$/, '') + '?text=' + encodeURIComponent(txt.trim());
     }
   }
 
   /* ---- Sizes ---- */
   function renderSizes() {
-    const prev = state.sizes.slice();
     sizesList.innerHTML = '';
-    state.sizes = [];
+    priceSignature = '';
     for (let i = 0; i < state.qty; i++) {
       const row = sizeTpl.content.firstElementChild.cloneNode(true);
-      row.querySelector('.cz__size-n').textContent = (strings.piece || 'Piece [n]').replace('[n]', i + 1);
+      // Piece captions are shopper-facing: same numerals as the price under them.
+      row.querySelector('.cz__size-n').textContent = (strings.piece || 'Piece [n]').replace('[n]', L.digits(i + 1));
       const inputs = row.querySelectorAll('input');
       inputs.forEach((inp) => { inp.name = `cz-size-${i}`; inp.checked = false; });
-      const want = prev[i];
+      row.querySelector('[role="radiogroup"]').setAttribute('aria-label', row.querySelector('.cz__size-n').textContent);
+      const want = state.sizes[i];
       const match = want && Array.from(inputs).find((inp) => inp.value === want);
-      const chosen = match || inputs[Math.min(1, inputs.length - 1)];
-      chosen.checked = true; state.sizes.push(chosen.value);
+      const available = Array.from(inputs).filter((input) => pickVariant(input.value)?.available);
+      const chosen = match || available[Math.min(1, available.length - 1)];
+      if (chosen) { chosen.checked = true; state.sizes[i] = chosen.value; }
+      else state.sizes[i] = want || '';
       row.addEventListener('change', (e) => { if (e.target.matches('input')) { state.sizes[i] = e.target.value; paint(); } });
       sizesList.appendChild(row);
     }
-    q('[data-cz-sizes]').classList.toggle('is-many', state.qty > 6);
   }
   function setQty(n) {
     state.qty = Math.max(1, Math.min(MAX_QTY, Math.round(Number(n) || 1)));
     qtyInput.value = state.qty;
+    L.numberInputs?.sync(qtyInput);
     qa('[data-cz-qty-set]').forEach((c) => c.classList.toggle('is-active', Number(c.dataset.czQtySet) === state.qty));
     renderSizes(); paint();
   }
@@ -182,35 +274,57 @@
     if (state.side === side) return;
     qa('[data-cz-side]').forEach((b) => { const on = b.dataset.czSide === side; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', String(on)); });
     state.side = side;
-    if (animate) { garment.classList.remove('is-flip'); void garment.offsetWidth; garment.classList.add('is-flip'); setTimeout(paint, 180); }
-    else paint();
+    state.editing = false;
+    if (animate) { garment.classList.remove('is-flip'); void garment.offsetWidth; garment.classList.add('is-flip'); }
+    paint();
     L.buzz();
   }
   qa('[data-cz-side]').forEach((btn) => btn.addEventListener('click', () => setSide(btn.dataset.czSide)));
+  editToggle.addEventListener('click', () => { state.editing = !state.editing; paint(); });
 
   /* ---- Upload (per side) ---- */
   function showError(msg) { err.textContent = msg; err.hidden = !msg; }
-  function setFile(side, file) {
+  function setFile(side, file, extra = {}) {
     showError('');
     if (!file) return;
     const d = design[side];
     if (file.size > MAX) { showError(strings.fileTooBig); d.input.value = ''; return; }
     if (!/^image\/(png|jpe?g|svg\+xml|webp)$/.test(file.type)) { showError(strings.fileType); d.input.value = ''; return; }
     const url = URL.createObjectURL(file);
-    d.img.onload = () => {
-      centerInArea(d, side); d.s = 42; d.r = 0; d.has = true; d.file = file;
+    const request = {}; d.request = request; d.loading = true; paint();
+    const image = new Image();
+    image.onload = () => {
+      if (d.request !== request) { URL.revokeObjectURL(url); return; }
+      if (d.url) URL.revokeObjectURL(d.url);
+      d.url = url; d.img.src = url; d.loading = false;
+      centerInArea(d, side); d.s = defaultScale(side); d.r = 0; d.has = true; d.file = file;
+      d.px = image.naturalWidth || 0;
+      d.vector = file.type === 'image/svg+xml' || !!extra.text;
+      d.text = extra.text || null;
+      d.place = null;
+      state.editing = false;
       if (state.side !== side) setSide(side, false);
+      const thumb = d.row.querySelector('[data-cz-thumb]'); if (thumb) thumb.src = url;
+      d.row.querySelector('[data-cz-filename]').textContent = extra.text ? (strings.text_file || '[text]').replace('[text]', extra.text.value) : file.name;
+      d.row.querySelector('[data-cz-filesize]').textContent = `${L.digits(Math.ceil(file.size / 1024))} ${strings.kilobytes}`;
       d.el.classList.remove('is-pop'); void d.el.offsetWidth; d.el.classList.add('is-pop');
       paint(); L.buzz();
     };
-    d.img.src = url;
-    const thumb = d.row.querySelector('[data-cz-thumb]'); if (thumb) thumb.src = url;
-    d.row.querySelector('[data-cz-filename]').textContent = file.name;
-    d.row.querySelector('[data-cz-filesize]').textContent = (file.size / 1024).toFixed(0) + ' KB';
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      if (d.request !== request) return;
+      d.loading = false; d.input.value = ''; showError(strings.file_invalid); paint();
+    };
+    image.src = url;
   }
   function clearFile(side) {
     const d = design[side];
+    d.request = null; d.loading = false;
+    if (d.url) URL.revokeObjectURL(d.url);
+    d.url = null;
     d.input.value = ''; d.img.removeAttribute('src'); d.has = false; d.file = null; d.pos.value = '';
+    d.text = null; d.place = null; d.vector = false; d.px = 0;
+    state.editing = false;
     if (d.mock) d.mock.value = '';
     paint();
   }
@@ -221,7 +335,7 @@
     ['dragleave', 'drop'].forEach((ev) => d.drop.addEventListener(ev, (e) => { e.preventDefault(); d.drop.classList.remove('is-over'); }));
     d.drop.addEventListener('drop', (e) => { const f = e.dataTransfer.files[0]; if (f) { try { d.input.files = e.dataTransfer.files; } catch {} setFile(side, f); } });
     q(`[data-cz-remove="${side}"]`).addEventListener('click', () => clearFile(side));
-    q(`[data-cz-edit="${side}"]`).addEventListener('click', () => { setSide(side); canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    q(`[data-cz-edit="${side}"]`).addEventListener('click', () => { setSide(side); state.editing = true; paint(); canvas.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
   });
   empty.addEventListener('click', () => cur().input.click());
   canvas.addEventListener('dragover', (e) => { e.preventDefault(); canvas.classList.add('is-over'); });
@@ -229,7 +343,7 @@
   canvas.addEventListener('drop', (e) => { e.preventDefault(); canvas.classList.remove('is-over'); const f = e.dataTransfer.files[0]; if (f) { try { cur().input.files = e.dataTransfer.files; } catch {} setFile(state.side, f); } });
 
   /* ---- Gestures: drag to move, knobs to scale / rotate ---- */
-  let gesture = null, pinch = null;
+  let gesture = null;
   const stageRect = () => garment.getBoundingClientRect();
   const angleTo = (e, r, d) => Math.atan2(e.clientY - (r.top + r.height * d.y / 100), e.clientX - (r.left + r.width * d.x / 100)) * 180 / Math.PI;
   const distTo = (e, r, d) => Math.hypot(e.clientX - (r.left + r.width * d.x / 100), e.clientY - (r.top + r.height * d.y / 100));
@@ -238,6 +352,7 @@
   SIDES.forEach((side) => {
     const d = design[side]; const el = d.el;
     el.addEventListener('pointerdown', (e) => {
+      if (!state.editing || root.dataset.preparing === 'true') return;
       if (e.button !== 0 && e.pointerType === 'mouse') return;
       const knob = e.target.closest('[data-cz-knob]');
       const r = stageRect();
@@ -247,7 +362,7 @@
       el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); e.preventDefault();
     });
     el.addEventListener('pointermove', (e) => {
-      if (!gesture) return;
+      if (!gesture || !state.editing) return;
       const g = gesture;
       if (g.kind === 'move') { d.x = g.sx + (e.clientX - g.ox) / g.r.width * 100; d.y = g.sy + (e.clientY - g.oy) / g.r.height * 100; }
       else if (g.kind === 'scale') d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, g.s0 * (distTo(e, g.r, d) / Math.max(1, g.d0))));
@@ -256,6 +371,7 @@
     });
     ['pointerup', 'pointercancel'].forEach((ev) => el.addEventListener(ev, () => { gesture = null; el.classList.remove('is-dragging'); }));
     el.addEventListener('keydown', (e) => {
+      if (!state.editing || root.dataset.preparing === 'true') return;
       const step = e.shiftKey ? 5 : 1; let used = true;
       switch (e.key) {
         case 'ArrowLeft': d.x -= step; break;
@@ -272,25 +388,6 @@
       if (used) { e.preventDefault(); paint(); }
     });
   });
-  canvas.addEventListener('wheel', (e) => {
-    const d = cur(); if (!d.has) return; e.preventDefault();
-    if (e.altKey || e.shiftKey) d.r = norm(d.r - Math.sign(e.deltaY) * 3);
-    else d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, d.s - Math.sign(e.deltaY) * 2));
-    paint();
-  }, { passive: false });
-  canvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) { const [a, b] = e.touches; const d = cur(); pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), ang: Math.atan2(b.clientY - a.clientY, b.clientX - a.clientX) * 180 / Math.PI, s: d.s, r: d.r }; gesture = null; }
-  }, { passive: true });
-  canvas.addEventListener('touchmove', (e) => {
-    if (!pinch || e.touches.length !== 2) return;
-    const [a, b] = e.touches; const d = cur();
-    const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-    const ang = Math.atan2(b.clientY - a.clientY, b.clientX - a.clientX) * 180 / Math.PI;
-    d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.s * dist / pinch.d));
-    d.r = norm(pinch.r + (ang - pinch.ang));
-    paint();
-  }, { passive: true });
-  canvas.addEventListener('touchend', () => { pinch = null; });
   scale && scale.addEventListener('input', () => { cur().s = Number(scale.value); paint(); });
   rotate && rotate.addEventListener('input', () => { cur().r = Number(rotate.value); paint(); });
 
@@ -303,77 +400,239 @@
       case 'rotate-l': d.r = norm(d.r - 15); break;
       case 'rotate-r': d.r = norm(d.r + 15); break;
       case 'center': centerInArea(d); break;
-      case 'reset': centerInArea(d); d.s = 42; d.r = 0; break;
-      case 'fit': { const [, , w, h] = printArea(); centerInArea(d); d.s = Math.min(SCALE_MAX, Math.min(w, h) * .92); d.r = 0; break; }
+      case 'reset': centerInArea(d); d.s = defaultScale(); d.r = 0; break;
+      case 'fit': centerInArea(d); d.s = clampS(model.fitWidth(printArea(), .92, aspectOf(d)) / .66); d.r = 0; break;
       case 'replace': d.input.click(); return;
       case 'remove': clearFile(state.side); return;
     }
     paint(); L.buzz();
   }));
 
+  /* ---- Placement presets ---- */
+  qa('[data-cz-place]').forEach((b) => b.addEventListener('click', () => {
+    const d = cur();
+    if (!d.has) return;
+    const p = model.placementFor(printArea(), state.side, b.dataset.czPlace, aspectOf(d));
+    if (!p) return;
+    d.x = p.x; d.y = p.y; d.s = Math.max(SCALE_MIN, Math.min(SCALE_MAX, p.s)); d.r = 0;
+    clampPos(d, state.side);
+    d.place = { name: b.dataset.czPlace, x: d.x, y: d.y, s: d.s };
+    d.el.classList.remove('is-pop'); void d.el.offsetWidth; d.el.classList.add('is-pop');
+    paint(); L.buzz();
+  }));
+
+  /* ---- Text designs: typed words become a transparent PNG for the side ---- */
+  function trimCanvas(c, margin) {
+    const { width, height } = c;
+    const data = c.getContext('2d').getImageData(0, 0, width, height).data;
+    let top = height, left = width, right = -1, bottom = -1;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        if (data[(y * width + x) * 4 + 3] > 8) { if (x < left) left = x; if (x > right) right = x; if (y < top) top = y; if (y > bottom) bottom = y; }
+      }
+    }
+    if (right < 0) return c;
+    left = Math.max(0, left - margin); top = Math.max(0, top - margin);
+    right = Math.min(width - 1, right + margin); bottom = Math.min(height - 1, bottom + margin);
+    const out = document.createElement('canvas');
+    out.width = right - left + 1; out.height = bottom - top + 1;
+    out.getContext('2d').drawImage(c, left, top, out.width, out.height, 0, 0, out.width, out.height);
+    return out;
+  }
+  async function textToFile(value, role, color) {
+    const css = getComputedStyle(document.documentElement);
+    const pick = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
+    const display = pick('--font-display', 'sans-serif');
+    const family = role === 'body' ? pick('--font-body', display) : role === 'accent' ? pick('--font-accent', display) : display;
+    const weight = role === 'body' ? pick('--w-ui', '600') : role === 'accent' ? pick('--w-accent', '400') : pick('--w-heading', '800');
+    const size = 240, spec = `${weight} ${size}px ${family}`;
+    try { await document.fonts.load(spec, value); } catch {}
+    const lines = value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).slice(0, 3);
+    const rtl = /[\u0590-\u08FF]/.test(value);
+    const probe = document.createElement('canvas').getContext('2d');
+    probe.font = spec;
+    const lineH = Math.round(size * 1.35), pad = Math.round(size * .35);
+    const c = document.createElement('canvas');
+    c.width = Math.min(4096, Math.ceil(Math.max(...lines.map((line) => probe.measureText(line).width))) + pad * 2);
+    c.height = Math.min(4096, lineH * lines.length + pad * 2);
+    const ctx = c.getContext('2d');
+    ctx.font = spec; ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    try { ctx.direction = rtl ? 'rtl' : 'ltr'; } catch {}
+    lines.forEach((line, i) => ctx.fillText(line, c.width / 2, pad + lineH * (i + .5)));
+    const out = trimCanvas(c, Math.round(size * .08));
+    const blob = await new Promise((res) => out.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('text');
+    return new File([blob], `text-${state.side}-${Date.now()}.png`, { type: 'image/png' });
+  }
+  const textBox = q('[data-cz-text]');
+  const textApply = q('[data-cz-text-apply]');
+  if (textBox && textApply) {
+    const input = q('[data-cz-text-input]'), toggle = q('[data-cz-text-toggle]');
+    let fontRole = 'display', color = textBox.querySelector('[data-cz-text-color].is-active')?.dataset.czTextColor || '#f4e8d8';
+    syncTextLabel = () => { textApply.textContent = (strings.text_apply || '[side]').replace('[side]', sideName(state.side)); };
+    toggle?.addEventListener('click', () => {
+      const open = textBox.hidden;
+      textBox.hidden = !open; toggle.setAttribute('aria-expanded', String(open));
+      if (open) { syncTextLabel(); input.focus(); }
+    });
+    qa('[data-cz-text-font]').forEach((b) => b.addEventListener('click', () => {
+      fontRole = b.dataset.czTextFont;
+      qa('[data-cz-text-font]').forEach((x) => { const on = x === b; x.classList.toggle('is-active', on); x.setAttribute('aria-checked', String(on)); });
+    }));
+    const pickColor = (hex, btn) => {
+      color = hex;
+      qa('[data-cz-text-color]').forEach((x) => { const on = x === btn; x.classList.toggle('is-active', on); x.setAttribute('aria-checked', String(on)); });
+    };
+    qa('[data-cz-text-color]').forEach((b) => b.addEventListener('click', () => pickColor(b.dataset.czTextColor, b)));
+    q('[data-cz-text-custom]')?.addEventListener('input', (e) => pickColor(e.target.value, null));
+    textApply.addEventListener('click', async () => {
+      const value = input.value.trim();
+      if (!value) { showError(strings.text_empty); input.focus(); return; }
+      textApply.classList.add('is-loading');
+      try {
+        const file = await textToFile(value, fontRole, color);
+        const fontLabel = q(`[data-cz-text-font="${fontRole}"]`)?.textContent.trim() || fontRole;
+        setFile(state.side, file, { text: { value, font: fontLabel, color } });
+        textBox.hidden = true; toggle?.setAttribute('aria-expanded', 'false');
+      } catch { showError(strings.file_invalid); }
+      textApply.classList.remove('is-loading');
+    });
+  }
+
+  /* ---- Phones: total + add-to-bag follow the shopper once the stage is passed ---- */
+  const sticky = q('[data-cz-sticky]'), submitButton = q('[data-cz-submit]');
+  if (sticky && submitButton && 'IntersectionObserver' in window) {
+    let pastStage = false, submitInView = false;
+    const update = () => {
+      const show = pastStage && !submitInView;
+      sticky.classList.toggle('is-visible', show);
+      sticky.setAttribute('aria-hidden', String(!show));
+      sticky.inert = !show;
+    };
+    new IntersectionObserver(([en]) => { submitInView = en.isIntersecting; update(); }).observe(submitButton);
+    new IntersectionObserver(([en]) => { pastStage = !en.isIntersecting && en.boundingClientRect.top < 0; update(); }).observe(q('.cz__stage') || canvas);
+    q('[data-cz-sticky-submit]')?.addEventListener('click', () => { if (form.requestSubmit) form.requestSubmit(submitButton); else submitButton.click(); });
+  }
+
   /* ---- Garment / colour ---- */
   qa('[data-cz-garment-opt]').forEach((btn) => btn.addEventListener('click', () => {
+    if (!catalog[btn.dataset.czGarmentOpt]) return;
     qa('[data-cz-garment-opt]').forEach((b) => { b.classList.toggle('is-active', b === btn); b.setAttribute('aria-pressed', String(b === btn)); });
     state.shape = btn.dataset.czGarmentOpt; state.label = btn.dataset.label || state.shape;
     garment.classList.remove('is-swap'); void garment.offsetWidth; garment.classList.add('is-swap');
-    SIDES.forEach((s) => centerInArea(design[s], s));
+    SIDES.forEach((s) => { centerInArea(design[s], s); design[s].s = Math.min(design[s].s, fitScale(s)); });
     paint(); L.buzz();
   }));
   qa('[data-cz-color]').forEach((btn) => btn.addEventListener('click', () => {
     qa('[data-cz-color]').forEach((b) => { b.classList.toggle('is-active', b === btn); b.setAttribute('aria-pressed', String(b === btn)); });
-    state.colorKey = btn.dataset.czColor; state.color = btn.dataset.czColorName || ''; state.colorValue = btn.dataset.czVariantValue || state.color; state.hex = btn.dataset.czHex || '#181818';
+    state.colorKey = btn.dataset.czColor; state.color = btn.dataset.czColorName || ''; state.colorValue = btn.dataset.czVariantKey || state.color; state.hex = btn.dataset.czTone || '#181818';
     garment.classList.remove('is-swap'); void garment.offsetWidth; garment.classList.add('is-swap');
     paint(); L.buzz();
   }));
 
   /* ---- Mockups: one composited JPEG per side that has a design ---- */
-  function loadImg(src) { return new Promise((res) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; }); }
+  function loadImg(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image(); image.crossOrigin = 'anonymous';
+      const timeout = setTimeout(() => reject(new Error(strings.mockup_failed)), 10000);
+      image.onload = () => { clearTimeout(timeout); resolve(image); };
+      image.onerror = () => { clearTimeout(timeout); reject(new Error(strings.mockup_failed)); };
+      image.src = src;
+    });
+  }
   async function buildMockup(side) {
     const d = design[side];
     if (!d.has || !d.mock) return null;
-    const photo = showLayer(side);
+    const photo = photoFor(side);
     const size = 1000;
     const c = document.createElement('canvas'); c.width = size; c.height = size;
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#0b2a1c'; ctx.fillRect(0, 0, size, size);
     try {
       let base = null;
-      if (photo) base = await loadImg(photo.currentSrc || photo.src);
+      if (photo) base = await loadImg(photo.dataset.src);
       else {
-        const svg = qa('[data-cz-mock]').find((m) => !m.hidden)?.querySelector('svg');
+        const svg = mocks.find((m) => m.dataset.czMock === `${state.shape}-${side}`)?.querySelector('svg');
         if (svg) { const clone = svg.cloneNode(true); clone.querySelectorAll('[fill="var(--gc)"]').forEach((el) => el.setAttribute('fill', state.hex)); clone.setAttribute('width', size); clone.setAttribute('height', size); const u = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(clone)], { type: 'image/svg+xml' })); base = await loadImg(u); URL.revokeObjectURL(u); }
       }
-      if (base) ctx.drawImage(base, 0, 0, size, size);
+      if (!base) throw new Error(strings.mockup_failed);
+      const fit = Math.min(size / base.naturalWidth, size / base.naturalHeight);
+      const width = base.naturalWidth * fit, height = base.naturalHeight * fit;
+      ctx.drawImage(base, (size - width) / 2, (size - height) / 2, width, height);
       const dw = size * d.s / 100 * .66;
       const dh = dw * (d.img.naturalHeight / Math.max(1, d.img.naturalWidth));
       ctx.save(); ctx.translate(size * d.x / 100, size * d.y / 100); ctx.rotate(d.r * Math.PI / 180);
       ctx.drawImage(d.img, -dw / 2, -dh / 2, dw, dh); ctx.restore();
-      ctx.fillStyle = 'rgba(244,232,216,.9)'; ctx.font = `500 24px ${getComputedStyle(document.body).fontFamily}`;
-      ctx.fillText(`${state.label} · ${state.color} · ${sideName(side)} · ${state.method} · ×${state.qty} · ${d.pos.value}`, 24, size - 28);
       const blob = await new Promise((res) => c.toBlob(res, 'image/jpeg', .85));
-      if (!blob) return null;
+      if (!blob) throw new Error(strings.mockup_failed);
       const file = new File([blob], `mockup-${state.shape}-${side}-${Date.now()}.jpg`, { type: 'image/jpeg' });
-      try { const dt = new DataTransfer(); dt.items.add(file); d.mock.files = dt.files; } catch { return null; }
       return file;
-    } catch (e) { console.warn('[customize] mockup failed', e); return null; }
-    finally { showLayer(); }
+    } catch { throw new Error(strings.mockup_failed); }
   }
 
-  /* ---- Submit guard: at least one design + embroidery minimum, then attach mockups ---- */
-  let mockupsReady = false;
+  /* Group identical pieces so large orders do not upload the same artwork per piece. */
+  let preparedItems = null, requestGroup = null, requestSignature = '';
+  const lock = (busy) => {
+    root.dataset.preparing = String(busy);
+    root.setAttribute('aria-busy', String(busy));
+    q('[data-cz-submit]').classList.toggle('is-loading', busy);
+    if (busy) q('[data-cz-submit]').disabled = true;
+  };
+  for (const event of ['click', 'keydown', 'change', 'input', 'drop']) {
+    root.addEventListener(event, (e) => {
+      if (root.dataset.preparing !== 'true') return;
+      e.preventDefault(); e.stopImmediatePropagation();
+    }, true);
+  }
+  form.getCartItems = () => {
+    if (!preparedItems) throw new Error(strings.selection_unavailable);
+    return preparedItems;
+  };
+  form.onCartAddSuccess = () => { requestGroup = null; requestSignature = ''; };
+  form.refreshProduct = () => { preparedItems = null; lock(false); paint(); };
   form.addEventListener('submit', (e) => {
+    if (preparedItems) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    if (root.dataset.preparing === 'true') return;
     let msg = '';
     const any = SIDES.some((s) => design[s].has);
+    const groups = model.groupPieces(selectedVariants(), state.sizes.slice(0, state.qty));
     if (!any) msg = strings.needDesign;
     else if (state.method === 'Embroidery' && state.qty < MIN_EMB) msg = strings.minEmbroidery;
-    if (msg) { e.preventDefault(); e.stopImmediatePropagation(); submitErr.textContent = msg; submitErr.hidden = false; (any ? minNotice : q('[data-cz-upload]')).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    else if (!groups) msg = strings.selection_unavailable;
+    else if (SIDES.some((side) => design[side].loading)) return;
+    if (msg) { submitErr.textContent = msg; submitErr.hidden = false; (any ? sizesList : q('[data-cz-upload]')).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     submitErr.hidden = true;
-    if (!mockupsReady) {
-      e.preventDefault(); e.stopImmediatePropagation();
-      const btn = q('[data-cz-submit]'); btn && btn.classList.add('is-loading');
-      Promise.all(SIDES.map(buildMockup)).then(() => { mockupsReady = true; form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); }).finally(() => setTimeout(() => { mockupsReady = false; }, 0));
-    }
+    const signature = JSON.stringify([state.shape, state.colorKey, state.method, state.qty, state.sizes.slice(0, state.qty), q('[data-cz-notes]').value, SIDES.map((side) => [design[side].url, design[side].pos.value])]);
+    if (!requestGroup || signature !== requestSignature) { requestGroup = crypto.randomUUID(); requestSignature = signature; }
+    lock(true);
+    const properties = { Garment: state.shape === 'tee' ? 'T-shirt' : 'Hoodie', Colour: state.color, Method: state.method, Sides: SIDES.filter((side) => design[side].has).map((side) => side === 'front' ? 'Front' : 'Back').join(' + '), Notes: q('[data-cz-notes]').value, _customize_group: requestGroup };
+    Promise.all(SIDES.map(buildMockup)).then((files) => {
+      SIDES.forEach((side, index) => {
+        const d = design[side], label = side === 'front' ? 'Front' : 'Back';
+        if (!d.has) return;
+        properties[`${label} design`] = d.file;
+        properties[`${label} mockup`] = files[index];
+        properties[`${label} position`] = d.pos.value;
+        if (d.text) properties[`${label} text`] = `${d.text.value} · ${d.text.font} · ${d.text.color}`;
+        const place = placeName(d);
+        if (place) properties[`${label} placement`] = PLACE_EN[place] || (side === 'front' ? 'Full front' : 'Full back');
+      });
+      preparedItems = groups.map((group) => ({ id: group.id, quantity: group.quantity, properties: { ...properties, Size: group.size, Piece: group.pieces.join(', ') } }));
+      q('[data-cz-submit]').disabled = false;
+      form.requestSubmit();
+    }).catch((error) => {
+      preparedItems = null; lock(false); paint();
+      submitErr.textContent = error.message || strings.mockup_failed; submitErr.hidden = false;
+    });
   }, true);
+
+  L.on('cart:updated', (cart) => {
+    for (const product of Object.values(catalog)) {
+      for (const variant of product?.variants || []) variant.cart_quantity = (cart.items || []).filter((item) => Number(item.variant_id) === Number(variant.id)).reduce((count, item) => count + item.quantity, 0);
+    }
+    priceSignature = ''; paint();
+  });
 
   renderSizes();
   SIDES.forEach((s) => centerInArea(design[s], s));

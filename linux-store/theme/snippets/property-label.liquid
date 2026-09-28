@@ -7,6 +7,7 @@
   assign n = name | downcase | strip
   assign name_design = 'customize.upload' | t
   assign name_pos = 'customize.position_label' | t
+  assign locale = request.locale.iso_code | slice: 0, 2
   case n
     when 'garment'
       echo 'customize.garment' | t
@@ -18,21 +19,93 @@
       echo 'customize.sizes_title' | t
     when 'notes'
       echo 'customize.notes' | t
+    when 'size'
+      echo 'products.option_names.size' | t
+    when 'piece'
+      echo 'cart.customized_pieces' | t
+    when 'sides'
+      echo 'cart.customized_sides' | t
     when 'design file'
-      echo 'customize.upload' | t
-    when 'side' or 'sides'
+      if locale == 'ar'
+        echo 'ملف التصميم'
+      else
+        echo 'customize.upload' | t
+      endif
+    when 'side'
       echo 'customize.side' | t
     when 'design position'
       echo 'customize.position_label' | t
     when 'front design'
-      echo 'customize.front' | t | append: ' · ' | append: name_design
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · ملف التصميم'
+      else
+        echo 'customize.front' | t | append: ' · ' | append: name_design
+      endif
     when 'back design'
-      echo 'customize.back' | t | append: ' · ' | append: name_design
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · ملف التصميم'
+      else
+        echo 'customize.back' | t | append: ' · ' | append: name_design
+      endif
     when 'front position'
       echo 'customize.front' | t | append: ' · ' | append: name_pos
     when 'back position'
       echo 'customize.back' | t | append: ' · ' | append: name_pos
+    when 'front text'
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · الكتابة'
+      else
+        echo name | escape
+      endif
+    when 'back text'
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · الكتابة'
+      else
+        echo name | escape
+      endif
+    when 'front placement'
+      if locale == 'ar'
+        echo 'customize.front' | t | append: ' · المكان'
+      else
+        echo name | escape
+      endif
+    when 'back placement'
+      if locale == 'ar'
+        echo 'customize.back' | t | append: ' · المكان'
+      else
+        echo name | escape
+      endif
+    when 'bundle offer'
+      if locale == 'ar'
+        echo 'عرض الباندل'
+      else
+        echo 'Bundle offer'
+      endif
+    when 'expected bundle discount'
+      if locale == 'ar'
+        echo 'خصم الباندل المتوقع'
+      else
+        echo 'Expected bundle discount'
+      endif
+    when 'bundle id'
+      if locale == 'ar'
+        echo 'رقم الباندل'
+      else
+        echo 'Bundle ID'
+      endif
+    when 'bundle piece'
+      if locale == 'ar'
+        echo 'قطعة من الباندل'
+      else
+        echo 'Bundle piece'
+      endif
+    when 'bundle selection'
+      if locale == 'ar'
+        echo 'اختيار القطعة'
+      else
+        echo 'Bundle selection'
+      endif
     else
-      echo name
+      echo name | escape
   endcase
 -%}

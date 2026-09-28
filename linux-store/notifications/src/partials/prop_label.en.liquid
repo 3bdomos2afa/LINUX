@@ -1,0 +1,6 @@
+{%- case lx_pkd -%}
+{%- when 'piece' -%}Pieces
+{%- when 'color' -%}Colour
+{%- when 'notes' -%}Your notes
+{%- else -%}{{ lx_pk | escape }}
+{%- endcase -%}

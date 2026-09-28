@@ -1,0 +1,29 @@
+{%- assign lx_track_url = fulfillment.tracking_urls.first | default: fulfillment.tracking_url | default: '' -%}
+{%- if fulfillment.tracking_numbers.size > 0 -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" dir="[[dir]]" bgcolor="[[c.panel]]" style="margin-top:22px;border-collapse:separate;background-color:[[c.panel]];border:1px solid [[c.border]];border-radius:20px;">
+<tr>
+<td style="padding:16px 18px;text-align:[[start]];font-family:[[font]];">
+<p style="margin:0 0 4px;font-family:[[font]];font-size:12px;line-height:16px;font-weight:800;color:[[c.lime]];[[eyebrow_css]]">[[tracking_number]]{%- if fulfillment.tracking_company != blank -%}&nbsp;·&nbsp;<span dir="ltr">{{ fulfillment.tracking_company | escape }}</span>{%- endif -%}</p>
+{%- for lx_tn in fulfillment.tracking_numbers -%}
+<p style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:17px;line-height:26px;font-weight:700;letter-spacing:0.04em;color:[[c.cream]];"><span dir="ltr">{{ lx_tn | escape }}</span></p>
+{%- endfor -%}
+{%- if fulfillment.estimated_delivery_at -%}
+<p style="margin:8px 0 0;font-family:[[font]];font-size:13px;line-height:20px;color:[[c.muted]];">[[eta]]: <span dir="ltr" style="white-space:nowrap;">{{ fulfillment.estimated_delivery_at | date: '[[date_fmt]]' }}</span></p>
+{%- endif -%}
+</td>
+</tr>
+</table>
+{%- else -%}
+<p style="[[s.note]]">[[no_tracking]]</p>
+{%- endif -%}
+{%- if lx_track_url != '' -%}
+{%- assign lx_btn_url = lx_track_url -%}
+{%- capture lx_btn_text -%}[[track]]{%- endcapture -%}
+{%- assign lx_btn2_url = order_status_url -%}
+{%- capture lx_btn2_text -%}[[view_order]]{%- endcapture -%}
+{%- else -%}
+{%- assign lx_btn_url = order_status_url -%}
+{%- capture lx_btn_text -%}[[view_order]]{%- endcapture -%}
+{%- assign lx_btn2_url = '' -%}
+{%- endif -%}
+[[> buttons]]

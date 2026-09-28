@@ -25,7 +25,42 @@
 
   {%- liquid
     assign seo_page_title = page_title
-    if template.name == 'search' and request.query.view == 'wishlist'
+    assign seo_description = page_description
+    if template.suffix == 'customize'
+      assign customize_title = 'customize.title' | t
+      capture seo_page_title
+        render 'localized-content', content: page_title, fallback: customize_title
+      endcapture
+      if template.name == 'index'
+        assign seo_page_title = customize_title
+      endif
+    elsif is_rtl
+      if template.name == 'index'
+        assign home_title = 'general.meta.home_title' | t
+        assign home_description = 'home.footer_tagline' | t
+        capture seo_page_title
+          render 'localized-content', content: page_title, fallback: home_title
+        endcapture
+        capture seo_description
+          render 'localized-content', content: page_description, fallback: home_description
+        endcapture
+        assign seo_description = seo_description | strip | default: home_description
+      elsif template.suffix == 'customize'
+        assign customize_title = 'customize.title' | t
+        capture seo_page_title
+          render 'localized-content', content: page_title, fallback: customize_title
+        endcapture
+      elsif template.name == 'product'
+        capture seo_page_title
+          render 'product-title', title: page_title
+        endcapture
+      elsif template.name == 'page' or template.name == 'collection' or template.name == 'blog'
+        capture seo_page_title
+          render 'menu-title', title: page_title
+        endcapture
+      endif
+    endif
+    if template.name == 'search' and template.suffix == 'wishlist'
       assign seo_page_title = 'wishlist.title' | t
     elsif template.name == 'search'
       assign seo_page_title = 'search.title' | t
@@ -49,19 +84,24 @@
     {{ seo_page_title }}{% if current_tags %} &ndash; {% for ct in current_tags %}{% render 'option-value', value: ct %}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless seo_page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
   {%- endcapture -%}
   <title>{{ seo_title | strip }}</title>
-  {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
-  {% render 'meta-tags' %}
+  {%- if seo_description != blank -%}<meta name="description" content="{{ seo_description | strip | escape }}">{%- endif -%}
+  {% render 'meta-tags', title: seo_page_title, description: seo_description %}
 
-  {%- unless settings.type_system_fonts -%}{% render 'fonts', is_rtl: is_rtl %}{%- endunless -%}
+  {% render 'fonts', is_rtl: is_rtl %}
 
   {{ 'glass.css' | asset_url | stylesheet_tag }}
   {{ 'components.css' | asset_url | stylesheet_tag }}
-  {%- if settings.motion_scale != 0 -%}{{ 'motion.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {%- comment -%} Enhancement-only sheets load without blocking the first paint. {%- endcomment -%}
+  {%- if settings.motion_scale != 0 -%}<link rel="stylesheet" href="{{ 'motion.css' | asset_url }}" media="print" onload="this.media='all'"><noscript>{{ 'motion.css' | asset_url | stylesheet_tag }}</noscript>{%- endif -%}
   {%- if template.suffix == 'customize' -%}{{ 'customize.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'product' -%}{{ 'product.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.name == 'collection' or template.name == 'search' or template.name == 'list-collections' -%}{{ 'collection.css' | asset_url | stylesheet_tag }}{%- endif -%}
   {%- if template.directory == 'customers' or template.name == 'cart' or template.name == 'page' or template.name == 'blog' or template.name == 'article' or template.name == '404' -%}{{ 'pages.css' | asset_url | stylesheet_tag }}{%- endif -%}
-  {%- if template.name == 'product' or template.name == 'cart' or settings.cart_type != 'page' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {%- if template.name == 'product' or template.name == 'cart' -%}{{ 'offers.css' | asset_url | stylesheet_tag }}{%- elsif settings.cart_type != 'page' -%}<link rel="stylesheet" href="{{ 'offers.css' | asset_url }}" media="print" onload="this.media='all'"><noscript>{{ 'offers.css' | asset_url | stylesheet_tag }}</noscript>{%- endif -%}
+  {{ 'v2.css' | asset_url | stylesheet_tag }}
+  {{ 'typography.css' | asset_url | stylesheet_tag }}
+  {%- if template.name == 'product' or template.name == 'cart' or template.suffix == 'customize' -%}{{ 'number-input.css' | asset_url | stylesheet_tag }}{%- else -%}<link rel="stylesheet" href="{{ 'number-input.css' | asset_url }}" media="print" onload="this.media='all'">{%- endif -%}
+  {{ 'brand.css' | asset_url | stylesheet_tag }}
 
   {%- liquid
     assign type_scale = settings.type_scale | default: 100
@@ -85,6 +125,10 @@
       --gutter-scale: {{ gutter_scale | divided_by: 100.0 }};
       --section-gap: calc(clamp(64px, 9vw, 128px) * var(--section-gap-scale));
       --gutter: calc(clamp(16px, 4vw, 48px) * var(--gutter-scale));
+      {%- if settings.glass_tint != blank %}
+      --glass-fill: rgb(244 232 216 / {{ settings.glass_tint | divided_by: 100.0 }});
+      --glass-fill-lensed: rgb(244 232 216 / {{ settings.glass_tint | times: 0.7 | divided_by: 100.0 }});
+      {%- endif %}
       {%- if settings.brand_forest != blank and settings.brand_forest != 'rgba(0,0,0,0)' %}
       --forest: {{ settings.brand_forest }};
       --forest-deep: {{ settings.brand_forest | color_darken: 8 }};
@@ -95,11 +139,6 @@
       {%- endif %}
       {%- if settings.brand_cream != blank and settings.brand_cream != 'rgba(0,0,0,0)' %}
       --cream: {{ settings.brand_cream }};
-      --fg: {{ settings.brand_cream }};
-      --fg-70: {{ settings.brand_cream | color_modify: 'alpha', 0.72 }};
-      --fg-50: {{ settings.brand_cream | color_modify: 'alpha', 0.52 }};
-      --fg-30: {{ settings.brand_cream | color_modify: 'alpha', 0.3 }};
-      --fg-12: {{ settings.brand_cream | color_modify: 'alpha', 0.12 }};
       --glass-fill: {{ settings.brand_cream | color_modify: 'alpha', 0.07 }};
       --glass-fill-hover: {{ settings.brand_cream | color_modify: 'alpha', 0.11 }};
       --glass-stroke: {{ settings.brand_cream | color_modify: 'alpha', 0.16 }};
@@ -113,10 +152,11 @@
     @media (max-width: 760px) { :root { --type-scale: {{ type_scale | times: mobile_type_scale | divided_by: 10000.0 }}; } }
     {%- if settings.motion_scale == 0 -%}
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    @view-transition { navigation: none; }
     {%- endif -%}
   {% endstyle %}
 
-  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script>document.documentElement.classList.replace('no-js', 'js');if (window.CSS && CSS.supports('animation-timeline: view()') && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('sdr');try{if(sessionStorage.getItem('linux:curtain'))document.documentElement.classList.add('curtain-seen');else sessionStorage.setItem('linux:curtain','1');}catch(e){}</script>
   <script>
     window.LINUX = window.LINUX || {};
     LINUX.settings = {
@@ -128,10 +168,23 @@
       freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }},
       cartType: {{ settings.cart_type | default: 'drawer' | json }},
       whatsapp: {{ settings.whatsapp_number | default: '' | json }},
-      showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }}
+      showWishlist: {{ settings.show_wishlist | default: true, allow_false: true | json }},
+      refraction: {{ settings.glass_refraction | default: 'off' | json }}
     };
     LINUX.strings = {
       added: {{ 'cart.added' | t | json }},
+      err_invalid: {{ 'cart.error_invalid' | t | json }},
+      err_check_bag: {{ 'cart.error_check_bag' | t | json }},
+      err_refresh: {{ 'cart.error_refresh' | t | json }},
+      err_confirm_size: {{ 'cart.error_confirm_size' | t | json }},
+      err_partial: {{ 'cart.error_partial' | t | json }},
+      load_error: {{ 'products.load_error' | t | json }},
+      bundle_offer: {{ 'cart.bundle_offer' | t | json }},
+      bundle_estimate_note: {{ 'bundle.estimate_note' | t | json }},
+      b_piece: {{ 'bundle.js_piece' | t | json }}, b_estimate: {{ 'bundle.js_estimate' | t | json }}, b_subtotal: {{ 'bundle.js_subtotal' | t | json }},
+      b_savings: {{ 'bundle.js_savings' | t | json }}, b_total: {{ 'bundle.js_total' | t | json }}, b_savings_live: {{ 'bundle.js_savings_live' | t | json }}, b_total_live: {{ 'bundle.js_total_live' | t | json }},
+      b_choose: {{ 'bundle.js_choose' | t | json }}, b_stock: {{ 'bundle.js_stock' | t | json }}, b_quantity: {{ 'bundle.js_quantity' | t | json }},
+      b_select: {{ 'bundle.js_select' | t | json }}, b_average: {{ 'bundle.js_average' | t | json }}, b_one_time: {{ 'bundle.js_one_time' | t | json }},
       discount_invalid: {{ 'cart.discount_invalid' | t | json }},
       discount_applied: {{ 'cart.discount_applied' | t | json }},
       view_bag: {{ 'cart.view_bag' | t | json }},
@@ -147,7 +200,12 @@
       pages: {{ 'search.pages' | t | json }},
       free_shipping_unlocked: {{ 'cart.free_shipping_unlocked' | t | json }},
       free_shipping_away: {{ 'cart.free_shipping_away' | t: amount: '[amount]' | json }},
-      copied: {{ 'general.copied' | t | json }}
+      copied: {{ 'general.copied' | t | json }},
+      view_full: {{ 'products.view_full' | t | json }},
+      quick_view: {{ 'products.quick_view' | t | json }},
+      close: {{ 'accessibility.close' | t | json }},
+      view_saved: {{ 'wishlist.view_saved' | t | json }},
+      notify_sent: {{ 'products.notify.success' | t | json }}
     };
     {%- if request.locale.iso_code == 'ar' -%}
     {%- assign ov_keys = 'hoodie,hoodies,shirt,shirts,t-shirt,tee,cap,black,white,beige,burgundy,olive,green,navy,grey,gray,red,blue,brown,cream,sada,anime,customize,flower,oversized,zip,classic,winter,summer,collection,embroidered,kids,men,women,unisex,pack,set' | split: ',' -%}
@@ -168,6 +226,8 @@
     <span class="atmosphere__orb atmosphere__orb--c"></span>
     <span class="atmosphere__grain"></span>
   </div>
+  <div class="scroll-edge scroll-edge--top" aria-hidden="true"></div>
+  <div class="scroll-edge scroll-edge--bottom" aria-hidden="true"></div>
 
   {% sections 'header-group' %}
 
@@ -196,13 +256,45 @@
   <div class="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
   <script src="{{ 'global.js' | asset_url }}" defer></script>
+  <script src="{{ 'number-input.js' | asset_url }}" defer></script>
   <script src="{{ 'glass.js' | asset_url }}" defer></script>
   <script src="{{ 'cart.js' | asset_url }}" defer></script>
   <script src="{{ 'drawers.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
   <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
+  {%- if template.name == 'product' -%}
   <script src="{{ 'product.js' | asset_url }}" defer></script>
+  {%- else -%}
+  {%- comment -%}
+    Product scripts (quick view, recommendations, recently viewed) are ~40 KB:
+    fetched when the page actually contains them, or on the first quick-view tap.
+  {%- endcomment -%}
+  <script>
+    (function () {
+      var src = {{ 'product.js' | asset_url | json }}, pending = null;
+      function load() {
+        if (!pending) pending = new Promise(function (done) { var el = document.createElement('script'); el.src = src; el.onload = function () { window.__linuxPdp = true; done(); }; document.head.appendChild(el); });
+        return pending;
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        if (document.querySelector('[data-product], [data-recommendations], [data-recently-viewed], [data-bundle]')) load();
+      });
+      document.addEventListener('pointerover', function warm(e) {
+        if (e.target.closest && e.target.closest('[data-quick-view]')) { document.removeEventListener('pointerover', warm); load(); }
+      }, { passive: true });
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest('[data-quick-view]');
+        if (!btn || window.__linuxPdp) return;
+        e.preventDefault(); e.stopPropagation();
+        load().then(function () { btn.click(); });
+      }, true);
+    })();
+  </script>
+  {%- endif -%}
   {%- if template.name == 'collection' or template.name == 'search' -%}<script src="{{ 'collection.js' | asset_url }}" defer></script>{%- endif -%}
-  {%- if template.suffix == 'customize' -%}<script src="{{ 'customize.js' | asset_url }}" defer></script>{%- endif -%}
+  {%- if template.suffix == 'customize' -%}
+    <script src="{{ 'customize-model.js' | asset_url }}" defer></script>
+    <script src="{{ 'customize.js' | asset_url }}" defer></script>
+  {%- endif -%}
 </body>
 </html>

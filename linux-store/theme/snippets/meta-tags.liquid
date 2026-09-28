@@ -17,6 +17,13 @@
     assign og_description = collection.description | strip_html | truncatewords: 40 | default: og_description
   endif
 
+  if title != blank
+    assign og_title = title | strip
+  endif
+  if description != blank
+    assign og_description = description | strip
+  endif
+
   assign og_image = settings.share_image
   if request.page_type == 'product' and product.featured_image
     assign og_image = product.featured_image

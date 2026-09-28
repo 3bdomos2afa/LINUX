@@ -5,7 +5,6 @@
     "radius_scale": 100,
     "motion_scale": 100,
     "page_width": 1440,
-    "type_system_fonts": false,
     "side_menu": "main-menu",
     "search_suggestions": "Hoodie,Anime,Customize,Sada,Shirt",
     "cart_type": "drawer",
@@ -22,7 +21,22 @@
     "social_instagram": "https://www.instagram.com/linux.eg",
     "social_facebook": "https://www.facebook.com/share/1CBF7WFvep",
     "social_tiktok": "",
-    "show_curtain": true
+    "show_curtain": true,
+    "glass_tint": 7,
+    "glass_refraction": "off",
+    "pay_cod": true,
+    "pay_instapay": true,
+    "pay_wallet": false,
+    "pay_fawry": false,
+    "pay_valu": false,
+    "pay_vodafone": true,
+    "pay_card_icons": false,
+    "pay_howto": true,
+    "font_ar_heading": "rakkas",
+    "font_ar_body": "alan",
+    "font_en_heading": "unbounded",
+    "font_en_body": "fustat",
+    "font_accent": "badeen"
   },
   "presets": {
     "Forest": {

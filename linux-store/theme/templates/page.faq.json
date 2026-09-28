@@ -1,0 +1,49 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "key_q": "home.faq_1_q",
+            "key_a": "home.faq_1_a"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "key_q": "home.faq_2_q",
+            "key_a": "home.faq_2_a"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "key_q": "home.faq_3_q",
+            "key_a": "home.faq_3_a"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "key_q": "home.faq_4_q",
+            "key_a": "home.faq_4_a"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "open_first": true
+      }
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}

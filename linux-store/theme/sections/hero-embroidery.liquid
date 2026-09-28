@@ -8,10 +8,6 @@
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  assign poster = 'hero-embroidery-poster.webp' | asset_url
-  if s.poster != blank
-    assign poster = s.poster | image_url: width: 1920
-  endif
   assign heading = s.heading
   if heading == blank
     assign heading = 'sections.hero.heading' | t
@@ -45,11 +41,25 @@
 <section class="hero hero--wide{% if panel_below %} hero--panel-below{% else %} hero--panel-over{% endif %}{% unless show_panel %} hero--quiet{% endunless %}" id="hero-{{ section.id }}" style="--hero-h: {{ s.height | default: 100 }}svh; --hero-h-mobile: {{ s.height_mobile | default: 100 }}svh; --hero-dim: {{ s.overlay | default: 0 | divided_by: 100.0 }};" data-hero>
   <div class="hero__stage">
     <div class="hero__media" aria-hidden="true" data-hero-media>
+      {%- comment -%}
+        The poster is a real <picture> so the browser finds it in the HTML and
+        paints it first (it is the LCP image); the video loads after the page
+        and fades in once it is actually playing (glass.js).
+      {%- endcomment -%}
+      <picture class="hero__poster">
+        {%- if s.poster != blank -%}
+          <img src="{{ s.poster | image_url: width: 1600 }}" srcset="{{ s.poster | image_url: width: 600 }} 600w, {{ s.poster | image_url: width: 1000 }} 1000w, {{ s.poster | image_url: width: 1600 }} 1600w, {{ s.poster | image_url: width: 2200 }} 2200w" sizes="100vw" alt="" width="{{ s.poster.width }}" height="{{ s.poster.height }}" fetchpriority="high" loading="eager" decoding="async">
+        {%- else -%}
+          <source media="(max-width: 639px)" srcset="{{ 'hero-poster-540.webp' | asset_url }}" width="540" height="960">
+          <source media="(max-width: 1099px)" srcset="{{ 'hero-poster-1280.webp' | asset_url }}" width="1280" height="720">
+          <img src="{{ 'hero-embroidery-poster-v2.webp' | asset_url }}" alt="" width="1672" height="941" fetchpriority="high" loading="eager" decoding="async">
+        {%- endif -%}
+      </picture>
       {%- if s.video != blank -%}
-        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'hero__video', poster: poster }}
+        {{ s.video | video_tag: autoplay: false, loop: true, muted: true, controls: false, playsinline: true, preload: 'none', class: 'hero__video' }}
       {%- else -%}
-        {%- comment -%} Three cuts of the same loop: 1080p desktop (~1 MB), 720p tablet, 540×960 portrait crop for phones (~220 KB). {%- endcomment -%}
-        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="{{ poster }}" data-hero-video>
+        {%- comment -%} Three cuts of the same loop: 1080p desktop (~1 MB), 720p tablet, 540×960 portrait crop for phones (~300 KB). {%- endcomment -%}
+        <video class="hero__video" muted loop playsinline preload="none" data-hero-video>
           <source src="{{ 'hero-1080.mp4' | asset_url }}" type="video/mp4" media="(min-width: 1100px)">
           <source src="{{ 'hero-720.mp4' | asset_url }}" type="video/mp4" media="(min-width: 640px)">
           <source src="{{ 'hero-mobile.mp4' | asset_url }}" type="video/mp4">
@@ -99,6 +109,11 @@
     { "type": "url", "id": "cta_url", "label": "Primary link" },
     { "type": "text", "id": "cta2_label", "label": "Secondary button" },
     { "type": "url", "id": "cta2_url", "label": "Secondary link" },
+    { "type": "header", "content": "Offer countdown" },
+    { "type": "paragraph", "content": "The countdown uses one real campaign end time and stays accurate after refresh. Leave the end time blank to hide it; the label falls back to the theme translation." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show the countdown", "default": true },
+    { "type": "text", "id": "countdown_label", "label": "Countdown label (blank = translated)" },
+    { "type": "text", "id": "countdown_end_at", "label": "Campaign end timestamp", "info": "Use the same expiration as the Shopify offer. Enter YYYY-MM-DDTHH:mm:ss+03:00 or YYYY-MM-DDTHH:mm:ssZ. Leave blank to hide; the timer does not enforce discount eligibility." },
     { "type": "header", "content": "Trust row" },
     { "type": "checkbox", "id": "show_trust", "label": "Show trust row", "default": true },
     { "type": "text", "id": "trust_1", "label": "Trust 1" },

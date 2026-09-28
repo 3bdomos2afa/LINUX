@@ -1,0 +1,54 @@
+{%- comment -%}
+  Summer scene for sections/seasonal-collection: sunglasses sun with turning
+  rays, heat shimmer, sea, sand, palm and the penguin. Decorative only — the
+  section hides it from assistive tech. Every animated node is its own box
+  (no animation inside an SVG) so the compositor can run it.
+  Params: badge, caption, show_badge, mascot (name, blank = none).
+  part: 'icon' → only the small sun glyph used in the eyebrow.
+{%- endcomment -%}
+{%- if part == 'icon' -%}
+<svg class="seasonal__glyph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+{%- else -%}
+<div class="sa__sunbox">
+  <span class="sa__glow"></span>
+  <svg class="sa__rays" viewBox="0 0 200 200" fill="none" stroke-linecap="round" focusable="false"><path stroke="#043020" stroke-width="13" d="M100 28L100 3M137 35.9L144.5 22.9M162.4 64L184 51.5M174 100L189 100M162.4 136L184 148.5M137 164.1L144.5 177.1M100 172L100 197M63 164.1L55.5 177.1M37.6 136L16 148.5M26 100L11 100M37.6 64L16 51.5M63 35.9L55.5 22.9"/><path stroke="#ffb627" stroke-width="7" d="M100 28L100 3M137 35.9L144.5 22.9M162.4 64L184 51.5M174 100L189 100M162.4 136L184 148.5M137 164.1L144.5 177.1M100 172L100 197M63 164.1L55.5 177.1M37.6 136L16 148.5M26 100L11 100M37.6 64L16 51.5M63 35.9L55.5 22.9"/></svg>
+  <svg class="sa__sun" viewBox="0 0 200 200" fill="none" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+    <circle cx="100" cy="100" r="61" fill="#ffc94a" stroke="#043020" stroke-width="4.5"/>
+    <path d="M56 84a46 46 0 0 1 30-28" stroke="#ffe7a1" stroke-width="7"/>
+    <path d="M140 136a48 48 0 0 1-22 16" stroke="#f2a51c" stroke-width="6"/>
+    <circle cx="66" cy="117" r="8" fill="#ff8f5a" opacity=".55"/><circle cx="134" cy="117" r="8" fill="#ff8f5a" opacity=".55"/>
+    <path d="M46 84l15 3M154 84l-15 3M93 89q7-5 14 0" stroke="#043020" stroke-width="4.5"/>
+    <path d="M59 83h35v8a14 14 0 0 1-14 14h-7a14 14 0 0 1-14-14ZM106 83h35v8a14 14 0 0 1-14 14h-7a14 14 0 0 1-14-14Z" fill="#043020"/>
+    <path d="M68 99l11-12M76 101l12-13M115 99l11-12M123 101l12-13" stroke="#fff" stroke-width="3.2" opacity=".9"/>
+    <path d="M83 118q17 22 34 0Z" fill="#043020" stroke="#043020" stroke-width="3"/>
+    <path d="M92 127q8 7 16 0q-8-4-16 0Z" fill="#ff7a59"/>
+  </svg>
+</div>
+<svg class="sa__sea" viewBox="0 0 400 100" preserveAspectRatio="none" focusable="false">
+  <rect width="400" height="64" fill="#2a9b7f"/><rect width="400" height="8" fill="#5cc3a4"/>
+  <path d="M22 24h30M112 36h44M218 20h22M330 42h40M58 50h28M176 54h30" stroke="#e9fff6" stroke-opacity=".65" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+  <path d="M268 14h46M278 26h28M262 38h58M282 51h20" stroke="#ffe08a" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+  <path d="M0 63C60 53 124 71 204 61S330 51 400 63V100H0Z" fill="#f6d59b"/>
+  <path d="M0 63C60 53 124 71 204 61S330 51 400 63" stroke="#fff" stroke-width="3.5" fill="none" vector-effect="non-scaling-stroke"/>
+  <path d="M0 86C90 76 230 94 400 82V100H0Z" fill="#eebf78" opacity=".75"/>
+</svg>
+<svg class="sa__heat sa__heat--1" viewBox="0 0 120 20" fill="none" focusable="false"><path d="M4 12c12-10 22 10 34 0s22 10 34 0 22 10 34 0" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="sa__heat sa__heat--2" viewBox="0 0 120 20" fill="none" focusable="false"><path d="M4 12c12-10 22 10 34 0s22 10 34 0 22 10 34 0" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="sa__heat sa__heat--3" viewBox="0 0 120 20" fill="none" focusable="false"><path d="M4 12c12-10 22 10 34 0s22 10 34 0 22 10 34 0" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="sa__palm" viewBox="30 10 192 352" stroke="#043020" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" focusable="false">
+  <path fill="#0a4a33" d="M126 92 121 78.9 110.4 76 102 64.7 90.3 70.4 79 64.6 70.1 75.4 59.9 78.5 54.2 90.4 45.2 96.6 54.2 90.4 66.3 92.6 74.1 89 83.2 96 89.9 89.1 96.2 96.6 105.6 90.1 113.1 94.7ZM126 92 138.4 94.6 145.8 90.1 155.3 96 161.6 88.8 168.5 95 177.1 88 184.8 91 196.2 88.1 204.9 93.3 196.2 88.1 190 77.3 180.1 75 171.2 65.2 160.6 71.2 149.3 66.1 141.3 76.9 131.1 79.7ZM126 92 131.8 82.7 129.3 74.7 135.1 65.3 128.2 57.9 132.1 48.7 123.6 41.5 122.8 33 115.2 25.6 113.8 17.1 115.2 25.6 110.2 35 112.2 43.4 106.3 52.9 113 60.4 108.8 69.6 117.3 76.7 117.5 85Z"/>
+  <path fill="#6b4a2e" d="M72.9 358.2 70.1 334.3 68.7 311 68.6 288.2 69.9 265.9 72.6 244.1 76.6 222.8 82.1 202 88.9 181.7 97.1 161.8 106.8 142.3 117.9 123.4 130.4 104.9 117.6 95.1 103.6 113.9 90.9 133.2 79.6 153.2 69.8 173.9 61.3 195.2 54.4 217.2 48.8 239.8 44.8 263 42.1 286.8 41 311.2 41.3 336.2 43.1 361.8Z"/>
+  <path fill="none" stroke="#4a3120" stroke-width="2.5" d="M67.2 334.5Q55.4 330.3 44.2 336M65.9 311Q54.8 306.1 43.8 311.2M66 288.1Q55.6 282.5 44.8 286.9M67.4 265.6Q57.9 259.5 47.3 263.3M70.2 243.7Q61.6 237 51.2 240.2M74.4 222.3Q66.7 215.2 56.6 217.7M80 201.3Q73.3 193.9 63.4 195.9M87 180.9Q81.2 173.1 71.7 174.7M95.4 160.9Q90.6 153 81.4 154.1M105.2 141.4Q101.3 133.4 92.5 134.1"/>
+  <circle cx="112" cy="104" r="9" fill="#5b3a1e"/><circle cx="128" cy="108" r="9" fill="#5b3a1e"/>
+  <path fill="#156e4c" d="M126 92 114.5 84.6 104.1 89.2 89.2 86.6 82 99.5 67.3 103.2 63.2 119.8 52.7 131 49.2 148.8 39.5 163.5 49.2 148.8 64.8 140.6 73.6 129.3 88.7 126.6 93.1 114.5 105.1 114.8 109.5 103 118.2 101.8ZM126 92 125.7 79.5 118.4 73.9 117.6 61.7 106.7 60.5 104.1 50.2 92.4 51.4 86.3 46 75.7 47.5 69.4 43.4 75.7 47.5 77.7 57.8 84.2 61.8 85 73.1 95 73.6 96.7 83.9 108.5 83.8 113.7 91ZM126 92 137.8 87 141.1 78 152.8 73.8 151.6 62.7 161.3 58.2 158.6 46.6 163.6 39.7 161.9 28.8 166.4 22.1 161.9 28.8 151.2 32 147.2 39.7 135.5 43.1 136.3 54.1 126.1 59.1 128.8 71.4 123.1 79.4ZM126 92 135.2 100.1 143.9 100.1 149.6 110.6 160.7 108.9 165.9 119.8 180.2 120.9 189.1 130.8 204.3 137.5 214 150.7 204.3 137.5 199.9 121 189.2 111.2 183.9 95.9 169.5 93.7 161.1 82.3 147.2 86.5 136.3 83.5Z"/>
+  <path fill="none" stroke="#8fcb5a" stroke-width="2.2" d="M126 92Q82.8 93.7 39.5 163.5M126 92Q97.7 60.9 69.4 43.4M126 92Q146.2 51.9 166.4 22.1M126 92Q170 87.4 214 150.7"/>
+</svg>
+{%- if mascot != blank -%}{% render 'mascot', name: mascot, width: 220, class: 'sa__mascot' %}{%- endif -%}
+{%- if show_badge and badge != blank -%}
+<div class="sa__temp">
+  <svg class="sa__temp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" focusable="false"><path d="M14 14.4V5a2 2 0 1 0-4 0v9.4a4 4 0 1 0 4 0Z"/><circle cx="12" cy="17.6" r="1.9" fill="currentColor" stroke="none"/><path d="M12 9.5v6.2"/></svg>
+  <span class="sa__temp-val">{{ badge }}</span>
+  {%- if caption != blank -%}<span class="sa__temp-cap">{{ caption }}</span>{%- endif -%}
+</div>
+{%- endif -%}
+{%- endif -%}
